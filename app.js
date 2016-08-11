@@ -19,6 +19,9 @@ const sass = require('node-sass-middleware');
 const multer = require('multer');
 const upload = multer({ dest: path.join(__dirname, 'uploads') });
 
+const constants = require('./constants/constants');
+
+
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
  */
@@ -32,6 +35,11 @@ const userController = require('./controllers/user');
 const apiController = require('./controllers/api');
 const contactController = require('./controllers/contact');
 const productsApis = require('./controllers/apis/products');
+
+/* Application Work Start Cisdev */
+const userAppController = require('./controllers/apis/userAppController');
+
+
 
 /**
  * API keys and Passport configuration.
@@ -79,13 +87,18 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
+
+/*
+  Commented by Cisdev
+
 app.use((req, res, next) => {
   if (req.path === '/api/upload') {
     next();
   } else {
     lusca.csrf()(req, res, next);
   }
-});
+}); */
+
 app.use(lusca.xframe('SAMEORIGIN'));
 app.use(lusca.xssProtection(true));
 app.use((req, res, next) => {
@@ -126,7 +139,30 @@ app.post('/account/password', passportConfig.isAuthenticated, userController.pos
 app.post('/account/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
 
-app.get('/apis/products', productsApis.getProducts);
+
+
+/* User Signup manually from application Cisdev*/
+
+// app.get('/api/customer/create/save', userAppController.postSignupManually);
+app.post('/api/customer/create/save', userAppController.postSignupManuallySave);
+app.post('/api/customer/forgotpassword', userAppController.postForgetPassword);
+app.post('/api/customer/changePassword', userAppController.postChangePassword);
+
+
+app.get('/api/customer/fetchuserdetails/:userId', userAppController.getUserProfile);
+app.post('/api/customer/updateprofile', userAppController.postUpdateProfile);
+
+app.get('/api/customer/coverimage/:userId', userAppController.postCoverImage);
+app.get('/api/customer/profileimage/:userId', userAppController.postProfileImage);
+app.get('/api/customer/bio/:userId', userAppController.postBioImage);
+
+app.post('/api/customer/create/facebook', userAppController.postSignupFacebook);
+app.post('/api/customer/create/googleplus', userAppController.postSignupGooglePlus);
+
+
+
+// app.get('/apis/products', productsApis.getProducts);
+
 
 /**
  * API examples routes.
@@ -220,5 +256,8 @@ app.use(errorHandler());
 app.listen(app.get('port'), () => {
   console.log('Express server listening on port %d in %s mode', app.get('port'), app.get('env'));
 });
+
+ 
+ 
 
 module.exports = app;

@@ -244,7 +244,8 @@ exports.postReset = (req, res, next) => {
 
   const errors = req.validationErrors();
 
-  if (errors) {
+  if (errors) 
+  {
     req.flash('errors', errors);
     return res.redirect('back');
   }
@@ -371,3 +372,58 @@ exports.postForgot = (req, res, next) => {
     res.redirect('/forgot');
   });
 };
+
+
+exports.postSignupManually = function(req,res)
+{
+  res.render('signup', {
+    title: 'Create Account'
+  });
+}
+
+exports.postSignupManuallySave = function(req,res)
+{
+  if(req.body.device_token !== '')
+  {
+    User.findOne({ email: req.body.email }, (err, existingUser) => {
+      if (existingUser) 
+      {
+        res.send({status:'error',msg:'Email address already exists.'});
+      }
+    });
+
+    User.findOne({ username: req.body.username }, (err, existingUserName) => {
+      if (existingUserName) 
+      {
+        res.send({status:'error',msg:'Username already exists.'});
+      }
+    });
+
+    var UserIns         = new User();
+    UserIns.email       = req.body.email;
+    UserIns.username    = req.body.username;
+    UserIns.password    = req.body.password;
+    UserIns.firstname   = req.body.firstname;
+    UserIns.lastname    = req.body.lastname;
+    UserIns.gender      = req.body.gender;
+    UserIns.usertype    = 'customer';
+    UserIns.time        = Date.now();
+
+    UserIns.save(function(error){
+      if(error == '' || error === null)
+      {
+        res.send({status:'success',msg:'Your details is successfully stored.',newId:UserIns._id});
+      }
+      else 
+      {
+        res.send({status:'error',msg:error});
+      }
+    });
+  }
+  else 
+  {
+    res.send({status:'error',msg:'Device Token is not available.'});
+  }
+  
+}
+
