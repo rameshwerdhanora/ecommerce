@@ -38,6 +38,7 @@ const productsApis = require('./controllers/apis/products');
 
 /* Application Work Start Cisdev */
 const userAppController = require('./controllers/apis/userAppController');
+const userAppCommon = require('./controllers/apis/common');
 
 
 
@@ -159,6 +160,7 @@ app.get('/api/customer/bio/:userId', userAppController.postBioImage);
 app.post('/api/customer/create/facebook', userAppController.postSignupFacebook);
 app.post('/api/customer/create/googleplus', userAppController.postSignupGooglePlus);
 
+app.post('/api/customer/leavefeedback/', userAppCommon.leavefeedback);
 
 
 // app.get('/apis/products', productsApis.getProducts);
