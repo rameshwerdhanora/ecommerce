@@ -1,0 +1,26 @@
+extends ../layout
+
+block content
+  .page-header
+    h3 List of All Colors
+
+    a.addcolor.colorbuttons(href='/addcolor', title='Add Color') Add Color | 
+    a.rmvcolor.colorbuttons(href='/rmvbrand', title='Remove Color') Remove Color
+    table(width='100%')
+     tr
+      th Sr.no
+      th Color code
+      th Color Name
+      th Remove
+      th Edit
+     each getAllColor in getAllColors 
+      tr(class='colorTr_#{getAllColor._id}')
+       td 1
+       td #{getAllColor.color_code}
+       td #{getAllColor.color_name}
+       td 
+        a.edit_color(href='#' onclick='make_sure_for_color("#{getAllColor._id}")') Remove
+       td 
+        a.edit_color(href='/editcolor/#{getAllColor._id}') Edit
+
+          

@@ -17,7 +17,7 @@ const UserDetails 		= require('../../models/UsersDetails');
 /* Manually Sign Up from Application */
 exports.postSignupManually = function(req,res)
 {
-  res.render('signup', {
+  res.render('user', {
     title: 'Create Account'
   });
 }
@@ -31,49 +31,54 @@ exports.postSignupManuallySave = function(req,res)
 {
   if(req.body.device_token !== '')
   {
-	User.findOne({ email: req.body.email }, function(err, existingEmail){
+	User.findOne({ email_id: req.body.email_id }, function(err, existingEmail){
 		if(existingEmail) 
 		{
 			return res.json({"status":'error',"msg":'Email address already exists.'});
 		} 
-		else if (req.body.username)
-		{
-			checkUsername();
-		}
 		else 
 		{
-			var UserIns        		= new User();
-			UserIns.role_id    		= constants.CUSTOMERROLE;
-			UserIns.user_name   	= req.body.username;
-			UserIns.password    	= req.body.password;
-		    UserIns.email       	= req.body.email;
-			UserIns.first_name  	= req.body.firstname;
-		    UserIns.last_name   	= req.body.lastname;
-		    UserIns.contact_no  	= '';
-		    UserIns.dob   			= '';
-		    UserIns.gender   		= req.body.gender;
-		    UserIns.bio   			= '';
-		    UserIns.cover_image		= '';
-		    UserIns.profile_image   = '';
-		    UserIns.social_type   	= '';
-		    UserIns.social_id   	= '';
-		    UserIns.access_token   	= '';
-		    UserIns.is_active   	= true;
-		    UserIns.is_deleted   	= false;
-		    UserIns.created        	= Date.now();
-		    UserIns.updated        	= '';
-
-		    UserIns.save(function(error){
-				if(error === null)
-				{	
-					// SendMailToUser(req.body);
-					return res.json({"status":'success',"msg":'Your details is successfully stored.',"newId":UserIns._id});
+			User.findOne({ user_name: req.body.user_name }, function(err, existingUserName) {
+				if (existingUserName) 
+				{
+					return res.json({"status":'error',"msg":'Username already exists.'});
 				}
 				else 
 				{
-					return res.json({"status":'error',"msg":error});
+					var UserIns        		= new User();
+					UserIns.role_id    		= constants.CUSTOMERROLE;
+					UserIns.user_name   	= req.body.user_name;
+					UserIns.password    	= req.body.password;
+				    UserIns.email_id       	= req.body.email_id;
+					UserIns.first_name  	= req.body.first_name;
+				    UserIns.last_name   	= req.body.last_name;
+				    UserIns.contact_no  	= '';
+				    UserIns.dob   			= '';
+				    UserIns.gender   		= req.body.gender;
+				    UserIns.bio   			= '';
+				    UserIns.cover_image		= '';
+				    UserIns.profile_image   = '';
+				    UserIns.social_type   	= '';
+				    UserIns.social_id   	= '';
+				    UserIns.access_token   	= '';
+				    UserIns.is_active   	= true;
+				    UserIns.is_deleted   	= false;
+				    UserIns.created        	= Date.now();
+				    UserIns.updated        	= '';
+
+				    UserIns.save(function(error){
+						if(error === null)
+						{	
+							// SendMailToUser(req.body);
+							return res.json({"status":'success',"msg":'Your details is successfully stored.',"newId":UserIns._id});
+						}
+						else 
+						{
+							return res.json({"status":'error',"msg":error});
+						}
+				    }); 
 				}
-		    }); 
+			});
 		}
 
 	});
@@ -85,17 +90,49 @@ exports.postSignupManuallySave = function(req,res)
   
 }
 
+
+/**
+* POST /api/customer/login
+* Process to Login Manually
+*/
+
+exports.postLoginManually = function(req,res)
+{
+	if(req.body.device_token !== '')
+  	{
+  		User.findOne({ user_name: req.body.user_name,password: req.body.password}, function(error, checkForLogin) {
+  			if(checkForLogin)
+  			{
+				return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id});
+  			}
+  			else 
+  			{
+  				return res.json({"status":'error',"msg":error});
+  			}
+
+  		});
+  	}
+	else 
+	{
+		return res.json({"status":'error',"msg":'Device Token is not available.'});
+	}
+}
+
 /* Check username for unique*/
 
-function checkUsername() 
+/*function checkUsername(req,res) 
 {
-	User.findOne({ username: req.body.username }, function(err, existingUserName) {
+	User.findOne({ user_name: req.body.user_name }, function(err, existingUserName) {
 		if (existingUserName) 
 		{
 			return res.json({"status":'error',"msg":'Username already exists.'});
 		}
+		else 
+		{
+			return true;
+		}
 	});
-}
+}*/
 
 /**
  * POST /api/customer/forgetpassword
@@ -189,20 +226,25 @@ exports.getUserProfile = function(req,res)
 			}
 			else 
 			{
-				UserDetails.findOne({user_id:req.params.userId},function(error,fetchUserDetails)
+				if(fetchSelectedUserDetails)
 				{
-					if(error)
+					UserDetails.findOne({user_id:req.params.userId},function(error,fetchUserDetails)
 					{
-						return res.json({"status":'error',"msg":error});
-					}
-					else 
-					{	
-						userDetails 			= new Array();
-						userDetails['user'] 	= fetchSelectedUserDetails;
-						userDetails['details'] 	= fetchUserDetails;						
-						return res.json({"status":'success',"msg":'Fetching your details.',userDetails:userDetails});	
-					}
-				});
+						if(error)
+						{
+							return res.json({"status":'error',"msg":error});
+						}
+						else 
+						{	
+							return res.json({"status":'success',"msg":'Fetching your details.',user:fetchSelectedUserDetails,details:fetchUserDetails});	
+						}
+					});
+				}
+				else 
+				{
+					return res.json({"status":'error',"msg":'Unable to find this user.'});
+				}
+				
 			}
 		});
 	}
@@ -223,8 +265,8 @@ exports.postUpdateProfile = function(req,res)
   	{	
   		UpdateData = {
 			'password' 	: req.body.password,
-			'first_name': req.body.firstname,
-		    'last_name'	: req.body.lastname,
+			'first_name': req.body.first_name,
+		    'last_name'	: req.body.last_name,
 		    'gender'	: req.body.gender,
 		    'dob'		: req.body.dob,
 		    'updated'	: Date.now()
@@ -293,12 +335,12 @@ exports.postUpdateProfile = function(req,res)
 function SignUpFromSocial(req,res,constants)
 {
 
-	var email = (req.body.email) ?  req.body.email : '';
+	var email_id = (req.body.email_id) ?  req.body.email_id : '';
 	var UserIns        		= new User();
 	UserIns.role_id    		= constants.CUSTOMERROLE;
 	UserIns.user_name   	= '';
 	UserIns.password    	= '';
-    UserIns.email       	= email;
+    UserIns.email       	= email_id;
 	UserIns.first_name  	= '';
     UserIns.last_name   	= '';
     UserIns.contact_no  	= '';
@@ -445,6 +487,53 @@ exports.postBioImage = function(req,res)
 	});
 }
 
+/**
+* POST /api/saveusercofiguration
+* Process to Save user configuration from Application.
+*/
+
+exports.saveUserCofiguration = function(req,res)
+{
+	UserDetails.findOne({user_id:req.body.userId},function(error,fetchUserConfigDetails)
+	{
+		if(fetchUserConfigDetails)
+		{
+			UserConfigDetails = {
+			    'user_id'	 	: req.body.userId,
+			    'configDetail'	: req.body.configDetail  //Array
+			};
+			UserDetails.findByIdAndUpdate(req.params.userId,UserConfigDetails, function(error, updateConfigDetails){
+				if(error)
+				{
+					return res.json({"status":'error',"msg":error});
+				}
+				else 
+				{
+					return res.json({"status":'success',"msg":'Your configuration successfully updated.'});
+				}
+			})
+		}
+		else
+		{
+			var UserDetailsIns  			= new UserDetails();
+			UserDetailsIns.user_id 			= req.body.userId;
+			UserDetailsIns.configDetail 	= req.body.configDetail;
+			
+			UserDetailsIns.save(function(error){
+				if(error)
+				{
+					return res.json({"status":'error',"msg":error});
+				}
+				else 
+				{
+					return res.json({"status":'success',"msg":'Your configuration successfully added.'});
+				}
+			});
+		}
+	});
+
+	 
+}
 
 
 /* Comman Send mail function for all user purpose */

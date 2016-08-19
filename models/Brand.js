@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
 const brandSchema = new mongoose.Schema({
-	name : String,
-	logo : String,
-	description : String,
-	bio : String
+	brand_name : String,
+	brand_logo : String,
+	brand_desc : String,
+	user_id : String
 });
 
 const Brand = mongoose.model('Brand', brandSchema);

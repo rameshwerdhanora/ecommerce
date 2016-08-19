@@ -1,0 +1,35 @@
+extends ../layout
+
+block content
+  .page-header
+    h3 Edit Size
+
+    form(name='addsize', action='/updatesize', method='POST')
+      input(type='hidden' value='#{fetchSize.user_id}' name='user_id')
+      input(type='hidden' value='#{fetchSize._id}' name='_id')
+      a(href='/listofsize') Cancel | 
+      input.savesize(type='submit', name='savesize', value='Save Size')
+      table#POITable(cellpadding='0', cellspacing='0', width='100%')
+        tr
+          td Size Name
+          td(colspan='4')
+            input.size_name(type='text', name='size_name', value='#{fetchSize.size_name}', required='required')
+          td
+            select.sizegender(name='gender')
+             option(value='male', selected=(fetchSize.gender == 'male')) Male
+             option(value='female', selected=(fetchSize.gender == 'female')) female
+
+        //each code in fetchSize.size_code   
+        each size_code, index in fetchSize.size_code
+         tr.tr_clone
+          td Sizes
+          td
+            input.size_code(type='text', name='size_code', value='#{fetchSize.size_code[index]}', required='required')
+          td  
+            input.size_label(type='text', name='size_label', value='#{fetchSize.size_label[index]}', required='required')
+          td  
+            input.add_more(type='button', name='add_more', value='add more' onclick="add_more_size()")
+          td  
+            input.delete_more(type='button', name='delete_more', value='Delete' onclick="deleteRow(this)")  
+            
+           

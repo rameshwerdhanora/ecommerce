@@ -17,6 +17,12 @@
           a(href='/api') API Examples
         li(class=(title == 'Contact') ? 'active' : undefined)
           a(href='/contact') Contact
+        li(class=(title == 'Brand') ? 'active' : undefined)
+          a(href='/listofbrand') Brand
+        li(class=(title == 'Color') ? 'active' : undefined)
+          a(href='/listofcolor') Color
+        li(class=(title == 'Size') ? 'active' : undefined)
+          a(href='/listofsize') Size
       ul.nav.navbar-nav.navbar-right
         if !user
           li(class=(title == 'Login') ? 'active' : undefined)

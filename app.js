@@ -39,7 +39,9 @@ const productsApis = require('./controllers/apis/products');
 /* Application Work Start Cisdev */
 const userAppController = require('./controllers/apis/userAppController');
 const userAppCommon = require('./controllers/apis/common');
-
+const brands = require('./controllers/brands');
+const color = require('./controllers/color');
+const size = require('./controllers/size');
 
 
 /**
@@ -144,27 +146,69 @@ app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userControl
 
 /* User Signup manually from application Cisdev*/
 
-// app.get('/api/customer/create/save', userAppController.postSignupManually);
+//app.get('/api/customer/create', userAppController.postSignupManually);
 app.post('/api/customer/create/save', userAppController.postSignupManuallySave);
-app.post('/api/customer/forgotpassword', userAppController.postForgetPassword);
-app.post('/api/customer/changePassword', userAppController.postChangePassword);
-
+app.post('/api/customer/forgotpassword', userAppController.postForgetPassword); // Completed
+app.post('/api/customer/changePassword', userAppController.postChangePassword); // Completed
 
 app.get('/api/customer/fetchuserdetails/:userId', userAppController.getUserProfile);
 app.post('/api/customer/updateprofile', userAppController.postUpdateProfile);
 
-app.get('/api/customer/coverimage/:userId', userAppController.postCoverImage);
-app.get('/api/customer/profileimage/:userId', userAppController.postProfileImage);
-app.get('/api/customer/bio/:userId', userAppController.postBioImage);
+app.get('/api/customer/coverimage/:userId', userAppController.postCoverImage); // Completed
+app.get('/api/customer/profileimage/:userId', userAppController.postProfileImage); // Completed
+app.get('/api/customer/bio/:userId', userAppController.postBioImage); // Completed
 
-app.post('/api/customer/create/facebook', userAppController.postSignupFacebook);
-app.post('/api/customer/create/googleplus', userAppController.postSignupGooglePlus);
+app.post('/api/customer/login', userAppController.postLoginManually);
+app.post('/api/customer/create/facebook', userAppController.postSignupFacebook); // Completed
+app.post('/api/customer/create/googleplus', userAppController.postSignupGooglePlus); // Completed
 
-app.post('/api/customer/leavefeedback/', userAppCommon.leavefeedback);
+app.post('/api/customer/leavefeedback', userAppCommon.leavefeedback); // Completed
+
+app.get('/api/product/like/:userId/:productId',productsApis.likeProductByUser);
+app.get('/api/product/wishlist/:userId/:productId',productsApis.wishListProductByUser);
+app.get('/api/product/alllike/:userId',  productsApis.listOfAllLike);
+app.get('/api/product/allwishlist/:userId',  productsApis.listOfAllWishlist);
+
+app.get('/api/listofsize',  size.listOfAllSize);
+app.get('/api/listofbrand',  brands.listOfAllBrand);
+app.get('/api/listofcolor',  color.listOfAllColor);
 
 
-// app.get('/apis/products', productsApis.getProducts);
 
+app.post('/api/saveusercofiguration',  userAppController.saveUserCofiguration);
+
+// app.get('/apis/product', productsApis.getProducts);
+
+
+/* Brand CRUD Section */ // Need isAuthenticated code for check user is loggedin.
+
+app.get('/listofbrand',  brands.listOfBrand);
+app.get('/addbrand',  brands.addBrand);
+app.get('/editbrand/:brandId',  brands.editBrand);
+app.post('/savebrand',  brands.saveBrand);
+app.get('/removebrand/:brandId',  brands.removeBrand);
+app.post('/updatebrand',  brands.updateBrand);
+
+/* Color CRUD Section */ // Need isAuthenticated code for check user is loggedin.
+
+app.get('/listofcolor',  color.listOfColor);
+app.get('/addcolor',  color.addColor);
+app.get('/editcolor/:colorId',  color.editColor);
+app.post('/savecolor',  color.saveColor);
+app.get('/removecolor/:colorId',  color.removeColor);
+app.post('/updatecolor',  color.updateColor);
+
+
+/* Size CRUD Section */ // Need isAuthenticated code for check user is loggedin.
+
+app.get('/listofsize',  size.listOfSize);
+app.get('/addsize',  size.addSize);
+app.get('/editsize/:sizeId',  size.editSize);
+app.post('/savesize',  size.saveSize);
+app.get('/removesize/:sizeId',  size.removeSize);
+app.post('/updatesize',  size.updateSize);
+
+ 
 
 /**
  * API examples routes.

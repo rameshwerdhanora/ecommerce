@@ -12,6 +12,7 @@ const userDetailsSchema = new mongoose.Schema({
 	shr_tw : String,
 	shr_intg : String,
 	enable_filter : String,
+	configDetail:Array,
 	created : String,
 	updated : String
 });

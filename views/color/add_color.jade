@@ -1,0 +1,21 @@
+extends ../layout
+
+block content
+  .page-header
+    h3 Add New Color
+
+    form(name='addcolor', action='/savecolor', method='POST')
+      table(cellpadding='0', cellspacing='0', width='100%')
+        tr
+          td Color Code
+          td
+            input.color_code(type='text', name='color_code',value='', required='required')
+        tr
+          td Color Name
+          td
+            input.color_name(type='text', name='color_name', value='', required='required')
+        tr
+          td(colspan='2')
+            a(href='/listofcolor') Cancel | 
+            input.savecolor(type='submit', name='savecolor', value='Save Color')
+           
