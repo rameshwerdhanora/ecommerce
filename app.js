@@ -154,15 +154,15 @@ app.post('/api/customer/changePassword', userAppController.postChangePassword); 
 app.get('/api/customer/fetchuserdetails/:userId', userAppController.getUserProfile);
 app.post('/api/customer/updateprofile', userAppController.postUpdateProfile);
 
-app.get('/api/customer/coverimage/:userId', userAppController.postCoverImage); // Completed
-app.get('/api/customer/profileimage/:userId', userAppController.postProfileImage); // Completed
-app.get('/api/customer/bio/:userId', userAppController.postBioImage); // Completed
+app.post('/api/customer/coverimage', userAppController.postCoverImage); // Completed
+app.post('/api/customer/profileimage', userAppController.postProfileImage); // Completed
+app.post('/api/customer/bio', userAppController.postBioImage); // Completed
 
 app.post('/api/customer/login', userAppController.postLoginManually);
 app.post('/api/customer/create/facebook', userAppController.postSignupFacebook); // Completed
 app.post('/api/customer/create/googleplus', userAppController.postSignupGooglePlus); // Completed
 
-app.post('/api/customer/leavefeedback', userAppCommon.leavefeedback); // Completed
+app.post('/api/customer/leavefeedback', userAppCommon.postLeaveFeedback); // Completed
 
 app.get('/api/product/like/:userId/:productId',productsApis.likeProductByUser);
 app.get('/api/product/wishlist/:userId/:productId',productsApis.wishListProductByUser);
@@ -173,12 +173,7 @@ app.get('/api/listofsize',  size.listOfAllSize);
 app.get('/api/listofbrand',  brands.listOfAllBrand);
 app.get('/api/listofcolor',  color.listOfAllColor);
 
-
-
 app.post('/api/saveusercofiguration',  userAppController.saveUserCofiguration);
-
-// app.get('/apis/product', productsApis.getProducts);
-
 
 /* Brand CRUD Section */ // Need isAuthenticated code for check user is loggedin.
 

@@ -6,14 +6,15 @@ const Brand		= require('../models/Brand');
 /* Define Folder name where our user porfile stored */
 var storage =   multer.diskStorage({
   destination: function (req, file, callback) {
-    callback(null, './uploads/profile_images');
+    callback(null, 'public/uploads/brands_logo');
   },
   filename: function (req, file, callback) {
-    callback(null, file.fieldname + '-' + Date.now());
+  	var realname = file.originalname.replace(/ /g,"_");
+    callback(null, Date.now() + '_' + realname);
   }
 });
 /* Create Instance for upload folder */
-var uploadProfile = multer({ storage : storage}).single('brand_logo');
+var uploadBrand = multer({ storage : storage}).single('brand_logo');
 
 /* Get the list of all brand name with imformation */
 exports.listOfBrand = (req, res) => {
@@ -35,13 +36,14 @@ exports.addBrand = (req, res) => {
 
 /* Save Brand Information */
 exports.saveBrand = (req,res) => {
-    uploadProfile(req,res,function(err) {
+    uploadBrand(req,res,function(err) {
         if(err) {
             return res.end("Error uploading file.");
         }
-
+        
+        var newname = req.file.path.replace('public/','');
         var BrandIns 			= new Brand();
-        BrandIns.brand_logo 	= req.file.path;
+        BrandIns.brand_logo 	= newname;
         BrandIns.brand_name  	= req.body.brand_name;
        	BrandIns.brand_desc 	= req.body.brand_desc;
        	BrandIns.user_id 		= req.user._id; 
@@ -94,7 +96,7 @@ exports.editBrand = (req,res) => {
 
 exports.updateBrand = (req,res) => {
 
-	uploadProfile(req,res,function(err) 
+	uploadBrand(req,res,function(err) 
 	{
 		UpdateData = {
 			'brand_logo' 	: req.file.path,
@@ -116,6 +118,8 @@ exports.updateBrand = (req,res) => {
 
 exports.listOfAllBrand = (req, res) => {
 	Brand.find({},function(error,getAllBrands){
+		console.log(error);
+		console.log(getAllBrands);
 		if(getAllBrands)
 		{
 			res.send({status:'success',msg:'Successfully fetch all brands.',getAllBrands:getAllBrands});

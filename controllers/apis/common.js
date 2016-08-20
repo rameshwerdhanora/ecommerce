@@ -11,7 +11,7 @@ const nodemailer 	= require('nodemailer');
 
 
 /**
- * POST /api/customer/leavefeedback
+ * POST /api/customer/postLeaveFeedback
  * Process to leave feedback from Application.
  */
 

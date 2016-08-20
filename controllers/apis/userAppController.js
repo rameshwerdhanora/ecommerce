@@ -8,10 +8,25 @@
 /* Load required library */
 const nodemailer 		= require('nodemailer');
 const passport 			= require('passport');
+const multer 			= require('multer');
 const User 				= require('../../models/AppUser');
 const ForgetPassword	= require('../../models/ForgetPassword');
 const constants 		= require('../../constants/constants');
 const UserDetails 		= require('../../models/UsersDetails');
+
+
+/* Define Folder name where our user porfile stored */
+var storage =   multer.diskStorage({
+  destination: function (req, file, callback) {
+    callback(null, 'public/uploads/profile_images');
+  },
+  filename: function (req, file, callback) {
+  	var realname = file.originalname.replace(/ /g,"_");
+    callback(null, Date.now() + '_' + realname);
+  }
+});
+/* Create Instance for upload folder */
+var Profileimage = multer({ storage : storage}).single('image');
 
 
 /* Manually Sign Up from Application */
@@ -427,64 +442,116 @@ exports.postSignupGooglePlus = function(req,res)
 
 
 /**
-* POST /api/customer/coverimage/:userId
+* POST /api/customer/coverimage
 * Process to update cover image.
 */
 
 exports.postCoverImage = function(req,res)
 {
-	UpdateData = {
-	    'cover_image'	: req.params.cover_image,
-	    'updated'		: Date.now()
-	};
+	if(req.body.device_token !== '')
+  	{
+  		Profileimage(req,res,function(err) 
+		{
+			if(err) {
+	            return res.end(err);
+	        }
+	        var newCIPath = req.file.path.replace('public/','');
 
-  		User.findByIdAndUpdate(req.body.userId,UpdateData, function(error, updateExistingCI)
-  		{
+			UpdateData = {
+			    'cover_image'	: newCIPath,
+			    'updated'		: Date.now()
+			};
 
-  		});
+	  		User.findByIdAndUpdate(req.body.user_id,UpdateData, function(error, updateExistingCI)
+	  		{
+	  			if(updateExistingCI)
+	  			{
+	  				return res.json({"status":'success',"msg":'Successfully update your cover Image'});
+	  			}
+	  			else 
+	  			{
+	  				return res.json({"status":'error',"msg":error});
+	  			}
+	  		});
+	  	});
+  	}
+	else 
+	{
+		return res.json({"status":'error',"msg":'Device Token is not available.'});
+	}	
 }
 
 /**
-* POST /api/customer/Profileimage/:userId
+* POST /api/customer/Profileimage
 * Process to update Profile image.
 */
 
 exports.postProfileImage = function(req,res)
 {
-	UpdateProfileImage = {
-	    'profile_image'	: req.params.profile_image,
-	    'updated'		: Date.now()
-	};
+	if(req.body.device_token !== '')
+  	{
+		Profileimage(req,res,function(err) 
+		{
+	        if(err) {
+	            return res.end(err);
+	        }
 
-  		User.findByIdAndUpdate(req.body.userId,UpdateProfileImage, function(error, updateExistingDP)
-  		{
+	  		var newDpPath = req.file.path.replace('public/','');
 
+			UpdateProfileImage = {
+			    'profile_image'	: newDpPath,
+			    'updated'		: Date.now()
+			};
+
+	  		User.findByIdAndUpdate(req.body.user_id,UpdateProfileImage, function(error, updateExistingDP)
+	  		{
+	  			if(updateExistingDP)
+	  			{
+	  				return res.json({"status":'success',"msg":'Successfully update your profile image'});
+	  			}
+	  			else 
+	  			{
+	  				return res.json({"status":'error',"msg":error});
+	  			}
+	  		});
   		});
+  	}
+	else 
+	{
+		return res.json({"status":'error',"msg":'Device Token is not available.'});
+	}		
 }
 
 /**
-* POST /api/customer/bio/:userId
+* POST /api/customer/bio
 * Process to update bio.
 */
 
 exports.postBioImage = function(req,res)
 {
-	UpdateBioData = {
-	    'bio'	 : req.body.dob,
-	    'updated': Date.now()
-	};
+	if(req.body.device_token !== '')
+  	{
+		UpdateBioData = {
+		    'bio'	 : req.body.dob,
+		    'updated': Date.now()
+		};
 
-	User.findByIdAndUpdate(req.params.userId,UpdateBioData, function(error, updateExistingBio)
+		User.findByIdAndUpdate(req.params.user_id,UpdateBioData, function(error, updateExistingBio)
 		{
-			if(error)
-		{	
-			return res.json({"status":'error',"msg":error});
-		}
-		else 
-		{
-			return res.json({"status":'success',"msg":'Your Bio updated successfully.'});
-		}
-	});
+			if(updateExistingBio)
+			{	
+				return res.json({"status":'success',"msg":'Your Bio updated successfully.'});
+			}
+			else 
+			{
+				return res.json({"status":'error',"msg":error});
+			}
+		});
+	}
+	else 
+	{
+		return res.json({"status":'error',"msg":'Device Token is not available.'});
+	}	
 }
 
 /**
