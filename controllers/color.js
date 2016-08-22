@@ -1,6 +1,6 @@
 /* Add Color Model for DB connectivity  */
 
-const Color		= require('../models/Color');
+const Color		= require('../models/color');
 
 
 /* Get the list of all color name with imformation */
@@ -24,11 +24,11 @@ exports.addColor = (req, res) => {
 /* Save Color Information */
 exports.saveColor = (req,res) => {
 
-    var ColorIns 			= new Color();
-    ColorIns.color_code 	= req.body.color_code;
-    ColorIns.color_name  	= req.body.color_name;
-   	ColorIns.user_id 		= req.user._id; 
-   	ColorIns.save(function(err) 
+    var colorIns 			= new Color();
+    colorIns.color_code 	= req.body.color_code;
+    colorIns.color_name  	= req.body.color_name;
+   	colorIns.user_id 		= req.user._id; 
+   	colorIns.save(function(err) 
     {
     	if (err)
     	{
@@ -75,12 +75,12 @@ exports.editColor = (req,res) => {
 
 exports.updateColor = (req,res) => {
 
-	UpdateData = {
+	updateData = {
 		'color_code' 	: req.body.color_code,
 		'color_name'	: req.body.color_name,
 	    'user_id'		: req.body.user_id 
 	};
-	Color.findByIdAndUpdate(req.body._id,UpdateData, function(error, updateRes)
+	Color.findByIdAndUpdate(req.body._id,updateData, function(error, updateRes)
 	{
 		res.redirect('/listofcolor');
 	});

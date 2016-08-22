@@ -6,8 +6,8 @@
 */
 
 /* Load required library */
-const userAppCommon	= require('../../models/common');
-const nodemailer 	= require('nodemailer');
+const Common	     = require('../../models/commonApp');
+const NodeMailer 	  = require('nodemailer');
 
 
 /**
@@ -24,7 +24,9 @@ exports.postLeaveFeedback = function(req,res)
 		feedback_description:req.body.feedback_description, 
 		created				:Date.now() 
 	};
-   	userAppCommon.insert(feedbackData,function(error,insertFeedbackRes){
+
+   	Common.insert(feedbackData,function(error,insertFeedbackRes)
+   	{
    		if(error)
    		{
    			return res.json({"status":'error',"msg":error});

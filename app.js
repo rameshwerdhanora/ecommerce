@@ -34,14 +34,20 @@ const homeController = require('./controllers/home');
 const userController = require('./controllers/user');
 const apiController = require('./controllers/api');
 const contactController = require('./controllers/contact');
-const productsApis = require('./controllers/apis/products');
+
 
 /* Application Work Start Cisdev */
-const userAppController = require('./controllers/apis/userAppController');
-const userAppCommon = require('./controllers/apis/common');
-const brands = require('./controllers/brands');
-const color = require('./controllers/color');
-const size = require('./controllers/size');
+const userAppController         = require('./controllers/apis/userApp');
+const commonAppController       = require('./controllers/apis/commonApp');
+const brandAppController        = require('./controllers/apis/brandApp');
+const sizeAppController         = require('./controllers/apis/sizeApp');
+const colorAppController        = require('./controllers/apis/colorApp');
+const productAppController      = require('./controllers/apis/productApp');
+
+
+const brandController          = require('./controllers/brand');
+const colorController          = require('./controllers/color');
+const sizeController           = require('./controllers/size');
 
 
 /**
@@ -162,46 +168,46 @@ app.post('/api/customer/login', userAppController.postLoginManually);
 app.post('/api/customer/create/facebook', userAppController.postSignupFacebook); // Completed
 app.post('/api/customer/create/googleplus', userAppController.postSignupGooglePlus); // Completed
 
-app.post('/api/customer/leavefeedback', userAppCommon.postLeaveFeedback); // Completed
+app.post('/api/customer/leavefeedback', commonAppController.postLeaveFeedback); // Completed
 
-app.get('/api/product/like/:userId/:productId',productsApis.likeProductByUser);
-app.get('/api/product/wishlist/:userId/:productId',productsApis.wishListProductByUser);
-app.get('/api/product/alllike/:userId',  productsApis.listOfAllLike);
-app.get('/api/product/allwishlist/:userId',  productsApis.listOfAllWishlist);
+app.get('/api/product/like/:userId/:productId',productAppController.likeProductByUser);
+app.get('/api/product/wishlist/:userId/:productId',productAppController.wishListProductByUser);
+app.get('/api/product/alllike/:userId',  productAppController.listOfAllLike);
+app.get('/api/product/allwishlist/:userId',  productAppController.listOfAllWishlist);
 
-app.get('/api/listofsize',  size.listOfAllSize);
-app.get('/api/listofbrand',  brands.listOfAllBrand);
-app.get('/api/listofcolor',  color.listOfAllColor);
+app.get('/api/listofbrand',  brandAppController.listOfAllBrand);
+app.get('/api/listofsize',  sizeAppController.listOfAllSize);
+app.get('/api/listofcolor',  colorAppController.listOfAllColor);
 
 app.post('/api/saveusercofiguration',  userAppController.saveUserCofiguration);
 
 /* Brand CRUD Section */ // Need isAuthenticated code for check user is loggedin.
 
-app.get('/listofbrand',  brands.listOfBrand);
-app.get('/addbrand',  brands.addBrand);
-app.get('/editbrand/:brandId',  brands.editBrand);
-app.post('/savebrand',  brands.saveBrand);
-app.get('/removebrand/:brandId',  brands.removeBrand);
-app.post('/updatebrand',  brands.updateBrand);
+app.get('/listofbrand',  brandController.listOfBrand);
+app.get('/addbrand',  brandController.addBrand);
+app.get('/editbrand/:brandId',  brandController.editBrand);
+app.post('/savebrand',  brandController.saveBrand);
+app.get('/removebrand/:brandId',  brandController.removeBrand);
+app.post('/updatebrand',  brandController.updateBrand);
 
 /* Color CRUD Section */ // Need isAuthenticated code for check user is loggedin.
 
-app.get('/listofcolor',  color.listOfColor);
-app.get('/addcolor',  color.addColor);
-app.get('/editcolor/:colorId',  color.editColor);
-app.post('/savecolor',  color.saveColor);
-app.get('/removecolor/:colorId',  color.removeColor);
-app.post('/updatecolor',  color.updateColor);
+app.get('/listofcolor',  colorController.listOfColor);
+app.get('/addcolor',  colorController.addColor);
+app.get('/editcolor/:colorId',  colorController.editColor);
+app.post('/savecolor',  colorController.saveColor);
+app.get('/removecolor/:colorId',  colorController.removeColor);
+app.post('/updatecolor',  colorController.updateColor);
 
 
 /* Size CRUD Section */ // Need isAuthenticated code for check user is loggedin.
 
-app.get('/listofsize',  size.listOfSize);
-app.get('/addsize',  size.addSize);
-app.get('/editsize/:sizeId',  size.editSize);
-app.post('/savesize',  size.saveSize);
-app.get('/removesize/:sizeId',  size.removeSize);
-app.post('/updatesize',  size.updateSize);
+app.get('/listofsize',  sizeController.listOfSize);
+app.get('/addsize',  sizeController.addSize);
+app.get('/editsize/:sizeId',  sizeController.editSize);
+app.post('/savesize',  sizeController.saveSize);
+app.get('/removesize/:sizeId',  sizeController.removeSize);
+app.post('/updatesize',  sizeController.updateSize);
 
  
 

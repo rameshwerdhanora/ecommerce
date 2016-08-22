@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const productsSchema = new mongoose.Schema({
+const productAppSchema = new mongoose.Schema({
 	users_id : String,
 	category_id : String,
 	sub_category_id : String,
@@ -15,6 +15,6 @@ const productsSchema = new mongoose.Schema({
 	updated : String
 });
 
-const Products = mongoose.model('Products', productsSchema);
+const ProductApp = mongoose.model('ProductApp', productAppSchema);
 
-module.exports = Products;
+module.exports = ProductApp;
