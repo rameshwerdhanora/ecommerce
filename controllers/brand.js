@@ -1,10 +1,10 @@
 /* Add Multer Library for upload image */
-const multer 	= require('multer');
-const Brand		= require('../models/Brand');
+const Multer 	= require('multer');
+const Brand		= require('../models/brand');
 
 
 /* Define Folder name where our user porfile stored */
-var storage =   multer.diskStorage({
+var storage =   Multer.diskStorage({
   destination: function (req, file, callback) {
     callback(null, 'public/uploads/brands_logo');
   },
@@ -14,7 +14,7 @@ var storage =   multer.diskStorage({
   }
 });
 /* Create Instance for upload folder */
-var uploadBrand = multer({ storage : storage}).single('brand_logo');
+var uploadBrand = Multer({ storage : storage}).single('brand_logo');
 
 /* Get the list of all brand name with imformation */
 exports.listOfBrand = (req, res) => {
@@ -42,12 +42,12 @@ exports.saveBrand = (req,res) => {
         }
         
         var newname = req.file.path.replace('public/','');
-        var BrandIns 			= new Brand();
-        BrandIns.brand_logo 	= newname;
-        BrandIns.brand_name  	= req.body.brand_name;
-       	BrandIns.brand_desc 	= req.body.brand_desc;
-       	BrandIns.user_id 		= req.user._id; 
-       	BrandIns.save(function(err) 
+        var brandIns 			= new Brand();
+        brandIns.brand_logo 	= newname;
+        brandIns.brand_name  	= req.body.brand_name;
+       	brandIns.brand_desc 	= req.body.brand_desc;
+       	brandIns.user_id 		= req.user._id; 
+       	brandIns.save(function(err) 
         {
         	if (err)
         	{
@@ -98,13 +98,13 @@ exports.updateBrand = (req,res) => {
 
 	uploadBrand(req,res,function(err) 
 	{
-		UpdateData = {
+		updateData = {
 			'brand_logo' 	: req.file.path,
 			'brand_name'	: req.body.brand_name,
 		    'brand_desc'	: req.body.brand_desc,
 		    'user_id'		: req.body.user_id 
 		};
-		Brand.findByIdAndUpdate(req.body._id,UpdateData, function(error, updateRes)
+		Brand.findByIdAndUpdate(req.body._id,updateData, function(error, updateRes)
 		{
 			res.redirect('/listofbrand');
 		});
@@ -118,8 +118,6 @@ exports.updateBrand = (req,res) => {
 
 exports.listOfAllBrand = (req, res) => {
 	Brand.find({},function(error,getAllBrands){
-		console.log(error);
-		console.log(getAllBrands);
 		if(getAllBrands)
 		{
 			res.send({status:'success',msg:'Successfully fetch all brands.',getAllBrands:getAllBrands});

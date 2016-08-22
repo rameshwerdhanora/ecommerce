@@ -1,6 +1,6 @@
 /* Add Size Model for DB connectivity  */
 
-const Size		= require('../models/Size');
+const Size		= require('../models/size');
 
 /* Get the list of all color name with imformation */
 exports.listOfSize = (req, res) => {
@@ -22,13 +22,13 @@ exports.addSize = (req, res) => {
 
 /* Save Size Information */
 exports.saveSize = (req,res) => {
-    var SizeIns 			= new Size();
-    SizeIns.size_name 		= req.body.size_name;
-    SizeIns.size_code  		= req.body.size_code;
-    SizeIns.size_label  	= req.body.size_label;
-    SizeIns.gender			= req.body.gender,
-   	SizeIns.user_id 		= req.user._id; 
-   	SizeIns.save(function(err) 
+    var sizeIns 			= new Size();
+    sizeIns.size_name 		= req.body.size_name;
+    sizeIns.size_code  		= req.body.size_code;
+    sizeIns.size_label  	= req.body.size_label;
+    sizeIns.gender			= req.body.gender,
+   	sizeIns.user_id 		= req.user._id; 
+   	sizeIns.save(function(err) 
     {
     	if (err)
     	{
@@ -75,14 +75,14 @@ exports.editSize = (req,res) => {
 
 exports.updateSize = (req,res) => {
 
-	UpdateData = {
+	updateData = {
 		'size_name' 	: req.body.size_name,
 		'size_code'		: req.body.size_code,
 		'size_label'	: req.body.size_label,
 		'gender'		: req.body.gender,
 	    'user_id'		: req.body.user_id 
 	};
-	Size.findByIdAndUpdate(req.body._id,UpdateData, function(error, updateRes)
+	Size.findByIdAndUpdate(req.body._id,updateData, function(error, updateRes)
 	{
 		res.redirect('/listofsize');
 	});

@@ -6,17 +6,17 @@
 */
 
 /* Load required library */
-const nodemailer 		= require('nodemailer');
-const passport 			= require('passport');
-const multer 			= require('multer');
-const User 				= require('../../models/AppUser');
-const ForgetPassword	= require('../../models/ForgetPassword');
-const constants 		= require('../../constants/constants');
-const UserDetails 		= require('../../models/UsersDetails');
+const NodeMailer 		= require('nodemailer');
+const Passport 			= require('passport');
+const Multer 			= require('multer');
+const User 				= require('../../models/userApp');
+const ForgetPassword	= require('../../models/forgetPassword');
+const Constants 		= require('../../constants/constants');
+const UserDetails 		= require('../../models/usersDetails');
 
 
 /* Define Folder name where our user porfile stored */
-var storage =   multer.diskStorage({
+var storage =   Multer.diskStorage({
   destination: function (req, file, callback) {
     callback(null, 'public/uploads/profile_images');
   },
@@ -26,7 +26,7 @@ var storage =   multer.diskStorage({
   }
 });
 /* Create Instance for upload folder */
-var Profileimage = multer({ storage : storage}).single('image');
+var Profileimage = Multer({ storage : storage}).single('image');
 
 
 /* Manually Sign Up from Application */
@@ -60,32 +60,32 @@ exports.postSignupManuallySave = function(req,res)
 				}
 				else 
 				{
-					var UserIns        		= new User();
-					UserIns.role_id    		= constants.CUSTOMERROLE;
-					UserIns.user_name   	= req.body.user_name;
-					UserIns.password    	= req.body.password;
-				    UserIns.email_id       	= req.body.email_id;
-					UserIns.first_name  	= req.body.first_name;
-				    UserIns.last_name   	= req.body.last_name;
-				    UserIns.contact_no  	= '';
-				    UserIns.dob   			= '';
-				    UserIns.gender   		= req.body.gender;
-				    UserIns.bio   			= '';
-				    UserIns.cover_image		= '';
-				    UserIns.profile_image   = '';
-				    UserIns.social_type   	= '';
-				    UserIns.social_id   	= '';
-				    UserIns.access_token   	= '';
-				    UserIns.is_active   	= true;
-				    UserIns.is_deleted   	= false;
-				    UserIns.created        	= Date.now();
-				    UserIns.updated        	= '';
+					var userIns        		= new User();
+					userIns.role_id    		= Constants.CUSTOMERROLE;
+					userIns.user_name   	= req.body.user_name;
+					userIns.password    	= req.body.password;
+				    userIns.email_id       	= req.body.email_id;
+					userIns.first_name  	= req.body.first_name;
+				    userIns.last_name   	= req.body.last_name;
+				    userIns.contact_no  	= '';
+				    userIns.dob   			= '';
+				    userIns.gender   		= req.body.gender;
+				    userIns.bio   			= '';
+				    userIns.cover_image		= '';
+				    userIns.profile_image   = '';
+				    userIns.social_type   	= '';
+				    userIns.social_id   	= '';
+				    userIns.access_token   	= '';
+				    userIns.is_active   	= true;
+				    userIns.is_deleted   	= false;
+				    userIns.created        	= Date.now();
+				    userIns.updated        	= '';
 
-				    UserIns.save(function(error){
+				    userIns.save(function(error){
 						if(error === null)
 						{	
 							// SendMailToUser(req.body);
-							return res.json({"status":'success',"msg":'Your details is successfully stored.',"newId":UserIns._id});
+							return res.json({"status":'success',"msg":'Your details is successfully stored.',"newId":userIns._id});
 						}
 						else 
 						{
@@ -161,10 +161,10 @@ exports.postForgetPassword = function(req,res)
   		User.findOne({ email: req.body.email }, function(err, existingEmail){
 			if(existingEmail) 
 			{
-				ForgetPasswordIns	 			= new ForgetPassword();
-				ForgetPasswordIns.email 		= req.body.email;
-				ForgetPasswordIns.send_token 	= new Buffer.from(req.body).toString('base64');
-				ForgetPasswordIns.send_time		= Date.now();
+				forgetPasswordIns	 			= new ForgetPassword();
+				forgetPasswordIns.email 		= req.body.email;
+				forgetPasswordIns.send_token 	= new Buffer.from(req.body).toString('base64');
+				forgetPasswordIns.send_time		= Date.now();
 				// SendMailToUser(req.body);
 				// For Decode 
 				// Buffer.from(req.body, 'base64').toString('ascii')
@@ -196,10 +196,10 @@ exports.postChangePassword = function(req,res)
 				ForgetPassword.findOne({email: req.body.email,send_token:req.body.token},function(err, changePasswordRes){
 					if(changePasswordRes)
 					{
-						var UserIns         = new User();
-						UserIns.password 	= req.body.password;
-						UserIns.updated     = Date.now();
-						UserIns.save(function(error){
+						var userIns         = new User();
+						userIns.password 	= req.body.password;
+						userIns.updated     = Date.now();
+						userIns.save(function(error){
 							if(error === null)
 							{
 								return res.json({"status":'success',"msg":'Your Password is successfully changed.'});
@@ -226,7 +226,7 @@ exports.postChangePassword = function(req,res)
 }
 
 /**
-* POST /api/customer/fetchuserdetails/:userId
+* GET /api/customer/fetchuserdetails/:userId
 * Process to Fetch user details.
 */
 exports.getUserProfile = function(req,res) 
@@ -278,7 +278,7 @@ exports.postUpdateProfile = function(req,res)
 {
 	if(req.body.device_token !== '')
   	{	
-  		UpdateData = {
+  		updateData = {
 			'password' 	: req.body.password,
 			'first_name': req.body.first_name,
 		    'last_name'	: req.body.last_name,
@@ -287,7 +287,7 @@ exports.postUpdateProfile = function(req,res)
 		    'updated'	: Date.now()
 		};
 
-  		User.findByIdAndUpdate(req.body.userId,UpdateData, function(error, updateExistingVals)
+  		User.findByIdAndUpdate(req.body.userId,updateData, function(error, updateExistingVals)
   		{
 			if(error) 
 			{
@@ -299,7 +299,7 @@ exports.postUpdateProfile = function(req,res)
 				{
 					if(fetchUserDetails)
 					{
-						UpdateUserDetailsData = 
+						updateUserDetailsData = 
 						{
 							'shr_fb' 	: req.body.shr_fb,
 							'shr_tw'	: req.body.shr_tw,
@@ -307,19 +307,19 @@ exports.postUpdateProfile = function(req,res)
 						    'enable_filter'	: req.body.enable_filter,
 						    'updated'	: Date.now()
 						};
-						UserDetails.findByIdAndUpdate(req.body.userId,UpdateUserDetailsData, function(error, updateExistingVals)
+						UserDetails.findByIdAndUpdate(req.body.userId,updateUserDetailsData, function(error, updateExistingVals)
   						{
   							return res.json({"status":'success',"msg":'Your details is successfully Updated.'});
   						});
 					}
 					else 
 					{
-						var UserDetailsIns  	= new UserDetails();
-						UserDetailsIns.shr_fb 	= req.body.shr_fb;
-						UserDetailsIns.shr_tw 	= req.body.shr_fb;
-						UserDetailsIns.shr_intg = req.body.shr_fb;
-						UserDetailsIns.enable_filter = req.body.shr_fb;
-						UserDetailsIns.save(function(error){
+						var userDetailsIns  	= new UserDetails();
+						userDetailsIns.shr_fb 	= req.body.shr_fb;
+						userDetailsIns.shr_tw 	= req.body.shr_fb;
+						userDetailsIns.shr_intg = req.body.shr_fb;
+						userDetailsIns.enable_filter = req.body.shr_fb;
+						userDetailsIns.save(function(error){
 							if(error)
 							{	
 								return res.json({"status":'error',"msg":error});
@@ -347,32 +347,32 @@ exports.postUpdateProfile = function(req,res)
 */
 
 
-function SignUpFromSocial(req,res,constants)
+function signUpFromSocial(req,res,constants)
 {
 
 	var email_id = (req.body.email_id) ?  req.body.email_id : '';
-	var UserIns        		= new User();
-	UserIns.role_id    		= constants.CUSTOMERROLE;
-	UserIns.user_name   	= '';
-	UserIns.password    	= '';
-    UserIns.email       	= email_id;
-	UserIns.first_name  	= '';
-    UserIns.last_name   	= '';
-    UserIns.contact_no  	= '';
-    UserIns.dob   			= '';
-    UserIns.gender   		= '';
-    UserIns.bio   			= '';
-    UserIns.cover_image		= '';
-    UserIns.profile_image   = '';
-    UserIns.social_type   	= constants ;
-    UserIns.social_id   	= req.body.userid;
-    UserIns.access_token   	= req.body.token;
-    UserIns.is_active   	= true;
-    UserIns.is_deleted   	= false;
-    UserIns.created        	= Date.now();
-    UserIns.updated        	= '';
+	var userIns        		= new User();
+	userIns.role_id    		= Constants.CUSTOMERROLE;
+	userIns.user_name   	= '';
+	userIns.password    	= '';
+    userIns.email       	= email_id;
+	userIns.first_name  	= '';
+    userIns.last_name   	= '';
+    userIns.contact_no  	= '';
+    userIns.dob   			= '';
+    userIns.gender   		= '';
+    userIns.bio   			= '';
+    userIns.cover_image		= '';
+    userIns.profile_image   = '';
+    userIns.social_type   	= constants ;
+    userIns.social_id   	= req.body.userid;
+    userIns.access_token   	= req.body.token;
+    userIns.is_active   	= true;
+    userIns.is_deleted   	= false;
+    userIns.created        	= Date.now();
+    userIns.updated        	= '';
 
-    UserIns.save(function(error){
+    userIns.save(function(error){
 		if(error)
 		{	
 			return res.json({"status":'error',"msg":error});
@@ -380,7 +380,7 @@ function SignUpFromSocial(req,res,constants)
 		else 
 		{
 			// SendMailToUser(req.body);
-			return res.json({"status":'success',"msg":'Your details is successfully stored.',"newId":UserIns._id});
+			return res.json({"status":'success',"msg":'Your details is successfully stored.',"newId":userIns._id});
 		}
     }); 
 }
@@ -401,7 +401,7 @@ exports.postSignupFacebook = function(req,res)
 			}
 			else 
 			{
-				SignUpFromSocial(req,res,constants.FACEBOOKLOGIN);
+				signUpFromSocial(req,res,Constants.FACEBOOKLOGIN);
 			}
 		});
 	}
@@ -429,7 +429,7 @@ exports.postSignupGooglePlus = function(req,res)
 			}
 			else 
 			{
-				SignUpFromSocial(req,res,constants.FACEBOOKLOGIN);
+				signUpFromSocial(req,res,Constants.FACEBOOKLOGIN);
 			}
 		});
 	}
@@ -457,12 +457,12 @@ exports.postCoverImage = function(req,res)
 	        }
 	        var newCIPath = req.file.path.replace('public/','');
 
-			UpdateData = {
+			updateData = {
 			    'cover_image'	: newCIPath,
 			    'updated'		: Date.now()
 			};
 
-	  		User.findByIdAndUpdate(req.body.user_id,UpdateData, function(error, updateExistingCI)
+	  		User.findByIdAndUpdate(req.body.user_id,updateData, function(error, updateExistingCI)
 	  		{
 	  			if(updateExistingCI)
 	  			{
@@ -498,12 +498,12 @@ exports.postProfileImage = function(req,res)
 
 	  		var newDpPath = req.file.path.replace('public/','');
 
-			UpdateProfileImage = {
+			updateProfileImage = {
 			    'profile_image'	: newDpPath,
 			    'updated'		: Date.now()
 			};
 
-	  		User.findByIdAndUpdate(req.body.user_id,UpdateProfileImage, function(error, updateExistingDP)
+	  		User.findByIdAndUpdate(req.body.user_id,updateProfileImage, function(error, updateExistingDP)
 	  		{
 	  			if(updateExistingDP)
 	  			{
@@ -531,12 +531,12 @@ exports.postBioImage = function(req,res)
 {
 	if(req.body.device_token !== '')
   	{
-		UpdateBioData = {
+		updateBioData = {
 		    'bio'	 : req.body.dob,
 		    'updated': Date.now()
 		};
 
-		User.findByIdAndUpdate(req.params.user_id,UpdateBioData, function(error, updateExistingBio)
+		User.findByIdAndUpdate(req.params.user_id,updateBioData, function(error, updateExistingBio)
 		{
 			if(updateExistingBio)
 			{	
@@ -561,15 +561,15 @@ exports.postBioImage = function(req,res)
 
 exports.saveUserCofiguration = function(req,res)
 {
-	UserDetails.findOne({user_id:req.body.userId},function(error,fetchUserConfigDetails)
+	UserDetails.findOne({user_id:req.body.user_id},function(error,fetchUserConfigDetails)
 	{
 		if(fetchUserConfigDetails)
-		{
-			UserConfigDetails = {
-			    'user_id'	 	: req.body.userId,
+		{ 
+			userConfigDetails = {
+			    'user_id'	 	: req.body.user_id,
 			    'configDetail'	: req.body.configDetail  //Array
 			};
-			UserDetails.findByIdAndUpdate(req.params.userId,UserConfigDetails, function(error, updateConfigDetails){
+			UserDetails.findByIdAndUpdate(fetchUserConfigDetails._id,userConfigDetails, function(error, updateConfigDetails){
 				if(error)
 				{
 					return res.json({"status":'error',"msg":error});
@@ -582,11 +582,11 @@ exports.saveUserCofiguration = function(req,res)
 		}
 		else
 		{
-			var UserDetailsIns  			= new UserDetails();
-			UserDetailsIns.user_id 			= req.body.userId;
-			UserDetailsIns.configDetail 	= req.body.configDetail;
+			var userDetailsIns  			= new UserDetails();
+			userDetailsIns.user_id 			= req.body.user_id;
+			userDetailsIns.configDetail 	= req.body.configDetail;
 			
-			UserDetailsIns.save(function(error){
+			userDetailsIns.save(function(error){
 				if(error)
 				{
 					return res.json({"status":'error',"msg":error});
@@ -604,7 +604,7 @@ exports.saveUserCofiguration = function(req,res)
 
 
 /* Comman Send mail function for all user purpose */
-function SendMailToUser (user, done) 
+function sendMailToUser (user, done) 
 {
 	const transporter = nodemailer.createTransport({
 		service: 'SendGrid',

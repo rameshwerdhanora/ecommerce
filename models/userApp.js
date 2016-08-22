@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const appUserSchema = new mongoose.Schema({
+const userAppSchema = new mongoose.Schema({
   role_id : String,
   user_name : String,
   password : String,
@@ -22,6 +22,6 @@ const appUserSchema = new mongoose.Schema({
   updated : String 
 });
 
-const AppUser = mongoose.model('AppUser', appUserSchema);
+const UserApp = mongoose.model('UserApp', userAppSchema);
 
-module.exports = AppUser;
+module.exports = UserApp;

@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
-const commonSchema = new mongoose.Schema({
+const commonAppSchema = new mongoose.Schema({
 	user_id : String,
 	feedback_subject : String,
 	feedback_description : String,
 	created : String
 });
 
-const Common = mongoose.model('Common', commonSchema);
+const CommonApp = mongoose.model('CommonApp', commonAppSchema);
 
-module.exports = Common;
+module.exports = CommonApp;

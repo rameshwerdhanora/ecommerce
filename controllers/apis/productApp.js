@@ -5,8 +5,8 @@
 
 */
 
-const Like 		= require('../../models/Like');
-const Wishlist 	= require('../../models/Wishlist');
+const Like 		  = require('../../models/like');
+const Wishlist  = require('../../models/wishlist');
 
 exports.getProducts = (req, res) => {
   console.log('aa gaya');
@@ -27,11 +27,11 @@ exports.likeProductByUser = (req, res) => {
   	}
   	else 
   	{
-  		var LikeIns			= new Like();
-  		LikeIns.user_id 	= req.params.userId;
-  		LikeIns.product_id 	= req.params.productId;
-  		LikeIns.user_id 	= Date.now();
-  		LikeIns.save(function(error)
+  		var likeIns			     = new Like();
+  		likeIns.user_id 	   = req.params.userId;
+  		likeIns.product_id 	 = req.params.productId;
+  		likeIns.user_id 	   = Date.now();
+  		likeIns.save(function(error)
   		{
   			if(error)
   			{
@@ -62,11 +62,11 @@ exports.wishListProductByUser = (req, res) => {
   	}
   	else 
   	{
-  		var WishlistIns			= new Wishlist();
-  		WishlistIns.user_id 	= req.params.userId;
-  		WishlistIns.product_id 	= req.params.productId;
-  		WishlistIns.user_id 	= Date.now();
-  		WishlistIns.save(function(error)
+  		var wishlistIns			     = new Wishlist();
+  		wishlistIns.user_id 	   = req.params.userId;
+  		wishlistIns.product_id 	 = req.params.productId;
+  		wishlistIns.user_id 	   = Date.now();
+  		wishlistIns.save(function(error)
   		{
   			if(error)
   			{
