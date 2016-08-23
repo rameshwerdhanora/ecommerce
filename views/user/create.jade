@@ -1,0 +1,178 @@
+extends ../layout
+block content
+  .col-sm-9.midlle-bar
+    .large-title-row
+      img(src='images/title-icon.png', alt='icon')
+      |  USERS
+    .customer-box.clearfix
+      form(method='post', action='')
+        .customer-cl
+          h2 USERS
+          ul
+            li
+              a(href='#') Manage Users
+            li.active
+              a(href='#') Add User
+        .profile-cl
+          .profile-top-row
+            h2 ADD USERS
+          .profile-form-box
+            .add-user-cl1.col-sm-6
+              h4 NEW USER
+              .profile-frm-row
+                .profile-frm-cl1 Shop Name 
+                .profile-frm-cl2
+                  input(type='text', value='', name='')
+              .profile-frm-row
+                .profile-frm-cl1  First Name
+                .profile-frm-cl2
+                  input(type='text', value='', name='')
+              .profile-frm-row
+                .profile-frm-cl1 Last Name
+                .profile-frm-cl2
+                  input(type='text', value='', name='')
+              .profile-frm-row
+                .profile-frm-cl1 E-mail Address 
+                .profile-frm-cl2
+                  input(type='text', value='', name='')
+              .profile-frm-row
+                .profile-frm-cl1 Password
+                .profile-frm-cl2
+                  input(type='text', value='', name='')
+              .profile-frm-row
+                .profile-frm-cl1 Confirm Password 
+                .profile-frm-cl2
+                  input(type='text', value='', name='')
+              .profile-frm-row.botique-spc
+                .profile-frm-cl1 Boutique 
+                .profile-frm-cl2
+                  input#radio.css-checkbox(type='radio', name='radio', value='radio')
+                  label.css-label(for='radio')
+              .profile-frm-row
+                .profile-frm-cl1 or 
+              .profile-frm-row
+                .profile-frm-cl1  Brand 
+                .profile-frm-cl2
+                  input#radio2.css-checkbox(type='radio', name='radio2', value='radio2')
+                  label.css-label(for='radio2')
+            .add-user-cl1.col-sm-6
+              h4 PERMISSIONS
+              .perms-box
+                ul.perms-list
+                  li
+                    input#checkbox(type='checkbox', name='checkbox')
+                    |                     Dashboard
+                  li
+                    input#checkbox2(type='checkbox', name='checkbox2')
+                    |                     ORDERS
+                    ul.perms-sub-list
+                      li
+                        input#checkbox3(type='checkbox', name='checkbox3')
+                        |                         fullfill orders
+                      li
+                        input#checkbox4(type='checkbox', name='checkbox4')
+                        |                         add tracking
+                      li
+                        input#checkbox5(type='checkbox', name='checkbox5')
+                        |                         print invoice
+                      li
+                        input#checkbox6(type='checkbox', name='checkbox6')
+                        |                         view order
+                  li
+                    input#checkbox7(type='checkbox', name='checkbox7')
+                    |                     products
+                    ul.perms-sub-list
+                      li
+                        input#checkbox8(type='checkbox', name='checkbox8')
+                        |                         post to feed
+                      li
+                        input#checkbox9(type='checkbox', name='checkbox9')
+                        |                         view item
+                      li
+                        input#checkbox10(type='checkbox', name='checkbox10')
+                        |                         edit item
+                      li
+                        input#checkbox11(type='checkbox', name='checkbox11')
+                        |                         catalog
+                        ul.perms-sub-list
+                          li
+                            input#checkbox12(type='checkbox', name='checkbox12')
+                            |                             manage products
+                          li
+                            input#checkbox13(type='checkbox', name='checkbox13')
+                            |                             manage categories
+                          li
+                            input#checkbox14(type='checkbox', name='checkbox14')
+                            |                             manage colors
+                          li
+                            input#checkbox15(type='checkbox', name='checkbox15')
+                            |                             manage brands
+                          li
+                            input#checkbox16(type='checkbox', name='checkbox16')
+                            |                             manage sizes
+                          li
+                            input#checkbox17(type='checkbox', name='checkbox17')
+                            |                             create attribute
+                  li
+                    input#checkbox18(type='checkbox', name='checkbox18')
+                    |                     customers
+                    ul.perms-sub-list
+                      li
+                        input#checkbox19(type='checkbox', name='checkbox19')
+                        |                         customer name
+                      li
+                        input#checkbox20(type='checkbox', name='checkbox20')
+                        |                         address
+                      li
+                        input#checkbox21(type='checkbox', name='checkbox21')
+                        |                         city
+                      li
+                        input#checkbox22(type='checkbox', name='checkbox22')
+                        |                         state
+                      li
+                        input#checkbox23(type='checkbox', name='checkbox23')
+                        |                         zip code
+                      li
+                        input#checkbox24(type='checkbox', name='checkbox24')
+                        |                         country
+                      li
+                        input#checkbox25(type='checkbox', name='checkbox25')
+                        |                         phone
+                      li
+                        input#checkbox26(type='checkbox', name='checkbox26')
+                        |                         email
+                      li
+                        input#checkbox27(type='checkbox', name='checkbox27')
+                        |                         gender
+                      li
+                        input#checkbox28(type='checkbox', name='checkbox28')
+                        |                         b-day
+                      li
+                        input#checkbox29(type='checkbox', name='checkbox29')
+                        |                         profile
+                        ul.perms-sub-list
+                          li
+                            input#checkbox30(type='checkbox', name='checkbox30')
+                            |                             reset password
+                          li
+                            input#checkbox31(type='checkbox', name='checkbox31')
+                            |                             delete customer
+                  li
+                    input#checkbox32(type='checkbox', name='checkbox32')
+                    |                     Brands
+                    ul.perms-sub-list
+                      li
+                        input#checkbox33(type='checkbox', name='checkbox33')
+                        |                         users
+                        ul.perms-sub-list
+                          li
+                            input#checkbox34(type='checkbox', name='checkbox34')
+                            |                             manage users
+                          li
+                            input#checkbox35(type='checkbox', name='checkbox35')
+                            |                             add user
+                  li
+                    input#checkbox36(type='checkbox', name='checkbox36')
+                    |                     system
+          .btn-btm
+            button(type='submit') ADD USER

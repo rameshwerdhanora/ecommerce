@@ -117,16 +117,16 @@ header {
 	margin-right: 10px;
 }
 .top-search {
-  float: left;
-  margin-top: -4px;
-  padding-left: 2px;
+	float: left;
+	margin-top: -4px;
+	padding-left: 2px;
 }
 .top-search button,
 .btn-top {
 	background: none;
 	border: none;
-	width:auto;
-	min-width:inherit;
+	width: auto;
+	min-width: inherit;
 }
 .top-search input[type="text"] {
 	border: none;
@@ -186,6 +186,7 @@ header {
 }
 .nav-left li {
 	background: url(../images/nav-arrow.png) no-repeat 95% center;
+	position: relative;
 }
 .nav-left li a {
 	color: #0dd0ff;
@@ -216,11 +217,18 @@ header {
 }
 .img-1-wrp {
 	border-bottom: solid 1px #0dd0ff;
+	position: relative;
+}
+.logo-left {
+	bottom: 15px;
+	left: 15px;
+	position: absolute;
 }
 .nav-left {
 	color: #0dd0ff;
 }
 .follow-us-row li {
+	background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
 	border: medium none;
 	display: inline-block;
 }
@@ -520,6 +528,8 @@ header {
 	font-size: 38px;
 	font-weight: 600;
 	margin-bottom: 25px;
+	padding-top: 5px;
+	position: relative;
 }
 .large-title-row img {
 	max-width: 40px;
@@ -583,11 +593,12 @@ header {
 	padding-right: 0;
 }
 .customer-cl {
-	background: #ffffff none repeat scroll 0 0;
-	float: left;
-	padding: 0 10px;
-	width: 240px;
-	min-height: 630px;
+  background: #ffffff none repeat scroll 0 0;
+  float: left;
+  margin-bottom: -10000px;
+  min-height: 630px;
+  padding: 0 10px 10000px;
+  width: 240px;
 }
 .customer-cl ul li {
 	font-size: 16px;
@@ -608,6 +619,8 @@ header {
 	margin: 0 0 15px 0;
 	padding: 0;
 	text-align: center;
+	font-weight: 600;
+	text-transform: uppercase;
 }
 .profile-cl {
 	background: #ffffff none repeat scroll 0 0;
@@ -626,6 +639,8 @@ header {
 	margin: 0;
 	padding: 0;
 	line-height: 40px;
+	font-weight: 600;
+	text-transform: uppercase;
 }
 .edit-btn {
 	background: #000000 none repeat scroll 0 0;
@@ -664,7 +679,7 @@ header {
 	border: solid 6px #000;
 }
 .profile-form-box {
-	padding: 35px 45px;
+	padding: 30px;
 }
 .profile-form-box:after {
 	clear: both;
@@ -723,86 +738,243 @@ header {
 /*5-users-customer-profile-edit-on-ADMIN-view page css  end*/
 
 /*login page css start*/
-.loign-body{
-	min-height:100%;
-	background:url(../images/login-bg.jpg) no-repeat;
-	background-size:cover;
-	
+.loign-body {
+	min-height: 100%;
+	background: url(../images/login-bg.jpg) no-repeat;
+	background-size: cover;
 }
 .login-box {
-  background: rgba(255, 255, 255, 0.5) none repeat scroll 0 0;
-  left: 0;
-  margin: auto;
-  max-width: 580px;
-  padding-bottom: 30px;
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+	background: rgba(255, 255, 255, 0.5) none repeat scroll 0 0;
+	left: 0;
+	margin: auto;
+	max-width: 580px;
+	padding-bottom: 30px;
+	position: absolute;
+	right: 0;
+	top: 50%;
+	transform: translateY(-50%);
 }
 .login-title-row {
-  background: #000000 none repeat scroll 0 0;
-  height: 60px;
-  position: relative;
-  color:#fff;
+	background: #000000 none repeat scroll 0 0;
+	height: 60px;
+	position: relative;
+	color: #fff;
 }
-.login-title-row:after{
-	clear:both;
-	display:block;
-	content:"";
+.login-title-row:after {
+	clear: both;
+	display: block;
+	content: "";
 }
 .login-logo {
-  float: left;
-  padding: 15px 10px 0 15px;
+	float: left;
+	padding: 15px 10px 0 15px;
 }
 .login-panel {
-  float: right;
-  font-size: 22px;
-  font-weight: 300;
-  padding: 19px 15px 0 0;
-  text-transform: uppercase;
+	float: right;
+	font-size: 22px;
+	font-weight: 300;
+	padding: 19px 15px 0 0;
+	text-transform: uppercase;
 }
-.login-btn-r{
-	text-align:center;
+.login-btn-r {
+	text-align: center;
 }
-.forgot-link{
-	text-align:center;
-	padding:10px 0 30px;
+.forgot-link {
+	text-align: center;
+	padding: 10px 0 30px;
 }
 .forgot-link > a {
-  color: #000000;
-  font-size: 15px;
-  font-weight: 600;
-  text-transform: uppercase;
+	color: #000000;
+	font-size: 15px;
+	font-weight: 600;
+	text-transform: uppercase;
 }
-.login-in{
-	max-width:450px;
-	margin:auto;
+.login-in {
+	max-width: 450px;
+	margin: auto;
 }
 .form-signin-heading {
-  font-size: 26px;
-  font-weight: 600;
-  margin: 20px 0;
-  text-transform: uppercase;
+	font-size: 26px;
+	font-weight: 600;
+	margin: 20px 0;
+	text-transform: uppercase;
 }
 .lgn-row {
-  margin-bottom: 15px;
+	margin-bottom: 15px;
 }
 .lgn-row .form-control {
-  background: #ffffff none repeat scroll 0 0;
-  border: medium none;
-  border-radius: 0;
-  color: #000000;
-  font-size: 16px;
-  font-weight: 300;
-  height: 40px;
-  text-transform: uppercase;
+	background: #ffffff none repeat scroll 0 0;
+	border: medium none;
+	border-radius: 0;
+	color: #000000;
+	font-size: 16px;
+	font-weight: 300;
+	height: 40px;
+	text-transform: uppercase;
 }
-
 .login-btn-r button {
-  font-size: 18px;
-  line-height: 40px;
-  min-width: 170px;
-  text-transform: uppercase;
+	font-size: 18px;
+	line-height: 40px;
+	min-width: 170px;
+	text-transform: uppercase;
 }
 /*login page css end*/
+
+
+/*sub nav css*/
+
+.easy-sidebar {
+	display: none;
+}
+.toggled .easy-sidebar {
+	display: block;
+}
+.easy-sidebar {
+	background: #000000 none repeat scroll 0 0;
+	left: 100%;
+	position: absolute;
+	top: 0;
+	width: 390px;
+	z-index: 1;
+	padding: 30px;
+	min-height: 500px;
+	border-left: solid 1px #e6e6e6;
+}
+.easy-sidebar li {
+	background: none;
+	border: none;
+}
+.easy-sidebar li:hover {
+	background: none;
+}
+.easy-sidebar li a {
+	background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+	border: medium none;
+	color: #aaaaaa;
+	line-height: 36px;
+	padding-left: 30px;
+}
+.easy-sidebar li a:hover {
+	background: none;
+	color: #01cfff;
+}
+.easy-sidebar li:first-child .sub-title {
+	padding-top: 0;
+}
+.sub-title {
+	display: block;
+	font-weight: 600;
+	padding-bottom: 12px;
+	padding-top: 45px;
+	font-size: 20px;
+}
+/*sub nav css end*/
+
+/*order page css start*/
+
+.cmn-in {
+	background: #fff;
+}
+.clr-s1 {
+	color: #d4cc44;
+	font-weight: 600;
+}
+.clr-s2 {
+	color: #ea0707;
+	font-weight: 600;
+}
+.clr-s3 {
+	color: #0a942e;
+	font-weight: 600;
+}
+.order-txt th {
+	font-size: 14px;
+}
+.order-txt td {
+	font-size: 14px;
+}
+.large-title-row .edit-btn-cl {
+	bottom: -20px;
+	right: 0;
+	top: inherit;
+}
+.order-txt td:first-child {
+	width: 30px;
+}
+.large-title-row .edit-btn {
+	letter-spacing: 1px;
+	line-height: 30px;
+	background: #00cfff;
+}
+.large-title-row .edit-btn:hover {
+	background: #000;
+}
+/*order page css end*/
+
+
+/*5-brand-add-users-ADMIN-view page start css*/
+
+.add-user-cl1 .profile-frm-cl2 {
+	float: left;
+	width: 130px;
+}
+.add-user-cl1 .profile-frm-cl2 input[type="text"] {
+	height: 26px;
+	padding: 5px;
+}
+.add-user-cl1 .profile-frm-cl1 {
+	width: 150px;
+}
+.add-user-cl1 h4 {
+  margin: 0 0 15px;
+}
+.botique-spc {
+	margin-top: 50px;
+}
+input[type=radio].css-checkbox {
+	display: none;
+}
+input[type=radio].css-checkbox + label.css-label {
+	padding-left: 20px;
+	height: 18px;
+	display: inline-block;
+	line-height: 18px;
+	background-repeat: no-repeat;
+	background-position: 0 0;
+	
+	vertical-align: middle;
+	cursor: pointer;
+	margin-top:10px;
+}
+input[type=radio].css-checkbox:checked + label.css-label {
+	background-position: 0 -18px;
+}
+label.css-label {
+	background-image: url(../images/radio-img.png);
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.add-user-cl1 {
+  padding: 0;
+}
+.perms-list {
+  font-size: 14px;
+  margin-left: 40px;
+  text-transform: uppercase;
+}
+.perms-sub-list {
+  margin-left: 25px;
+}
+.btn-btm {
+  padding: 15px 0;
+  text-align: center;
+}
+.btn-btm button{
+	letter-spacing:1px;
+}
+/*5-brand-add-users-ADMIN-view page end css*/

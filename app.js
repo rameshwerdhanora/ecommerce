@@ -49,6 +49,7 @@ const brandController          = require('./controllers/brand');
 const colorController          = require('./controllers/color');
 const sizeController           = require('./controllers/size');
 
+const orderController           = require('./controllers/order');
 
 /**
  * API keys and Passport configuration.
@@ -209,7 +210,9 @@ app.post('/savesize',  sizeController.saveSize);
 app.get('/removesize/:sizeId',  sizeController.removeSize);
 app.post('/updatesize',  sizeController.updateSize);
 
- 
+/* Order */
+
+app.get('/order',  orderController.list);
 
 /**
  * API examples routes.
