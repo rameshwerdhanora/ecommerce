@@ -48,8 +48,8 @@ const productAppController      = require('./controllers/apis/productApp');
 const brandController          = require('./controllers/brand');
 const colorController          = require('./controllers/color');
 const sizeController           = require('./controllers/size');
-
-const orderController           = require('./controllers/order');
+const attributeController      = require('./controllers/attribute');
+const orderController          = require('./controllers/order');
 
 /**
  * API keys and Passport configuration.
@@ -210,9 +210,19 @@ app.post('/savesize',  sizeController.saveSize);
 app.get('/removesize/:sizeId',  sizeController.removeSize);
 app.post('/updatesize',  sizeController.updateSize);
 
+/* Attribute CRUD Section */ // Need isAuthenticated code for check user is loggedin.
+
+app.get('/attribute/list',  attributeController.list);
+app.get('/attribute/create',  attributeController.create);
+app.get('/attribute/edit/:attributeId',  attributeController.edit);
+app.post('/attribute/save',  attributeController.saveAttribute);
+app.get('/attribute/delete/:attributeId',  attributeController.deleteAttribute);
+app.post('/atttribute/update',  attributeController.updateAttribute);
+
 /* Order */
 
 app.get('/order',  orderController.list);
+app.get('/order/detail',  orderController.detail);
 
 /**
  * API examples routes.

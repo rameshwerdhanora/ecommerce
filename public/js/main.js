@@ -14,7 +14,7 @@ function deleteAttribute(id)
 		{
 			if(result.status == 'success')
 			{
-				$(".sizeTr_"+id).remove();
+				$(".attrTr_"+id).remove();
 			}  
 		},
 		cache: false,
