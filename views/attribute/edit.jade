@@ -35,7 +35,7 @@ block content
                 .profile-frm-row
                   .profile-frm-cl1  Catalog input type
                   .profile-frm-cl2
-                    select#select(name='type', required='required')
+                    select#select(name='type', required='required', disabled='disabled')
                       option(value='text') Text Field
                       option(value='select') Select
                       option(value='checkbox') Checkbox
@@ -88,6 +88,6 @@ block content
                       input#is_published2.css-checkbox(type='radio', name='is_published', value='0')
                       label.css-label(for='is_published2') No            
               .btn-btm
-                input#attribute_id(type='hidden', name='attribute_id', value='#{fetchAttribute.name}')
+                input#attribute_id(type='hidden', name='_id', value='#{fetchAttribute._id}')
                 button(type='submit') UPDATE ATTRIBUTE
            

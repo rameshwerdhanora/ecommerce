@@ -217,7 +217,7 @@ app.get('/attribute/create',  attributeController.create);
 app.get('/attribute/edit/:attributeId',  attributeController.edit);
 app.post('/attribute/save',  attributeController.saveAttribute);
 app.get('/attribute/delete/:attributeId',  attributeController.deleteAttribute);
-app.post('/atttribute/update',  attributeController.updateAttribute);
+app.post('/attribute/update',  attributeController.updateAttribute);
 
 /* Order */
 

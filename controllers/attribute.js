@@ -80,13 +80,14 @@ exports.edit = (req,res) => {
 exports.updateAttribute = (req,res) => {
 
 	updateData = {
-		'size_name' 	: req.body.size_name,
-		'size_code'		: req.body.size_code,
-		'size_label'	: req.body.size_label,
-		'gender'		: req.body.gender,
-	    'user_id'		: req.body.user_id 
+		'name' :  req.body.attr_name,
+		'is_required' 	: req.body.is_required,
+		'is_post_feed'		: req.body.is_post_feed,
+		'product_manager'	: req.body.product_manager,
+		'display_type'		: req.body.display_type,
+	    'is_published'		: req.body.is_published 
 	};
-	Size.findByIdAndUpdate(req.body._id,updateData, function(error, updateRes)
+	Attribute.findByIdAndUpdate(req.body._id,updateData, function(error, updateRes)
 	{
 		res.redirect('/attribute/list');
 	});
