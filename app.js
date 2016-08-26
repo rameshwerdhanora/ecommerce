@@ -35,6 +35,9 @@ const userController = require('./controllers/user');
 const apiController = require('./controllers/api');
 const contactController = require('./controllers/contact');
 
+const userAppControlleraAdmin = require('./controllers/userApp');
+
+
 
 /* Application Work Start Cisdev */
 const userAppController         = require('./controllers/apis/userApp');
@@ -213,6 +216,11 @@ app.post('/updatesize',  sizeController.updateSize);
 /* Order */
 
 app.get('/order',  orderController.list);
+
+/* Signup users */
+app.get('/signup/user',  userAppControlleraAdmin.signupUser);
+app.post('/signup/saveuser',  userAppControlleraAdmin.saveUser);
+
 
 /**
  * API examples routes.
