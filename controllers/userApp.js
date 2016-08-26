@@ -27,6 +27,7 @@ exports.saveUser = (req, res) => {
 		{
 			var userIns        		= new User();
 			userIns.role_id    		= req.body.role_id;
+			userIns.shop_name   	= req.body.shop_name;
 			userIns.user_name   	= '';
 			userIns.password    	= req.body.password;
 		    userIns.email_id       	= req.body.email_id;
