@@ -1,6 +1,55 @@
 extends ../layout
 
 block content
+  .col-sm-9.midlle-bar
+    .large-title-row
+      img(src='images/title-icon3.png', alt='icon')
+      |  PRODUCTS
+    .customer-box.clearfix
+      form(method='post', action='')
+        .customer-cl
+          h2 CATALOG
+          ul
+            li
+              a(href='#') Manage Products
+            li
+              a(href='#') Manage Categories
+            li
+              a(href='#') Manage Colors
+            li
+              a(href='#') Manage Sizes
+            li.active
+              a(href='#') Manage Brands
+            li
+              a(href='#') Create Attribute
+        .profile-cl
+          .profile-top-row
+            h2 MANAGE BRANDS
+          h3.sub-heading BRAND
+          .profile-form-box
+            ul.brand-list
+              each getAllBrand in getAllBrands 
+                li
+                  a#modal-104831(href='#modal-container-104831', role='button', data-toggle='modal')
+                    img(src='#{getAllBrand.brand_logo}', title='#{getAllBrand.brand_name}', alt='#{getAllBrand.brand_name}')
+                    | Nike
+                li
+                  a(href='#')
+                    img(src='images/puma-icon.png', alt='icon')
+                    | PUMA
+                li
+                  a(href='#')
+                    img(src='images/fake-icon.png', alt='icon')
+                    | Fake Street
+                li
+                  a(href='#')
+                    img(src='images/reebok-icon.png', alt='icon')
+                    | Reebok
+                li
+                  a(href='#')
+                    img(src='images/ness-icon.png', alt='icon')
+                    | Mitchell & Ness
+
   .page-header
     h3 List of All Brands
 

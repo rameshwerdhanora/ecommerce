@@ -1,0 +1,93 @@
+extends ../layout
+
+block content
+  .col-sm-9.midlle-bar
+    .large-title-row
+      img(src='/images/title-icon3.png', alt='icon')
+      |  ATTRIBUTES
+    .customer-box.clearfix
+      form(method='post', action='/attribute/update')
+        .customer-cl
+          h2 CATALOG
+          ul
+            li
+              a(href='#') Manage Products
+            li
+              a(href='#') Manage Categories
+            li
+              a(href='/color/list') Manage Colors
+            li
+              a(href='/size/list') Manage Sizes
+            li
+              a(href='/brand/list') Manage Brands
+            li.active
+              a(href='/attribute/create') Create Attribute
+        .profile-cl
+          .profile-top-row
+            h2 EDIT ATTRIBUTE
+          .profile-form-box
+            .add-user-cl1.col-sm-12
+              .full-form-wdt
+                .profile-frm-row
+                  .profile-frm-cl1 ATTRIBUTE NAME 
+                  .profile-frm-cl2
+                    input(type='text', value='#{fetchAttribute.name}', name='attr_name', required='required')
+                .profile-frm-row
+                  .profile-frm-cl1  Catalog input type
+                  .profile-frm-cl2
+                    select#select(name='type', required='required', disabled='disabled')
+                      option(value='text') Text Field
+                      option(value='select') Select
+                      option(value='checkbox') Checkbox
+                      option(value='multiselect') Multi Select
+                      option(value='textarea') Textarea
+                      option(value='radio') Radio
+                .profile-frm-row
+                  .profile-frm-cl1 Values required?
+                  .profile-frm-cl2
+                    span.yes-cl
+                      input#is_required.css-checkbox(type='radio', name='is_required', value='1', checked='checked')
+                      label.css-label(for='is_required') Yes
+                    span.yes-cl
+                      input#is_required2.css-checkbox(type='radio', name='is_required', value='0')
+                      label.css-label(for='is_required2') No
+                .profile-frm-row
+                  .profile-frm-cl1 ADD TO “POST TO FEED” 
+                  .profile-frm-cl2
+                    span.yes-cl
+                      input#is_post_feed.css-checkbox(type='radio', name='is_post_feed', value='1', checked='checked')
+                      label.css-label(for='is_post_feed') Yes
+                    span.yes-cl
+                      input#is_post_feed2.css-checkbox(type='radio', name='is_post_feed', value='0')
+                      label.css-label(for='is_post_feed2') No
+                .profile-frm-row
+                  .profile-frm-cl1 ADD COLUMN to product manager?
+                  .profile-frm-cl2
+                    span.yes-cl
+                      input#product_manager.css-checkbox(type='radio', name='product_manager', value='1', checked='checked')
+                      label.css-label(for='product_manager') Yes
+                    span.yes-cl
+                      input#product_manager2.css-checkbox(type='radio', name='product_manager', value='0')
+                      label.css-label(for='product_manager2') No
+                .profile-frm-row
+                  .profile-frm-cl1 Display Type
+                  .profile-frm-cl2
+                    span.yes-cl
+                      input#display_type.css-checkbox(type='radio', name='display_type', value='H', checked='checked')
+                      label.css-label(for='display_type') Hotizontal
+                    span.yes-cl
+                      input#display_type2.css-checkbox(type='radio', name='display_type', value='V')
+                      label.css-label(for='display_type2') Vertical      
+                .profile-frm-row
+                  .profile-frm-cl1 Is Published?
+                  .profile-frm-cl2
+                    span.yes-cl
+                      input#is_published.css-checkbox(type='radio', name='is_published', value='1', checked='checked')
+                      label.css-label(for='is_published') Yes
+                    span.yes-cl
+                      input#is_published2.css-checkbox(type='radio', name='is_published', value='0')
+                      label.css-label(for='is_published2') No            
+              .btn-btm
+                input#attribute_id(type='hidden', name='_id', value='#{fetchAttribute._id}')
+                button(type='submit') UPDATE ATTRIBUTE
+           
