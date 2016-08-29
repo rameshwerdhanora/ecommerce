@@ -1,0 +1,26 @@
+extends ../layout
+
+block content
+  .page-header
+    h3 List of All Categories
+
+    a.addsubcategory.categorybuttons(href='/addsubcategory', title='Add Sub Category') Add Sub Category | 
+    a.rmvsubcategory.categorybuttons(href='/rmvsubcategory', title='Remove Sub Category') Remove Sub Category
+    table(width='100%')
+     tr
+      th Sr.no
+      th Name
+      th Active
+      th Remove
+      th Edit
+     each getAllSubCategory in getAllSubCategories 
+      tr(class='subCategoryTr_#{getAllSubCategory._id}')
+       td 1
+       td #{getAllSubCategory.name}
+       td #{getAllSubCategory.is_active}
+       td 
+        a.edit_subcategory(href='#' onclick='make_sure_for_subcategory("#{getAllSubCategory._id}")') Remove
+       td 
+        a.edit_subcategory(href='/editsubcategory/#{getAllSubCategory._id}') Edit
+
+          

@@ -17,15 +17,28 @@ block content
             select.sizegender(name='gender')
              option(value='male') Male
              option(value='female') female
-        tr.tr_clone
-          td Sizes
+        tr 
+          td Select Attribute
+          td 
+            select(multiple='multiple' name='listofattrmap' class='listofattrmap')
+              each fetchAllAttributes in fetchAllAttribute
+               option(value='#{fetchAllAttributes._id}') #{fetchAllAttributes.name}
+          
+          td Published
           td
-            input.size_code(type='text', name='size_code[]', value='', required='required')
-          td  
-            input.size_label(type='text', name='size_label[]', value='', required='required')
-          td  
-            input.add_more(type='button', name='add_more', value='add more' onclick="add_more_size()")
-          td  
-            input.delete_more(type='button', name='delete_more', value='Delete' onclick="deleteRow(this)")  
+            select.sizepublished(name='is_published')
+             option(value='true') Yes
+             option(value='false') No
+
+        //tr.tr_clone
+        //  td Sizes
+         // td
+          //  input.size_code(type='text', name='size_code[]', value='', required='required')
+          //td  
+           // input.size_label(type='text', name='size_label[]', value='', required='required')
+         // td  
+          //  input.add_more(type='button', name='add_more', value='add more' onclick="add_more_size()")
+          //td  
+           // input.delete_more(type='button', name='delete_more', value='Delete' onclick="deleteRow(this)")  
             
            

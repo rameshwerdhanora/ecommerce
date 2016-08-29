@@ -5,8 +5,13 @@
 
 */
 
-const Like 		  = require('../../models/like');
-const Wishlist  = require('../../models/wishlist');
+const Like 		      = require('../../models/like');
+const Wishlist      = require('../../models/wishlist');
+const Product       = require('../../models/product');
+const ProductImage  = require('../../models/productsImages');
+const Brand         = require('../../models/brand');
+const async = require('async');
+
 
 exports.getProducts = (req, res) => {
   console.log('aa gaya');
@@ -117,5 +122,206 @@ exports.listOfAllLike = (req, res) => {
     {
       return res.json({"status":'error',"msg":error});
     }
+  });
+};
+
+function fetchingImage(pid, callback)
+{
+   ProductImage.findOne({product_id:pid},function(error,fetchallFeatProdsImgs)
+   {
+     callback(error,fetchallFeatProdsImgs.large_image);
+   });
+}
+
+function fetchingBrand(bid, callback)
+{
+  Brand.findOne({_id:bid},function(error,fetchAllBrands)
+  { 
+    callback(error,fetchAllBrands);
+  });
+}
+
+/**
+ * GET /api/product/featured/:userId
+ * Process for Fetch all featured products.
+ * Use AsyncLoop method for waiting data before fetching value
+ */
+
+exports.listofAllFeaturedProd = (req, res) => {
+
+  Product.find({is_featured:'1'},function(error,fetchallFeatProds)
+  {
+    var temp = []; 
+    async.eachSeries(fetchallFeatProds, function(ProductId, callback)
+    {
+        var pArr              = {};
+        pArr._id              = ProductId._id;
+        pArr.name             = ProductId.name;
+        pArr.sku              = ProductId.sku;
+        pArr.description      = ProductId.description;
+        pArr.price            = ProductId.price;
+
+        /* Use asyn Parallel method for waiting those functions value */
+        async.parallel
+        (
+          [
+             function(callback)
+             {
+                fetchingImage(ProductId._id, function(err, res){
+                pArr.large_image  = res;
+                  callback(err); //Forgot to add
+                });
+              },
+              function(callback)
+              {
+                fetchingBrand(ProductId.brand_id,function(err, res){
+                   pArr.brand = res;
+                   callback(err); //Forgot to add
+                });
+              },
+          ], 
+          function(err)
+          {
+            temp.push(pArr);
+            callback(err); 
+          }
+        )
+      }, 
+      function(err)
+      {
+        // console.log(temp); //This should give you desired result
+        return res.json({"status":'success',"msg":'Fetch all products.',productslist:temp});
+      });
+  });  
+}; 
+
+
+function fetchingProduct(bid, callback)
+{
+
+  Product.find({brand_id:bid},function(error,fetchallFeatProds)
+  {
+    callback(error,fetchallFeatProds);
+  });
+}
+
+
+/**
+ * GET /api/product/fits/:userId
+ * Process for Fetch all Fits products.
+ * Use AsyncLoop method for waiting data before fetching value
+ */
+
+exports.listofAllItFitsProd = (req, res) => {
+
+  var allBrdProd = new Array();
+  Brand.find({},function(error,fetchAllBrands)
+  { 
+      if(fetchAllBrands)
+      {
+        async.eachSeries(fetchAllBrands, function(Brand, callback)
+        {
+
+          var bArr                = {};
+          var image               = [];
+          bArr._id                = Brand._id;
+          bArr.brand_name         = Brand.brand_name;
+          bArr.brand_description  = Brand.brand_desc;
+          bArr.brand_logo         = Brand.brand_logo;
+
+          /* Use asyn Parallel method for waiting those functions value */
+          async.parallel
+          ([
+            function(callback)
+            {
+              fetchingProduct(Brand._id, function(err, fetchAllProducts)
+              {
+
+                bArr.product = fetchAllProducts;
+                async.eachSeries(fetchAllProducts, function(fetchProductImage, callback)
+                {
+                  fetchingImage(fetchProductImage._id, function(err, wer)
+                  {
+                    image.push({productId:fetchProductImage._id,imagePath:wer});
+                    callback(err); 
+                  })
+
+                }, function(err)
+                {
+                  bArr.image = image;
+                  callback(err);
+                });
+
+              });
+            }
+          ],
+          function(err)
+          {
+            allBrdProd.push(bArr);
+            callback(err);
+          })
+        }, 
+        function(err)
+        {
+          // console.log(allBrdProd); //This should give you desired result
+          return res.json({"status":'success',"msg":'Fetch all products.',listAccToBrand:allBrdProd});
+        });
+      }
+      else 
+      {
+        return res.json({"status":'error',"msg":'Brand is not avaible in admin.'})
+      }
+  });
+};
+
+/**
+ * GET /api/product/details/:productId
+ * Process for Fetch perticlular product details.
+ */
+
+exports.productDetailView = (req, res) => { 
+  
+  Product.findOne({_id:productId},function(error,fetchAProductDetails)
+  {
+    if(fetchAProductDetails)
+    {
+        var pArr              = {};
+        pArr._id              = ProductId._id;
+        pArr.name             = ProductId.name;
+        pArr.sku              = ProductId.sku;
+        pArr.description      = ProductId.description;
+        pArr.price            = ProductId.price;
+
+        /* Use asyn Parallel method for waiting those functions value */
+        async.parallel
+        (
+          [
+             function(callback)
+             {
+                fetchingImage(ProductId._id, function(err, res){
+                pArr.large_image  = res;
+                  callback(err); //Forgot to add
+                });
+              },
+              function(callback)
+              {
+                fetchingBrand(ProductId.brand_id,function(err, res){
+                   pArr.brand = res;
+                   callback(err); //Forgot to add
+                });
+              },
+          ], 
+          function(err)
+          {
+            temp.push(pArr);
+            callback(err); 
+          }
+        )
+    }
+    else 
+    {
+      return res.json({"status":'error',"msg":'Unable to found any details for selected product.'})
+    }
+
   });
 };

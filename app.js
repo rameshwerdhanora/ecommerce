@@ -48,7 +48,10 @@ const productAppController      = require('./controllers/apis/productApp');
 const brandController          = require('./controllers/brand');
 const colorController          = require('./controllers/color');
 const sizeController           = require('./controllers/size');
-
+const productController        = require('./controllers/product');
+const attributeController      = require('./controllers/attribute');
+const categoryController       = require('./controllers/category');
+const categorySubController    = require('./controllers/subCategory');
 
 /**
  * API keys and Passport configuration.
@@ -174,12 +177,18 @@ app.get('/api/product/like/:userId/:productId',productAppController.likeProductB
 app.get('/api/product/wishlist/:userId/:productId',productAppController.wishListProductByUser);
 app.get('/api/product/alllike/:userId',  productAppController.listOfAllLike);
 app.get('/api/product/allwishlist/:userId',  productAppController.listOfAllWishlist);
+app.get('/api/product/featured/:userId',  productAppController.listofAllFeaturedProd);
+app.get('/api/product/fits/:userId',  productAppController.listofAllItFitsProd);
 
 app.get('/api/listofbrand',  brandAppController.listOfAllBrand);
 app.get('/api/listofsize',  sizeAppController.listOfAllSize);
+app.get('/api/size/:sizeId',  sizeAppController.listOfSizeAttribute);
 app.get('/api/listofcolor',  colorAppController.listOfAllColor);
 
 app.post('/api/saveusercofiguration',  userAppController.saveUserCofiguration);
+
+
+
 
 /* Brand CRUD Section */ // Need isAuthenticated code for check user is loggedin.
 
@@ -208,6 +217,46 @@ app.get('/editsize/:sizeId',  sizeController.editSize);
 app.post('/savesize',  sizeController.saveSize);
 app.get('/removesize/:sizeId',  sizeController.removeSize);
 app.post('/updatesize',  sizeController.updateSize);
+
+/* Products CRUD Section */ // Need isAuthenticated code for check user is loggedin.
+
+app.get('/listofproducts',  productController.listOfProducts);
+app.get('/addproduct',  productController.addProduct);
+app.post('/saveproduct',  productController.saveProduct);
+app.get('/editproduct/:productId',  productController.editProduct);
+app.post('/updateproduct',  productController.updateProduct);
+app.get('/removeproduct/:productId',  productController.removeProduct);
+
+/* Category CRUD Section */ // Need isAuthenticated code for check user is loggedin.
+
+app.get('/listofcategories',  categoryController.listOfCategories);
+app.get('/addcategory',  categoryController.addCategory);
+app.post('/savecategory',  categoryController.saveCategory);
+app.get('/editcategory/:catId',  categoryController.editCategory);
+app.post('/updatecategory',  categoryController.updateCategory);
+app.get('/removecategory/:catId',  categoryController.removeCategory);
+
+/* Sub Category CRUD Section */ // Need isAuthenticated code for check user is loggedin.
+
+app.get('/listofsubcategories',  categorySubController.listOfSubCategories);
+app.get('/addsubcategory',  categorySubController.addSubCategory);
+app.post('/savesubcategory',  categorySubController.saveSubCategory);
+app.get('/editsubcategory/:subcatId',  categorySubController.editSubCategory);
+app.post('/updatesubcategory',  categorySubController.updateSubCategory);
+app.get('/removesubcategory/:subcatId',  categorySubController.removeSubCategory);
+app.get('/fetchselectedcategory/:catId',  categorySubController.selectedCategory);
+
+
+/* Attribute CRUD Section */ // Need isAuthenticated code for check user is loggedin.
+
+app.get('/attribute/list',  attributeController.list);
+app.get('/attribute/create',  attributeController.create);
+app.get('/attribute/edit/:attributeId',  attributeController.edit);
+app.post('/attribute/save',  attributeController.saveAttribute);
+app.get('/attribute/delete/:attributeId',  attributeController.deleteAttribute);
+app.post('/attribute/update',  attributeController.updateAttribute);
+
+
 
  
 

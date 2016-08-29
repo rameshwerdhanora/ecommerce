@@ -1,7 +1,4 @@
 $(document).ready(function() {
- 
-  // Place JavaScript code here...
-
 });
 
 function make_sure_for_brand(id)
@@ -61,6 +58,62 @@ function make_sure_for_size(id)
 	});
 }
 
+function make_sure_for_product(id)
+{
+	$.ajax({
+		type: "GET",
+		url: "/removeproduct/"+id,
+		async: false,
+		success: function(result)
+		{
+			if(result.status == 'success')
+			{
+				$(".productTr_"+id).remove();
+			}  
+		},
+		cache: false,
+		contentType: false,
+		processData: false
+	});
+}
+
+function make_sure_for_category(id)
+{
+	$.ajax({
+		type: "GET",
+		url: "/removecategory/"+id,
+		async: false,
+		success: function(result)
+		{
+			if(result.status == 'success')
+			{
+				$(".categoryTr_"+id).remove();
+			}  
+		},
+		cache: false,
+		contentType: false,
+		processData: false
+	});
+}
+
+function make_sure_for_subcategory(id)
+{
+	$.ajax({
+		type: "GET",
+		url: "/removesubcategory/"+id,
+		async: false,
+		success: function(result)
+		{
+			if(result.status == 'success')
+			{
+				$(".subCategoryTr_"+id).remove();
+			}  
+		},
+		cache: false,
+		contentType: false,
+		processData: false
+	});
+}
 
 function deleteRow(row)
 {
@@ -94,4 +147,25 @@ function add_more_size()
     inp2.id += len;
     inp2.value = '';
     x.appendChild( new_row );
+}
+
+function loadSelectedsubCategory(catId)
+{
+	$.ajax({
+		type: "GET",
+		url: "/fetchselectedcategory/"+catId,
+		async: false,
+		success: function(result)
+		{
+			if(result.status == 'success')
+			{
+				var parseData = $.parseJSON( result.fetchSubCategory );
+				console.log(parseData);
+
+			}  
+		},
+		cache: false,
+		contentType: false,
+		processData: false
+	});
 }

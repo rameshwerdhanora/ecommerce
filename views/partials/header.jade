@@ -23,6 +23,14 @@
           a(href='/listofcolor') Color
         li(class=(title == 'Size') ? 'active' : undefined)
           a(href='/listofsize') Size
+        li(class=(title == 'Product') ? 'active' : undefined)
+          a(href='/listofproducts') Product
+        li(class=(title == 'Create Attribute') ? 'active' : undefined)
+          a(href='/attribute/list') Create Attribute
+        li(class=(title == 'Category') ? 'active' : undefined)
+          a(href='/listofcategories') Create Category
+        li(class=(title == 'SubCategory') ? 'active' : undefined)
+          a(href='/listofsubcategories') Create Sub Category
       ul.nav.navbar-nav.navbar-right
         if !user
           li(class=(title == 'Login') ? 'active' : undefined)

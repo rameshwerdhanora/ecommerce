@@ -116,13 +116,25 @@ exports.postLoginManually = function(req,res)
 	if(req.body.device_token !== '')
   	{
   		User.findOne({ user_name: req.body.user_name,password: req.body.password}, function(error, checkForLogin) {
+  			//console.log(checkForLogin)
   			if(checkForLogin)
   			{
-				return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id});
+  				UserDetails.findOne({user_id:checkForLogin._id},function(error,fetchUserDetails)
+				{
+					if(fetchUserDetails)
+					{
+						return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,configData:fetchUserDetails.configDetail});
+					}
+					else 
+					{
+						return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,configData:''});
+					}
+				});
+				
   			}
   			else 
   			{
-  				return res.json({"status":'error',"msg":error});
+  				return res.json({"status":'error',"msg":'Username or Password is incorrect.'});
   			}
 
   		});
