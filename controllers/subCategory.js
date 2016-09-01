@@ -84,32 +84,18 @@ exports.editSubCategory = (req,res) => {
 
 exports.updateSubCategory = (req,res) => {
 
-		updateData = {
-			'name' 			: req.body.name,
-			'description'	: req.body.description,
-		    'is_active'		: req.body.is_active,
-		    'parent_id'		: req.body.parent_id,
-		    'update'		: Date.now()
-		};
+	updateData = {
+		'name' 			: req.body.name,
+		'description'	: req.body.description,
+	    'is_active'		: req.body.is_active,
+	    'parent_id'		: req.body.parent_id,
+	    'update'		: Date.now()
+	};
 
-		SubCategory.findByIdAndUpdate(req.body._id,updateData, function(error, updateRes)
-		{
-			res.redirect('/listofsubcategories');
-		});
+	SubCategory.findByIdAndUpdate(req.body._id,updateData, function(error, updateRes)
+	{
+		res.redirect('/listofsubcategories');
+	});
  
 };
 
-exports.selectedCategory = (req,res) => {
-	
-	SubCategory.find({parent_id:req.params.catId,is_active:'1'},function(error,fetchSubCategory)
-	{
-		if(fetchSubCategory)
-		{
-			res.send({status:'success',msg:'Fetch all sub categories.',fetchSubCategory:fetchSubCategory});
-		}
-		else 
-		{
-			res.send({status:'error',msg:'Not any sub category created in selected category.'});
-		}
-	});
-};

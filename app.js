@@ -46,7 +46,7 @@ const brandAppController        = require('./controllers/apis/brandApp');
 const sizeAppController         = require('./controllers/apis/sizeApp');
 const colorAppController        = require('./controllers/apis/colorApp');
 const productAppController      = require('./controllers/apis/productApp');
-
+const filterAppController       = require('./controllers/apis/filterApp');
 
 const brandController          = require('./controllers/brand');
 const colorController          = require('./controllers/color');
@@ -183,10 +183,25 @@ app.post('/api/customer/leavefeedback', commonAppController.postLeaveFeedback); 
 
 app.get('/api/product/like/:userId/:productId',productAppController.likeProductByUser);
 app.get('/api/product/wishlist/:userId/:productId',productAppController.wishListProductByUser);
-app.get('/api/product/alllike/:userId',  productAppController.listOfAllLike);
-app.get('/api/product/allwishlist/:userId',  productAppController.listOfAllWishlist);
-app.get('/api/product/featured/:userId',  productAppController.listofAllFeaturedProd);
-app.get('/api/product/fits/:userId',  productAppController.listofAllItFitsProd);
+app.get('/api/product/alllike/:userId',productAppController.listOfAllLike);
+app.get('/api/product/allwishlist/:userId',productAppController.listOfAllWishlist);
+app.get('/api/product/featured/:userId',productAppController.listofAllFeaturedProd);
+app.get('/api/product/chkfomoalert/:userId',productAppController.checkFomoAlertAccToUser);
+app.get('/api/product/fits/:userId/:config',productAppController.listofAllItFitsProd);
+app.get('/api/product/details/:productId',productAppController.productDetailView);
+app.post('/api/product/fetchfilter',productAppController.fetchFilterValues);
+app.post('/api/product/fetchsort',productAppController.fetchSortValues);
+
+
+app.get('/api/brand/details/:brandId',productAppController.BrandDetailView);
+
+
+/* Filter Controller */
+app.get('/api/filter/fetchfilter',  filterAppController.fetchFilterOptions);
+app.get('/api/filter/category/:catId',  filterAppController.fetchSelectedSubCategory);
+
+
+
 
 app.get('/api/listofbrand',  brandAppController.listOfAllBrand);
 app.get('/api/listofsize',  sizeAppController.listOfAllSize);
@@ -236,6 +251,9 @@ app.get('/editproduct/:productId',  productController.editProduct);
 app.post('/updateproduct',  productController.updateProduct);
 app.get('/removeproduct/:productId',  productController.removeProduct);
 
+app.get('/product/fetchselectedcategory/:catId',  productController.selectedCategory);
+app.get('/product/loadattrvalues/:attrId',  productController.loadAttrValues);
+
 /* Category CRUD Section */ // Need isAuthenticated code for check user is loggedin.
 
 app.get('/listofcategories',  categoryController.listOfCategories);
@@ -253,7 +271,7 @@ app.post('/savesubcategory',  categorySubController.saveSubCategory);
 app.get('/editsubcategory/:subcatId',  categorySubController.editSubCategory);
 app.post('/updatesubcategory',  categorySubController.updateSubCategory);
 app.get('/removesubcategory/:subcatId',  categorySubController.removeSubCategory);
-app.get('/fetchselectedcategory/:catId',  categorySubController.selectedCategory);
+
 
 
 =======
@@ -268,6 +286,9 @@ app.get('/attribute/delete/:attributeId',  attributeController.deleteAttribute);
 app.post('/attribute/update',  attributeController.updateAttribute);
 
 <<<<<<< HEAD
+
+
+
 
 
  

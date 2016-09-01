@@ -1,13 +1,16 @@
 /* Add Multer Library for upload image */
-const Multer 		= require('multer');
-const Product		= require('../models/product');
-const ProductImage	= require('../models/productsImages');
-const Brand			= require('../models/brand');
-const Category		= require('../models/category');
-const SubCategory	= require('../models/subCategory');
+const Multer 			= require('multer');
+const async 			= require('async');
+const Product			= require('../models/product');
+const ProductImage		= require('../models/productsImages');
+const Brand				= require('../models/brand');
+const Category			= require('../models/category');
+const SubCategory		= require('../models/subCategory');
+const Attribute			= require('../models/attribute');
+const AttributeOption	= require('../models/attributeOption');
+const Color				= require('../models/color');
 
 
-const async = require('async');
 
 /* Define Folder name where our user porfile stored */
 var storage =   Multer.diskStorage({
@@ -36,14 +39,25 @@ exports.listOfProducts = (req, res) => {
 
 /* Create new Product */
 exports.addProduct = (req, res) => {
-	Category.find({is_active:1},function(error,fetchCategories){
-		SubCategory.find({is_active:1},function(error,fetchSubCategories){
-			Brand.find({},function(error,fetchAllBrands){
-				res.render('product/add_product', {
-		    		title: 'Product',
-		    		allBrands : fetchAllBrands,
-		    		fetchCategories:fetchCategories,
-		    		fetchSubCategories:fetchSubCategories
+	Category.find({is_active:1},function(error,fetchCategories)
+	{
+		SubCategory.find({is_active:1},function(error,fetchSubCategories)
+		{
+			Brand.find({},function(error,fetchAllBrands)
+			{
+				Attribute.find({},function(error,fetchAllAttributes)
+				{
+					Color.find({},function(error,fetchAllColors)
+					{
+						res.render('product/add_product', {
+				    		title: 'Product',
+				    		allBrands : fetchAllBrands,
+				    		fetchCategories:fetchCategories,
+				    		fetchSubCategories:fetchSubCategories,
+				    		fetchAllAttributes:fetchAllAttributes,
+				    		fetchAllColors:fetchAllColors
+						});
+					});	
 				});
 		 	});
 		});
@@ -58,31 +72,39 @@ exports.editProduct = (req, res) => {
 	{
 		SubCategory.find({is_active:1},function(error,fetchSubCategories)
 		{
-			Brand.find({},function(error,fetchAllBrands)
+			Color.find({},function(error,fetchAllColors)
 			{
-				Product.findOne({_id:req.params.productId},function(error,fetchEditProduct)
+				Attribute.find({},function(error,fetchAllAttributes)
 				{
-					if(fetchEditProduct)
-					{	
-						ProductImage.find({product_id:req.params.productId},function(error,fetchImageOfProducts)
-						{	
-							res.render('product/edit_product', {
-							    title: 'Product',
-							    fetchEditProduct:fetchEditProduct,
-							    fetchImageOfProducts:fetchImageOfProducts,
-							    allBrands : fetchAllBrands,
-							    fetchCategories:fetchCategories,
-							    fetchSubCategories:fetchSubCategories
-							});
-						});	
-					}
-					else 
+					Brand.find({},function(error,fetchAllBrands)
 					{
-						req.flash('errors', error);
-						return res.redirect('/listofproducts');
-					}
-				  
-				}); 
+						Product.findOne({_id:req.params.productId},function(error,fetchEditProduct)
+						{
+							if(fetchEditProduct)
+							{	
+								ProductImage.find({product_id:req.params.productId},function(error,fetchImageOfProducts)
+								{	
+									res.render('product/edit_product', {
+									    title: 'Product',
+									    fetchEditProduct:fetchEditProduct,
+									    fetchImageOfProducts:fetchImageOfProducts,
+									    allBrands : fetchAllBrands,
+									    fetchCategories:fetchCategories,
+									    fetchSubCategories:fetchSubCategories,
+									    fetchAllColors:fetchAllColors,
+									    fetchAllAttributes:fetchAllAttributes
+									});
+								});	
+							}
+							else 
+							{
+								req.flash('errors', error);
+								return res.redirect('/listofproducts');
+							}
+						  
+						}); 
+					});	
+				});
 			});	 
 		});	 
 	});	 
@@ -98,7 +120,7 @@ exports.saveProduct = (req, res) =>
 		{
 			return res.end("Error uploading file.");
 		}
-		
+
 		var fineSku 				= req.body.sku.replace(' ','-');
 		var productIns 				= new Product();
 		productIns.name 			= req.body.name
@@ -109,6 +131,9 @@ exports.saveProduct = (req, res) =>
 		productIns.brand_id 		= req.body.brand_id;
 		productIns.is_featured 		= req.body.is_featured;
 		productIns.price 			= req.body.price;
+		productIns.color 			= req.body.color;
+		productIns.productview 		= '0';
+		productIns.attribute 		= req.body.selectedAttr;
 		productIns.user_id 			= req.user._id; 
 		productIns.created 			= Date.now();
 		productIns.update 			= '';
@@ -223,6 +248,50 @@ exports.removeProduct = (req, res) => {
 		}
 	});
 };
+
+
+/**
+ * GET /product/fetchselectedcategory/:catId
+ * Process Fetch all sub categories of selected category
+ */
+
+exports.selectedCategory = (req,res) => {
+	
+	SubCategory.find({parent_id:req.params.catId,is_active:'1'},function(error,fetchSubCategory)
+	{
+		if(fetchSubCategory)
+		{
+			res.send({status:'success',msg:'Fetch all sub categories.',fetchSubCategory:fetchSubCategory});
+		}
+		else 
+		{
+			res.send({status:'error',msg:'Not any sub category created in selected category.'});
+		}
+	});
+};
+
+
+/**
+ * GET /product/loadattrvalues/:attrId
+ * Process for fetch all attributes value of selected attribute
+ */
+
+exports.loadAttrValues = (req,res) => {
+	
+	AttributeOption.find({attribute_id:req.params.attrId},function(error,fetchAttrValues)
+	{
+		if(fetchAttrValues)
+		{
+			res.send({status:'success',msg:'Fetch all attribute value.',fetchAttrValues:fetchAttrValues});
+		}
+		else 
+		{
+			res.send({status:'error',msg:'Not found any attibute options.'});
+		}
+	});
+};
+
+
 
 
 

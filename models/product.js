@@ -10,7 +10,10 @@ const productSchema = new mongoose.Schema({
 	sku : String,
 	description : String,
 	price : String,
+	productview:String,
 	is_featured : String,
+	color : Array,
+	attribute : Array,
 	created : String,
 	updated : String
 });

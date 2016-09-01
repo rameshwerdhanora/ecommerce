@@ -1,4 +1,11 @@
 $(document).ready(function() {
+
+	  var selectedColors = $('.selectedColors').val();
+	  if(selectedColors !== undefined)
+	  {
+	  	//alert(selectedColors);
+	  }
+
 });
 
 function deleteAttribute(id)
@@ -150,38 +157,115 @@ function deleteRow(row)
    	}
 }
 
-
-function add_more_size()
+function remove_row(id)
 {
-    //console.log( 'hi');
-    var x = document.getElementById('POITable');
-    var new_row = x.rows[1].cloneNode(true);
-    var len = x.rows.length;
-    new_row.cells[0].innerHTML = 'Size';
-    
-    var inp1 = new_row.cells[1].getElementsByTagName('input')[0];
-    inp1.id += len;
-    inp1.value = '';
-    var inp2 = new_row.cells[2].getElementsByTagName('input')[0];
-    inp2.id += len;
-    inp2.value = '';
-    x.appendChild( new_row );
+	$('#tableToModify tr#'+id).remove();
+}
+
+
+
+ function add_more_size() 
+ {
+	var row 	= document.getElementById("rowToClone"); // find row to copy
+	var table 	= document.getElementById("tableToModify"); // find table to append to
+	var rowCount = $('#tableToModify >tr').length
+	var clone 	= row.cloneNode(true); // copy children too
+	clone.id 	= rowCount+1; // change id or other attributes/contents
+
+	table.appendChild(clone); // add new row to end of table
+
+	$('#tableToModify >tr#'+clone.id+' >td >select').attr("id",clone.id);
+	$('#tableToModify >tr#'+clone.id+' >td >.removeAttrRow').attr("id",clone.id);
 }
 
 function loadSelectedsubCategory(catId)
 {
+	if(catId == '' || catId == 0)
+	{
+		return false;
+	}
 	$.ajax({
 		type: "GET",
-		url: "/fetchselectedcategory/"+catId,
+		url: "/product/fetchselectedcategory/"+catId,
 		async: false,
 		success: function(result)
 		{
 			if(result.status == 'success')
-			{
-				var parseData = $.parseJSON( result.fetchSubCategory );
-				console.log(parseData);
-
+			{	
+				var optionArray = [];
+				var selected = '';
+				var selectedSubCat = $('.selectedSubCat').val();
+				$(".subCategoryError").remove();
+				var fetchSubCategoryOptions = result.fetchSubCategory.length;
+				optionArray.push('<option value="0">Select Sub Category</option>');
+				if(fetchSubCategoryOptions > 0)
+				{
+					for (var i=0;  i < fetchSubCategoryOptions; i++) 
+					{
+						if(selectedSubCat == result.fetchSubCategory[i]._id)
+						{
+							selected = 'selected="selected"'
+						}
+						else 
+						{
+							selected = '';
+						}
+						optionArray.push('<option '+selected+' value="'+result.fetchSubCategory[i]._id+'">'+result.fetchSubCategory[i].name+'</option>');
+					}
+				}
+				else
+				{
+					$(".product_sub_category").after('<span class="subCategoryError">Not any sub category.</span>');
+				}
+				$(".product_sub_category option").remove();
+				$(".product_sub_category").append(optionArray);
 			}  
+		},
+		cache: false,
+		contentType: false,
+		processData: false
+	});
+}
+
+function loadAttrValues(attrId,id)
+{
+	if(attrId == '' || attrId == 0)
+	{
+		return false;
+	}
+	$('#tableToModify >tr#'+id+' #attrValuesDisplay').html('');
+	$.ajax({
+		type: "GET",
+		url: "/product/loadattrvalues/"+attrId,
+		async: false,
+		success: function(result)
+		{
+			//console.log(result.fetchAttrValues)
+			if(result.status == 'success')
+			{
+				var optionArray = [];
+				var AttrLen = result.fetchAttrValues.length;
+				if(AttrLen > 0)
+				{
+					var createSpan = '';
+					for (var a=0; a<AttrLen; a++) 
+					{
+						createSpan += '<span class="attrSpans">';
+						createSpan += '<input type="checkbox" name="selectedAttr['+result.fetchAttrValues[a].attribute_id+'][]" value="'+result.fetchAttrValues[a]._id+'">';
+						createSpan += result.fetchAttrValues[a].value;
+						createSpan += '</span>';
+						optionArray.push(createSpan);
+
+					}
+
+					$('#tableToModify >tr#'+id+' #attrValuesDisplay').append(optionArray);
+				}
+				else
+				{
+					$(this).after('<span class="attrError">Not found any value.</span>');
+				}
+			}  
+			
 		},
 		cache: false,
 		contentType: false,

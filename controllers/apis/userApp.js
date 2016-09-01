@@ -76,6 +76,7 @@ exports.postSignupManuallySave = function(req,res)
 				    userIns.social_type   	= '';
 				    userIns.social_id   	= '';
 				    userIns.access_token   	= '';
+				    userIns.isFomo   		= '0';
 				    userIns.is_active   	= true;
 				    userIns.is_deleted   	= false;
 				    userIns.created        	= Date.now();
@@ -581,6 +582,7 @@ exports.saveUserCofiguration = function(req,res)
 			    'user_id'	 	: req.body.user_id,
 			    'configDetail'	: req.body.configDetail  //Array
 			};
+
 			UserDetails.findByIdAndUpdate(fetchUserConfigDetails._id,userConfigDetails, function(error, updateConfigDetails){
 				if(error)
 				{
@@ -594,20 +596,25 @@ exports.saveUserCofiguration = function(req,res)
 		}
 		else
 		{
-			var userDetailsIns  			= new UserDetails();
-			userDetailsIns.user_id 			= req.body.user_id;
-			userDetailsIns.configDetail 	= req.body.configDetail;
+			if(req.body.configDetail[0].Size.length > 0)
+			{
+				var userDetailsIns  			= new UserDetails();
+				userDetailsIns.user_id 			= req.body.user_id;
+				userDetailsIns.configDetail 	= req.body.configDetail;
+				
+				userDetailsIns.save(function(error){
+					if(error)
+					{
+						return res.json({"status":'error',"msg":error});
+					}
+					else 
+					{
+						User.findByIdAndUpdate(req.body.user_id,{isFomo:'1'}, function(error, updateExistingVals){});
+						return res.json({"status":'success',"msg":'Your configuration successfully added.'});
+					}
+				});
+			}
 			
-			userDetailsIns.save(function(error){
-				if(error)
-				{
-					return res.json({"status":'error',"msg":error});
-				}
-				else 
-				{
-					return res.json({"status":'success',"msg":'Your configuration successfully added.'});
-				}
-			});
 		}
 	});
 
