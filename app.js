@@ -2,6 +2,9 @@
  * Module dependencies.
  */
 const express = require('express');
+//const paginate = require('express-paginate');
+//require('mongoose-paginate');
+
 const compression = require('compression');
 const session = require('express-session');
 const bodyParser = require('body-parser');
@@ -137,6 +140,9 @@ app.use(function(req, res, next) {
   next();
 });
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
+
+
+//app.use(paginate.middleware(10, 50));
 
 /**
  * Primary app routes.
@@ -277,13 +283,24 @@ app.get('/removesubcategory/:subcatId',  categorySubController.removeSubCategory
 =======
 >>>>>>> eadfc303cbd32eeddb936750b9824fa24f33dd99
 /* Attribute CRUD Section */ // Need isAuthenticated code for check user is loggedin.
+app.get('/attribute', passportConfig.isAuthenticated,  attributeController.list);
+app.get('/attribute/list', passportConfig.isAuthenticated,  attributeController.list);
+app.get('/attribute/create', passportConfig.isAuthenticated,  attributeController.create);
+app.get('/attribute/edit/:attributeId', passportConfig.isAuthenticated,  attributeController.edit);
+app.post('/attribute/save', passportConfig.isAuthenticated,  attributeController.saveAttribute);
+app.get('/attribute/delete/:attributeId', passportConfig.isAuthenticated,  attributeController.deleteAttribute);
+app.post('/attribute/update', passportConfig.isAuthenticated,  attributeController.updateAttribute);
+/* 31 Aug */
+app.post('/attribute/getOptions', passportConfig.isAuthenticated,  attributeController.getAttributeOptions);
+app.post('/attribute/deleteAttibOption', passportConfig.isAuthenticated,  attributeController.deleteAttributeOption);
+app.post('/attribute/updateAttribOption', passportConfig.isAuthenticated,  attributeController.updateAttributeOption);
 
-app.get('/attribute/list',  attributeController.list);
-app.get('/attribute/create',  attributeController.create);
-app.get('/attribute/edit/:attributeId',  attributeController.edit);
-app.post('/attribute/save',  attributeController.saveAttribute);
-app.get('/attribute/delete/:attributeId',  attributeController.deleteAttribute);
-app.post('/attribute/update',  attributeController.updateAttribute);
+/* 1 sep*/
+app.post('/attribute/addAttribOption', passportConfig.isAuthenticated,  attributeController.addAttributeOption);
+
+
+
+
 
 <<<<<<< HEAD
 
@@ -388,7 +405,17 @@ app.get('/auth/pinterest/callback', passport.authorize('pinterest', { failureRed
 /**
  * Error Handler.
  */
-app.use(errorHandler());
+app.use(function(req, res) {
+      res.status(404);
+     res.render('404.jade', {title: '404: Page Not found'});
+  });
+  
+  // Handle 500
+  app.use(function(error, req, res, next) {
+      res.status(500);
+     res.render('500.jade', {title:'500: Internal Server Error', error: error});
+  });
+//app.use(errorHandler());
 
 /**
  * Start Express server.

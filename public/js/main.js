@@ -1,12 +1,152 @@
 $(document).ready(function() {
+<<<<<<< Updated upstream
 
 	  var selectedColors = $('.selectedColors').val();
 	  if(selectedColors !== undefined)
 	  {
 	  	//alert(selectedColors);
 	  }
+=======
+ 
+  // Place JavaScript code here...
+  
+    /* Attribut Page:  To add more attribut Row */
+    $("input[type='button'][name='addMoreAttribBtn']").click(function(n){
+          var rowHtml =  '<div class="profile-frm-row attribOptionRow"><div class="profile-frm-cl1"><input type="text" value="" name="optionName[]" required="required" /></div><div class="profile-frm-cl2"><span class="yes-cl"><input type="button" name="delOptionBtn[]" value="Delete" class="css-checkbox"/></span></div></div>';
+          $(".addAttribOptionHeaderRow").after(rowHtml);
+    });
+    $(".attributeType").change(function(){
+        var attibuteTypeValue = $(this).val();
+        if(attibuteTypeValue == 'select' || attibuteTypeValue == 'multiselect'){
+            $(".addAttribOptionHeaderRow").show('slow');
+        }else{
+            $(".addAttribOptionHeaderRow").hide('slow');
+            $(".attribOptionRow").remove();
+        }
+    });
+    
+    
+    
+    $(".profile-cl").on('click','input[name="delOptionBtn[]"]',function(){
+        $(this).closest('.attribOptionRow').remove();
+    });
+    $(".profile-cl").on('keyup','input[name="editOptionName[]"]',function(){
+        $(this).closest('.attribOptionRow').find('.optionUpdateButton').show();
+    });
+    
+    $(".profile-cl").on('click','input[name="editDelOptionBtn[]"]',function(){
+        var attrbOptionId = $(this).attr('id');
+        if(attrbOptionId == ''){
+            $(this).closest('.attribOptionRow').remove();
+        }else{
+            if(confirm('Are you sure to delete?')){
+                //$(this).closest('.attribOptionRow').remove();
 
+                var attribVal = attrbOptionId.split('_');
+                attribVal = attribVal[1];
+                $.ajax({
+                    type: "POST",
+                    url: "/attribute/deleteAttibOption",
+                    data: {attributeOptionId:attribVal},
+                    dataType: 'json',
+                    success: function(res){
+                        if(parseInt(res.flag) == 1){
+                            $('#'+attrbOptionId).closest('.attribOptionRow').remove();
+                            alert(res.msg);
+                        }else{
+
+                        }
+                    }
+                });
+
+            }else{
+
+            }
+        }
+    });
+    
+    $(".profile-cl").on('click','.optionUpdateButton',function(){
+        var attrbOptionId = $(this).attr('id');
+        if(attrbOptionId == ''){
+            var optionName = $(this).closest('div.attribOptionRow').find('input[name="editOptionName[]"]').val();
+            var updateButton = $(this);
+            var attributeId = $("#attribute_id").val();
+            $.ajax({
+                type: "POST",
+                url: "/attribute/addAttribOption",
+                data: {attributeId:attributeId,optionNm:optionName},
+                dataType: 'json',
+                success: function(res){
+                    if(parseInt(res.flag) == 1){
+                        updateButton.attr('id','update_'+res.attribOptionId);
+                        updateButton.closest('div.attribOptionRow').find('input[name="editDelOptionBtn[]"]').attr('id','del_'+res.attribOptionId);
+                        updateButton.closest('div.attribOptionRow').find('input[name="editOptionName[]"]').attr('id','option_'+res.attribOptionId);
+                        updateButton.attr('value','Update');
+                    }else{
+>>>>>>> Stashed changes
+
+                    }
+                }
+            });
+        }else{
+            if(confirm('Are you sure you want to update?')){
+                var attribVal = attrbOptionId.split('_');
+                attribVal = attribVal[1];
+                var optionName = $("#option_"+attribVal).val();
+                $.ajax({
+                    type: "POST",
+                    url: "/attribute/updateAttribOption",
+                    data: {attributeOptionId:attribVal,optionNm:optionName},
+                    dataType: 'json',
+                    success: function(res){
+                        if(parseInt(res.flag) == 1){
+                            alert(res.msg);
+                        }else{
+
+                        }
+                    }
+                });
+
+            }else{
+
+            }
+        }
+    });
+    $("input[type='button'][name='editaddMoreAttribBtn']").click(function(n){
+           var rowHtml =  '<div class="profile-frm-row attribOptionRow"><div class="profile-frm-cl1"><input id=""  type="text" value="" name="editOptionName[]" required="required" /></div><div class="profile-frm-cl2"><span class="yes-cl"><input id="" type="button" name="editDelOptionBtn[]" value="Delete" class="css-checkbox"/> &nbsp; <input id="" type="button" name="update" value="Save" class="optionUpdateButton" /> </span></div></div>';
+            $(".addAttribOptionHeaderRow").after(rowHtml);
+    });
+    
+    /*$('#editAttributeFrm').load('',function(){
+        
+        var attributeType = $("#attributeType").val();
+        if(attributeType == 'select' || attributeType == 'multiselect'){
+            
+        }
+    });*/
+    
 });
+
+function getOptions(attrbid){
+    var attributeType = $("#attributeType").val();
+    if(attributeType == 'select' || attributeType == 'multiselect' ){
+        $.ajax({
+            type: "POST",
+            url: "/attribute/getOptions",
+            data: {'attribId':attrbid},
+            dataType: 'json',
+            success: function(res){
+                $(".addAttribOptionHeaderRow").show('slow');
+                $.each(res.data,function(index,val){
+                    var rowHtml =  '<div class="profile-frm-row attribOptionRow"><div class="profile-frm-cl1"><input id="option_'+val._id+'"  type="text" value="'+val.value+'" name="editOptionName[]" required="required" /></div><div class="profile-frm-cl2"><span class="yes-cl"><input id="del_'+val._id+'" type="button" name="editDelOptionBtn[]" value="Delete" class="css-checkbox"/> &nbsp; <input id="update_'+val._id+'" type="button" name="update" value="update" class="dnone optionUpdateButton" /> </span></div></div>';
+                    $(".addAttribOptionHeaderRow").after(rowHtml);
+                });
+            }
+        });
+    }
+}
+
+
 
 function deleteAttribute(id)
 {

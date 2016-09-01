@@ -21,7 +21,7 @@ block content
           li
             a(href='/brand/list') Manage Brands
           li.active
-            a(href='/attribute/create') Create Attribute
+            a(href='/attribute') Manage Attribute
       .profile-cl
         .profile-top-row
           h2 CREATE ATTRIBUTE
@@ -35,13 +35,23 @@ block content
               .profile-frm-row
                 .profile-frm-cl1  Catalog input type
                 .profile-frm-cl2
-                  select#select(name='type', required='required')
+                  select#select.attributeType(name='type', required='required')
                     option(value='text') Text Field
                     option(value='select') Select
-                    option(value='checkbox') Checkbox
                     option(value='multiselect') Multi Select
                     option(value='textarea') Textarea
                     option(value='radio') Radio
+                    
+                  
+              .profile-frm-row.dnone.addAttribOptionHeaderRow
+                .profile-frm-cl1 
+                    span.yes-cl Option
+                .profile-frm-cl2
+                  span.yes-cl 
+                    input#is_required2.css-checkbox(type='button', name='addMoreAttribBtn', value='Add option')
+                    
+              
+                    
               .profile-frm-row
                 .profile-frm-cl1 Values required?
                 .profile-frm-cl2

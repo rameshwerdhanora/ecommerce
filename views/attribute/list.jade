@@ -20,6 +20,7 @@ block content
                 th Display Type
                 th Action
               - var count = 1;
+<<<<<<< Updated upstream
               each getAllAttribute in getAllAttributes 
                 tr(class='attrTr_#{getAllAttribute._id}')
                   td(align='center') #{count}
@@ -35,6 +36,60 @@ block content
                 - count++;
 <<<<<<< HEAD
 =======
+=======
+                if getAllAttributes > 0
+                each getAllAttribute in getAllAttributes 
+                  tr(class='attrTr_#{getAllAttribute._id}')
+                    td(align='center') #{count}
+                    td.ord-title #{getAllAttribute.name}
+                    td #{getAllAttribute.type}
+                    td #{getAllAttribute.is_required}
+                    td #{getAllAttribute.is_post_feed}
+                    td #{getAllAttribute.product_manager}
+                    td #{getAllAttribute.display_type}
+                    td 
+                       a.addsize.sizebuttons(href='/attribute/edit/#{getAllAttribute._id}', title='Edit Attribute') Edit | 
+                       a.rmvsize.sizebuttons(href='#', onclick='deleteAttribute("#{getAllAttribute._id}")' title='Delete Attribute') Delete
+                  - count++;
+                else
+                    tr
+                     td(colspan=8)
+                      p No record found
+                      
+
+    - if(totalPage > 0)
+     ul.pagination
+        - var links = 2;
+        - var start = (( currentPage - links ) > 0 ) ? currentPage - links : 1;
+        - var end  = (( currentPage + links ) < totalPage ) ? currentPage + links : totalPage;
+        - var scls = (currentPage  == 1)?'disabled':'';
+        - var lcls = (last == currentPage)?'disabled':'';
+        li
+            span
+                a(href='?page=1'+(currentPage-1), class='#{scls}') &laquo;
+        if start > 1
+           li
+            span
+                a(href='?page=1') 1
+           li
+            span
+                ...
+                
+
+        if end < last
+           li
+            span
+                ...
+           li
+            span
+                a(href='?page=1') #{last}
+
+        li
+            span
+                a(href='?page='+(currentPage+1), class='#{lcls}') &raquo;
+        
+
+>>>>>>> Stashed changes
 
           
 >>>>>>> eadfc303cbd32eeddb936750b9824fa24f33dd99
