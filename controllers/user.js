@@ -64,7 +64,7 @@ exports.getSignup = (req, res) => {
   if (req.user) {
     return res.redirect('/');
   }
-  res.render('account/signup', {
+  res.render('user/create', {
     title: 'Create Account'
   });
 };
@@ -74,6 +74,7 @@ exports.getSignup = (req, res) => {
  * Create a new local account.
  */
 exports.postSignup = (req, res, next) => {
+  
   req.assert('email', 'Email is not valid').isEmail();
   req.assert('password', 'Password must be at least 4 characters long').len(4);
   req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);

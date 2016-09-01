@@ -1,6 +1,25 @@
 $(document).ready(function() {
 });
 
+function deleteAttribute(id)
+{
+	$.ajax({
+		type: "GET",
+		url: "/attribute/delete/"+id,
+		async: false,
+		success: function(result)
+		{
+			if(result.status == 'success')
+			{
+				$(".attrTr_"+id).remove();
+			}  
+		},
+		cache: false,
+		contentType: false,
+		processData: false
+	});
+}
+
 function make_sure_for_brand(id)
 {
 	$.ajax({

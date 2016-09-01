@@ -35,6 +35,9 @@ const userController = require('./controllers/user');
 const apiController = require('./controllers/api');
 const contactController = require('./controllers/contact');
 
+const userAppControlleraAdmin = require('./controllers/userApp');
+
+
 
 /* Application Work Start Cisdev */
 const userAppController         = require('./controllers/apis/userApp');
@@ -48,10 +51,15 @@ const productAppController      = require('./controllers/apis/productApp');
 const brandController          = require('./controllers/brand');
 const colorController          = require('./controllers/color');
 const sizeController           = require('./controllers/size');
+<<<<<<< HEAD
 const productController        = require('./controllers/product');
 const attributeController      = require('./controllers/attribute');
 const categoryController       = require('./controllers/category');
 const categorySubController    = require('./controllers/subCategory');
+=======
+const attributeController      = require('./controllers/attribute');
+const orderController          = require('./controllers/order');
+>>>>>>> eadfc303cbd32eeddb936750b9824fa24f33dd99
 
 /**
  * API keys and Passport configuration.
@@ -218,6 +226,7 @@ app.post('/savesize',  sizeController.saveSize);
 app.get('/removesize/:sizeId',  sizeController.removeSize);
 app.post('/updatesize',  sizeController.updateSize);
 
+<<<<<<< HEAD
 /* Products CRUD Section */ // Need isAuthenticated code for check user is loggedin.
 
 app.get('/listofproducts',  productController.listOfProducts);
@@ -247,6 +256,8 @@ app.get('/removesubcategory/:subcatId',  categorySubController.removeSubCategory
 app.get('/fetchselectedcategory/:catId',  categorySubController.selectedCategory);
 
 
+=======
+>>>>>>> eadfc303cbd32eeddb936750b9824fa24f33dd99
 /* Attribute CRUD Section */ // Need isAuthenticated code for check user is loggedin.
 
 app.get('/attribute/list',  attributeController.list);
@@ -256,9 +267,21 @@ app.post('/attribute/save',  attributeController.saveAttribute);
 app.get('/attribute/delete/:attributeId',  attributeController.deleteAttribute);
 app.post('/attribute/update',  attributeController.updateAttribute);
 
+<<<<<<< HEAD
 
 
  
+=======
+/* Order */
+
+app.get('/order',  orderController.list);
+app.get('/order/detail',  orderController.detail);
+
+/* Signup users */
+app.get('/signup/user',  userAppControlleraAdmin.signupUser);
+app.post('/signup/saveuser',  userAppControlleraAdmin.saveUser);
+
+>>>>>>> eadfc303cbd32eeddb936750b9824fa24f33dd99
 
 /**
  * API examples routes.

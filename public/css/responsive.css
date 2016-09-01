@@ -1,0 +1,362 @@
+@media screen and (min-width:768px) {
+.my-nav {
+	display: block !important;
+}
+}
+ @media screen and (max-width:1250px) {
+.loign-body {
+	background-size: auto;
+}
+.left-sidebar {
+	width: 25%;
+}
+.midlle-bar {
+	padding: 10px 0 0 10px;
+	width: 75%;
+}
+.shipping-total-box {
+	width: 35%;
+}
+.today-sale-box {
+	padding-left: 10px;
+	padding-right: 10px;
+	width: 37%;
+}
+.new-ord-box {
+	width: 28%;
+}
+.mdl-cmn {
+	margin-top: 10px;
+}
+.right-cmn {
+	margin-top: 10px;
+}
+.wkl-sale {
+	padding-left: 10px;
+	width: 35%;
+}
+.mdl-tab-box {
+	width: 65%;
+}
+.ul-mdl-tab li a {
+	padding: 0 25px;
+	font-size: 17px;
+}
+.sealsLeft h3,
+.sealsRight h3 {
+	font-size: 15px;
+}
+.socialLeft h3,
+.socialRight h3 {
+	font-size: 14px;
+}
+.nav-close {
+	right: 0;
+}
+.customer-cl {
+	width: 30%;
+}
+.profile-cl {
+	width: 69%;
+}
+
+.left-sub ul li {
+font-size: 16px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+.righsub-nav{
+	margin-bottom:10px;
+}
+.large-title-row{
+	margin-bottom:10px;
+}
+}
+@media screen and (max-width:1140px) {
+.ul-mdl-tab li a {
+	padding: 0 21px;
+	font-size: 16px;
+}
+}
+@media screen and (max-width:1023px) {
+.customer-cl ul li {
+	font-size: 14px;
+	font-weight: 600;
+	padding: 10px 0 10px 10px;
+}
+.omer_notification_left {
+	width: 210px;
+}
+.order-txt {
+	overflow: auto;
+}
+.order-txt table {
+	width: 1000px;
+}
+.wkl-sale {
+	padding-left: 0;
+	width: 100%;
+}
+.mdl-tab-box {
+	width: 100%;
+}
+.num-txt {
+	font-size: 35px;
+}
+.blue-title {
+	font-size: 24px;
+}
+.box-title {
+	font-size: 16px;
+}
+.shipping-total-in,
+.today-sale-in,
+.new-ord-in {
+	height: 155px;
+}
+.ul-mdl-tab {
+	text-align: center;
+}
+.ul-mdl-tab li {
+	float: none;
+	display: inline-block;
+}
+.ul-mdl-tab li:last-child {
+	float: none;
+}
+.nav-left li a {
+	padding: 0 5px;
+	font-size: 15px;
+	line-height: 55px;
+}
+.img-1-wrp > img {
+	max-width: inherit;
+}
+.img-1-wrp {
+	overflow: hidden;
+}
+.easy-sidebar {
+	padding-left: 20px;
+}
+.sub-title {
+	padding-top: 25px;
+}
+.left-sub ul li {
+  font-size: 12px;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+}
+ @media screen and (max-width:767px) {
+	 .profile-form-box {
+  padding: 15px;
+}
+
+.sub-title {
+	padding-top: 15px;
+	font-size: 17px;
+	padding-bottom: 8px;
+}
+.easy-sidebar.dropdown-menu a {
+	font-size: 14px;
+	line-height: 26px;
+}
+.easy-sidebar {
+	background: #333333 none repeat scroll 0 0;
+	border-left: 0 none;
+	border-radius: 0;
+	left: 0;
+	min-height: inherit;
+	padding: 5px;
+	position: relative;
+	top: 0;
+	width: 100%;
+	z-index: 1;
+}
+.menu-icon {
+	background: #000000 none repeat scroll 0 0;
+	border: 2px solid #333333;
+	border-radius: 2px;
+	color: #ffffff;
+	margin: 5px;
+	padding: 5px 10px 8px;
+	position: absolute;
+	z-index: 1;
+	cursor: pointer;
+	display: block;
+}
+.body-nav .left-sidebar {
+	display: block;
+}
+.body-nav {
+	overflow: hidden;
+	left: 245px;
+	position: relative;
+	-webkit-transition: all 0.4s ease-in;
+	-moz-transition: all 0.4s ease-in;
+	-o-transition: all 0.4s ease-in;
+	-ms-transition: all 0.4s ease-in;
+	transition: all 0.4s ease-in;
+}
+body {
+	transition: all 0.4s ease;
+	left: 0;
+}
+.second-icon {
+	display: none;
+}
+.body-nav .second-icon {
+	display: block;
+}
+.body-nav .first-icon {
+	display: none;
+}
+.left-sidebar {
+	height: 100%;
+	margin: 0;
+	overflow: auto;
+	padding: 0;
+	position: fixed;
+	top: 0;
+	width: 250px;
+	z-index: 9;
+	left: -100%;
+}
+.body-nav .left-sidebar {
+	left: 0;
+	-webkit-transition: all 0.4s ease-in-out;
+	-moz-transition: all 0.4s ease-in-out;
+	-o-transition: all 0.4s ease-in-out;
+	-ms-transition: all 0.4s ease-in-out;
+	transition: all 0.4s ease-in-out;
+}
+.logo {
+	height: auto;
+	padding-bottom: 10px;
+	padding-top: 5px;
+	position: static;
+}
+header {
+	padding: 8px;
+}
+/*.left-sidebar {
+	display: none;
+}*/
+.midlle-bar {
+	padding: 10px;
+	width: 100%;
+}
+.customer-cl, .profile-cl{
+	float:none;
+	width:100%;
+	min-height:inherit;
+	margin-bottom:10px;
+	padding:0;
+}
+}
+
+ @media screen and (max-width:640px) {
+.righsub-nav{
+	padding: 15px 15px 13px 5px;
+}
+ }
+
+ @media screen and (max-width:568px) {
+	 .left-sub {
+  float: none;
+  max-width: 100%;
+}
+.right-sub {
+  float: right;
+  max-width: 100%;
+}
+
+.new-ord-box,
+.today-sale-box,
+.shipping-total-box {
+	width: 100%;
+	margin-bottom: 10px;
+	padding-left: 0;
+	padding-right: 0;
+}
+.shipping-total-box {
+	margin-bottom: 0;
+}
+.shipping-total-in,
+.today-sale-in,
+.new-ord-in {
+	height: auto;
+}
+.ul-mdl-tab li a {
+	font-size: 14px;
+}
+.first-tab-cnt .adminlist {
+	padding: 0 5px;
+}
+.adminlist {
+	padding: 0 5px;
+}
+}
+@media screen and (max-width:479px) {
+	.left-sub ul li{
+		line-height:20px;
+	}
+	.large-title-row{
+		font-size:25px;
+	}
+.top-left {
+	width: 70%;
+}
+.top-right {
+	width: 30%;
+}
+.top-right li {
+	margin-left: 5px;
+	margin-right: 0;
+}
+.top-l-1 {
+	margin-right: 5px;
+	width: 12%;
+}
+.top-search {
+	width: 84%;
+}
+.top-search input[type="text"] {
+	width: 74%;
+}
+.top-search button {
+	padding: 0;
+	width: 16%;
+}
+.my-name {
+	margin: -10px -10px 5px -15px;
+}
+.notifation {
+	width: 300px;
+	border-radius: 0;
+}
+.ul-mdl-tab li a {
+	font-size: 11px;
+	padding: 0 4px;
+}
+.low-tbl-box th {
+	font-size: 11px;
+}
+.low-tbl-box td {
+	font-size: 11px;
+}
+.adminlist {
+	width: 33%;
+}
+.login-panel {
+	font-size: 14px;
+}
+.omer_notification_left > p{
+	text-align:left;
+	width: 150px;
+}
+.omer_notification_left{
+	text-align:left;
+	width:auto;
+}
+}

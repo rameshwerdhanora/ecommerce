@@ -1,5 +1,6 @@
-.navbar.navbar-default.navbar-fixed-top
+header
   .container
+<<<<<<< HEAD
     .navbar-header
       button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
         span.sr-only Toggle navigation
@@ -52,3 +53,27 @@
               li.divider
               li
                 a(href='/logout') Logout
+=======
+    .logo
+      a(href='/')
+        img(src='/images/logo.png', alt='icon')
+    .top-left
+      .top-l-1
+        a(href='#')
+          img(src='/images/nav-icon.png', alt='icon')
+      .top-search
+        form(name='form1', method='post', action='#')
+          button(type='submit')
+            img(src='/images/search-icon.png', alt='icon')
+          input#textfield(type='text', name='textfield', placeholder='SEARCH')
+    .top-right
+      ul
+        li
+          a(href='/logout')
+            img(src='/images/user-icon.png', alt='icon')
+        li
+          a(href='#')
+            img(src='/images/notifaction-icon.png', alt='icon')
+          span.noti-itme 5
+// header end
+>>>>>>> eadfc303cbd32eeddb936750b9824fa24f33dd99
