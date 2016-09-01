@@ -50,6 +50,7 @@ const colorController          = require('./controllers/color');
 const sizeController           = require('./controllers/size');
 const attributeController      = require('./controllers/attribute');
 const orderController          = require('./controllers/order');
+const emailController          = require('./controllers/emailTemplate');
 
 /**
  * API keys and Passport configuration.
@@ -223,6 +224,11 @@ app.post('/attribute/update',  attributeController.updateAttribute);
 
 app.get('/order',  orderController.list);
 app.get('/order/detail',  orderController.detail);
+
+/* Email Template */
+
+app.get('/emailtemplate/list',  emailController.list);
+app.get('/emailtemplate/edit',  emailController.edit);
 
 /**
  * API examples routes.

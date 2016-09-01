@@ -13,3 +13,4 @@ const attributeSchema = new mongoose.Schema({
 const Attribute = mongoose.model('Attribute', attributeSchema);
 
 module.exports = Attribute;
+

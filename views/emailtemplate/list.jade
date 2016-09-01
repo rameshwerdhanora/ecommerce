@@ -1,0 +1,83 @@
+extends ../layout
+block content
+  .col-sm-9.midlle-bar
+      .large-title-row
+        img(src='/images/title-icon.png', alt='icon')
+        |  User
+        .edit-btn-cl.select-item
+          form(action='', method='post', name='form3')
+            select#select(name='select')
+              option ACTIONS
+      .customer-box.clearfix
+        .customer-cl
+          h2 Emails
+          ul
+            li
+              a(href='#')
+                | Email Templates
+            li
+              a(href='#') Add Template
+        .profile-cl
+          .profile-top-row
+            h2 Email Templates
+          .low-tbl-box.order-txt
+            form(name='form2', method='post', action='')
+              table(width='100%', cellspacing='0', cellpadding='0', border='0')
+                tbody
+                  tr
+                    th(align='center')
+                      input#checkbox2(type='checkbox', name='checkbox2')
+                    th
+                      | Name
+                    th Subject 
+                    th User
+                    th
+                      a(href='#')
+                        img(src='/images/delete-icon.png', alt='delete')
+                  tr
+                    td(align='center')
+                      input#checkbox4(type='checkbox', name='checkbox4')
+                    td.ord-title 12345
+                    td 30 july 2016 8:20AM PT
+                    td FAKE STREET
+                    td  
+                  tr
+                    td(align='center')
+                      input#checkbox(type='checkbox', name='checkbox')
+                    td.ord-title 12345
+                    td 30 july 2016 8:20AM PT
+                    td FAKE STREET
+                    td  
+                  tr
+                    td(align='center')
+                      input#checkbox3(type='checkbox', name='checkbox3')
+                    td.ord-title 12345
+                    td 30 july 2016 8:20AM PT
+                    td FAKE STREET
+                    td  
+                  tr
+                    td(align='center')
+                      input#checkbox5(type='checkbox', name='checkbox5')
+                    td.ord-title 12345
+                    td 30 july 2016 8:20AM PT
+                    td FAKE STREET
+                    td  
+                  tr
+                    td
+                      input#checkbox6(type='checkbox', name='checkbox6')
+                    td.ord-title 12345
+                    td 30 july 2016 8:20AM PT
+                    td FAKE STREET
+                    td  
+                  tr
+                    td  
+                    td  
+                    td  
+                    td  
+                    td  
+                  tr
+                    td  
+                    td  
+                    td  
+                    td  
+                    td  

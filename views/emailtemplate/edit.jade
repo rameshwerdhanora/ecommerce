@@ -1,0 +1,42 @@
+extends ../layout
+
+block content
+  .col-sm-9.midlle-bar
+    .large-title-row
+      img(src='/images/title-icon.png', alt='icon')
+      |  ASHLEY MOLINA
+    .customer-box.clearfix
+      .customer-cl
+        h2 Emails
+        ul
+          li
+            a(href='#') Email Template
+          li.active
+            a(href='#') Add Template
+      .profile-cl
+        .profile-top-row
+          h2 Add Template
+          .edit-btn-cl
+            a.edit-btn(href='#') Save
+        .profile-form-box
+          .profile-right-cl
+            form(action='', method='post')
+              .profile-frm-row
+                .profile-frm-cl1
+                  | Name
+                .profile-frm-cl2
+                  input(name='', type='text', value='')
+              .profile-frm-row
+                .profile-frm-cl1
+                  | Subject
+                .profile-frm-cl2
+                  input(name='', type='text', value='')
+              .profile-frm-row
+                .profile-frm-cl1 User
+                .profile-frm-cl2
+                  .select-item
+                    select#select(name='select')
+                      option Shop
+              .profile-frm-row
+                .editer-box Editer
+
