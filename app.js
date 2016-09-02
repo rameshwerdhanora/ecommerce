@@ -54,15 +54,14 @@ const filterAppController       = require('./controllers/apis/filterApp');
 const brandController          = require('./controllers/brand');
 const colorController          = require('./controllers/color');
 const sizeController           = require('./controllers/size');
-<<<<<<< HEAD
+
 const productController        = require('./controllers/product');
-const attributeController      = require('./controllers/attribute');
 const categoryController       = require('./controllers/category');
 const categorySubController    = require('./controllers/subCategory');
-=======
+
 const attributeController      = require('./controllers/attribute');
 const orderController          = require('./controllers/order');
->>>>>>> eadfc303cbd32eeddb936750b9824fa24f33dd99
+
 
 /**
  * API keys and Passport configuration.
@@ -247,7 +246,6 @@ app.post('/savesize',  sizeController.saveSize);
 app.get('/removesize/:sizeId',  sizeController.removeSize);
 app.post('/updatesize',  sizeController.updateSize);
 
-<<<<<<< HEAD
 /* Products CRUD Section */ // Need isAuthenticated code for check user is loggedin.
 
 app.get('/listofproducts',  productController.listOfProducts);
@@ -280,8 +278,6 @@ app.get('/removesubcategory/:subcatId',  categorySubController.removeSubCategory
 
 
 
-=======
->>>>>>> eadfc303cbd32eeddb936750b9824fa24f33dd99
 /* Attribute CRUD Section */ // Need isAuthenticated code for check user is loggedin.
 app.get('/attribute', passportConfig.isAuthenticated,  attributeController.list);
 app.get('/attribute/list', passportConfig.isAuthenticated,  attributeController.list);
@@ -300,16 +296,6 @@ app.post('/attribute/addAttribOption', passportConfig.isAuthenticated,  attribut
 
 
 
-
-
-<<<<<<< HEAD
-
-
-
-
-
- 
-=======
 /* Order */
 
 app.get('/order',  orderController.list);
@@ -319,7 +305,13 @@ app.get('/order/detail',  orderController.detail);
 app.get('/signup/user',  userAppControlleraAdmin.signupUser);
 app.post('/signup/saveuser',  userAppControlleraAdmin.saveUser);
 
->>>>>>> eadfc303cbd32eeddb936750b9824fa24f33dd99
+
+/* Customer */
+app.get('/customer/list',  userAppControlleraAdmin.customerList);
+app.get('/customer/view/:id',  userAppControlleraAdmin.customerView);
+app.get('/customer/edit/:id',  userAppControlleraAdmin.customerEdit);
+app.post('/customer/update',  userAppControlleraAdmin.customerUpdate);
+app.get('/customer/delete/:customerId',  userAppControlleraAdmin.customerDelete);
 
 /**
  * API examples routes.
