@@ -721,7 +721,11 @@ header {
 .profile-frm-cl2 {
 	float: left;
 	width: 215px;
+<<<<<<< HEAD
 	font-weight: 600;
+=======
+	font-weight:600;
+>>>>>>> f2a298c68b30e97c2e447cb340283263b6e07345
 }
 .profile-frm-cl2 input[type="text"],
 .profile-frm-cl2 textarea {
@@ -773,6 +777,7 @@ header {
 	height: 180px;
 	line-height: 22px;
 }
+<<<<<<< HEAD
 .payment .profile-frm-row {
 	padding-left: 75px;
 }
@@ -816,6 +821,47 @@ div .first-txt .profile-frm-cl1 {
 .omer_notification_box {
 	margin-bottom: 10px;
 }
+=======
+.payment .profile-frm-row{
+	padding-left:75px;
+}
+.first-txt{
+	text-align:left;
+	padding-left:0 !important;
+}
+div .first-txt .profile-frm-cl1 {
+  padding-top: 0;
+  text-align: left;
+  width: 85px;
+}
+.vimo-txt {
+  display: inline-block;
+}
+.first-txt .profile-frm-cl2 {
+  line-height: 34px;
+}
+
+
+.omer_notification_left {
+    float: left;
+    width: 263px;
+	line-height:32px;
+	font-weight:600;
+}
+.omer_notification_right {
+    float: left;
+}
+.omer_notification_left > p{text-align:right; font-size:14px; font-weight:600; text-transform:none; margin-bottom:0; width:170px}
+.omer_notification_right > span {
+    display: inline-block;
+    text-align: center;
+    width: 50px;
+}
+.omer_notification_box {
+    margin-bottom: 10px;
+}
+
+>>>>>>> f2a298c68b30e97c2e447cb340283263b6e07345
 /*5-users-customer-profile-edit-on-ADMIN-view page css  end*/
 
 /*login page css start*/
@@ -834,7 +880,11 @@ div .first-txt .profile-frm-cl1 {
 	right: 0;
 	top: 50%;
 	transform: translateY(-50%);
+<<<<<<< HEAD
 	width: 94%;
+=======
+	width:94%;
+>>>>>>> f2a298c68b30e97c2e447cb340283263b6e07345
 }
 .login-title-row {
 	background: #000000 none repeat scroll 0 0;
@@ -874,7 +924,11 @@ div .first-txt .profile-frm-cl1 {
 .login-in {
 	max-width: 450px;
 	margin: auto;
+<<<<<<< HEAD
 	width: 94%;
+=======
+	width:94%;
+>>>>>>> f2a298c68b30e97c2e447cb340283263b6e07345
 }
 .form-signin-heading {
 	font-size: 26px;
@@ -1249,7 +1303,11 @@ label.css-label {
 	line-height: 1.42857;
 	margin: 0;
 	margin-bottom: 30px;
+<<<<<<< HEAD
 	text-transform: uppercase;
+=======
+	text-transform:uppercase;
+>>>>>>> f2a298c68b30e97c2e447cb340283263b6e07345
 }
 .cmn-popup .modal-header {
 	border: 0;
@@ -1675,6 +1733,7 @@ label.css-label {
 	background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
 }
 .product_logo {
+<<<<<<< HEAD
 	float: left;
 	max-width: 12%;
 }
@@ -1704,6 +1763,37 @@ label.css-label {
 	font-size: 14px;
 	font-weight: normal;
 	margin-bottom: 10px;
+=======
+  float: left;
+  max-width: 12%;
+}
+.product_price_rate {
+  float: left;
+  font-size: 20px;
+  font-weight: bold;
+  max-width: 15%;
+  padding-top: 15px;
+}
+.product_description {
+  float: left;
+  max-width: 73%;
+  padding: 0 15px;
+}
+.product_description h3 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 0;
+  margin-top: 0;
+  padding-bottom: 5px;
+  text-transform: uppercase;
+}
+.product_description span {
+  color: #a1a1a1;
+  display: block;
+  font-size: 14px;
+  font-weight: normal;
+  margin-bottom: 10px;
+>>>>>>> f2a298c68b30e97c2e447cb340283263b6e07345
 }
 .product_description p {
 	font-size: 13px;
@@ -1720,6 +1810,7 @@ label.css-label {
 	content: "";
 }
 .add_product .modal-body ul li {
+<<<<<<< HEAD
 	border-left: 1px solid #aaaaaa;
 	display: inline-block;
 	float: none;
@@ -1736,6 +1827,25 @@ label.css-label {
 	font-size: 0;
 	margin: 0 -15px;
 	text-align: center;
+=======
+  border-left: 1px solid #aaaaaa;
+  
+  display: inline-block;
+  float: none;
+  height: 125px;
+  width: 27%;
+  vertical-align:top;
+}
+.add_product .modal-body ul li:last-child{
+	border-right: 1px solid #aaaaaa;
+}
+.up-list {
+  border-bottom: 1px solid #aaaaaa;
+  border-top: 1px solid #aaaaaa;
+  font-size: 0;
+  margin: 0 -15px;
+  text-align: center;
+>>>>>>> f2a298c68b30e97c2e447cb340283263b6e07345
 }
 .add_product .modal-footer {
 	border: medium none;
@@ -1759,7 +1869,11 @@ label.css-label {
 	text-align: center;
 }
 .cam_upload img {
+<<<<<<< HEAD
 	width: 75%;
+=======
+  width: 75%;
+>>>>>>> f2a298c68b30e97c2e447cb340283263b6e07345
 }
 .popup_product {
 	float: none;
@@ -1799,12 +1913,21 @@ label.css-label {
 	text-align: center
 }
 .profile-frm-cl3 a {
+<<<<<<< HEAD
 	color: #00cfff;
 	font-size: 14px;
 	font-weight: 600;
 	line-height: 34px;
 	text-align: center;
 	text-decoration: underline;
+=======
+  color: #00cfff;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 34px;
+  text-align: center;
+  text-decoration: underline;
+>>>>>>> f2a298c68b30e97c2e447cb340283263b6e07345
 }
 .product_size a {
 	border: 1px solid #000;
@@ -1842,11 +1965,19 @@ label.css-label {
 	text-align: center;
 }
 .custom-span {
+<<<<<<< HEAD
 	color: #aaaaaa;
 	font-size: 55px;
 	font-weight: bold;
 	position: relative;
 	top: 25px;
+=======
+  color: #aaaaaa;
+  font-size: 55px;
+  font-weight: bold;
+  position: relative;
+  top: 25px;
+>>>>>>> f2a298c68b30e97c2e447cb340283263b6e07345
 }
 #uploadFile {
 	border: none;
@@ -1854,6 +1985,7 @@ label.css-label {
 	width: 200px;
 }
 .custom-para {
+<<<<<<< HEAD
 	color: #aaaaaa;
 	font-size: 11px;
 	position: relative;
@@ -1864,6 +1996,18 @@ label.css-label {
 	font-weight: 600;
 	font-size: 14px;
 	padding-left: 100px;
+=======
+  color: #aaaaaa;
+  font-size: 11px;
+  position: relative;
+  text-transform: uppercase;
+  top: 35px;
+}
+.sg-row{
+	font-weight:600;
+	font-size:14px;
+	padding-left:100px;
+>>>>>>> f2a298c68b30e97c2e447cb340283263b6e07345
 }
 /* view product popup */
 .view_product ul {
@@ -1879,14 +2023,25 @@ label.css-label {
 	width: 100%;
 }
 .product_info_details {
+<<<<<<< HEAD
 	padding: 0 10px;
 }
+=======
+  padding: 0 10px;
+}
+
+>>>>>>> f2a298c68b30e97c2e447cb340283263b6e07345
 .view_product .modal-body {
-	padding: 0;
+  padding: 0;
 }
 .sz-txt {
+<<<<<<< HEAD
 	padding-right: 10px;
 	text-transform: uppercase;
+=======
+  padding-right: 10px;
+  text-transform: uppercase;
+>>>>>>> f2a298c68b30e97c2e447cb340283263b6e07345
 }
 /* discount coupan popup */
 .discount_coupan {
@@ -1908,6 +2063,7 @@ label.css-label {
 	max-width: 100%;
 }
 .discount_coupan .profile-frm-cl1 {
+<<<<<<< HEAD
 	color: #ffffff;
 	font-size: 14px;
 	width: 40%;
@@ -1919,6 +2075,19 @@ label.css-label {
 }
 .discount_coupan .profile-frm-cl2 input {
 	height: 28px;
+=======
+  color: #ffffff;
+  font-size: 14px;
+  width: 40%;
+}
+.discount_coupan  .profile-frm-cl2 {
+  float: left;
+  font-weight: 600;
+  width: 60%;
+}
+.discount_coupan .profile-frm-cl2 input{
+	height:28px;
+>>>>>>> f2a298c68b30e97c2e447cb340283263b6e07345
 }
 .discount_coupan .profile-frm-cl2 select {
 	border: 1px solid #333333;
@@ -1930,6 +2099,10 @@ label.css-label {
 	padding: 0 10px 0 5px;
 	width: 100%;
 	text-transform: capitalize;
+<<<<<<< HEAD
+=======
+	
+>>>>>>> f2a298c68b30e97c2e447cb340283263b6e07345
 	-moz-appearance: none;
 	-webkit-appearance: none;
 	-ms-appearance: none;
@@ -1943,6 +2116,7 @@ label.css-label {
 	text-align: center;
 }
 .discount_coupan .modal-footer .btn-primary {
+<<<<<<< HEAD
 	background-color: #000000;
 	border-color: #000000;
 	border-radius: 0;
@@ -1952,6 +2126,17 @@ label.css-label {
 	height: 33px;
 	line-height: 18px;
 	width: 130px;
+=======
+  background-color: #000000;
+  border-color: #000000;
+  border-radius: 0;
+  color: #00cfff;
+  font-size: 17px;
+  font-weight: bold;
+  height: 33px;
+  line-height: 18px;
+  width: 130px;
+>>>>>>> f2a298c68b30e97c2e447cb340283263b6e07345
 }
 .discount_coupan .modal-header {
 	padding-bottom: 10px;
@@ -1982,11 +2167,19 @@ label.css-label {
 	margin-right: 20px
 }*/
 .vm-inp {
+<<<<<<< HEAD
 	padding-right: 15px;
+=======
+  padding-right: 15px;
+>>>>>>> f2a298c68b30e97c2e447cb340283263b6e07345
 }
 .profile-right-cl4 {
 	display: inline-block
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> f2a298c68b30e97c2e447cb340283263b6e07345
 .payment .profile-frm-cl1 {
 	width: 135px;
 }
@@ -2069,11 +2262,19 @@ label.css-label {
 	width: 894px;
 }
 .star_review p {
+<<<<<<< HEAD
 	font-size: 15px;
 	text-align: left
 }
 .reviews .product_price p {
 	font-size: 15px;
+=======
+	font-size: 20px;
+	text-align: left
+}
+.reviews .product_price p {
+	font-size: 20px;
+>>>>>>> f2a298c68b30e97c2e447cb340283263b6e07345
 	text-align: center
 }
 .reviews .product_details li {
@@ -2086,7 +2287,11 @@ label.css-label {
 .product_manage table th {
 	text-align: left;
 	font-size: 15px;
+<<<<<<< HEAD
 	text-transform: uppercase;
+=======
+	text-transform:uppercase;
+>>>>>>> f2a298c68b30e97c2e447cb340283263b6e07345
 }
 .product_manage table td {
 	border: 1px solid #e1e1e1;
@@ -2116,9 +2321,16 @@ label.css-label {
 	margin-bottom: 30px
 }
 .linked {
+<<<<<<< HEAD
 }
 .linked ul {
 	padding-left: 20px;
+=======
+	
+}
+.linked ul {
+  padding-left: 20px;
+>>>>>>> f2a298c68b30e97c2e447cb340283263b6e07345
 }
 /* omer-notification-ADMIN-view */
 .omer_notification table tr th {
@@ -2172,19 +2384,33 @@ label.css-label {
 	margin-bottom: 0;
 	margin-top: 0;
 	margin-left: 0;
+<<<<<<< HEAD
 	line-height: 15px;
+=======
+	line-height:15px;
+>>>>>>> f2a298c68b30e97c2e447cb340283263b6e07345
 }
 .address_btn {
 	text-align: center;
 }
 .blng-title {
+<<<<<<< HEAD
 	font-size: 15px !important;
 	margin: 0 !important;
 	padding: 7px 15px;
 }
 .top-bdr {
 	border-top: 1px solid #bcbcbc;
+=======
+  font-size: 15px !important;
+  margin: 0 !important;
+  padding: 7px 15px;
 }
+.top-bdr {
+    border-top: 1px solid #bcbcbc;
+>>>>>>> f2a298c68b30e97c2e447cb340283263b6e07345
+}
+
 /*designer-2 css end*/
 
 
@@ -2373,6 +2599,7 @@ label.css-label {
 /*notifaction account css end*/
 
 .etik-sms {
+<<<<<<< HEAD
 	clear: both;
 	padding-top: 60px;
 }
@@ -2409,12 +2636,54 @@ label.css-label {
 .sp-btn-row {
 	margin-top: -50px;
 	text-align: right;
+=======
+  clear: both;
+  padding-top: 60px;
+}
+.shop-acc-box {
+  margin: auto;
+  max-width: 400px;
+}
+.shop-acc-box .profile-frm-cl1{
+	width: 135px;
+}
+.length-box {
+  font-weight: 600;
+  margin-top: 60px;
+}
+.fb-btns{
+	background:#285dcf;
+	padding-left:15px;
+		padding-right:15px;
+}
+
+/*5-users-shop-shipping-ADMIN-view page css start*/
+
+.shpping-box{
+	margin:0 0 70px 0;
+}
+.shpping-box .profile-frm-cl1 {
+  text-transform: capitalize;
+
+}
+
+.shpping-box h4 {
+  margin-top: 0;
+}
+.sp-acc {
+  padding-left: 70px;
+}
+.sp-btn-row {
+  margin-top: -50px;
+  text-align: right;
+>>>>>>> f2a298c68b30e97c2e447cb340283263b6e07345
 }
 /*5-users-shop-shipping-ADMIN-view page css end*/
 
 
 
 /*3 popus css start*/
+<<<<<<< HEAD
 .digit-txt {
 	color: #afafaf;
 	font-size: 11px;
@@ -2513,6 +2782,108 @@ label.css-label {
 	font-size: 13px;
 }
 .popup-wdt-2 .profile-frm-cl2 select {
+=======
+.digit-txt{
+	color:#afafaf;
+	font-size:11px;
+}
+.small-inp{
+	max-width:100px;
+	text-align:center;
+}
+.card-list:after{
+	clear:both;
+	display:block;
+	content:"";
+}
+.card-list{
+	text-align:center;
+	padding:20px 0 40px;
+}
+.card-list li{
+	display:inline-block;
+	padding:0 2px;
+}
+.yes-no-txt{
+	padding:50px 0;
+}
+.want-txt {
+  font-size: 15px;
+}
+
+.yes-no {
+  margin-top: 30px;
+}
+.yes-btn {
+  background: #00cfff none repeat scroll 0 0;
+  color: #ffffff;
+  display: inline-block;
+  font-weight: 600;
+  padding: 8px 18px;
+  border:solid 1px #00cfff;
+}
+.yes-btn:hover{
+	background:#000;
+	color:#fff;
+	 border:solid 1px #000;
+}
+
+.no-btn {
+  background: #fff none repeat scroll 0 0;
+  color: #ffffff;
+  display: inline-block;
+  font-weight: 600;
+  padding: 8px 18px;
+  border:solid 1px #000000;
+  color:#000;
+}
+.no-btn:hover{
+	background:#000;
+	color:#fff;
+	 border:solid 1px #000;
+}
+.cl-btn{
+	padding:0 10px;
+}
+.or-txt {
+  left: 0;
+  position: absolute;
+  top: 21px;
+}
+.billing-txt input.css-checkbox[type="radio"] + label.css-label{
+	padding-left:0;
+	padding-right:20px;
+}
+.billing-txt label.css-label {
+  -moz-user-select: none;
+  background-image: url("../images/radio-img.png");
+  background-position: right top;
+}
+.billing-txt input.css-checkbox[type="radio"]:checked + label.css-label {
+  background-position: 100% -18px;
+}
+.billing-txt input.css-checkbox[type="radio"] + label.css-label {
+    background-position: 100% 0;
+}
+.billing-txt {
+  padding: 20px 0 15px !important;
+}
+.popup-wdt-2{
+	width:550px;
+}
+.popup-wdt-2 .popup_product .profile-frm-cl1 {
+  width: 40%;
+  font-size:13px;
+}
+.popup-wdt-2 .popup_product .profile-frm-cl2 {
+  width: 60%;
+}
+.popup-wdt-2 .profile-frm-cl2 input[type="text"]{
+	height:28px;
+	font-size:13px;
+}
+.popup-wdt-2 .profile-frm-cl2 select{
+>>>>>>> f2a298c68b30e97c2e447cb340283263b6e07345
 	border: 1px solid #333333;
 	color: #000;
 	font-size: 13px;
@@ -2522,6 +2893,10 @@ label.css-label {
 	padding: 0 10px 0 5px;
 	width: 100%;
 	text-transform: capitalize;
+<<<<<<< HEAD
+=======
+	
+>>>>>>> f2a298c68b30e97c2e447cb340283263b6e07345
 	-moz-appearance: none;
 	-webkit-appearance: none;
 	-ms-appearance: none;
@@ -2529,6 +2904,7 @@ label.css-label {
 	background-size: 20px;
 	min-width: 120px;
 }
+<<<<<<< HEAD
 .sml-select {
 	max-width: 100px;
 }
@@ -2618,3 +2994,16 @@ label.css-label {
 	font-size: 15px;
 }
 /*brnad css end*/
+=======
+.sml-select{
+	max-width:100px;
+}
+.sml-select2{
+	max-width:130px;
+}
+	
+/*3 popus css end*/
+.menu-icon{
+	display:none;
+}
+>>>>>>> f2a298c68b30e97c2e447cb340283263b6e07345

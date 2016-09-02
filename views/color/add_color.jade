@@ -4,12 +4,12 @@ block content
   .page-header
     h3 Add New Color
 
-    form(name='addcolor', action='/savecolor', method='POST')
+    form(name='addcolor', action='/savecolor', method='POST' enctype='multipart/form-data')
       table(cellpadding='0', cellspacing='0', width='100%')
         tr
           td Color Code
           td
-            input.color_code(type='text', name='color_code',value='', required='required')
+            input.color_logo(type='file', name='color_logo', required='required') 
         tr
           td Color Name
           td

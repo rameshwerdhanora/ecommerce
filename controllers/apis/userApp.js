@@ -76,6 +76,7 @@ exports.postSignupManuallySave = function(req,res)
 				    userIns.social_type   	= '';
 				    userIns.social_id   	= '';
 				    userIns.access_token   	= '';
+				    userIns.isFomo   		= '0';
 				    userIns.is_active   	= true;
 				    userIns.is_deleted   	= false;
 				    userIns.created        	= Date.now();
@@ -116,13 +117,25 @@ exports.postLoginManually = function(req,res)
 	if(req.body.device_token !== '')
   	{
   		User.findOne({ user_name: req.body.user_name,password: req.body.password}, function(error, checkForLogin) {
+  			//console.log(checkForLogin)
   			if(checkForLogin)
   			{
-				return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id});
+  				UserDetails.findOne({user_id:checkForLogin._id},function(error,fetchUserDetails)
+				{
+					if(fetchUserDetails)
+					{
+						return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,configData:fetchUserDetails.configDetail});
+					}
+					else 
+					{
+						return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,configData:''});
+					}
+				});
+				
   			}
   			else 
   			{
-  				return res.json({"status":'error',"msg":error});
+  				return res.json({"status":'error',"msg":'Username or Password is incorrect.'});
   			}
 
   		});
@@ -569,6 +582,7 @@ exports.saveUserCofiguration = function(req,res)
 			    'user_id'	 	: req.body.user_id,
 			    'configDetail'	: req.body.configDetail  //Array
 			};
+
 			UserDetails.findByIdAndUpdate(fetchUserConfigDetails._id,userConfigDetails, function(error, updateConfigDetails){
 				if(error)
 				{
@@ -582,20 +596,25 @@ exports.saveUserCofiguration = function(req,res)
 		}
 		else
 		{
-			var userDetailsIns  			= new UserDetails();
-			userDetailsIns.user_id 			= req.body.user_id;
-			userDetailsIns.configDetail 	= req.body.configDetail;
+			if(req.body.configDetail[0].Size.length > 0)
+			{
+				var userDetailsIns  			= new UserDetails();
+				userDetailsIns.user_id 			= req.body.user_id;
+				userDetailsIns.configDetail 	= req.body.configDetail;
+				
+				userDetailsIns.save(function(error){
+					if(error)
+					{
+						return res.json({"status":'error',"msg":error});
+					}
+					else 
+					{
+						User.findByIdAndUpdate(req.body.user_id,{isFomo:'1'}, function(error, updateExistingVals){});
+						return res.json({"status":'success',"msg":'Your configuration successfully added.'});
+					}
+				});
+			}
 			
-			userDetailsIns.save(function(error){
-				if(error)
-				{
-					return res.json({"status":'error',"msg":error});
-				}
-				else 
-				{
-					return res.json({"status":'success',"msg":'Your configuration successfully added.'});
-				}
-			});
 		}
 	});
 

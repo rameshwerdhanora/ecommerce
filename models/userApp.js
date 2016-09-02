@@ -17,6 +17,7 @@ const userAppSchema = new mongoose.Schema({
   social_id : String,
   access_token : String,
   is_active : String,
+  isFomo : String,
   is_deleted : String,
   created : String,
   updated : String 

@@ -98,8 +98,9 @@ exports.updateBrand = (req,res) => {
 
 	uploadBrand(req,res,function(err) 
 	{
+		var newname = req.file.path.replace('public/','');
 		updateData = {
-			'brand_logo' 	: req.file.path,
+			'brand_logo' 	: newname,
 			'brand_name'	: req.body.brand_name,
 		    'brand_desc'	: req.body.brand_desc,
 		    'user_id'		: req.body.user_id 

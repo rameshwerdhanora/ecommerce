@@ -2,6 +2,9 @@
  * Module dependencies.
  */
 const express = require('express');
+//const paginate = require('express-paginate');
+//require('mongoose-paginate');
+
 const compression = require('compression');
 const session = require('express-session');
 const bodyParser = require('body-parser');
@@ -46,14 +49,20 @@ const brandAppController        = require('./controllers/apis/brandApp');
 const sizeAppController         = require('./controllers/apis/sizeApp');
 const colorAppController        = require('./controllers/apis/colorApp');
 const productAppController      = require('./controllers/apis/productApp');
-
+const filterAppController       = require('./controllers/apis/filterApp');
 
 const brandController          = require('./controllers/brand');
 const colorController          = require('./controllers/color');
 const sizeController           = require('./controllers/size');
+
+const productController        = require('./controllers/product');
+const categoryController       = require('./controllers/category');
+const categorySubController    = require('./controllers/subCategory');
+
 const attributeController      = require('./controllers/attribute');
 const orderController          = require('./controllers/order');
 const emailController          = require('./controllers/emailTemplate');
+
 
 /**
  * API keys and Passport configuration.
@@ -132,6 +141,9 @@ app.use(function(req, res, next) {
 });
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
 
+
+//app.use(paginate.middleware(10, 50));
+
 /**
  * Primary app routes.
  */
@@ -177,14 +189,35 @@ app.post('/api/customer/leavefeedback', commonAppController.postLeaveFeedback); 
 
 app.get('/api/product/like/:userId/:productId',productAppController.likeProductByUser);
 app.get('/api/product/wishlist/:userId/:productId',productAppController.wishListProductByUser);
-app.get('/api/product/alllike/:userId',  productAppController.listOfAllLike);
-app.get('/api/product/allwishlist/:userId',  productAppController.listOfAllWishlist);
+app.get('/api/product/alllike/:userId',productAppController.listOfAllLike);
+app.get('/api/product/allwishlist/:userId',productAppController.listOfAllWishlist);
+app.get('/api/product/featured/:userId',productAppController.listofAllFeaturedProd);
+app.get('/api/product/chkfomoalert/:userId',productAppController.checkFomoAlertAccToUser);
+app.get('/api/product/fits/:userId/:config',productAppController.listofAllItFitsProd);
+app.get('/api/product/details/:productId',productAppController.productDetailView);
+app.post('/api/product/fetchfilter',productAppController.fetchFilterValues);
+app.post('/api/product/fetchsort',productAppController.fetchSortValues);
+
+
+app.get('/api/brand/details/:brandId',productAppController.BrandDetailView);
+
+
+/* Filter Controller */
+app.get('/api/filter/fetchfilter',  filterAppController.fetchFilterOptions);
+app.get('/api/filter/category/:catId',  filterAppController.fetchSelectedSubCategory);
+
+
+
 
 app.get('/api/listofbrand',  brandAppController.listOfAllBrand);
 app.get('/api/listofsize',  sizeAppController.listOfAllSize);
+app.get('/api/size/:sizeId',  sizeAppController.listOfSizeAttribute);
 app.get('/api/listofcolor',  colorAppController.listOfAllColor);
 
 app.post('/api/saveusercofiguration',  userAppController.saveUserCofiguration);
+
+
+
 
 /* Brand CRUD Section */ // Need isAuthenticated code for check user is loggedin.
 
@@ -214,14 +247,55 @@ app.post('/savesize',  sizeController.saveSize);
 app.get('/removesize/:sizeId',  sizeController.removeSize);
 app.post('/updatesize',  sizeController.updateSize);
 
-/* Attribute CRUD Section */ // Need isAuthenticated code for check user is loggedin.
+/* Products CRUD Section */ // Need isAuthenticated code for check user is loggedin.
 
-app.get('/attribute/list',  attributeController.list);
-app.get('/attribute/create',  attributeController.create);
-app.get('/attribute/edit/:attributeId',  attributeController.edit);
-app.post('/attribute/save',  attributeController.saveAttribute);
-app.get('/attribute/delete/:attributeId',  attributeController.deleteAttribute);
-app.post('/attribute/update',  attributeController.updateAttribute);
+app.get('/listofproducts',  productController.listOfProducts);
+app.get('/addproduct',  productController.addProduct);
+app.post('/saveproduct',  productController.saveProduct);
+app.get('/editproduct/:productId',  productController.editProduct);
+app.post('/updateproduct',  productController.updateProduct);
+app.get('/removeproduct/:productId',  productController.removeProduct);
+
+app.get('/product/fetchselectedcategory/:catId',  productController.selectedCategory);
+app.get('/product/loadattrvalues/:attrId',  productController.loadAttrValues);
+
+/* Category CRUD Section */ // Need isAuthenticated code for check user is loggedin.
+
+app.get('/listofcategories',  categoryController.listOfCategories);
+app.get('/addcategory',  categoryController.addCategory);
+app.post('/savecategory',  categoryController.saveCategory);
+app.get('/editcategory/:catId',  categoryController.editCategory);
+app.post('/updatecategory',  categoryController.updateCategory);
+app.get('/removecategory/:catId',  categoryController.removeCategory);
+
+/* Sub Category CRUD Section */ // Need isAuthenticated code for check user is loggedin.
+
+app.get('/listofsubcategories',  categorySubController.listOfSubCategories);
+app.get('/addsubcategory',  categorySubController.addSubCategory);
+app.post('/savesubcategory',  categorySubController.saveSubCategory);
+app.get('/editsubcategory/:subcatId',  categorySubController.editSubCategory);
+app.post('/updatesubcategory',  categorySubController.updateSubCategory);
+app.get('/removesubcategory/:subcatId',  categorySubController.removeSubCategory);
+
+
+
+/* Attribute CRUD Section */ // Need isAuthenticated code for check user is loggedin.
+app.get('/attribute', passportConfig.isAuthenticated,  attributeController.list);
+app.get('/attribute/list', passportConfig.isAuthenticated,  attributeController.list);
+app.get('/attribute/create', passportConfig.isAuthenticated,  attributeController.create);
+app.get('/attribute/edit/:attributeId', passportConfig.isAuthenticated,  attributeController.edit);
+app.post('/attribute/save', passportConfig.isAuthenticated,  attributeController.saveAttribute);
+app.get('/attribute/delete/:attributeId', passportConfig.isAuthenticated,  attributeController.deleteAttribute);
+app.post('/attribute/update', passportConfig.isAuthenticated,  attributeController.updateAttribute);
+/* 31 Aug */
+app.post('/attribute/getOptions', passportConfig.isAuthenticated,  attributeController.getAttributeOptions);
+app.post('/attribute/deleteAttibOption', passportConfig.isAuthenticated,  attributeController.deleteAttributeOption);
+app.post('/attribute/updateAttribOption', passportConfig.isAuthenticated,  attributeController.updateAttributeOption);
+
+/* 1 sep*/
+app.post('/attribute/addAttribOption', passportConfig.isAuthenticated,  attributeController.addAttributeOption);
+
+
 
 /* Order */
 
@@ -234,6 +308,13 @@ app.get('/emailtemplate/edit',  emailController.edit);
 /* Signup users */
 app.get('/signup/user',  userAppControlleraAdmin.signupUser);
 app.post('/signup/saveuser',  userAppControlleraAdmin.saveUser);
+
+/* Customer */
+app.get('/customer/list',  userAppControlleraAdmin.customerList);
+app.get('/customer/view/:id',  userAppControlleraAdmin.customerView);
+app.get('/customer/edit/:id',  userAppControlleraAdmin.customerEdit);
+app.post('/customer/update',  userAppControlleraAdmin.customerUpdate);
+app.get('/customer/delete/:customerId',  userAppControlleraAdmin.customerDelete);
 
 /**
  * API examples routes.
@@ -319,7 +400,17 @@ app.get('/auth/pinterest/callback', passport.authorize('pinterest', { failureRed
 /**
  * Error Handler.
  */
-app.use(errorHandler());
+app.use(function(req, res) {
+      res.status(404);
+     res.render('404.jade', {title: '404: Page Not found'});
+  });
+  
+  // Handle 500
+  app.use(function(error, req, res, next) {
+      res.status(500);
+     res.render('500.jade', {title:'500: Internal Server Error', error: error});
+  });
+//app.use(errorHandler());
 
 /**
  * Start Express server.

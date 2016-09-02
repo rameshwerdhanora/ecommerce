@@ -1,6 +1,7 @@
 /* Add Size Model for DB connectivity  */
 
-const Size		= require('../models/size');
+const Size			= require('../models/size');
+const Attribute		= require('../models/attribute');
 
 /* Get the list of all color name with imformation */
 exports.listOfSize = (req, res) => {
@@ -15,18 +16,23 @@ exports.listOfSize = (req, res) => {
 
 /* Add Size page  */
 exports.addSize = (req, res) => {
-  res.render('size/add_size', {
-    title: 'Size'
-  });
+	Attribute.find({},function(error,fetchAllAttribute){
+		res.render('size/add_size', {
+		    title: 'Size',
+		    fetchAllAttribute:fetchAllAttribute
+		});	
+	})	
+  
 };
 
 /* Save Size Information */
 exports.saveSize = (req,res) => {
+
     var sizeIns 			= new Size();
     sizeIns.size_name 		= req.body.size_name;
-    sizeIns.size_code  		= req.body.size_code;
-    sizeIns.size_label  	= req.body.size_label;
     sizeIns.gender			= req.body.gender,
+    sizeIns.listofattrmap	= req.body.listofattrmap,
+    sizeIns.is_published	= req.body.is_published,
    	sizeIns.user_id 		= req.user._id; 
    	sizeIns.save(function(err) 
     {
@@ -58,16 +64,20 @@ exports.removeSize = (req,res) => {
  
 /* Edit Size */
 exports.editSize = (req,res) => {
+	
 	Size.findOne({_id:req.params.sizeId},function(error,fetchSize)
 	{
-		if(error)
+		Attribute.find({},function(error,fetchAllAttribute)
 		{
-			res.send({status:'error',msg:error});
-		}
-		else 
-		{
-			res.render('size/edit_size', { title: 'Size',fetchSize:fetchSize});
-		}
+			if(error)
+			{
+				res.send({status:'error',msg:error});
+			}
+			else 
+			{
+				res.render('size/edit_size', { title: 'Size',fetchSize:fetchSize,fetchAllAttribute:fetchAllAttribute});
+			}
+		});	
 	});
 };
 
@@ -75,12 +85,13 @@ exports.editSize = (req,res) => {
 
 exports.updateSize = (req,res) => {
 
+	console.log(req.body);
 	updateData = {
-		'size_name' 	: req.body.size_name,
-		'size_code'		: req.body.size_code,
-		'size_label'	: req.body.size_label,
-		'gender'		: req.body.gender,
-	    'user_id'		: req.body.user_id 
+		'size_name' 		: req.body.size_name,
+		'gender'			: req.body.gender,
+		'is_published'		: req.body.is_published,
+		'listofattrmap'		: req.body.listofattrmap,
+	    'user_id'			: req.body.user_id 
 	};
 	Size.findByIdAndUpdate(req.body._id,updateData, function(error, updateRes)
 	{

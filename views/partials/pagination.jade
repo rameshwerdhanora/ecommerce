@@ -1,0 +1,10 @@
+if totalPage > 1
+    ul.pagination
+        - for (var x = 1; x <= totalPage; x++)
+          if currentPage == x
+            li.active
+             span.active #{currentPage}
+          else
+            li
+             span
+              a(href='?page='+x) #{x}
