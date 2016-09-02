@@ -35,6 +35,9 @@ const userController = require('./controllers/user');
 const apiController = require('./controllers/api');
 const contactController = require('./controllers/contact');
 
+const userAppControlleraAdmin = require('./controllers/userApp');
+
+
 
 /* Application Work Start Cisdev */
 const userAppController         = require('./controllers/apis/userApp');
@@ -225,10 +228,12 @@ app.post('/attribute/update',  attributeController.updateAttribute);
 app.get('/order',  orderController.list);
 app.get('/order/detail',  orderController.detail);
 
-/* Email Template */
-
 app.get('/emailtemplate/list',  emailController.list);
 app.get('/emailtemplate/edit',  emailController.edit);
+
+/* Signup users */
+app.get('/signup/user',  userAppControlleraAdmin.signupUser);
+app.post('/signup/saveuser',  userAppControlleraAdmin.saveUser);
 
 /**
  * API examples routes.
