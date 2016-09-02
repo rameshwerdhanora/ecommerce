@@ -1,12 +1,10 @@
 $(document).ready(function() {
-<<<<<<< Updated upstream
 
-	  var selectedColors = $('.selectedColors').val();
-	  if(selectedColors !== undefined)
-	  {
+	var selectedColors = $('.selectedColors').val();
+	if(selectedColors !== undefined)
+	{
 	  	//alert(selectedColors);
-	  }
-=======
+	}
  
   // Place JavaScript code here...
   
@@ -83,7 +81,6 @@ $(document).ready(function() {
                         updateButton.closest('div.attribOptionRow').find('input[name="editOptionName[]"]').attr('id','option_'+res.attribOptionId);
                         updateButton.attr('value','Update');
                     }else{
->>>>>>> Stashed changes
 
                     }
                 }
@@ -124,7 +121,6 @@ $(document).ready(function() {
             
         }
     });*/
-    
 });
 
 function getOptions(attrbid){

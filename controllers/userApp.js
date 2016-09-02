@@ -154,7 +154,7 @@ exports.customerDelete = (req,res) => {
 		}
 		else
 		{
-			res.flash({'success','Remove Successfully.'});
+			res.flash('success','Remove Successfully.');
 			res.redirect('/customer/list');
 		}
 	});

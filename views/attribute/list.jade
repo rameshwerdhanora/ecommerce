@@ -20,7 +20,7 @@ block content
                 th Display Type
                 th Action
               - var count = 1;
-<<<<<<< Updated upstream
+
               each getAllAttribute in getAllAttributes 
                 tr(class='attrTr_#{getAllAttribute._id}')
                   td(align='center') #{count}
@@ -34,9 +34,7 @@ block content
                      a.addsize.sizebuttons(href='/attribute/edit/#{getAllAttribute._id}', title='Edit Attribute') Edit | 
                      a.rmvsize.sizebuttons(href='#', onclick='deleteAttribute("#{getAllAttribute._id}")' title='Delete Attribute') Delete
                 - count++;
-<<<<<<< HEAD
-=======
-=======
+
                 if getAllAttributes > 0
                 each getAllAttribute in getAllAttributes 
                   tr(class='attrTr_#{getAllAttribute._id}')
@@ -88,8 +86,3 @@ block content
             span
                 a(href='?page='+(currentPage+1), class='#{lcls}') &raquo;
         
-
->>>>>>> Stashed changes
-
-          
->>>>>>> eadfc303cbd32eeddb936750b9824fa24f33dd99
