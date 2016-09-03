@@ -16,7 +16,7 @@ block content
             li
               a(href='javascript:deleteCustomer("#{getCustomerDetails[0]._id}");') Delete USER 
             li
-              a(href='#') Reset Password 
+              a(href='/customer/changePassword/#{getCustomerDetails[0]._id}') Reset Password 
             li
               a(href='#') Save and continue edit 
         .right-sub

@@ -85,9 +85,10 @@ exports.saveUser = (req, res) => {
  * Customer List user page.
  */
 exports.customerList = (req, res) => {
-	User.find({role_id:4},function(error,getCustomers){
+	User.find({role_id:5},function(error,getCustomers){
 		if(getCustomers)
 		{
+			//console.log(getCustomers.length);
 			res.render('user/customer_list', { title: 'Customer',getCustomers:getCustomers});
 		}
 	});	
@@ -157,5 +158,32 @@ exports.customerDelete = (req,res) => {
 			res.flash('success','Remove Successfully.');
 			res.redirect('/customer/list');
 		}
+	});
+};
+
+/**
+ * GET /customer/customerChangePassword
+ * Customer Change Password
+ */
+exports.customerChangePassword = (req, res) => {
+	User.find({_id:req.params.customerId},function(error,getCustomerDetails){
+		if(getCustomerDetails)
+		{
+			res.render('user/customer_change_password', { title: 'Change Password',getCustomerDetails:getCustomerDetails});
+		}
+	});	
+};
+
+/**
+ * POST /customer/customerChangePasswordSave
+ * Update Customer Change Password Save
+ */
+exports.customerChangePasswordSave = (req, res) => {
+	updateData = {
+		'password' 		: req.body.password,
+	};
+	User.findByIdAndUpdate(req.body._id,updateData, function(error, updateRes)
+	{
+		res.redirect('/customer/view/'+req.body._id);
 	});
 };

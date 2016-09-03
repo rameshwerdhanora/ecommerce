@@ -29,7 +29,7 @@ block content
                 th
                   a(href='#')
                     img(src='/images/delete-icon.png', alt='Delete')
-              if getCustomers.keys(users).length > 0
+              if getCustomers.length > 0
                 each getCustomer in getCustomers       
                   tr
                     td(align='center')

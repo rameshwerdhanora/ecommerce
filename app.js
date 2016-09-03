@@ -249,7 +249,7 @@ app.post('/updatesize',  sizeController.updateSize);
 
 /* Products CRUD Section */ // Need isAuthenticated code for check user is loggedin.
 
-app.get('/listofproducts',  productController.listOfProducts);
+app.get('/product/list',  productController.listOfProducts);
 app.get('/addproduct',  productController.addProduct);
 app.post('/saveproduct',  productController.saveProduct);
 app.get('/editproduct/:productId',  productController.editProduct);
@@ -315,6 +315,8 @@ app.get('/customer/view/:id',  userAppControlleraAdmin.customerView);
 app.get('/customer/edit/:id',  userAppControlleraAdmin.customerEdit);
 app.post('/customer/update',  userAppControlleraAdmin.customerUpdate);
 app.get('/customer/delete/:customerId',  userAppControlleraAdmin.customerDelete);
+app.get('/customer/changePassword/:customerId',  userAppControlleraAdmin.customerChangePassword);
+app.post('/customer/changePasswordSave',  userAppControlleraAdmin.customerChangePasswordSave);
 
 /**
  * API examples routes.
