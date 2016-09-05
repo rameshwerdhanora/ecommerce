@@ -26,12 +26,12 @@ exports.listOfColor = (req, res) => {
  
 };
 
-/* Add Color page  */
-exports.addColor = (req, res) => {
-  res.render('color/add_color', {
-    title: 'Color'
-  });
-};
+// /* Add Color page  */
+// exports.addColor = (req, res) => {
+//   res.render('color/add_color', {
+//     title: 'Color'
+//   });
+// };
 
 /* Save Color Information */
 exports.saveColor = (req,res) => {
@@ -55,7 +55,7 @@ exports.saveColor = (req,res) => {
 	    	}
 	    	else 
 	    	{
-	    		res.redirect('/listofcolor');
+	    		res.redirect('/color/list');
 	    	}
 	    });
    	});

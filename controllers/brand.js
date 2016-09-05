@@ -28,15 +28,15 @@ exports.listOfBrand = (req, res) => {
 };
 
 /* Add Brand page  */
-exports.addBrand = (req, res) => {
-  res.render('brand/add_brand', {
-    title: 'Brand'
-  });
-};
+// exports.addBrand = (req, res) => {
+//   res.render('brand/add_brand', {
+//     title: 'Brand'
+//   });
+// };
 
 /* Save Brand Information */
 exports.saveBrand = (req,res) => {
-    uploadBrand(req,res,function(err) {
+	uploadBrand(req,res,function(err) {
         if(err) {
             return res.end("Error uploading file.");
         }
@@ -55,10 +55,9 @@ exports.saveBrand = (req,res) => {
         	}
         	else 
         	{
-        		res.redirect('/listofbrand');
+        		res.redirect('/brand/list');
         	}
         });
-         
     });
 };
 
@@ -68,12 +67,13 @@ exports.removeBrand = (req,res) => {
 	{
 		if(error)
 		{
-			res.send({status:'error',msg:error});
+			req.flash('message', 'Something Wrong!!');
 		}
 		else
 		{
-			res.send({status:'success',msg:'Remove Successfully.'});
+			req.flash('message', 'Remove Successfully.');
 		}
+		return res.redirect('/brand/list');
 	});
 };
  

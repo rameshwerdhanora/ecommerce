@@ -221,61 +221,62 @@ app.post('/api/saveusercofiguration',  userAppController.saveUserCofiguration);
 
 /* Brand CRUD Section */ // Need isAuthenticated code for check user is loggedin.
 
-app.get('/listofbrand',  brandController.listOfBrand);
-app.get('/addbrand',  brandController.addBrand);
-app.get('/editbrand/:brandId',  brandController.editBrand);
-app.post('/savebrand',  brandController.saveBrand);
-app.get('/removebrand/:brandId',  brandController.removeBrand);
-app.post('/updatebrand',  brandController.updateBrand);
+app.get('/brand/list',  brandController.listOfBrand);
+//app.get('/brand/add',  brandController.addBrand);
+app.post('/brand/save',  brandController.saveBrand);
+app.get('/brand/edit:brandId',  brandController.editBrand);
+app.post('/brand/update',  brandController.updateBrand);
+app.get('/brand/delete/:brandId',  brandController.removeBrand);
+
 
 /* Color CRUD Section */ // Need isAuthenticated code for check user is loggedin.
 
-app.get('/listofcolor',  colorController.listOfColor);
-app.get('/addcolor',  colorController.addColor);
-app.get('/editcolor/:colorId',  colorController.editColor);
-app.post('/savecolor',  colorController.saveColor);
-app.get('/removecolor/:colorId',  colorController.removeColor);
-app.post('/updatecolor',  colorController.updateColor);
+app.get('/color/list',  colorController.listOfColor);
+//app.get('/color/add',  colorController.addColor);
+app.get('/color/edit/:colorId',  colorController.editColor);
+app.post('/color/save',  colorController.saveColor);
+app.get('/color/remove/:colorId',  colorController.removeColor);
+app.post('/color/update',  colorController.updateColor);
 
 
 /* Size CRUD Section */ // Need isAuthenticated code for check user is loggedin.
 
-app.get('/listofsize',  sizeController.listOfSize);
-app.get('/addsize',  sizeController.addSize);
-app.get('/editsize/:sizeId',  sizeController.editSize);
-app.post('/savesize',  sizeController.saveSize);
-app.get('/removesize/:sizeId',  sizeController.removeSize);
-app.post('/updatesize',  sizeController.updateSize);
+app.get('/size/list',  sizeController.listOfSize);
+app.get('/size/add',  sizeController.addSize);
+app.get('/size/edit/:sizeId',  sizeController.editSize);
+app.post('/size/save',  sizeController.saveSize);
+app.get('/size/delete/:sizeId',  sizeController.removeSize);
+app.post('/size/update',  sizeController.updateSize);
 
 /* Products CRUD Section */ // Need isAuthenticated code for check user is loggedin.
 
 app.get('/product/list',  productController.listOfProducts);
-app.get('/addproduct',  productController.addProduct);
-app.post('/saveproduct',  productController.saveProduct);
-app.get('/editproduct/:productId',  productController.editProduct);
-app.post('/updateproduct',  productController.updateProduct);
-app.get('/removeproduct/:productId',  productController.removeProduct);
+app.get('/product/add',  productController.addProduct);
+app.post('/product/save',  productController.saveProduct);
+app.get('/product/edit/:productId',  productController.editProduct);
+app.post('/product/update',  productController.updateProduct);
+app.get('/product/delete/:productId',  productController.removeProduct);
 
 app.get('/product/fetchselectedcategory/:catId',  productController.selectedCategory);
 app.get('/product/loadattrvalues/:attrId',  productController.loadAttrValues);
 
 /* Category CRUD Section */ // Need isAuthenticated code for check user is loggedin.
 
-app.get('/listofcategories',  categoryController.listOfCategories);
-app.get('/addcategory',  categoryController.addCategory);
-app.post('/savecategory',  categoryController.saveCategory);
-app.get('/editcategory/:catId',  categoryController.editCategory);
-app.post('/updatecategory',  categoryController.updateCategory);
-app.get('/removecategory/:catId',  categoryController.removeCategory);
+app.get('/category/list',  categoryController.listOfCategories);
+app.get('/category/add',  categoryController.addCategory);
+app.post('/category/save',  categoryController.saveCategory);
+app.get('/category/edit/:catId',  categoryController.editCategory);
+app.post('/category/update',  categoryController.updateCategory);
+app.get('/category/delete/:catId',  categoryController.removeCategory);
 
 /* Sub Category CRUD Section */ // Need isAuthenticated code for check user is loggedin.
 
-app.get('/listofsubcategories',  categorySubController.listOfSubCategories);
-app.get('/addsubcategory',  categorySubController.addSubCategory);
-app.post('/savesubcategory',  categorySubController.saveSubCategory);
-app.get('/editsubcategory/:subcatId',  categorySubController.editSubCategory);
-app.post('/updatesubcategory',  categorySubController.updateSubCategory);
-app.get('/removesubcategory/:subcatId',  categorySubController.removeSubCategory);
+app.get('/subcategory/list',  categorySubController.listOfSubCategories);
+app.get('/subcategory/add',  categorySubController.addSubCategory);
+app.post('/subcategory/save',  categorySubController.saveSubCategory);
+app.get('/subcategory/edit/:subcatId',  categorySubController.editSubCategory);
+app.post('/subcategory/update',  categorySubController.updateSubCategory);
+app.get('/subcategory/delete/:subcatId',  categorySubController.removeSubCategory);
 
 
 

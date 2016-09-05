@@ -1,27 +1,89 @@
 extends ../layout
 
 block content
-  .page-header
-    h3 List of All Colors
+  .col-sm-9.midlle-bar
+    .large-title-row
+      img(src='/images/title-icon3.png', alt='icon')
+      |  PRODUCTS
+    .top-btns.clearfix
+      .btn-s-right
+        a#modal-104831.default-btn(href='#modal-container-104831', role='button', data-toggle='modal') ADD COLOR
+    .customer-box.clearfix
+      form(method='post', action='')
+        .customer-cl
+          h2 CATALOG
+          ul
+            li
+              a(href='/product/list') Manage Products
+            li
+              a(href='/category/list') Manage Categories
+            li.active
+              a(href='/color/list') Manage Colors
+            li
+              a(href='/size/list') Manage Sizes
+            li
+              a(href='/brand/list') Manage Brands
+            li
+              a(href='/attribute/create') Create Attribute
+        .profile-cl
+          if (messages.message && messages.message.length > 0)
+            .message.message
+              span= messages.message
+          .profile-top-row
+            h2 MANAGE COLORS
+          h3.sub-heading 
+            | BARNDS  
+          .profile-form-box.users-in
+            .low-tbl-box
+              table(width='100%', cellspacing='0', cellpadding='0', border='0')
+                tbody
+                  tr
+                    th #
+                    th Color Name
+                    th Logo
+                    th 
+                      a(href='#')
+                        img(src='/images/delete-icon.png', alt='icon')
+                  if getAllColors.length > 0
+                    - var number =1;
+                    each getAllColor in getAllColors      
+                      tr
+                        td #{number}
+                        td 
+                          a#modal-104831(href='#modal-container-104831', role='button', data-toggle='modal') 
+                            img(src='/#{getAllColor.brand_logo}', alt='Logo')
+                        td #{getAllColor.brand_name}
+                        td
+                          a(href='/brand/delete/#{getAllColor._id}')
+                            img(src='/images/delete-icon.png', alt='icon')
+                      - number++
+                   else
+                    tr
+                      td(colspan=4)
+                        | No Color      
+  
+  #modal-container-104831.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+    .modal-dialog.popup-wdt-1
+      form(name='form2', method='post', action='/color/save', enctype='multipart/form-data')
+        .modal-content
+          .modal-header
+            button.close(type='button', data-dismiss='modal', aria-hidden='true')
+              img(src='/images/close-icon.png', alt='icon')
+            h4#myModalLabel.modal-title
+              | ADD COLOR
+          .modal-body
+            .upload-box
+              .upload-in
+                input.brand_logo(type='file', name='brand_logo', required='required')
+              p.up-title Upload color swatch
+            .color-row.spc-row
+              .cl-name COLOR NAME
+              .cl-inp
+                input(name='color_name', type='text')
+          .modal-footer
+            button(type='submit')
+              | Save
 
-    a.addcolor.colorbuttons(href='/addcolor', title='Add Color') Add Color | 
-    a.rmvcolor.colorbuttons(href='/rmvbrand', title='Remove Color') Remove Color
-    table(width='100%')
-     tr
-      th Sr.no
-      th Color code
-      th Color Name
-      th Remove
-      th Edit
-     each getAllColor in getAllColors 
-      tr(class='colorTr_#{getAllColor._id}')
-       td 1
-       td 
-        img(src='#{getAllColor.color_logo}', title='#{getAllColor.color_name}', alt='#{getAllColor.color_name}', width='50px',height='50px')
-       td #{getAllColor.color_name}
-       td 
-        a.edit_color(href='#' onclick='make_sure_for_color("#{getAllColor._id}")') Remove
-       td 
-        a.edit_color(href='/editcolor/#{getAllColor._id}') Edit
 
-          
+                  
+  

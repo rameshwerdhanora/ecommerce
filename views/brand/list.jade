@@ -3,74 +3,87 @@ extends ../layout
 block content
   .col-sm-9.midlle-bar
     .large-title-row
-      img(src='images/title-icon3.png', alt='icon')
+      img(src='/images/title-icon3.png', alt='icon')
       |  PRODUCTS
+    .top-btns.clearfix
+      .btn-s-right
+        a#modal-104831.default-btn(href='#modal-container-104831', role='button', data-toggle='modal') ADD BRAND
     .customer-box.clearfix
       form(method='post', action='')
         .customer-cl
           h2 CATALOG
           ul
             li
-              a(href='#') Manage Products
+              a(href='/product/list') Manage Products
             li
-              a(href='#') Manage Categories
+              a(href='/category/list') Manage Categories
             li
-              a(href='#') Manage Colors
+              a(href='/color/list') Manage Colors
             li
-              a(href='#') Manage Sizes
+              a(href='/size/list') Manage Sizes
             li.active
-              a(href='#') Manage Brands
+              a(href='/brand/list') Manage Brands
             li
-              a(href='#') Create Attribute
+              a(href='/attribute/create') Create Attribute
         .profile-cl
+          if (messages.message && messages.message.length > 0)
+            .message.message
+              span= messages.message
           .profile-top-row
             h2 MANAGE BRANDS
-          h3.sub-heading BRAND
-          .profile-form-box
-            ul.brand-list
-              each getAllBrand in getAllBrands 
-                li
-                  a#modal-104831(href='#modal-container-104831', role='button', data-toggle='modal')
-                    img(src='#{getAllBrand.brand_logo}', title='#{getAllBrand.brand_name}', alt='#{getAllBrand.brand_name}')
-                    | Nike
-                li
-                  a(href='#')
-                    img(src='images/puma-icon.png', alt='icon')
-                    | PUMA
-                li
-                  a(href='#')
-                    img(src='images/fake-icon.png', alt='icon')
-                    | Fake Street
-                li
-                  a(href='#')
-                    img(src='images/reebok-icon.png', alt='icon')
-                    | Reebok
-                li
-                  a(href='#')
-                    img(src='images/ness-icon.png', alt='icon')
-                    | Mitchell & Ness
+          h3.sub-heading 
+            | BARNDS  
+          .profile-form-box.users-in
+            .low-tbl-box
+              table(width='100%', cellspacing='0', cellpadding='0', border='0')
+                tbody
+                  tr
+                    th #
+                    th Logo
+                    th Brand Name
+                    th 
+                      a(href='#')
+                        img(src='/images/delete-icon.png', alt='icon')
+                  if getAllBrands.length > 0
+                    - var number =1;
+                    each getAllBrand in getAllBrands      
+                      tr
+                        td #{number}
+                        td 
+                          a#modal-104831(href='#modal-container-104831', role='button', data-toggle='modal') 
+                            img(src='/#{getAllBrand.brand_logo}', alt='Logo')
+                        td #{getAllBrand.brand_name}
+                        td
+                          a(href='/brand/delete/#{getAllBrand._id}')
+                            img(src='/images/delete-icon.png', alt='icon')
+                      - number++
+                   else
+                    tr
+                      td(colspan=4)
+                        | No Brand
 
-  .page-header
-    h3 List of All Brands
-
-    a.addbrand.brandbuttons(href='/addbrand', title='Add Brand') Add Brand | 
-    a.rmvbrand.brandbuttons(href='/rmvbrand', title='Remove Brand') Remove Brand
-    table(width='100%')
-     tr
-      th Sr.no
-      th Brand Logo
-      th Brand Name
-      th Remove
-      th Edit
-     each getAllBrand in getAllBrands 
-      tr(class='brandTr_#{getAllBrand._id}')
-       td 1
-       td 
-        img(src='#{getAllBrand.brand_logo}', title='#{getAllBrand.brand_name}', alt='#{getAllBrand.brand_name}', width='50px',height='50px')
-       td #{getAllBrand.brand_name}
-       td 
-        a.edit_brand(href='#' onclick='make_sure_for_brand("#{getAllBrand._id}")') Remove
-       td 
-        a.edit_brand(href='/editbrand/#{getAllBrand._id}') Edit
-
-          
+  #modal-container-104831.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true',)
+    .modal-dialog.popup-wdt-1
+      form(name='addbrand', method='post', action='/brand/save', enctype='multipart/form-data')
+        .modal-content
+          .modal-header
+            button.close(type='button', data-dismiss='modal', aria-hidden='true')
+              img(src='/images/close-icon.png', alt='icon')
+            h4#myModalLabel.modal-title
+              | ADD BRAND
+          .modal-body
+            .upload-box
+              .upload-in
+                input.brand_logo(type='file', name='brand_logo', required='required')
+              p.up-title Upload Logo
+            .color-row
+              .cl-name Brand Name
+              .cl-inp
+                input(name='brand_name', type='text', required='required')
+            .color-row
+              .cl-name Brand Description
+              .cl-inp
+                textarea(name='brand_desc', required='required')
+          .modal-footer
+            button(type='submit')
+              | Save
