@@ -2,7 +2,6 @@
 const Multer 	= require('multer');
 const Brand		= require('../models/brand');
 
-
 /* Define Folder name where our user porfile stored */
 var storage =   Multer.diskStorage({
   destination: function (req, file, callback) {
@@ -21,7 +20,7 @@ exports.listOfBrand = (req, res) => {
 	Brand.find({},function(error,getAllBrands){
 		if(getAllBrands)
 		{
-			res.render('brand/list', { title: 'Brand',getAllBrands:getAllBrands});
+			res.render('brand/list', { title: 'Brand',getAllBrands:getAllBrands,activeClass:5});
 		}
 	});	
  

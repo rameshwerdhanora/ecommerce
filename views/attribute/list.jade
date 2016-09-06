@@ -3,86 +3,47 @@ extends ../layout
 block content
   .col-sm-9.midlle-bar
     .large-title-row
-      img(src='/images/title-icon2.png', alt='icon')
+      img(src='/images/title-icon.png', alt='icon')
       |  ATTRIBUTES
-    .customer-box.cmn-in.clearfix
-      .low-tbl-box.order-txt
-        form(name='form2', method='post', action='')
-          table(width='100%', cellspacing='0', cellpadding='0', border='0')
-            tbody
-              tr
-                th(align='center') #
-                th Name 
-                th Type
-                th Required
-                th Post Feed
-                th Product Manager
-                th Display Type
-                th Action
-              - var count = 1;
+    .top-btns.clearfix
+      .btn-s-right
+        a(href='/attribute/add', title='Add Size') ADD ATTRIBUTE
+    .customer-box.clearfix
+      include ../partials/product_left_menu
+      .profile-cl
+        .profile-top-row
+          h2 MANAGE ATTRIBUTES
+        .profile-form-box.users-in
+          .low-tbl-box.large-table.order-txt
+            form(action='', method='post', name='form2')
+              table(width='100%', cellspacing='0', cellpadding='0', border='0')
+                tbody
+                  tr
+                    th(align='center') #
+                    th Name 
+                    th Type
+                    th Required
+                    th Post Feed
+                    th Product Manager
+                    th Display Type
+                    th Action
+                  - var count = 1;
 
-              each getAllAttribute in getAllAttributes 
-                tr(class='attrTr_#{getAllAttribute._id}')
-                  td(align='center') #{count}
-                  td.ord-title #{getAllAttribute.name}
-                  td #{getAllAttribute.type}
-                  td #{getAllAttribute.is_required}
-                  td #{getAllAttribute.is_post_feed}
-                  td #{getAllAttribute.product_manager}
-                  td #{getAllAttribute.display_type}
-                  td 
-                     a.addsize.sizebuttons(href='/attribute/edit/#{getAllAttribute._id}', title='Edit Attribute') Edit | 
-                     a.rmvsize.sizebuttons(href='#', onclick='deleteAttribute("#{getAllAttribute._id}")' title='Delete Attribute') Delete
-                - count++;
-
-                if getAllAttributes > 0
-                each getAllAttribute in getAllAttributes 
-                  tr(class='attrTr_#{getAllAttribute._id}')
-                    td(align='center') #{count}
-                    td.ord-title #{getAllAttribute.name}
-                    td #{getAllAttribute.type}
-                    td #{getAllAttribute.is_required}
-                    td #{getAllAttribute.is_post_feed}
-                    td #{getAllAttribute.product_manager}
-                    td #{getAllAttribute.display_type}
-                    td 
-                       a.addsize.sizebuttons(href='/attribute/edit/#{getAllAttribute._id}', title='Edit Attribute') Edit | 
-                       a.rmvsize.sizebuttons(href='#', onclick='deleteAttribute("#{getAllAttribute._id}")' title='Delete Attribute') Delete
-                  - count++;
-                else
-                    tr
-                     td(colspan=8)
-                      p No record found
-                      
-
-    - if(totalPage > 0)
-     ul.pagination
-        - var links = 2;
-        - var start = (( currentPage - links ) > 0 ) ? currentPage - links : 1;
-        - var end  = (( currentPage + links ) < totalPage ) ? currentPage + links : totalPage;
-        - var scls = (currentPage  == 1)?'disabled':'';
-        - var lcls = (last == currentPage)?'disabled':'';
-        li
-            span
-                a(href='?page=1'+(currentPage-1), class='#{scls}') &laquo;
-        if start > 1
-           li
-            span
-                a(href='?page=1') 1
-           li
-            span
-                ...
-                
-
-        if end < last
-           li
-            span
-                ...
-           li
-            span
-                a(href='?page=1') #{last}
-
-        li
-            span
-                a(href='?page='+(currentPage+1), class='#{lcls}') &raquo;
-        
+                  if getAllAttributes > 0
+                    each getAllAttribute in getAllAttributes 
+                      tr(class='attrTr_#{getAllAttribute._id}')
+                        td(align='center') #{count}
+                        td.ord-title #{getAllAttribute.name}
+                        td #{getAllAttribute.type}
+                        td #{getAllAttribute.is_required}
+                        td #{getAllAttribute.is_post_feed}
+                        td #{getAllAttribute.product_manager}
+                        td #{getAllAttribute.display_type}
+                        td 
+                           a.addsize.sizebuttons(href='/attribute/edit/#{getAllAttribute._id}', title='Edit Attribute') Edit | 
+                           a.rmvsize.sizebuttons(href='#', onclick='deleteAttribute("#{getAllAttribute._id}")' title='Delete Attribute') Delete
+                      - count++;
+                  else
+                      tr
+                       td(colspan=8)
+                        p No record found  

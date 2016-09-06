@@ -2,26 +2,11 @@ extends ../layout
 
 block content
   .col-sm-9.midlle-bar
-  .large-title-row
-    img(src='/images/title-icon3.png', alt='icon')
-    |  PRODUCTS
-  .customer-box.clearfix
-    form(method='post', action='/attribute/save')
-      .customer-cl
-        h2 CATALOG
-        ul
-          li
-            a(href='#') Manage Products
-          li
-            a(href='#') Manage Categories
-          li
-            a(href='/color/list') Manage Colors
-          li
-            a(href='/size/list') Manage Sizes
-          li
-            a(href='/brand/list') Manage Brands
-          li.active
-            a(href='/attribute') Manage Attribute
+    .large-title-row
+      img(src='/images/title-icon3.png', alt='icon')
+      |  ATTRIBUTES
+    .customer-box.clearfix
+      include ../partials/product_catlog
       .profile-cl
         .profile-top-row
           h2 CREATE ATTRIBUTE

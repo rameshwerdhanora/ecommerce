@@ -11,20 +11,23 @@ exports.list = (req, res) => {
     var perPage = 10;
     var skipRecord = (page-1)*perPage;
     
-
     Attribute.count(function(err, totalRecord) { 
-        var totalPage = Math.ceil(totalRecord/perPage);
-        //Attribute.find({},{},{limit:perPage,skip:skipRecord},function(error,getAllAttributes){
-        Attribute.find()
-                .limit(perPage)
-                .skip(skipRecord)
-                .sort('-_id')
-                .exec(function(error,getAllAttributes){
-            if(getAllAttributes){
-                //console.log(getAllAttributes);
-                    res.render('attribute/list', {title: 'Attribute List',getAllAttributes:getAllAttributes,currentPage:page,totalRecord:totalRecord,totalPage:totalPage});
-            }
-        });
+        if(totalPage > 0){
+            var totalPage = Math.ceil(totalRecord/perPage);
+            Attribute.find()
+                    .limit(perPage)
+                    .skip(skipRecord)
+                    .sort('-_id')
+                    .exec(function(error,getAllAttributes){
+                if(getAllAttributes){
+                    //console.log(getAllAttributes);
+                    res.render('attribute/list', {title: 'Attribute List',getAllAttributes:getAllAttributes,currentPage:page,totalRecord:totalRecord,totalPage:totalPage,activeClass:6});
+                }
+            });
+        }else{
+            res.render('attribute/list',{title: 'Attribute List',activeClass:6});
+        }
+        
     });
     
 };

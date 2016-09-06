@@ -235,7 +235,7 @@ app.get('/color/list',  colorController.listOfColor);
 //app.get('/color/add',  colorController.addColor);
 app.get('/color/edit/:colorId',  colorController.editColor);
 app.post('/color/save',  colorController.saveColor);
-app.get('/color/remove/:colorId',  colorController.removeColor);
+app.get('/color/delete/:colorId',  colorController.removeColor);
 app.post('/color/update',  colorController.updateColor);
 
 
@@ -281,9 +281,8 @@ app.get('/subcategory/delete/:subcatId',  categorySubController.removeSubCategor
 
 
 /* Attribute CRUD Section */ // Need isAuthenticated code for check user is loggedin.
-app.get('/attribute', passportConfig.isAuthenticated,  attributeController.list);
 app.get('/attribute/list', passportConfig.isAuthenticated,  attributeController.list);
-app.get('/attribute/create', passportConfig.isAuthenticated,  attributeController.create);
+app.get('/attribute/add', passportConfig.isAuthenticated,  attributeController.create);
 app.get('/attribute/edit/:attributeId', passportConfig.isAuthenticated,  attributeController.edit);
 app.post('/attribute/save', passportConfig.isAuthenticated,  attributeController.saveAttribute);
 app.get('/attribute/delete/:attributeId', passportConfig.isAuthenticated,  attributeController.deleteAttribute);
@@ -312,8 +311,8 @@ app.post('/signup/saveuser',  userAppControlleraAdmin.saveUser);
 
 /* Customer */
 app.get('/customer/list',  userAppControlleraAdmin.customerList);
-app.get('/customer/view/:id',  userAppControlleraAdmin.customerView);
-app.get('/customer/edit/:id',  userAppControlleraAdmin.customerEdit);
+app.get('/customer/view/:id/:activeClass',  userAppControlleraAdmin.customerView);
+app.get('/customer/edit/:id/:activeClass',  userAppControlleraAdmin.customerEdit);
 app.post('/customer/update',  userAppControlleraAdmin.customerUpdate);
 app.get('/customer/delete/:customerId',  userAppControlleraAdmin.customerDelete);
 app.get('/customer/changePassword/:customerId',  userAppControlleraAdmin.customerChangePassword);

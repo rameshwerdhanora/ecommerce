@@ -1,26 +1,189 @@
 extends ../layout
 
 block content
-  .page-header
-    h3 List of All Categories
+  .col-sm-9.midlle-bar
+    .large-title-row
+      img(src='/images/title-icon3.png', alt='icon')
+      |  PRODUCTS
+    .top-btns.clearfix
+      .btn-s-left
+        a#modal-104831.default-btn(href='#modal-container-104831', role='button', data-toggle='modal') ADD CATEGORY
+      .btn-s-right
+        a#modal-104832.default-btn(href='#modal-container-104832', role='button', data-toggle='modal') ADD SUBCATEGORY
+    .customer-box.clearfix
+      include ../partials/product_left_menu
+      .profile-cl
+        .profile-top-row
+          h2 MANAGE CATEGORIES
+        .profile-form-box.padding-none
+          .catg-left
+            .catg-in-cl1
+              h4 MENS
+              ul.catg-list
+                li
+                  a.catg-open(href='#') MENS
+            .catg-in-cl2
+              h4 CATEGORIES
+              ul.catg-list
+                li
+                  a.catg-open(href='#') SHIRTS
+                  ul.catg-sub-list
+                    li
+                      a.catg-open(href='#') SS TEE
+                      ul.catg-sub-list
+                        li
+                          a(href='#') XS, S, M, L ,XL,XXL,3XL
+                    li
+                      a.catg-close(href='#') LS TEE 
+                    li
+                      a.catg-close(href='#') SS BUTTONDOWN
+                    li
+                      a.catg-close(href='#') LS BUTTONDOWN
+                    li
+                      a.catg-close(href='#') HENLEY
+                    li
+                      a.catg-close(href='#') POLO
+                li
+                  a.catg-close(href='#') PANTS 
+                li
+                  a.catg-close(href='#') DENIM
+                li
+                  a.catg-close(href='#') OUTWERWEAR
+                li
+                  a.catg-close(href='#') HATS
+                li
+                  a.catg-close(href='#') ACTIVEWEAR
+                li
+                  a.catg-close(href='#') SWEATERS
+                li
+                  a.catg-close(href='#') SWEATSHIRTS
+                li
+                  a.catg-close(href='#') FOOTWEAR
+                li
+                  a.catg-close(href='#') ACCESSORIES
+          .catg-left
+            .catg-in-cl1
+              h4 WOMENS
+              ul.catg-list
+                li
+                  a.catg-open(href='#') WOMENS
+            .catg-in-cl2
+              h4 CATEGORIES
+              ul.catg-list
+                li
+                  a.catg-open(href='#') SHIRTS
+                  ul.catg-sub-list
+                    li
+                      a.catg-open(href='#') SS Top
+                      ul.catg-sub-list
+                        li
+                          a(href='#') XS, S, M, L ,XL,XXL,3XL
+                    li
+                      a.catg-close(href='#') LS TEE 
+                    li
+                      a.catg-close(href='#') SS BUTTONDOWN
+                    li
+                      a.catg-close(href='#') LS BUTTONDOWN
+                    li
+                      a.catg-close(href='#') HENLEY
+                    li
+                      a.catg-close(href='#') POLO
+                li
+                  a.catg-close(href='#') PANTS 
+                li
+                  a.catg-close(href='#') DENIM
+                li
+                  a.catg-close(href='#') OUTWERWEAR
+                li
+                  a.catg-close(href='#') HATS
+                li
+                  a.catg-close(href='#') ACTIVEWEAR
+                li
+                  a.catg-close(href='#') SWEATERS
+                li
+                  a.catg-close(href='#') SWEATSHIRTS
+                li
+                  a.catg-close(href='#') FOOTWEAR
+                li
+                  a.catg-close(href='#') ACCESSORIES
+  
+  #modal-container-104831.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+    .modal-dialog.popup-wdt-1
+      form(name='addCategory', method='post', action='/category/save')
+        .modal-content
+          .modal-header
+            button.close(type='button', data-dismiss='modal', aria-hidden='true')
+              img(src='/images/close-icon.png', alt='icon')
+            h4#myModalLabel.modal-title  ADD CATEGORY 
+          .modal-body
+            .manage-cat-form
+              .color-row
+                .cl-name Category Name
+                .cl-inp
+                  input.cat_name(type='text', name='name', value='', required='required')
+              .color-row
+                .cl-name
+                  | Gender
+                .cl-inp
+                  .select-item
+                    select
+                      option
+              .color-row
+                .cl-name
+                  | Size Correlation
+                .cl-inp
+                  .select-item
+                    select
+                      option
+              .color-row
+                .cl-name Description
+                .cl-inp
+                  textarea.description(name='description')
+          .modal-footer
+            button(type='button')  Save 
 
-    a.addcategory.categorybuttons(href='/category/add', title='Add Category') Add Category | 
-    a.rmvcategory.categorybuttons(href='/rmvcategory', title='Remove Category') Remove Category
-    table(width='100%')
-     tr
-      th Sr.no
-      th Name
-      th Active
-      th Remove
-      th Edit
-     each getAllCategory in getAllCategories 
-      tr(class='categoryTr_#{getAllCategory._id}')
-       td 1
-       td #{getAllCategory.name}
-       td #{getAllCategory.is_active}
-       td 
-        a.edit_category(href='#' onclick='make_sure_for_category("#{getAllCategory._id}")') Remove
-       td 
-        a.edit_category(href='/editcategory/#{getAllCategory._id}') Edit
 
-          
+  #modal-container-104832.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+    .modal-dialog.popup-wdt-1
+      form(name='addCategory', method='post', action='/subcategory/save')
+        .modal-content
+          .modal-header
+            button.close(type='button', data-dismiss='modal', aria-hidden='true')
+              img(src='/images/close-icon.png', alt='icon')
+            h4#myModalLabel.modal-title  ADD SUBCATEGORY 
+          .modal-body
+            .manage-cat-form
+              .color-row
+                .cl-name Subcategory Name
+                .cl-inp
+                  input(name='', type='text')
+              .color-row
+                .cl-name
+                  | Gender
+                .cl-inp
+                  .select-item
+                    select
+                      option
+              .color-row
+                .cl-name
+                  | Parent Category
+                .cl-inp
+                  .select-item
+                    select
+                      option
+              .color-row
+                .cl-name
+                  | Sizing Correlation
+                .cl-inp
+                  .select-item
+                    select
+                      option
+              .color-row
+                .cl-name Description
+                .cl-inp
+                  textarea#textarea(name='textarea')
+          .modal-footer
+            button(type='button')  Save 
+
+
+            

@@ -7,7 +7,7 @@ exports.listOfCategories = (req, res) => {
 	Category.find({},function(error,getAllCategories){
 		if(getAllCategories)
 		{
-			res.render('category/list', { title: 'Category',getAllCategories:getAllCategories});
+			res.render('category/list', { title: 'Category',getAllCategories:getAllCategories,activeClass:2});
 		}
 	});	
  
@@ -36,7 +36,7 @@ exports.saveCategory = (req,res) => {
         	}
         	else 
         	{
-        		res.redirect('/listofcategories');
+        		res.redirect('/category/list');
         	}
         });
  
@@ -48,12 +48,13 @@ exports.removeCategory = (req,res) => {
 	{
 		if(error)
 		{
-			res.send({status:'error',msg:error});
+			req.flash('message', 'Something Wrong!!');
 		}
 		else
 		{
-			res.send({status:'success',msg:'Remove Successfully.'});
+			req.flash('message', 'Remove Successfully.');
 		}
+		return res.redirect('/category/list');
 	});
 };
  
@@ -84,7 +85,7 @@ exports.updateCategory = (req,res) => {
 		};
 		Category.findByIdAndUpdate(req.body._id,updateData, function(error, updateRes)
 		{
-			res.redirect('/listofcategories');
+			res.redirect('/category/list');
 		});
  
 };

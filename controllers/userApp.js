@@ -103,7 +103,7 @@ exports.customerView = (req, res) => {
 		if(getCustomerDetails)
 		{
 			//console.log(getCustomerDetails);
-			res.render('user/customer_view', { title: 'Customer View',getCustomerDetails:getCustomerDetails});
+			res.render('user/customer_view', { title: 'Customer View',getCustomerDetails:getCustomerDetails,activeClass:req.params.activeClass});
 		}
 	});	
 };
@@ -117,7 +117,7 @@ exports.customerEdit = (req, res) => {
 	User.find({_id:req.params.id},function(error,getCustomerDetails){
 		if(getCustomerDetails)
 		{
-			res.render('user/customer_edit', { title: 'Customer Edit',getCustomerDetails:getCustomerDetails});
+			res.render('user/customer_edit', { title: 'Customer Edit',getCustomerDetails:getCustomerDetails,activeClass:req.params.activeClass});
 		}
 	});	
 };

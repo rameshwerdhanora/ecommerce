@@ -8,7 +8,7 @@ exports.listOfSize = (req, res) => {
 	Size.find({},function(error,getAllSizes){
 		if(getAllSizes)
 		{
-			res.render('size/list', { title: 'Size',getAllSizes:getAllSizes});
+			res.render('size/list', { title: 'Size',getAllSizes:getAllSizes,activeClass:4});
 		}
 	});	
  

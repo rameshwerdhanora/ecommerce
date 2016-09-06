@@ -29,11 +29,12 @@ var uploadProductImage = Multer({ storage : storage}).single('product_image',4);
 exports.listOfProducts = (req, res) => {
 	Product.find({},function(error,fetchAllProducts)
 	{
-		console.log(fetchAllProducts);
+		//console.log(fetchAllProducts);
 		res.render('product/list', 
 		{
 			title: 'Product',
-			fetchAllProducts:fetchAllProducts
+			fetchAllProducts:fetchAllProducts,
+			activeClass:1
 		});
 	});	
 };
