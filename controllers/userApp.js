@@ -196,9 +196,6 @@ exports.customerChangePasswordSave = (req, res) => {
 exports.notification = (req, res) => {
     Notification.findOne({user_id:'57a5d75e1dd8d04a1816ae82'},function(error,notificationRes){
         if(notificationRes){
-            console.log(notificationRes);
-            console.log(notificationRes.news[0].mobile);
-            
             res.render('user/notification', { title: 'Customer notification',activeClass:8, result:notificationRes });
         }
     });
