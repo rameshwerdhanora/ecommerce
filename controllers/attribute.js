@@ -3,30 +3,31 @@
 const Attribute		= require('../models/attribute');
 const AttributeOption   = require('../models/attributeOption');
 const passport = require('passport');
+const Constants 		= require('../constants/constants');
+const flash = require('connect-flash');
 
 /* Get the list of all color name with imformation */
 exports.list = (req, res) => {
     
     var page = (req.query.page == undefined)?1:req.query.page;
-    var perPage = 10;
-    var skipRecord = (page-1)*perPage;
+    var skipRecord = (page-1)*Constants.RECORDS_PER_PAGE;
     
     Attribute.count(function(err, totalRecord) { 
-        if(totalPage > 0){
-            var totalPage = Math.ceil(totalRecord/perPage);
+        //if(totalRecord > 0){
+            var totalPage = Math.ceil(totalRecord/Constants.RECORDS_PER_PAGE);
             Attribute.find()
-                    .limit(perPage)
+                    .limit(Constants.RECORDS_PER_PAGE)
                     .skip(skipRecord)
                     .sort('-_id')
                     .exec(function(error,getAllAttributes){
                 if(getAllAttributes){
-                    //console.log(getAllAttributes);
-                    res.render('attribute/list', {title: 'Attribute List',getAllAttributes:getAllAttributes,currentPage:page,totalRecord:totalRecord,totalPage:totalPage,activeClass:6});
+                    //var msg = req.flash('message');
+                    res.render('attribute/list', {title: 'Attribute List', getAllAttributes:getAllAttributes, currentPage:page, totalRecord:totalRecord, totalPage:totalPage, activeClass:6 });
                 }
             });
-        }else{
+        /*}else{
             res.render('attribute/list',{title: 'Attribute List',activeClass:6});
-        }
+        }*/
         
     });
     
@@ -61,14 +62,14 @@ exports.saveAttribute = (req,res) => {
    	attrIns.product_manager = req.body.product_manager; 
    	attrIns.display_type 	= req.body.display_type; 
    	attrIns.is_published 	= req.body.is_published; 
-   	attrIns.save(function(err,rm)
-    {
+   	attrIns.save(function(err,rm){
     	if (err)
     	{
             res.send({status:'error',error:err});
     	}
     	else 
     	{   
+            
             if(req.body.type == 'select' || req.body.type == 'multiselect'){
                 var attribOptions = req.body.optionName;
                 for(var i=0;i < attribOptions.length;i++){
@@ -78,6 +79,7 @@ exports.saveAttribute = (req,res) => {
                     attrbModel.save(function(err){});
                 }
             }
+            req.flash('info', 'Attribute saved successfully');
             res.redirect('/attribute/list');
     	}
     });

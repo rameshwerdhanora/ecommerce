@@ -18,34 +18,15 @@ block content
           h2 MANAGE BRANDS
         h3.sub-heading 
           | BARNDS  
-        .profile-form-box.users-in
-          .low-tbl-box
-            table(width='100%', cellspacing='0', cellpadding='0', border='0')
-              tbody
-                tr
-                  th #
-                  th Logo
-                  th Brand Name
-                  th 
-                    a(href='#')
-                      img(src='/images/delete-icon.png', alt='icon')
-                if getAllBrands.length > 0
-                  - var number =1;
-                  each getAllBrand in getAllBrands      
-                    tr
-                      td #{number}
-                      td 
-                        a#modal-104831(href='#modal-container-104831', role='button', data-toggle='modal') 
-                          img(src='/#{getAllBrand.brand_logo}', alt='Logo')
-                      td #{getAllBrand.brand_name}
-                      td
-                        a(href='/brand/delete/#{getAllBrand._id}')
-                          img(src='/images/delete-icon.png', alt='icon')
-                    - number++
-                 else
-                  tr
-                    td(colspan=4)
-                      | No Brand
+        .profile-form-box
+          ul.brand-list
+            each getAllBrand in getAllBrands
+              li
+                a(id='modal-#{getAllBrand._id}', href='#modal-container-#{getAllBrand._id}',role='button',data-toggle='modal')
+                  img(src='/#{getAllBrand.brand_logo}', alt='Logo')
+                  | #{getAllBrand.brand_name}
+
+          
 
   #modal-container-104831.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true',)
     .modal-dialog.popup-wdt-1

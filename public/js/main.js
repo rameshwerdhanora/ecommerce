@@ -302,6 +302,7 @@ function remove_row(id)
 
  function add_more_size() 
  {
+ 	/*
 	var row 	= document.getElementById("rowToClone"); // find row to copy
 	var table 	= document.getElementById("tableToModify"); // find table to append to
 	var rowCount = $('#tableToModify >tr').length
@@ -312,6 +313,13 @@ function remove_row(id)
 
 	$('#tableToModify >tr#'+clone.id+' >td >select').attr("id",clone.id);
 	$('#tableToModify >tr#'+clone.id+' >td >.removeAttrRow').attr("id",clone.id);
+	*/
+	var row 	= document.getElementById("rowToClone"); // find row to copy
+	var rowCount = $(".clonedRow").length;
+	//var clone 	= row.cloneNode(true); // copy children too
+	//clone.id 	= rowCount+1; // change id or other attributes/contents
+	$(".clonedRow").append(row);
+	//AttributesTr
 }
 
 function loadSelectedsubCategory(catId)

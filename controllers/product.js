@@ -30,12 +30,45 @@ exports.listOfProducts = (req, res) => {
 	Product.find({},function(error,fetchAllProducts)
 	{
 		//console.log(fetchAllProducts);
-		res.render('product/list', 
+                Category.find({is_active:1},function(error,fetchCategories)
+	{
+		SubCategory.find({is_active:1},function(error,fetchSubCategories)
 		{
-			title: 'Product',
-			fetchAllProducts:fetchAllProducts,
-			activeClass:1
+			Brand.find({},function(error,fetchAllBrands)
+			{
+				Attribute.find({},function(error,fetchAllAttributes)
+				{
+					Color.find({},function(error,fetchAllColors)
+					{
+                                                /*
+						res.render('product/add_product', {
+                                                    title: 'Product',
+                                                    allBrands : fetchAllBrands,
+                                                    fetchCategories:fetchCategories,
+                                                    fetchSubCategories:fetchSubCategories,
+                                                    fetchAllAttributes:fetchAllAttributes,
+                                                    fetchAllColors:fetchAllColors
+						});*/
+                                                
+                                                res.render('product/list', 
+                                                {
+                                                        title: 'Product',
+                                                        fetchAllProducts:fetchAllProducts,
+                                                        activeClass:1,
+                                                        allBrands : fetchAllBrands,
+                                                        fetchCategories:fetchCategories,
+                                                        fetchSubCategories:fetchSubCategories,
+                                                        fetchAllAttributes:fetchAllAttributes,
+                                                        fetchAllColors:fetchAllColors
+                                                });
+                
+					});	
+				});
+		 	});
 		});
+	});
+        
+		
 	});	
 };
 
@@ -101,7 +134,7 @@ exports.editProduct = (req, res) => {
 							else 
 							{
 								req.flash('errors', error);
-								return res.redirect('/listofproducts');
+								return res.redirect('/product/list');
 							}
 						  
 						}); 
@@ -161,7 +194,7 @@ exports.saveProduct = (req, res) =>
 					}
 					else 
 					{
-						res.redirect('/listofproducts');
+						res.redirect('/product/list');
 					}
 				});
 			}
@@ -216,14 +249,14 @@ exports.updateProduct = (req, res) =>
 					else 
 					{
 						req.flash('msg', 'Update product details successfully.');
-						res.redirect('/listofproducts');
+						res.redirect('/product/list');
 					}
 				});
 			}
 			else 
 			{
 				req.flash('msg', 'Update product details successfully.');
-				res.redirect('/listofproducts');
+				res.redirect('/product/list');
 			}
 
 			

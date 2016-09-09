@@ -3,11 +3,11 @@ extends ../layout
 block content
   .col-sm-9.midlle-bar
     .large-title-row
+      img(src='/images/title-icon3.png', alt='icon')
       | List of All Sizes
-      
     .top-btns.clearfix
      .btn-s-right
-        a.default-btn(href='/addsize', title='Add Size') Add Size
+        a.default-btn(href='/size/add', title='Add Size') Add Size
         //a.default-btn(href='/rmvsize', title='Remove Size') Remove Size | 
     
     .customer-box.clearfix
@@ -21,19 +21,42 @@ block content
           .low-tbl-box
             table(width='100%')
              tr
-              th Sr.no
-              th Size Name
-              th Gender
-              th Remove
-              th Edit
-             each getAllSize in getAllSizes 
-              tr(class='sizeTr_#{getAllSize._id}')
-               td 1
-               td #{getAllSize.size_name}
-               td #{getAllSize.gender}
-               td 
-                a.edit_size(href='#' onclick='make_sure_for_size("#{getAllSize._id}")') Remove
-               td 
-                a.edit_size(href='/editsize/#{getAllSize._id}') Edit
+              //th Sr.no
+              th GENDER
+              th CATEGORIES
+              //th Size Name
+              //th Remove
+              //th Edit
+             - var i=0;
+             - for(i=0;i<result.length;i++){
+              tr(class='sizeTr_')
+                //td 1
+                td 
+                    if(i ==0)
+                      strong
+                        | Male
+                    else if(i==1)
+                      strong
+                        | Female
+                    else 
+                      strong
+                        | Unisex
 
-          
+                td
+                  - for(var cr=0;cr<result[i].length;cr++){
+                      p
+                        | #{result[i][cr].name}
+                  - }
+
+                td
+                  - for(var cr=0;cr<result[i].length;cr++){
+                      p
+                        - for(var jj=0;jj<result[i][cr].options.length;jj++){
+                            | #{result[i][cr].options[jj]}
+                            - if((jj+1) != result[i][cr].options.length){
+                                |,
+                            - }
+                        - }
+                  - }
+                    
+             - }
