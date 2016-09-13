@@ -219,6 +219,22 @@ exports.listofAllFeaturedProd = (req, res) => {
                    callback(err); //Forgot to add
                 });
               },
+              function(callback)
+              {
+                fetchinglike(ProductId._id,req.params.userId,function(err, res){
+                   var like = (res != null) ? 'true' : 'false';
+                   pArr.like = like;
+                   callback(err); //Forgot to add
+                });
+              },
+              function(callback)
+              {
+                fetchingWishlist(ProductId._id,req.params.userId,function(err, res){
+                   var wishlist = (res != null) ? 'true' : 'false';
+                   pArr.wishlist = wishlist;
+                   callback(err); //Forgot to add
+                });
+              },
           ], 
           function(err)
           {
@@ -298,6 +314,7 @@ function callItsFitsWithConfigData(sizes,brands,userId,req,res)
           var image               = [];
           bArr._id                = Brand._id;
           bArr.brand_name         = Brand.brand_name;
+          bArr.brand_cover        = Brand.brand_cover;
           bArr.brand_description  = Brand.brand_desc;
           bArr.brand_logo         = Brand.brand_logo;
 
@@ -371,6 +388,7 @@ function callItsFitsWithoutConfigData(userId,req, res)
           var image               = [];
           bArr._id                = Brand._id;
           bArr.brand_name         = Brand.brand_name;
+          bArr.brand_cover        = Brand.brand_cover;
           bArr.brand_description  = Brand.brand_desc;
           bArr.brand_logo         = Brand.brand_logo;
 
@@ -445,7 +463,7 @@ exports.checkFomoAlertAccToUser = (req, res) => {
 };
 
 /**
- * GET /api/product/details/:productId
+ * GET /api/product/details/:productId/:userId
  * Process for Fetch perticlular product details.
  */
 
@@ -476,6 +494,24 @@ exports.productDetailView = (req, res) => {
                 }   
                 callback(err); 
               });
+          },
+          function(callback) 
+          {
+             fetchinglike(req.params.productId,req.params.userId, function(err, fetchLikeValue)
+             {
+              var like = (fetchLikeValue != null) ? 'true' : 'false';
+              productArray.like  = like;
+              callback(err); //Forgot to add
+             });
+          },
+          function(callback) 
+          {
+             fetchingWishlist(req.params.productId,req.params.userId, function(err, fetchWishlistValue)
+             {
+              var wishlist = (fetchWishlistValue != null) ? 'true' : 'false';
+              productArray.wishlist  = wishlist;
+              callback(err); //Forgot to add
+             });
           },
           function(callback) 
           {
@@ -516,6 +552,7 @@ exports.productDetailView = (req, res) => {
       ], 
       function(err, results) 
       {
+
         //Product.update({_id:req.params.productId},{$inc: {productview: 1}}, { upsert: true, safe: true }, null);
         return res.json({"status":'success',"msg":'fetch product details.',fetchProductDetails:productArray})
       });
@@ -698,6 +735,7 @@ function brandDetailsWithFilterAndSort(saveFilterSort,req, res)
         var image                     = [];
         filterObj._id                 = fetchAllBrands._id;
         filterObj.brand_name          = fetchAllBrands.brand_name;
+        filterObj.brand_cover          = fetchAllBrands.brand_cover;
         filterObj.brand_description   = fetchAllBrands.brand_desc;
         filterObj.brand_logo          = fetchAllBrands.brand_logo;
 
@@ -756,6 +794,7 @@ exports.fetchSortValues = (req, res) => {
         var image                     = [];
         filterObj._id                 = fetchAllBrands._id;
         filterObj.brand_name          = fetchAllBrands.brand_name;
+        filterObj.brand_cover         = fetchAllBrands.brand_cover;
         filterObj.brand_description   = fetchAllBrands.brand_desc;
         filterObj.brand_logo          = fetchAllBrands.brand_logo;
 
@@ -813,6 +852,7 @@ exports.BrandDetailView = (req, res) => {
       var image                     = [];
       filterObj._id                 = fetchAllBrands._id;
       filterObj.brand_name          = fetchAllBrands.brand_name;
+      filterObj.brand_cover         = fetchAllBrands.brand_cover;
       filterObj.brand_description   = fetchAllBrands.brand_desc;
       filterObj.brand_logo          = fetchAllBrands.brand_logo;
 
@@ -873,6 +913,7 @@ exports.BrandItFitsProducts = (req, res) => {
         var image                     = [];
         filterObj._id                 = fetchAllBrands._id;
         filterObj.brand_name          = fetchAllBrands.brand_name;
+        filterObj.brand_cover         = fetchAllBrands.brand_cover;
         filterObj.brand_description   = fetchAllBrands.brand_desc;
         filterObj.brand_logo          = fetchAllBrands.brand_logo;
 
@@ -1094,7 +1135,7 @@ function fetchingFilterProduct(bid,saveFilterSort,callback)
 
 
   if((filter) && (sort))
-  { console.log('ssssssssssssssssssssssss');
+  { 
     Product.find(
     {
       brand_id:bid,
@@ -1109,7 +1150,7 @@ function fetchingFilterProduct(bid,saveFilterSort,callback)
     }).sort( {_id:-1,price:-1} );
   }
   else if(filter)
-  { console.log('fffffffffffffffffffffff');
+  {  
     Product.find(
     {
       brand_id:bid,
@@ -1125,7 +1166,7 @@ function fetchingFilterProduct(bid,saveFilterSort,callback)
   }
   else if(sort)
   {
-    console.log('hhhhhhhhhhhhhhhhhhhhh');
+     
     Product.find({brand_id:bid},{},function(error,fetchallFeatProds)
     {
       callback(error,fetchallFeatProds);
@@ -1215,3 +1256,20 @@ function fetchingAllWLAndLikeProducts(pid,callback)
       });
   }); 
 }
+
+function fetchinglike(pid,userId,callback)
+{
+  Like.findOne({user_id:userId,product_id:pid},function(error,fetchLike)
+  {
+    callback(error,fetchLike);
+  });
+}
+
+function fetchingWishlist(pid,userId,callback)
+{
+  Wishlist.findOne({user_id:userId,product_id:pid},function(error,fetchWishlist)
+  {
+    callback(error,fetchWishlist);
+  });
+}
+
