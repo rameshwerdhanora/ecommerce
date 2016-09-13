@@ -14,38 +14,20 @@ block content
         if (messages.message && messages.message.length > 0)
           .message.message
             span= messages.message
+
         .profile-top-row
           h2 MANAGE COLORS
         h3.sub-heading 
           | COLORS  
-        .profile-form-box.users-in
-          .low-tbl-box
-            table(width='100%', cellspacing='0', cellpadding='0', border='0')
-              tbody
-                tr
-                  th #
-                  th Color Name
-                  th Logo
-                  th 
-                    a(href='#')
-                      img(src='/images/delete-icon.png', alt='icon')
-                if getAllColors.length > 0
-                  - var number =1;
-                  each getAllColor in getAllColors      
-                    tr
-                      td #{number}
-                      td 
-                        a#modal-104831(href='#modal-container-104831', role='button', data-toggle='modal') 
-                          img(src='/#{getAllColor.color_logo}', alt='Logo')
-                      td #{getAllColor.color_name}
-                      td
-                        a(href='/color/delete/#{getAllColor._id}')
-                          img(src='/images/delete-icon.png', alt='icon')
-                    - number++
-                 else
-                  tr
-                    td(colspan=4)
-                      | No Color      
+        .profile-form-box
+          ul.brand-list
+            each getAllColor in getAllColors
+              li
+                a(href="#modal-container-#{getAllColor._id}", role="button",data-toggle="modal", id='modal-#{getAllColor._id}')
+                  span
+                    img(src='/#{getAllColor.color_logo}', alt='Logo')
+                  | #{getAllColor.color_name}
+
   
   #modal-container-104831.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
     .modal-dialog.popup-wdt-1

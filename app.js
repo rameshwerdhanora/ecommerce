@@ -22,6 +22,7 @@ const sass = require('node-sass-middleware');
 const multer = require('multer');
 const upload = multer({ dest: path.join(__dirname, 'uploads') });
 
+
 const constants = require('./constants/constants');
 
 
@@ -50,6 +51,9 @@ const sizeAppController         = require('./controllers/apis/sizeApp');
 const colorAppController        = require('./controllers/apis/colorApp');
 const productAppController      = require('./controllers/apis/productApp');
 const filterAppController       = require('./controllers/apis/filterApp');
+const addressAppController      = require('./controllers/apis/addressApp');
+const shippingAppController      = require('./controllers/apis/shippingApp');
+const cartAppController      = require('./controllers/apis/cartApp');
 
 const brandController          = require('./controllers/brand');
 const colorController          = require('./controllers/color');
@@ -207,6 +211,15 @@ app.get('/api/filter/fetchfilter',  filterAppController.fetchFilterOptions);
 app.get('/api/filter/category/:catId',  filterAppController.fetchSelectedSubCategory);
 
 
+app.post('/api/showCart',  cartAppController.getCartProduct);
+app.post('/api/addTocart',  cartAppController.addTocart);
+app.post('/api/deleteFromCart',  cartAppController.deleteFromCart);
+app.post('/api/emptyCart',  cartAppController.emptyCart);
+app.post('/api/updateIntoCart',  cartAppController.updateIntoCart);
+
+
+
+
 
 
 app.get('/api/listofbrand',  brandAppController.listOfAllBrand);
@@ -227,6 +240,12 @@ app.post('/brand/save',  brandController.saveBrand);
 app.get('/brand/edit:brandId',  brandController.editBrand);
 app.post('/brand/update',  brandController.updateBrand);
 app.get('/brand/delete/:brandId',  brandController.removeBrand);
+
+/* Address CRUD Section */
+app.post('/api/getUserAddress',addressAppController.getUserAddress);
+app.post('/api/addUserAddress',addressAppController.addAddress);
+app.post('/api/deleteUserAddress',addressAppController.deleteAddress);
+app.post('/api/updateUserAddress',addressAppController.updateAddress);
 
 
 /* Color CRUD Section */ // Need isAuthenticated code for check user is loggedin.
@@ -281,6 +300,7 @@ app.get('/subcategory/delete/:subcatId',  categorySubController.removeSubCategor
 
 
 /* Attribute CRUD Section */ // Need isAuthenticated code for check user is loggedin.
+app.get('/attribute', passportConfig.isAuthenticated,  attributeController.list);
 app.get('/attribute/list', passportConfig.isAuthenticated,  attributeController.list);
 app.get('/attribute/add', passportConfig.isAuthenticated,  attributeController.create);
 app.get('/attribute/edit/:attributeId', passportConfig.isAuthenticated,  attributeController.edit);
@@ -305,9 +325,21 @@ app.get('/order/detail',  orderController.detail);
 app.get('/emailtemplate/list',  emailController.list);
 app.get('/emailtemplate/edit',  emailController.edit);
 
-/* Signup users */
-app.get('/signup/user',  userAppControlleraAdmin.signupUser);
-app.post('/signup/saveuser',  userAppControlleraAdmin.saveUser);
+/* Users pages */
+app.get('/user/list',  userAppControlleraAdmin.userList);
+app.get('/user/add',  userAppControlleraAdmin.userAdd);
+app.post('/user/save',  userAppControlleraAdmin.userSave);
+app.get('/user/view/:id/:activeClass',  userAppControlleraAdmin.userView);
+app.get('/user/edit/:id/:activeClass',  userAppControlleraAdmin.userEdit);
+app.post('/user/update',  userAppControlleraAdmin.userUpdate);
+app.get('/user/delete/:userId',  userAppControlleraAdmin.userDelete);
+app.get('/user/shipping/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
+app.get('/user/paymentMethod/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
+app.get('/user/order/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
+app.get('/user/reviews/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
+app.get('/user/account/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
+app.get('/user/linkedAccount/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
+app.get('/user/notifications/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
 
 /* Customer */
 app.get('/customer/list',  userAppControlleraAdmin.customerList);
@@ -317,6 +349,21 @@ app.post('/customer/update',  userAppControlleraAdmin.customerUpdate);
 app.get('/customer/delete/:customerId',  userAppControlleraAdmin.customerDelete);
 app.get('/customer/changePassword/:customerId',  userAppControlleraAdmin.customerChangePassword);
 app.post('/customer/changePasswordSave',  userAppControlleraAdmin.customerChangePasswordSave);
+<<<<<<< Updated upstream
+app.get('/customer/notification',  userAppControlleraAdmin.notification);
+app.post('/customer/saveNotification',  userAppControlleraAdmin.saveNotification);
+app.get('/customer/linkedAccounts',  userAppControlleraAdmin.linkedAccounts);
+app.post('/customer/saveLinkedAccounts',  userAppControlleraAdmin.saveLinkedAccounts);
+
+app.get('/customer/accounts',  userAppControlleraAdmin.accounts);
+app.get('/customer/productPreview',  userAppControlleraAdmin.productPreview);
+app.get('/customer/order',  userAppControlleraAdmin.order);
+app.get('/customer/payments',  userAppControlleraAdmin.payments);
+
+=======
+app.get('/customer/address/:customerId/:activeClass',  userAppControlleraAdmin.customerAddressList);
+app.post('/customer/address/save/:customerId/:activeClass',  userAppControlleraAdmin.customerAddressSave);
+>>>>>>> Stashed changes
 
 /**
  * API examples routes.
@@ -350,6 +397,12 @@ app.post('/api/upload', upload.single('myFile'), apiController.postFileUpload);
 app.get('/api/pinterest', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getPinterest);
 app.post('/api/pinterest', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.postPinterest);
 app.get('/api/google-maps', apiController.getGoogleMaps);
+
+
+app.get('/api/getShippingRate', shippingAppController.getShppingRate);
+
+
+
 
 /**
  * OAuth authentication routes. (Sign in)

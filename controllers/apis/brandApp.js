@@ -19,9 +19,3 @@ exports.listOfAllBrand = (req, res) => {
 	});	
  
 };
-
-
-
-
-
-

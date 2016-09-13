@@ -1,0 +1,66 @@
+extends ../layout
+block content
+  .col-sm-9.midlle-bar
+    .large-title-row
+        img(src='/images/title-icon.png', alt='icon')
+        |  ASHLEY MOLINA
+       form(method='post',action='/customer/saveNotification')
+        .righsub-nav.clearfix
+          include top_bar
+          //.right-sub
+            input(type='submit',class='save-btn',value='SAVE')
+        .customer-box.clearfix
+          .customer-cl
+              include ../partials/customer_left_menu
+          .profile-cl
+            .profile-top-row
+              h2 PRODUCT REVIEWS
+            .profile-form-box.reviews
+              .product_table
+                table
+                  tr
+                    td
+                      input(type='checkbox')
+                    td
+                      .product_img
+                        img(src='/images/tp.png')
+                    td
+                      .product_details
+                        ul
+                          li
+                            .order_label
+                              strong PRODUCT:
+                            .order_field  Street Tshirt Turbo
+                            .clearfix
+                          li
+                            .order_label
+                              strong SKU:
+                            .order_field  MTC-6120
+                            .clearfix
+                          li
+                            .order_label
+                              strong SIZE:
+                            .order_field  S
+                            .clearfix
+                          li
+                            .order_label
+                              strong COLOR:
+                            .order_field  Black
+                            .clearfix
+                          li
+                            .order_label
+                              strong QTY:
+                            .order_field  1
+                            .clearfix
+                    td
+                      .product_price
+                        p  Price
+                        p   $25.00
+                    td
+                      .star_review
+                        p Review
+                        p
+                          img(src='/images/star.png')
+                        p Great tee! Fast shipping
+                  
+

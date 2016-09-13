@@ -1,0 +1,71 @@
+extends ../layout
+block content
+  .col-sm-9.midlle-bar
+    .large-title-row
+        img(src='//images/title-icon.png', alt='icon')
+        |  ASHLEY MOLINA
+      .righsub-nav.clearfix
+        include top_bar        
+        //.right-sub
+          a.save-btn(href='#') SAVE
+      .customer-box.clearfix
+        .customer-cl
+            include ../partials/customer_left_menu
+        .profile-cl
+            .profile-top-row
+              h2 PAYMENTS
+              .edit-btn-cl
+                a.edit-btn(href='#') EDIT
+            .profile-form-box
+              form(method='post', action='')
+                ul.brand_payment_brand_view
+                  li Choose your form of payout.
+                  li
+                    .vimo-txt
+                      span.vm-inp
+                        input#radio.css-checkbox(type='radio', name='radio', value='radio')
+                        label.css-label(for='radio')
+                      span.mv-img
+                        img(src='/images/paytm.jpg')
+                    .profile-right-cl4
+                      .profile-frm-row
+                        .profile-frm-cl1 EMAIL
+                        .profile-frm-cl2
+                          input(type='text', value='', name='')
+                  li
+                    .vimo-txt
+                      span.vm-inp
+                        span.vm-inp
+                          input#radio2.css-checkbox(type='radio', name='radio', value='radio')
+                          label.css-label(for='radio2')
+                      span.mv-img
+                        img(src='/images/venmo.jpg')
+                    .profile-right-cl4
+                      .profile-frm-row
+                        .profile-frm-cl1 EMAIL
+                        .profile-frm-cl2
+                          input(type='text', value='', name='')
+                  li
+                    .payment
+                      .profile-right-cl4
+                        .profile-frm-row.first-txt
+                          .profile-frm-cl1
+                            span.vm-inp
+                              input#radio3.css-checkbox(type='radio', name='radio', value='radio')
+                              label.css-label(for='radio3')
+                          .profile-frm-cl2
+                            | Direct Deposit
+                        .profile-frm-row
+                          .profile-frm-cl1 Bank Name
+                          .profile-frm-cl2
+                            input(type='text', value='', name='')
+                        .profile-frm-row
+                          .profile-frm-cl1 Account Number
+                          .profile-frm-cl2
+                            input(type='text', value='', name='')
+                        .profile-frm-row
+                          .profile-frm-cl1 Routing Number
+                          .profile-frm-cl2
+                            input(type='text', value='', name='')
+                    .save
+                      button SAVE

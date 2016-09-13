@@ -1,13 +1,37 @@
 h2 CUSTOMER
 ul
+<<<<<<< Updated upstream
+  li(class=(activeClass == 1)?'active':'')
+      a(href='/customer/list') Profile
+  li(class=(activeClass == 2)?'active':'')
+    a(href='#') Addresses
+  li(class=(activeClass == 3)?'active':'')
+    a(href='/customer/payments') Payment Methods
+  li(class=(activeClass == 4)?'active':'')
+    a(href='/customer/order') Orders
+  li(class=(activeClass == 5)?'active':'')
+    a(href='/customer/productPreview') Product Reviews
+  li(class=(activeClass == 6)?'active':'')
+    a(href='/customer/accounts') Account
+  li(class=(activeClass == 7)?'active':'')
+    a(href='/customer/linkedAccounts') Linked Accounts
+  li(class=(activeClass == 8)?'active':'')
+    a(href='/customer/notification') Notifications
+=======
   if activeClass == 1
     li.active
-      a(href='/customer/list') Profile
+      a(href='/customer/view/#{getCustomerDetails[0]._id}/1') Profile
   else
     li
-      a(href='/customer/list') Profile
-  li
-    a(href='#') Addresses
+      a(href='/customer/view/#{getCustomerDetails[0]._id}/1') Profile
+
+  if activeClass == 2
+    li.active
+      a(href='/customer/address/#{getCustomerDetails[0]._id}/2') Addresses
+  else
+    li
+      a(href='/customer/address/#{getCustomerDetails[0]._id}/2') Addresses      
+
   li
     a(href='#') Payment Methods
   li
@@ -20,3 +44,4 @@ ul
     a(href='#') Linked Accounts
   li
     a(href='#') Notifications
+>>>>>>> Stashed changes

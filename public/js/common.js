@@ -26,3 +26,12 @@ function deleteCustomer(id)
 		// });
 	}
 }
+
+//-- Delete User
+function deleteUser(id)
+{
+	var tFalse = confirm("Are you sure ?");
+	if(tFalse){
+		window.location = '/user/delete/'+id;
+	}
+}
