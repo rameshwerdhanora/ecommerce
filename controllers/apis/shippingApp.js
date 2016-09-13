@@ -1,8 +1,4 @@
-<<<<<<< Updated upstream
-const Constants         = require('../../constants/constants');
-=======
 const Constants 		= require('../../constants/constants');
->>>>>>> Stashed changes
 
 
 exports.getShppingRate = (req,res) => {
