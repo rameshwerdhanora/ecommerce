@@ -8,26 +8,120 @@
                 a(href='#')
                   img(src='/images/left-icon1.png', alt='icon')
                   |  Dashboard
-              li
-                a(href='/order/list')
+              li.dropdown
+                a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
                   img(src='/images/left-icon2.png', alt='icon')
-                  | Orders
+                  | Orders                    
+                ul.easy-sidebar.dropdown-menu
+                  li
+                    span.nav-close
+                      a(href='#')
+                        img(src='/images/close-white.png', alt='close')
+                  li
+                    span.sub-title USERS
+                  li
+                    a(href='#') MANAGE USERS
+                  li
+                    a(href='#') ADD USERS
+                  li
+                    span.sub-title EMAIL
+                  li
+                    a(href='#') Email templates
+                  li
+                    a(href='#') ADD new template
+
               li
-                a(href='/product/list')
+                a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
                   img(src='/images/left-icon3.png', alt='icon')
                   | Products
+                
+                ul.easy-sidebar.dropdown-menu
+                  li
+                    span.nav-close
+                      a(href='#')
+                        img(src='/images/close-white.png', alt='close')
+                  li
+                    span.sub-title USERS
+                  li
+                    a(href='/product/list') Product list
+                  li
+                    a(href='#') ADD USERS
+                  li
+                    span.sub-title EMAIL
+                  li
+                    a(href='#') Email templates
+                  li
+                    a(href='#') ADD new template
+                    
               li
-                a(href='/customer/list')
+                a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
                   img(src='/images/left-icon4.png', alt='icon')
                   | Customers
+                  
+                ul.easy-sidebar.dropdown-menu
+                  li
+                    span.nav-close
+                      a(href='#')
+                        img(src='/images/close-white.png', alt='close')
+                  li
+                    span.sub-title USERS
+                  li
+                    a(href='/customer/list') Customer list
+                  li
+                    a(href='#') ADD USERS
+                  li
+                    span.sub-title EMAIL
+                  li
+                    a(href='#') Email templates
+                  li
+                    a(href='#') ADD new template
+                    
               li
-                a(href='/user/list')
+                a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
                   img(src='/images/left-icon5.png', alt='icon')
                   | USERS
+                
+                ul.easy-sidebar.dropdown-menu
+                  li
+                    span.nav-close
+                      a(href='#')
+                        img(src='/images/close-white.png', alt='close')
+                  li
+                    span.sub-title USERS
+                  li
+                    a(href='/user/list') User list
+                  li
+                    a(href='#') ADD USERS
+                  li
+                    span.sub-title EMAIL
+                  li
+                    a(href='#') Email templates
+                  li
+                    a(href='#') ADD new template
+                    
               li
-                a(href='#')
+                a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
                   img(src='/images/left-icon6.png', alt='icon')
                   | System
+                
+                ul.easy-sidebar.dropdown-menu
+                  li
+                    span.nav-close
+                      a(href='#')
+                        img(src='/images/close-white.png', alt='close')
+                  li
+                    span.sub-title USERS
+                  li
+                    a(href='/user/list') User list
+                  li
+                    a(href='#') ADD USERS
+                  li
+                    span.sub-title EMAIL
+                  li
+                    a(href='#') Email templates
+                  li
+                    a(href='#') ADD new template
+                
           .follow-us-row
             h4  Follow us
             ul

@@ -52,7 +52,7 @@ exports.saveTemplate = (req,res) => {
             req.flash('errors', ['There is some error occured']);
             res.send({status:'error',error:err});
         }else{
-            req.flash('success', ['Email template added successfully','good']);
+            req.flash('success', ['Email template added successfully']);
             res.redirect('/emailtemplate/list');
         }
     });
