@@ -23,17 +23,52 @@ var storage =   Multer.diskStorage({
   }
 });
 /* Create Instance for upload folder */
-var uploadProductImage = Multer({ storage : storage}).single('product_image',4);
+var uploadProductImage = Multer({ storage : storage}).any();
 
 /* List of all Products  */
 exports.listOfProducts = (req, res) => {
 	Product.find({},function(error,fetchAllProducts)
 	{
-		res.render('product/list', 
+		//console.log(fetchAllProducts);
+                Category.find({is_active:1},function(error,fetchCategories)
+	{
+		SubCategory.find({is_active:1},function(error,fetchSubCategories)
 		{
-			title: 'Product',
-			fetchAllProducts:fetchAllProducts
+			Brand.find({},function(error,fetchAllBrands)
+			{
+				Attribute.find({},function(error,fetchAllAttributes)
+				{
+					Color.find({},function(error,fetchAllColors)
+					{
+                                                /*
+						res.render('product/add_product', {
+                                                    title: 'Product',
+                                                    allBrands : fetchAllBrands,
+                                                    fetchCategories:fetchCategories,
+                                                    fetchSubCategories:fetchSubCategories,
+                                                    fetchAllAttributes:fetchAllAttributes,
+                                                    fetchAllColors:fetchAllColors
+						});*/
+                                                
+                                                res.render('product/list', 
+                                                {
+                                                        title: 'Product',
+                                                        fetchAllProducts:fetchAllProducts,
+                                                        activeClass:1,
+                                                        allBrands : fetchAllBrands,
+                                                        fetchCategories:fetchCategories,
+                                                        fetchSubCategories:fetchSubCategories,
+                                                        fetchAllAttributes:fetchAllAttributes,
+                                                        fetchAllColors:fetchAllColors
+                                                });
+                
+					});	
+				});
+		 	});
 		});
+	});
+        
+		
 	});	
 };
 
@@ -99,7 +134,7 @@ exports.editProduct = (req, res) => {
 							else 
 							{
 								req.flash('errors', error);
-								return res.redirect('/listofproducts');
+								return res.redirect('/product/list');
 							}
 						  
 						}); 
@@ -145,12 +180,21 @@ exports.saveProduct = (req, res) =>
 			}
 			else 
 			{
-				var finePath 					= req.file.path.replace('public/','');
+				var finePath 					= req.files[0].path.replace('public/','');
 				var productImageIns 			= new ProductImage();
 				productImageIns.product_id 		= productIns._id;
-				productImageIns.thumb_image 	= finePath;
-				productImageIns.large_image 	= finePath;
-				productImageIns.image_name 		= req.file.filename;
+				productImageIns.thumb_image_1 	= req.files[0].path.replace('public/','');;
+				productImageIns.large_image_1 	= req.files[0].path.replace('public/','');;
+				productImageIns.image_name_1 	= req.files[0].filename;
+				productImageIns.thumb_image_2 	= req.files[1].path.replace('public/','');;
+				productImageIns.large_image_2 	= req.files[1].path.replace('public/','');;
+				productImageIns.image_name_2 	= req.files[1].filename;
+				productImageIns.thumb_image_3 	= req.files[2].path.replace('public/','');;
+				productImageIns.large_image_3 	= req.files[2].path.replace('public/','');;
+				productImageIns.image_name_3 	= req.files[2].filename;
+				productImageIns.thumb_image_4 	= req.files[3].path.replace('public/','');;
+				productImageIns.large_image_4 	= req.files[3].path.replace('public/','');;
+				productImageIns.image_name_4 	= req.files[3].filename;
 				productImageIns.save(function(err) 
 				{
 					if (err)
@@ -159,7 +203,7 @@ exports.saveProduct = (req, res) =>
 					}
 					else 
 					{
-						res.redirect('/listofproducts');
+						res.redirect('/product/list');
 					}
 				});
 			}
@@ -214,14 +258,14 @@ exports.updateProduct = (req, res) =>
 					else 
 					{
 						req.flash('msg', 'Update product details successfully.');
-						res.redirect('/listofproducts');
+						res.redirect('/product/list');
 					}
 				});
 			}
 			else 
 			{
 				req.flash('msg', 'Update product details successfully.');
-				res.redirect('/listofproducts');
+				res.redirect('/product/list');
 			}
 
 			

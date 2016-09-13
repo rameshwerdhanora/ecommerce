@@ -1,0 +1,115 @@
+extends ../layout
+script(src='/js/editProduct.js')
+block content
+  .page-header
+    h3 Edit
+    
+    style.
+     #rowToClone { display: none;}
+    form(name='updateproduct', action='/updateproduct', method='POST' enctype='multipart/form-data')
+      a(href='/listofproducts') Cancel | 
+      input.updateproduct(type='submit', name='updateproduct', value='Update Product')
+      input(type='hidden' name='selectedColors' class='selectedColors' value='#{fetchEditProduct.color}')
+      input(type='hidden' name='selectedAttr' class='selectedAttr' value='#{fetchEditProduct.attribute}')    
+      table(cellpadding='0', cellspacing='0', width='100%')
+        tr
+          td Product Name
+          td
+            input.product_name(type='text', name='name', value='#{fetchEditProduct.name}', required='required')
+        tr
+          td Product sku
+          td
+            input.size_name(type='text', name='sku', value='#{fetchEditProduct.sku}', required='required')
+        tr    
+          td Product Description
+          td
+            textarea.product_desc(rows='5', cols='50', name='description') #{fetchEditProduct.description}
+        tr
+          td Product Category
+          td
+            select.product_category(name='category_id' onchange='loadSelectedsubCategory(this.value)')
+             option(value='0') Select Category
+             each fetchCategory in fetchCategories
+              option(value='#{fetchCategory._id}' selected=(fetchCategory._id == fetchEditProduct.category_id)) #{fetchCategory.name}
+        tr
+          td Product Sub Category
+          td 
+            select.product_sub_category(name='sub_category_id')
+             option(value='0') Select Sub Category
+             each fetchSubCategory in fetchSubCategories
+              option(value='#{fetchSubCategory._id}' selected=(fetchSubCategory._id == fetchEditProduct.sub_category_id)) #{fetchSubCategory.name}
+           input(type='hidden' class="selectedSubCat" id='selectedSubCat' name='selectedSubCat' value='#{fetchEditProduct.sub_category_id}')   
+        tr
+          td Product Brand
+          td
+            select.product_brand(name='brand_id')
+             option(value='0' selected=(fetchEditProduct.brand_id == '0')) Select Brand
+             each allBrand in allBrands
+              option(value='#{allBrand._id}' selected=(fetchEditProduct.brand_id == allBrand._id)) #{allBrand.brand_name}
+        tr
+          td Is Featured
+          td
+            select.is_featured(name='is_featured')
+             option(value='1' selected=(fetchEditProduct.is_featured == '1')) yes
+             option(value='0' selected=(fetchEditProduct.is_featured == '0')) no
+        tr
+          td Product Price
+          td
+            input.product_desc(type='text', name='price', value='#{fetchEditProduct.price}', required='required')
+            input.pid(type='hidden', name='_id', value='#{fetchEditProduct._id}')
+        tr
+          td Product Image
+          td  
+            input.product_image_1(type='file', name='product_image_1', value='')
+        tr
+          td Product Image
+          td
+            input.product_image_2(type='file', name='product_image_2', value='')
+        tr
+          td Product Image
+          td
+            input.product_image_3(type='file', name='product_image_3', value='')
+        tr
+          td Product Image
+          td
+            input.product_image_4(type='file', name='product_image_4', value='')
+        tr
+          td
+          td 
+            each fetchImageOfProduct in fetchImageOfProducts   
+              img(src='/#{fetchImageOfProduct.large_image_1}' alt='#{fetchImageOfProduct.image_name_1}' title='#{fetchEditProduct.name}' height='150px' width='150px')
+              img(src='/#{fetchImageOfProduct.large_image_2}' alt='#{fetchImageOfProduct.image_name_2}' title='#{fetchEditProduct.name}' height='150px' width='150px')
+              img(src='/#{fetchImageOfProduct.large_image_3}' alt='#{fetchImageOfProduct.image_name_3}' title='#{fetchEditProduct.name}' height='150px' width='150px')
+              img(src='/#{fetchImageOfProduct.large_image_4}' alt='#{fetchImageOfProduct.image_name_4}' title='#{fetchEditProduct.name}' height='150px' width='150px')
+        tr
+          td Product Color
+          td 
+             each fetchAllColor in fetchAllColors
+              div(class='selectColor')
+               input(type='checkbox' name='color[]' value='#{fetchAllColor._id}') 
+               img(class='colorName' src='/#{fetchAllColor.color_logo}' height='30px' width='30px') 
+
+        tr(class="AttributesTr")
+          td Add Size
+          td 
+           input.add_more(type='button', name='add_more', value='add more' onclick="add_more_size()")
+           table#tableToModify(cellpadding='0', cellspacing='0', width='100%')
+            tr#rowToClone
+             td 
+             td
+              select.attributes(name='attributes[]' onchange='loadAttrValues(this.value,this.id)')
+               option(value='0') Select Attribute
+               each fetchAllAttribute in fetchAllAttributes
+                option(value='#{fetchAllAttribute._id}') #{fetchAllAttribute.name}
+              div#attrValuesDisplay    
+             td(class='remove')
+              a(href='#' class='removeAttrRow' onclick="remove_row(this.id)") Remove
+
+
+ 
+
+
+
+
+            
+           

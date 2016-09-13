@@ -1,0 +1,99 @@
+extends ../layout
+
+block content
+  .page-header
+    h3 Add New Size
+    style.
+     #rowToClone { display: none;}
+    form(name='addproduct', action='/saveproduct', method='POST' enctype='multipart/form-data')
+      a(href='/listofproducts') Cancel | 
+      input.saveproduct(type='submit', name='saveproduct', value='Save Product')
+      table(cellpadding='0', cellspacing='0', width='100%')
+        tr
+          td Product Name
+          td
+            input.product_name(type='text', name='name', value='', required='required')
+        tr
+          td Product sku
+          td
+            input.sku(type='text', name='sku', value='', required='required')
+        tr    
+          td Product Description
+          td
+            textarea.product_desc(rows='5', cols='50', name='description')
+        tr
+          td Product Category
+          td
+            select.product_category(name='category_id' onchange='loadSelectedsubCategory(this.value)')
+             option(value='0') Select Category
+             each fetchCategory in fetchCategories
+              option(value='#{fetchCategory._id}') #{fetchCategory.name}
+        tr
+          td Product Sub Category
+          td
+            select.product_sub_category(name='sub_category_id', required='required')
+             option(value='0') Select Sub Category
+             each fetchSubCategory in fetchSubCategories
+              option(value='#{fetchSubCategory._id}') #{fetchSubCategory.name}
+        tr
+          td Product Brand
+          td
+            select.product_brand(name='brand_id', required='required')
+             option(value='0') Select Brand
+             each allBrand in allBrands
+              option(value='#{allBrand._id}') #{allBrand.brand_name}
+        tr
+          td Is Featured
+          td
+            select.is_featured(name='is_featured', required='required')
+             option(value='1') yes
+             option(value='0') no
+        tr
+          td Product Price
+          td
+            input.product_desc(type='text', name='price', value='', required='required')
+        tr
+          td Product Image
+          td
+            input.product_image_1(type='file', name='product_image_1', value='', required='required')
+        tr
+          td Product Image
+          td
+            input.product_image_2(type='file', name='product_image_2', value='', required='required')
+        tr
+          td Product Image
+          td
+            input.product_image_3(type='file', name='product_image_3', value='', required='required')
+        tr
+          td Product Image
+          td
+            input.product_image_4(type='file', name='product_image_4', value='', required='required')
+        tr
+          td Product Color
+          td 
+             each fetchAllColor in fetchAllColors
+              div(class='selectColor')
+               input(type='checkbox' name='color[]' value='#{fetchAllColor._id}') 
+               img(class='colorName' src='#{fetchAllColor.color_logo}' height='30px' width='30px') 
+
+        tr(class="AttributesTr")
+          td Add Size
+          td 
+           input.add_more(type='button', name='add_more', value='add more' onclick="add_more_size()")
+           table#tableToModify(cellpadding='0', cellspacing='0', width='100%')
+            tr#rowToClone
+             td 
+             td
+              select.attributes(name='attributes[]' onchange='loadAttrValues(this.value,this.id)')
+               option(value='0') Select Attribute
+               each fetchAllAttribute in fetchAllAttributes
+                option(value='#{fetchAllAttribute._id}') #{fetchAllAttribute.name}
+              div#attrValuesDisplay    
+             td(class='remove')
+              a(href='#' class='removeAttrRow' onclick="remove_row(this.id)") Remove
+             
+
+
+
+            
+           

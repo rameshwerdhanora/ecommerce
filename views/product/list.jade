@@ -1,33 +1,78 @@
 extends ../layout
 
 block content
-  .page-header
-    h3 List of All Products
+  .col-sm-9.midlle-bar
+    .large-title-row
+      img(src='/images/title-icon.png', alt='icon')
+      |  PRODUCTS
+    .top-btns.clearfix
+      .btn-s-right
+        a(href='/product/add', title='Add Size') ADD PRODUCT  
+    .customer-box.clearfix
+      include ../partials/product_left_menu
+      .profile-cl
+        .profile-top-row
+          h2 MANAGE PRODUCTS
+        .profile-form-box.users-in
+          .low-tbl-box.large-table.order-txt
+            form(action='', method='post', name='form2')
+              table(width='100%', cellspacing='0', cellpadding='0', border='0')
+                tbody
+                  tr
+                    th(align='center')
+                      input#checkbox2(type='checkbox', name='checkbox2')
+                    th
+                      | USERNAME 
+                      span.paginng-icon
+                        img(src='/images/list-arrow.png', alt='arrow')
+                    th
+                      | BRAND 
+                      span.paginng-icon
+                        img(src='/images/list-arrow.png', alt='arrow')
+                    th  IMAGES
+                    th PRODUCT NAME
+                    th
+                      | SIZE 
+                      span.paginng-icon
+                        img(src='/images/list-arrow.png', alt='arrow')
+                    th
+                      | CATEGORY 
+                      span.paginng-icon
+                        img(src='/images/list-arrow.png', alt='arrow')
+                    th
+                      | SUBCATEGORY 
+                      span.paginng-icon
+                        img(src='/images/list-arrow.png', alt='arrow')
+                    th
+                      | PRICE 
+                      span.paginng-icon
+                        img(src='/images/list-arrow.png', alt='arrow')
+                    th
+                      | SOLD 
+                      span.paginng-icon
+                        img(src='/images/list-arrow.png', alt='arrow')
+                    th ON HAND
+                    th
+                      | SALES 
+                      span.paginng-icon
+                        img(src='/images/list-arrow.png', alt='arrow')
+                    th
+                      a(href='#')
+                        img(src='/images/delete-icon.png', alt='icon')
 
-    a.addsize.sizebuttons(href='/addproduct', title='Add Size') Add Products  
-    //a.rmvsize.sizebuttons(href='/rmvsize', title='Remove Size') Remove Products
-    table(width='100%')
-     tr
-      th Sr.no
-      th Product Name
-      th Price
-      th Category
-      th Image
-      th Featured
-      th Edit
-      th Remove
-     each fetchAllProduct in fetchAllProducts       
-      tr(class='productTr_#{fetchAllProduct._id}')
-       td 1
-       td #{fetchAllProduct.name}
-       td #{fetchAllProduct.price}
-       td #{fetchAllProduct.category_id}
-       td Image
-       td #{fetchAllProduct.is_featured}
-       td 
-          a.edit_product(href='/editproduct/#{fetchAllProduct._id}') Edit
-       td 
-          a.edit_product(href='#' onclick='make_sure_for_product("#{fetchAllProduct._id}")') Remove
-      
-  
-
+                  if fetchAllProducts.length > 0
+                    each fetchAllProduct in fetchAllProducts
+                      tr(class='productTr_#{fetchAllProduct._id}')
+                       td 1
+                       td #{fetchAllProduct.name}
+                       td #{fetchAllProduct.price}
+                       td #{fetchAllProduct.category_id}
+                       td Image
+                       td #{fetchAllProduct.is_featured}
+                       td 
+                          a.edit_product(href='/product/edit/#{fetchAllProduct._id}') Edit
+                       td 
+                          a.edit_product(href='#' onclick='make_sure_for_product("#{fetchAllProduct._id}")') Remove             
+                  else
+                    tr
+                      td(colspan=13) No Products      

@@ -37,8 +37,6 @@ const contactController = require('./controllers/contact');
 
 const userAppControlleraAdmin = require('./controllers/userApp');
 
-
-
 /* Application Work Start Cisdev */
 const userAppController         = require('./controllers/apis/userApp');
 const commonAppController       = require('./controllers/apis/commonApp');
@@ -47,19 +45,25 @@ const sizeAppController         = require('./controllers/apis/sizeApp');
 const colorAppController        = require('./controllers/apis/colorApp');
 const productAppController      = require('./controllers/apis/productApp');
 const filterAppController       = require('./controllers/apis/filterApp');
+const followAppController       = require('./controllers/apis/followApp');
+const cardAppController         = require('./controllers/apis/cardApp');
+const addressAppController      = require('./controllers/apis/addressApp');
+const shippingAppController     = require('./controllers/apis/shippingApp');
+const cartAppController         = require('./controllers/apis/cartApp');
+const privacyAppController      = require('./controllers/apis/privacyApp');
+
 
 const brandController          = require('./controllers/brand');
 const colorController          = require('./controllers/color');
 const sizeController           = require('./controllers/size');
-<<<<<<< HEAD
 const productController        = require('./controllers/product');
-const attributeController      = require('./controllers/attribute');
 const categoryController       = require('./controllers/category');
 const categorySubController    = require('./controllers/subCategory');
-=======
 const attributeController      = require('./controllers/attribute');
 const orderController          = require('./controllers/order');
->>>>>>> eadfc303cbd32eeddb936750b9824fa24f33dd99
+const emailController          = require('./controllers/emailTemplate');
+
+//const userAppControlleraAdmin  = require('./controllers/userApp');
 
 /**
  * API keys and Passport configuration.
@@ -191,10 +195,16 @@ app.get('/api/product/fits/:userId/:config',productAppController.listofAllItFits
 app.get('/api/product/details/:productId',productAppController.productDetailView);
 app.post('/api/product/fetchfilter',productAppController.fetchFilterValues);
 app.post('/api/product/fetchsort',productAppController.fetchSortValues);
+app.get('/api/product/addcartoptions/:productId',productAppController.addCartOptions);
 
+app.post('/api/product/filterupdate',productAppController.saveFilter);
+app.post('/api/product/sortupdate',productAppController.saveSort);
+app.get('/api/product/fetchfilter/:brandId/:userId',productAppController.fetchFilterValues);
+
+app.get('/api/follow/:userId/:brandId',followAppController.followUnFollowBrand);
 
 app.get('/api/brand/details/:brandId',productAppController.BrandDetailView);
-
+app.get('/api/brand/itfits/:brandId/:userId',productAppController.BrandItFitsProducts);
 
 /* Filter Controller */
 app.get('/api/filter/fetchfilter',  filterAppController.fetchFilterOptions);
@@ -208,101 +218,167 @@ app.get('/api/listofsize',  sizeAppController.listOfAllSize);
 app.get('/api/size/:sizeId',  sizeAppController.listOfSizeAttribute);
 app.get('/api/listofcolor',  colorAppController.listOfAllColor);
 
+app.get('/api/size/fetchcofiguration/:userId',  sizeAppController.fetchCofiguration);
+
 app.post('/api/saveusercofiguration',  userAppController.saveUserCofiguration);
 
 
 
+/* Card CRUD Section */ // Need isAuthenticated code for check user is loggedin.
+
+app.get('/api/card/list/:userId',  cardAppController.listOfCards);
+app.post('/api/card/savecard',  cardAppController.saveCard);
+app.post('/api/card/removecard',  cardAppController.removeCard);
+app.post('/api/card/editcard',  cardAppController.editCard);
+app.post('/api/card/updatecard',  cardAppController.updateCard);
+
+
 
 /* Brand CRUD Section */ // Need isAuthenticated code for check user is loggedin.
+app.get('/brand/list',  brandController.listOfBrand);
+//app.get('/brand/add',  brandController.addBrand);
+app.post('/brand/save',  brandController.saveBrand);
+app.get('/brand/edit/:brandId',  brandController.editBrand);
+app.post('/brand/update',  brandController.updateBrand);
+app.get('/brand/delete/:brandId',  brandController.removeBrand); 
 
-app.get('/listofbrand',  brandController.listOfBrand);
-app.get('/addbrand',  brandController.addBrand);
-app.get('/editbrand/:brandId',  brandController.editBrand);
-app.post('/savebrand',  brandController.saveBrand);
-app.get('/removebrand/:brandId',  brandController.removeBrand);
-app.post('/updatebrand',  brandController.updateBrand);
 
 /* Color CRUD Section */ // Need isAuthenticated code for check user is loggedin.
-
-app.get('/listofcolor',  colorController.listOfColor);
-app.get('/addcolor',  colorController.addColor);
-app.get('/editcolor/:colorId',  colorController.editColor);
-app.post('/savecolor',  colorController.saveColor);
-app.get('/removecolor/:colorId',  colorController.removeColor);
-app.post('/updatecolor',  colorController.updateColor);
-
+app.get('/color/list',  colorController.listOfColor);
+//app.get('/color/add',  colorController.addColor);
+app.get('/color/edit/:colorId',  colorController.editColor);
+app.post('/color/save',  colorController.saveColor);
+app.get('/color/delete/:colorId',  colorController.removeColor);
+app.post('/color/update',  colorController.updateColor);
+ 
 
 /* Size CRUD Section */ // Need isAuthenticated code for check user is loggedin.
+app.get('/size/list',  sizeController.listOfSize);
+app.get('/size/add',  sizeController.addSize);
+app.get('/size/edit/:sizeId',  sizeController.editSize);
+app.post('/size/save',  sizeController.saveSize);
+app.get('/size/delete/:sizeId',  sizeController.removeSize);
+app.post('/size/update',  sizeController.updateSize);
 
-app.get('/listofsize',  sizeController.listOfSize);
-app.get('/addsize',  sizeController.addSize);
-app.get('/editsize/:sizeId',  sizeController.editSize);
-app.post('/savesize',  sizeController.saveSize);
-app.get('/removesize/:sizeId',  sizeController.removeSize);
-app.post('/updatesize',  sizeController.updateSize);
 
-<<<<<<< HEAD
 /* Products CRUD Section */ // Need isAuthenticated code for check user is loggedin.
-
-app.get('/listofproducts',  productController.listOfProducts);
-app.get('/addproduct',  productController.addProduct);
-app.post('/saveproduct',  productController.saveProduct);
-app.get('/editproduct/:productId',  productController.editProduct);
-app.post('/updateproduct',  productController.updateProduct);
-app.get('/removeproduct/:productId',  productController.removeProduct);
-
+app.get('/product/list',  productController.listOfProducts);
+app.get('/product/add',  productController.addProduct);
+app.post('/product/save',  productController.saveProduct);
+app.get('/product/edit/:productId',  productController.editProduct);
+app.post('/product/update',  productController.updateProduct);
+app.get('/product/delete/:productId',  productController.removeProduct);
 app.get('/product/fetchselectedcategory/:catId',  productController.selectedCategory);
 app.get('/product/loadattrvalues/:attrId',  productController.loadAttrValues);
 
 /* Category CRUD Section */ // Need isAuthenticated code for check user is loggedin.
+app.get('/category/list',  categoryController.listOfCategories);
+app.get('/category/add',  categoryController.addCategory);
+app.post('/category/save',  categoryController.saveCategory);
+app.get('/category/edit/:catId',  categoryController.editCategory);
+app.post('/category/update',  categoryController.updateCategory);
+app.get('/category/delete/:catId',  categoryController.removeCategory);
 
-app.get('/listofcategories',  categoryController.listOfCategories);
-app.get('/addcategory',  categoryController.addCategory);
-app.post('/savecategory',  categoryController.saveCategory);
-app.get('/editcategory/:catId',  categoryController.editCategory);
-app.post('/updatecategory',  categoryController.updateCategory);
-app.get('/removecategory/:catId',  categoryController.removeCategory);
 
 /* Sub Category CRUD Section */ // Need isAuthenticated code for check user is loggedin.
+app.get('/subcategory/list',  categorySubController.listOfSubCategories);
+app.get('/subcategory/add',  categorySubController.addSubCategory);
+app.post('/subcategory/save',  categorySubController.saveSubCategory);
+app.get('/subcategory/edit/:subcatId',  categorySubController.editSubCategory);
+app.post('/subcategory/update',  categorySubController.updateSubCategory);
+app.get('/subcategory/delete/:subcatId',  categorySubController.removeSubCategory);
 
-app.get('/listofsubcategories',  categorySubController.listOfSubCategories);
-app.get('/addsubcategory',  categorySubController.addSubCategory);
-app.post('/savesubcategory',  categorySubController.saveSubCategory);
-app.get('/editsubcategory/:subcatId',  categorySubController.editSubCategory);
-app.post('/updatesubcategory',  categorySubController.updateSubCategory);
-app.get('/removesubcategory/:subcatId',  categorySubController.removeSubCategory);
+/* Users pages */
+app.get('/user/list',  userAppControlleraAdmin.userList);
+app.get('/user/add',  userAppControlleraAdmin.userAdd);
+app.post('/user/save',  userAppControlleraAdmin.userSave);
+app.get('/user/view/:id/:activeClass',  userAppControlleraAdmin.userView);
+app.get('/user/edit/:id/:activeClass',  userAppControlleraAdmin.userEdit);
+app.post('/user/update',  userAppControlleraAdmin.userUpdate);
+app.get('/user/delete/:userId',  userAppControlleraAdmin.userDelete);
+// app.get('/user/shipping/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
+// app.get('/user/paymentMethod/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
+// app.get('/user/order/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
+// app.get('/user/reviews/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
+// app.get('/user/account/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
+// app.get('/user/linkedAccount/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
+// app.get('/user/notifications/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
 
-
-
-=======
->>>>>>> eadfc303cbd32eeddb936750b9824fa24f33dd99
-/* Attribute CRUD Section */ // Need isAuthenticated code for check user is loggedin.
-
-app.get('/attribute/list',  attributeController.list);
-app.get('/attribute/create',  attributeController.create);
-app.get('/attribute/edit/:attributeId',  attributeController.edit);
-app.post('/attribute/save',  attributeController.saveAttribute);
-app.get('/attribute/delete/:attributeId',  attributeController.deleteAttribute);
-app.post('/attribute/update',  attributeController.updateAttribute);
-
-<<<<<<< HEAD
-
-
-
-
+app.get('/customer/address/:customerId/:activeClass',  userAppControlleraAdmin.customerAddressList);
+app.post('/customer/address/save/:customerId/:activeClass',  userAppControlleraAdmin.customerAddressSave);
 
  
-=======
+
+
+/* Attribute CRUD Section */ // Need isAuthenticated code for check user is loggedin.
+app.get('/attribute', passportConfig.isAuthenticated,  attributeController.list);
+app.get('/attribute/list', passportConfig.isAuthenticated,  attributeController.list);
+app.get('/attribute/add', passportConfig.isAuthenticated,  attributeController.create);
+app.get('/attribute/edit/:attributeId', passportConfig.isAuthenticated,  attributeController.edit);
+app.post('/attribute/save', passportConfig.isAuthenticated,  attributeController.saveAttribute);
+app.get('/attribute/delete/:attributeId', passportConfig.isAuthenticated,  attributeController.deleteAttribute);
+app.post('/attribute/update', passportConfig.isAuthenticated,  attributeController.updateAttribute);
+/* 31 Aug */
+app.post('/attribute/getOptions', passportConfig.isAuthenticated,  attributeController.getAttributeOptions);
+app.post('/attribute/deleteAttibOption', passportConfig.isAuthenticated,  attributeController.deleteAttributeOption);
+app.post('/attribute/updateAttribOption', passportConfig.isAuthenticated,  attributeController.updateAttributeOption);
+
+
+
+app.post('/attribute/addAttribOption', passportConfig.isAuthenticated,  attributeController.addAttributeOption); 
+
 /* Order */
 
 app.get('/order',  orderController.list);
 app.get('/order/detail',  orderController.detail);
 
+app.get('/emailtemplate/list',  emailController.list);
+app.get('/emailtemplate/edit',  emailController.edit);
+
 /* Signup users */
 app.get('/signup/user',  userAppControlleraAdmin.signupUser);
 app.post('/signup/saveuser',  userAppControlleraAdmin.saveUser);
 
->>>>>>> eadfc303cbd32eeddb936750b9824fa24f33dd99
+/* Customer */
+app.get('/customer/list',  userAppControlleraAdmin.customerList);
+app.get('/customer/view/:id/:activeClass',  userAppControlleraAdmin.customerView);
+app.get('/customer/edit/:id/:activeClass',  userAppControlleraAdmin.customerEdit);
+app.post('/customer/update',  userAppControlleraAdmin.customerUpdate);
+app.get('/customer/delete/:customerId',  userAppControlleraAdmin.customerDelete);
+app.get('/customer/changePassword/:customerId',  userAppControlleraAdmin.customerChangePassword);
+app.post('/customer/changePasswordSave',  userAppControlleraAdmin.customerChangePasswordSave);
+app.get('/customer/notification',  userAppControlleraAdmin.notification);
+app.post('/customer/saveNotification',  userAppControlleraAdmin.saveNotification);
+app.get('/customer/linkedAccounts',  userAppControlleraAdmin.linkedAccounts);
+app.post('/customer/saveLinkedAccounts',  userAppControlleraAdmin.saveLinkedAccounts);
+
+app.get('/customer/accounts',  userAppControlleraAdmin.accounts);
+app.get('/customer/productPreview',  userAppControlleraAdmin.productPreview);
+app.get('/customer/order',  userAppControlleraAdmin.order);
+app.get('/customer/payments',  userAppControlleraAdmin.payments);
+
+
+/* Address CRUD Section */
+app.post('/api/getUserAddress',addressAppController.getUserAddress);
+app.post('/api/addUserAddress',addressAppController.addAddress);
+app.post('/api/deleteUserAddress',addressAppController.deleteAddress);
+app.post('/api/updateUserAddress',addressAppController.updateAddress);
+
+/* cart CRUD Section */
+app.post('/api/showCart',cartAppController.getCartProduct);
+app.post('/api/addToCart',cartAppController.addTocart);
+app.post('/api/deleteFromCart',cartAppController.deleteFromCart);
+app.post('/api/emptyCart',cartAppController.emptyCart);
+app.post('/api/updateIntoCart',cartAppController.updateIntoCart);
+
+/* privacy CRUD Section */
+app.post('/api/privacy/privacysetting',privacyAppController.privacySettingofUser);
+app.get('/api/privacy/fetchprivacysetting/:userId',privacyAppController.fetchPrivacySetting);
+app.post('/api/privacy/notificationsetting',privacyAppController.notificationSettingofUser);
+app.get('/api/privacy/fetchnotificationsetting/:userId',privacyAppController.fetchNotificationSetting);
+
+
+app.get('/api/getShippingRate', shippingAppController.getShppingRate);
 
 /**
  * API examples routes.
@@ -388,7 +464,18 @@ app.get('/auth/pinterest/callback', passport.authorize('pinterest', { failureRed
 /**
  * Error Handler.
  */
-app.use(errorHandler());
+ app.use(function(req, res) {
+      res.status(404);
+     res.render('404.jade', {title: '404: Page Not found'});
+  });
+  
+  // Handle 500
+  app.use(function(error, req, res, next) {
+      res.status(500);
+     res.render('500.jade', {title:'500: Internal Server Error', error: error});
+  });
+//app.use(errorHandler());
+ 
 
 /**
  * Start Express server.

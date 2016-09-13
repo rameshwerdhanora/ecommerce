@@ -6,6 +6,7 @@
 */
 
 /* Load required library */
+const async 			= require('async');
 const NodeMailer 		= require('nodemailer');
 const Passport 			= require('passport');
 const Multer 			= require('multer');
@@ -13,6 +14,9 @@ const User 				= require('../../models/userApp');
 const ForgetPassword	= require('../../models/forgetPassword');
 const Constants 		= require('../../constants/constants');
 const UserDetails 		= require('../../models/usersDetails');
+const Brand             = require('../../models/brand');
+const Attribute         = require('../../models/attribute');
+const AttributeOptions  = require('../../models/attributeOption');
 
 
 /* Define Folder name where our user porfile stored */
@@ -617,10 +621,7 @@ exports.saveUserCofiguration = function(req,res)
 			
 		}
 	});
-
-	 
 }
-
 
 /* Comman Send mail function for all user purpose */
 function sendMailToUser (user, done) 

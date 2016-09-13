@@ -26,12 +26,12 @@ exports.listOfColor = (req, res) => {
  
 };
 
-/* Add Color page  */
-exports.addColor = (req, res) => {
-  res.render('color/add_color', {
-    title: 'Color'
-  });
-};
+// /* Add Color page  */
+// exports.addColor = (req, res) => {
+//   res.render('color/add_color', {
+//     title: 'Color'
+//   });
+// };
 
 /* Save Color Information */
 exports.saveColor = (req,res) => {
@@ -42,9 +42,9 @@ exports.saveColor = (req,res) => {
             return res.end("Error uploading file.");
         }
 
-        var fineName 			= req.file.path.replace('public/','');
+        var fileName 			= req.file.path.replace('public/','');
 	    var colorIns 			= new Color();
-	    colorIns.color_logo 	= fineName;
+	    colorIns.color_logo 	= fileName;
 	    colorIns.color_name  	= req.body.color_name;
 	   	colorIns.user_id 		= req.user._id; 
 	   	colorIns.save(function(err) 
@@ -55,7 +55,7 @@ exports.saveColor = (req,res) => {
 	    	}
 	    	else 
 	    	{
-	    		res.redirect('/listofcolor');
+	    		res.redirect('/color/list');
 	    	}
 	    });
    	});
@@ -67,12 +67,13 @@ exports.removeColor = (req,res) => {
 	{
 		if(error)
 		{
-			res.send({status:'error',msg:error});
+			req.flash('message', 'Something Wrong!!');
 		}
 		else
 		{
-			res.send({status:'success',msg:'Remove Successfully.'});
+			req.flash('message', 'Remove Successfully.');
 		}
+		return res.redirect('/color/list');
 	});
 };
  

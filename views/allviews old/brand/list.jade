@@ -1,0 +1,27 @@
+extends ../layout
+
+block content
+  .page-header
+    h3 List of All Brands
+
+    a.addbrand.brandbuttons(href='/addbrand', title='Add Brand') Add Brand | 
+    a.rmvbrand.brandbuttons(href='/rmvbrand', title='Remove Brand') Remove Brand
+    table(width='100%')
+     tr
+      th Sr.no
+      th Brand Logo
+      th Brand Name
+      th Remove
+      th Edit
+     each getAllBrand in getAllBrands 
+      tr(class='brandTr_#{getAllBrand._id}')
+       td 1
+       td 
+        img(src='#{getAllBrand.brand_logo}', title='#{getAllBrand.brand_name}', alt='#{getAllBrand.brand_name}', width='50px',height='50px')
+       td #{getAllBrand.brand_name}
+       td 
+        a.edit_brand(href='#' onclick='make_sure_for_brand("#{getAllBrand._id}")') Remove
+       td 
+        a.edit_brand(href='/editbrand/#{getAllBrand._id}') Edit
+
+          

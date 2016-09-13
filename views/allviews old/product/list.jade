@@ -1,0 +1,34 @@
+extends ../layout
+
+block content
+  .page-header
+    h3 List of All Products
+    br
+    br
+    a.addsize.sizebuttons(href='/addproduct', title='Add Size') Add Products  
+    //a.rmvsize.sizebuttons(href='/rmvsize', title='Remove Size') Remove Products
+    table(width='100%')
+     tr
+      th Sr.no
+      th Product Name
+      th Price
+      th Category
+      th Image
+      th Featured
+      th Edit
+      th Remove
+     each fetchAllProduct in fetchAllProducts       
+      tr(class='productTr_#{fetchAllProduct._id}')
+       td 1
+       td #{fetchAllProduct.name}
+       td #{fetchAllProduct.price}
+       td #{fetchAllProduct.category_id}
+       td Image
+       td #{fetchAllProduct.is_featured}
+       td 
+          a.edit_product(href='/editproduct/#{fetchAllProduct._id}') Edit
+       td 
+          a.edit_product(href='#' onclick='make_sure_for_product("#{fetchAllProduct._id}")') Remove
+      
+  
+

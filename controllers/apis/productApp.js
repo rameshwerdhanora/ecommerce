@@ -6,17 +6,23 @@
 */
 
 const async = require('async');
-const Like 		      = require('../../models/like');
-const Wishlist      = require('../../models/wishlist');
-const Product       = require('../../models/product');
-const ProductImage  = require('../../models/productsImages');
-const Brand         = require('../../models/brand');
-const User          = require('../../models/userApp');
+const Like 		          = require('../../models/like');
+const Wishlist          = require('../../models/wishlist');
+const Product           = require('../../models/product');
+const ProductImage      = require('../../models/productsImages');
+const Brand             = require('../../models/brand');
+const User              = require('../../models/userApp');
+const Follow            = require('../../models/follow');
+const Color             = require('../../models/color');
+const Attribute         = require('../../models/attribute');
+const AttributeOptions  = require('../../models/attributeOption');
+const UsersDetails      = require('../../models/usersDetails');
+const FilterSort        = require('../../models/filterSort');
 
 
 
 exports.getProducts = (req, res) => {
-  console.log('aa gaya');
+   
 };
 
 /**
@@ -24,8 +30,9 @@ exports.getProducts = (req, res) => {
  * Process for like product by any user.
  */
 exports.likeProductByUser = (req, res) => {
-  Like.findOne({user_id:req.params.userId,product_id:req.params.productId},function(error,fetchLike){
-  	if(fetchLike)
+  Like.findOne({user_id:req.params.userId,product_id:req.params.productId},function(error,fetchLike)
+  {
+  	if(fetchLike !== null)
   	{
   		Like.remove({user_id:req.params.userId,product_id:req.params.productId},function(error,removeLike)
   		{
@@ -37,7 +44,7 @@ exports.likeProductByUser = (req, res) => {
   		var likeIns			     = new Like();
   		likeIns.user_id 	   = req.params.userId;
   		likeIns.product_id 	 = req.params.productId;
-  		likeIns.user_id 	   = Date.now();
+  		likeIns.date 	       = Date.now();
   		likeIns.save(function(error)
   		{
   			if(error)
@@ -59,20 +66,23 @@ exports.likeProductByUser = (req, res) => {
  * Process for like product by any user.
  */
 exports.wishListProductByUser = (req, res) => {
-  Wishlist.findOne({user_id:req.params.userId,product_id:req.params.productId},function(error,fetchLike){
-  	if(fetchLike)
+
+  Wishlist.findOne({user_id:req.params.userId,product_id:req.params.productId},function(error,fetchWL)
+  {
+ 
+  	if(fetchWL !== null)
   	{
   		Wishlist.remove({user_id:req.params.userId,product_id:req.params.productId},function(error,removeLike)
   		{
   			return res.json({"status":'success',"msg":'This Product successfully remove from your wishlist.'});
-  		})
+  		});
   	}
   	else 
   	{
   		var wishlistIns			     = new Wishlist();
   		wishlistIns.user_id 	   = req.params.userId;
   		wishlistIns.product_id 	 = req.params.productId;
-  		wishlistIns.user_id 	   = Date.now();
+  		wishlistIns.date 	       = Date.now();
   		wishlistIns.save(function(error)
   		{
   			if(error)
@@ -95,15 +105,34 @@ exports.wishListProductByUser = (req, res) => {
  */
 
 exports.listOfAllWishlist = (req, res) => {
-  Wishlist.findOne({user_id:req.params.userId},function(error,fetchAllWishlistByUser){
+
+  Wishlist.find({user_id:req.params.userId},{product_id:true,_id:false},function(error,fetchAllWishlistByUser)
+  {
     if(fetchAllWishlistByUser)
     {
-      /* Now we have send only user id and product id. We have to send all products as well (Its remaining for now) */
-      return res.json({"status":'success',"msg":'Fetch all your wishlist products.',fetchAllWishlistByUsers:fetchAllWishlistByUser});
+      var wlProdId = new Array();
+      for(wl=0;wl<fetchAllWishlistByUser.length;wl++)
+      {
+        wlProdId.push(fetchAllWishlistByUser[wl].product_id);
+      }
+
+     fetchingAllWLAndLikeProducts(wlProdId,function(err, fetchWishlistProducts)
+     {
+        if(fetchWishlistProducts.length > 0)
+        {
+          return res.json({"status":'success',"msg":'Fetch all your wishlist products.',fetchAllWishlistByUsers:fetchWishlistProducts});
+        }
+        else 
+        {
+          return res.json({"status":'error',"msg":'Products not added in your wishlist'});
+        }
+        
+     });
+      
     }
     else
     {
-      return res.json({"status":'error',"msg":error});
+      return res.json({"status":'error',"msg":'This product not added in your wishlist.'});
     }
   });
 };
@@ -115,35 +144,40 @@ exports.listOfAllWishlist = (req, res) => {
 
 exports.listOfAllLike = (req, res) => {
 
-  Like.findOne({user_id:req.params.userId},function(error,fetchAllLikeByUser)
+  Like.find({user_id:req.params.userId},{product_id:true,_id:false},function(error,fetchAllLikeByUser)
   {
     if(fetchAllLikeByUser)
     {
+
+      var lkProdId = new Array();
+      for(lk=0; lk<fetchAllLikeByUser.length;lk++)
+      {
+        lkProdId.push(fetchAllLikeByUser[lk].product_id);
+      }
+       
+     fetchingAllWLAndLikeProducts(lkProdId,function(err, fetchLikeProducts)
+     {
+        if(fetchLikeProducts.length > 0)
+        {
+          return res.json({"status":'success',"msg":'Fetch all your like products.',fetchAllLikeByUsers:fetchLikeProducts});
+        }
+        else 
+        {
+          return res.json({"status":'error',"msg":'Products not added in your like list'});
+        }
+        
+     });
+
+
       /* Now we have send only user id and product id. We have to send all products as well (Its remaining for now) */
-      return res.json({"status":'success',"msg":'Fetch all your like products.',fetchAllLikeByUsers:fetchAllLikeByUser});
+     // return res.json({"status":'success',"msg":'Fetch all your like products.',fetchAllLikeByUsers:fetchAllLikeByUser});
     }
     else
     {
-      return res.json({"status":'error',"msg":error});
+      return res.json({"status":'error',"msg":'This product not added in your like list.'});
     }
   });
 };
-
-function fetchingImage(pid, callback)
-{
-   ProductImage.findOne({product_id:pid},function(error,fetchallFeatProdsImgs)
-   {
-     callback(error,fetchallFeatProdsImgs.large_image);
-   });
-}
-
-function fetchingBrand(bid, callback)
-{
-  Brand.findOne({_id:bid},function(error,fetchAllBrands)
-  { 
-    callback(error,fetchAllBrands);
-  });
-}
 
 /**
  * GET /api/product/featured/:userId
@@ -156,6 +190,7 @@ exports.listofAllFeaturedProd = (req, res) => {
   Product.find({is_featured:'1'},function(error,fetchallFeatProds)
   {
     var temp = []; 
+     
     async.eachSeries(fetchallFeatProds, function(ProductId, callback)
     {
         var pArr              = {};
@@ -164,6 +199,7 @@ exports.listofAllFeaturedProd = (req, res) => {
         pArr.sku              = ProductId.sku;
         pArr.description      = ProductId.description;
         pArr.price            = ProductId.price;
+
 
         /* Use asyn Parallel method for waiting those functions value */
         async.parallel
@@ -200,23 +236,6 @@ exports.listofAllFeaturedProd = (req, res) => {
 }; 
 
 
-function fetchingProduct(bid, callback)
-{
-
-  Product.find({brand_id:bid},function(error,fetchallFeatProds)
-  {
-    callback(error,fetchallFeatProds);
-  });
-}
-
-function fetchingAllImage(pid, callback)
-{
-  ProductImage.find({product_id:pid},function(error,fetchallAllOfProduct)
-  {
-    callback(error,fetchallAllOfProduct);
-  });
-}
-
 
 /**
  * GET /api/product/fits/:userId/:config
@@ -226,29 +245,120 @@ function fetchingAllImage(pid, callback)
 
 exports.listofAllItFitsProd = (req, res) => {
 
-  /*var fetchConfigDetails = [];
-  if(req.params.config == 1)
+   
+  UsersDetails.findOne({user_id:req.params.userId},function(error,fetchConfigDetailsOfUser)
   {
-
-    UserDetails.findOne({user_id:req.params.userId},function(error,fetchConfigDetailsOfUser)
+    var userId  = req.params.userId;
+    if(fetchConfigDetailsOfUser)
     {
-      userCofigDetails = [];
-      if(fetchConfigDetailsOfUser)
+       
+      if(fetchConfigDetailsOfUser.configDetail.length > 0)
       {
-        //console.log(fetchConfigDetailsOfUser.configDetail[0].Size);
-        userCofigDetails['sizes'] = fetchConfigDetailsOfUser.configDetail[0].Size;
-        userCofigDetails['brand'] = fetchConfigDetailsOfUser.configDetail[1].brands;
+        var newArray = [];
+        for(i=0;i<fetchConfigDetailsOfUser.configDetail[0].Size.length;i++)
+        {
+          if(fetchConfigDetailsOfUser.configDetail[0].Size[i].attributeSizes)
+          {
+            newArray.push(fetchConfigDetailsOfUser.configDetail[0].Size[i].attributeSizes);
+          }
+        }
         
+        var joinArray  = newArray.join(',');
+        var size       = joinArray.split(','); 
+  
+        //var size    = fetchConfigDetailsOfUser.configDetail[0].Size[0].attributeSizes;
+        var brand   = fetchConfigDetailsOfUser.configDetail[1].brands;
+        callItsFitsWithConfigData(size,brand,userId,req, res);
       }
+      else 
+      {
+        callItsFitsWithoutConfigData(userId,req, res);
+      }
+    }
+    else 
+    {
+      callItsFitsWithoutConfigData(userId,req, res);
+    }
+  });
+   
+}
 
-    });
-    fetchConfigDetails['pp'] = userCofigDetails;
-  }
-  else 
-  {
-     
-  }*/
+function callItsFitsWithConfigData(sizes,brands,userId,req,res)
+{
+   
+  var allBrdProd = new Array();
+  Brand.find({_id:{$in:brands}},function(error,fetchAllBrands)
+  { 
+      if(fetchAllBrands)
+      {
+        async.eachSeries(fetchAllBrands, function(Brand, callback)
+        {
+
+          var bArr                = {};
+          var image               = [];
+          bArr._id                = Brand._id;
+          bArr.brand_name         = Brand.brand_name;
+          bArr.brand_description  = Brand.brand_desc;
+          bArr.brand_logo         = Brand.brand_logo;
+
+          /* Use asyn Parallel method for waiting those functions value */
+          async.parallel
+          ([
+            function(callback)
+            {
+              fetchingConfigProduct(Brand._id,sizes, function(err, fetchAllProducts)
+              {
+
+                bArr.product = fetchAllProducts;
+                async.eachSeries(fetchAllProducts, function(fetchProductImage, callback)
+                {
+                  fetchingImage(fetchProductImage._id, function(err, fetchImagePath)
+                  {
+                    image.push({productId:fetchProductImage._id,imagePath:fetchImagePath});
+                    callback(err); 
+                  })
+
+                }, function(err)
+                {
+                  bArr.image = image;
+                  callback(err);
+                });
+
+              });
+            },
+            function(callback)
+            {
+              fetchFollowUnFollow(Brand._id,userId, function(err, fetchFollowUnfollow)
+              {
+                var brandFollwo = (fetchFollowUnfollow.length > 0) ? 'true' : 'false';
+                bArr.brand_follow         = brandFollwo;
+                callback(err); 
+              });
+            }
+          ],
+          function(err)
+          {
+            allBrdProd.push(bArr);
+            callback(err);
+          })
+        }, 
+        function(err)
+        {
+          //colos
+          //console.log(allBrdProd); //This should give you desired result
+          return res.json({"status":'success',"msg":'Fetch all products.',listAccToBrand:allBrdProd});
+        });
+      }
+      else 
+      {
+        return res.json({"status":'error',"msg":'Brand is not avaible in admin.'})
+      }
+  });
  
+}
+
+function callItsFitsWithoutConfigData(userId,req, res)
+{
   var allBrdProd = new Array();
   Brand.find({},function(error,fetchAllBrands)
   { 
@@ -288,6 +398,15 @@ exports.listofAllItFitsProd = (req, res) => {
                 });
 
               });
+            },
+            function(callback)
+            {
+              fetchFollowUnFollow(Brand._id,userId, function(err, fetchFollowUnfollow)
+              {
+                var brandFollwo = (fetchFollowUnfollow.length > 0) ? 'true' : 'false';
+                bArr.brand_follow         = brandFollwo;
+                callback(err); 
+              });
             }
           ],
           function(err)
@@ -298,7 +417,8 @@ exports.listofAllItFitsProd = (req, res) => {
         }, 
         function(err)
         {
-          // console.log(allBrdProd); //This should give you desired result
+          //colos
+          //console.log(allBrdProd); //This should give you desired result
           return res.json({"status":'success',"msg":'Fetch all products.',listAccToBrand:allBrdProd});
         });
       }
@@ -307,7 +427,7 @@ exports.listofAllItFitsProd = (req, res) => {
         return res.json({"status":'error',"msg":'Brand is not avaible in admin.'})
       }
   });
-};
+}
 
 
 /**
@@ -330,7 +450,6 @@ exports.checkFomoAlertAccToUser = (req, res) => {
  */
 
 exports.productDetailView = (req, res) => { 
-  
 
   Product.findOne({_id:req.params.productId},function(error,fetchAProductDetails)
   {
@@ -362,7 +481,27 @@ exports.productDetailView = (req, res) => {
           {
              fetchingAllImage(fetchAProductDetails._id, function(err, fetchImagesOfProduct)
              {
-              productArray.allImages  = fetchImagesOfProduct;
+
+              var ar = new Array();
+          
+              
+              ar[0] = {};
+              ar[0]['image'] = fetchImagesOfProduct[0].image_name_1;
+              ar[0]['thumb_image'] =  fetchImagesOfProduct[0].thumb_image_1;
+
+              ar[1] = {};
+              ar[1]['image'] = fetchImagesOfProduct[0].image_name_2;
+              ar[1]['thumb_image'] =  fetchImagesOfProduct[0].thumb_image_2;
+
+              ar[2] = {};
+              ar[2]['image'] = fetchImagesOfProduct[0].image_name_3;
+              ar[2]['thumb_image'] =  fetchImagesOfProduct[0].thumb_image_3;
+
+              ar[3] = {};
+              ar[3]['image'] = fetchImagesOfProduct[0].image_name_4;
+              ar[3]['thumb_image'] =  fetchImagesOfProduct[0].thumb_image_4;
+
+              productArray.allImages  = ar;
               callback(err); //Forgot to add
              });
           },
@@ -430,21 +569,128 @@ function fetchingRelatedProducts(bid,pid,callback)
 }
 
 /**
- * POST /api/product/fetchfilter
+ * POST /api/product/filterupdate
+ * Process for Save filter values
+ */
+
+exports.saveFilter = (req, res) => {
+
+    FilterSort.findOne({user_id:req.body.user_id},function(error,saveFilterSort)
+    {
+      if(saveFilterSort)
+      {
+          updateFilterData = {
+            'user_id'  : req.body.user_id,
+            'filter'   : req.body
+          };
+          FilterSort.findByIdAndUpdate(saveFilterSort._id,updateFilterData, function(error, updateRes)
+          {
+            if(error)
+            {
+              return res.json({"status":'error',"msg":'Something Wrong.'});
+            }
+            else 
+            {
+              return res.json({"status":'success',"msg":'Update successfully.'});
+            }
+          });
+      }
+      else 
+      {
+        var filterSortIns          = new FilterSort();
+        filterSortIns.user_id      = req.body.user_id;
+        filterSortIns.filter       = req.body;
+        filterSortIns.brand_id     = req.body.brand_id;;
+        filterSortIns.date         = Date.now();
+        filterSortIns.save(function(error)
+        {
+          console.log(error);
+          if(error)
+          {
+            return res.json({"status":'error',"msg":'Something Wrong.'});
+          }
+          else 
+          {
+            return res.json({"status":'success',"msg":'Added successfully.'});
+          }
+        });
+      }
+
+    });
+};
+
+/**
+ * POST /api/product/sortupdate
+ * Process for Save filter values
+ */
+
+exports.saveSort = (req, res) => {
+
+    FilterSort.findOne({user_id:req.body.user_id,brand_id:req.body.brand_id},function(error,saveFilterSort)
+    {
+      if(saveFilterSort)
+      {
+          updateSortData = {
+            'user_id'  : req.body.user_id,
+            'sort'     : req.body
+          };
+          FilterSort.findByIdAndUpdate(saveFilterSort._id,updateSortData, function(error, updateRes)
+          {
+            if(error)
+            {
+              return res.json({"status":'error',"msg":'Something Wrong.'});
+            }
+            else 
+            {
+              return res.json({"status":'success',"msg":'Update successfully.'});
+            }
+          });
+      }
+      else 
+      {
+        var filterSortIns          = new FilterSort();
+        filterSortIns.user_id      = req.body.user_id;
+        filterSortIns.sort         = req.body;
+        filterSortIns.brand_id     = req.body.brand_id;;
+        filterSortIns.date         = Date.now();
+
+        filterSortIns.save(function(error)
+        {
+          if(error)
+          {
+            return res.json({"status":'error',"msg":'Something Wrong.'});
+          }
+          else 
+          {
+            return res.json({"status":'success',"msg":'Added successfully.'});
+          }
+        });
+      }
+
+    });
+};
+
+/**
+ * GET /api/product/fetchfilter/:brandId/:userId
  * Process for fetch Filter values.
  */
 
-function fetchingFilterProduct(bid,catId,subCatId,minPrice,maxPrice,color,callback)
-{
-  Product.find({brand_id:bid,category_id:catId,subCatId:{$in:subCatId},price:{$gt:minPrice},price:{$lt:maxPrice}},function(error,fetchallFeatProds)
+exports.fetchFilterValues = (req, res) => { 
+
+  FilterSort.findOne({user_id:req.params.userId},function(error,saveFilterSort)
   {
-    callback(error,fetchallFeatProds);
+    console.log(saveFilterSort);
+      if(saveFilterSort)
+      {
+        brandDetailsWithFilterAndSort(saveFilterSort,req, res);
+      }
   });
 }
 
-exports.fetchFilterValues = (req, res) => { 
+function brandDetailsWithFilterAndSort(saveFilterSort,req, res)
+{
 
-  Brand.findOne({_id:req.body.brand_id},function(error,fetchAllBrands)
+  Brand.findOne({_id:saveFilterSort.brand_id},function(error,fetchAllBrands)
   { 
       if(fetchAllBrands)
       {
@@ -461,7 +707,7 @@ exports.fetchFilterValues = (req, res) => {
         ([
           function(callback)
           {
-            fetchingFilterProduct(fetchAllBrands._id,req.body.catId,req.body.subcatid,req.body.minprice,req.body.maxprice,req.body.color, function(err, fetchAllProducts)
+            fetchingFilterProduct(fetchAllBrands._id,saveFilterSort, function(err, fetchAllProducts)
             {
               filterObj.product = fetchAllProducts;
               async.eachSeries(fetchAllProducts, function(fetchProductImage, callback)
@@ -499,17 +745,6 @@ exports.fetchFilterValues = (req, res) => {
  * POST /api/product/fetchsort
  * Process for Sort Product according to select
  */
-
-function fetchingSortProduct(bid,type,callback)
-{
-  //var typeSort = (type == 'latest') ? "{ _id:-1 }" : "{ productview :-1 }";
-  //var priceSort = (price == 'low') ? "{price: 1 }" : "{ price :-1 }";
-
-  Product.find({brand_id:bid},{},function(error,fetchallFeatProds)
-  {
-    callback(error,fetchallFeatProds);
-  }).sort( {_id:-1,price:-1} );
-}
 
 exports.fetchSortValues = (req, res) => { 
 
@@ -569,6 +804,7 @@ exports.fetchSortValues = (req, res) => {
 
 exports.BrandDetailView = (req, res) => { 
 
+ 
   Brand.findOne({_id:req.params.brandId},function(error,fetchAllBrands)
   { 
     if(fetchAllBrands)
@@ -619,3 +855,363 @@ exports.BrandDetailView = (req, res) => {
     }
   });  
 };
+
+
+/**
+ * GET /api/brand/itfits/:brandId/:userId
+ * Process for Fetch Brand it fits Product
+ */
+
+exports.BrandItFitsProducts = (req, res) => { 
+
+ Brand.findOne({_id:req.params.brandId},function(error,fetchAllBrands)
+  { 
+      var finalArray = []; 
+      if(fetchAllBrands)
+      {
+        var filterObj                 = {};
+        var image                     = [];
+        filterObj._id                 = fetchAllBrands._id;
+        filterObj.brand_name          = fetchAllBrands.brand_name;
+        filterObj.brand_description   = fetchAllBrands.brand_desc;
+        filterObj.brand_logo          = fetchAllBrands.brand_logo;
+
+        /* Use asyn Parallel method for waiting those functions value */
+        async.parallel
+        ([
+          function(callback)
+          { // ,req.params.price,req.body.itfits
+            fetchingProduct(fetchAllBrands._id, function(err, fetchAllProducts)
+            {
+              filterObj.product = fetchAllProducts;
+              async.eachSeries(fetchAllProducts, function(fetchProductImage, callback)
+              {
+                fetchingImage(fetchProductImage._id, function(err, fetchImagePath)
+                {
+                  image.push({productId:fetchProductImage._id,imagePath:fetchImagePath});
+                  callback(err); 
+                })
+
+              }, function(err)
+              {
+                filterObj.image = image;
+                
+                callback(err);
+              });
+
+            });
+          },
+          function(callback)
+            {
+              fetchFollowUnFollow(req.params.brandId,req.params.userId, function(err, fetchFollowUnfollow)
+              {
+                var brandFollwo = (fetchFollowUnfollow.length > 0) ? 'true' : 'false';
+                filterObj.brand_follow         = brandFollwo;
+                finalArray.push(filterObj);
+                callback(err); 
+              });
+            }
+        ],
+        function(err)
+        {
+          //console.log(filterObj);
+          return res.json({"status":'success',"msg":'Fetch all products.',listAccToBrand:finalArray});
+        });
+      }
+      else 
+      {
+        return res.json({"status":'error',"msg":'Brand is not avaible in admin.'})
+      }
+  });
+}
+
+/**
+ * GET /api/product/addcartoptions/:productId
+ * Process for Fetch Brand it fits Product
+ */
+
+exports.addCartOptions = (req, res) => { 
+
+  Product.findOne({_id:req.params.productId},function(error,fetchProductDetails)
+  {
+
+    if(fetchProductDetails)
+    {
+        var options = {};
+        async.parallel
+        ([
+          function(callback)
+          {  
+            fetchingColors(fetchProductDetails.color, function(err, fetchListOfColors)
+            {
+              options.colors = fetchListOfColors;
+              callback(err); 
+            });
+          },
+          function(callback)
+          { 
+            fetchingSizesVales(fetchProductDetails.attribute, function(err, fetchListOfSizesVal)
+            {
+
+              var tmpAttributeKey = new Array();
+              var tmpOptionValue = new Array();
+              var tmpOptionIdArray = new Array();
+
+              for(var kk=0;kk<fetchListOfSizesVal.length;kk++)
+              {
+                  tmpAttributeKey[kk] = fetchListOfSizesVal[kk].attribute_id;
+                  tmpOptionValue[kk] = fetchListOfSizesVal[kk].value;
+                  tmpOptionIdArray[kk] = fetchListOfSizesVal[kk]._id;
+              }
+              var tmpOoptionFinalAr = new Array();
+
+              fetchingSizes(tmpAttributeKey,function(err,attribRes)
+              {
+                  var tempAttribName = new Array();
+                  for(var i=0;i<tmpAttributeKey.length;i++)
+                  {
+                    for(j=0;j<attribRes.length;j++)
+                    {
+                      if(attribRes[j]._id == tmpAttributeKey[i])
+                      {
+                        if(tempAttribName.indexOf(attribRes[j].name) !== -1)
+                        {
+                          var indexVl = tempAttribName.indexOf(attribRes[j].name);
+                          var lnth = tmpOoptionFinalAr[indexVl]['options'].length;
+                          tmpOoptionFinalAr[indexVl]['options'][lnth] = {};
+                          tmpOoptionFinalAr[indexVl]['options'][lnth]['id'] = tmpOptionIdArray[i];
+                          tmpOoptionFinalAr[indexVl]['options'][lnth]['size'] = tmpOptionValue[i];
+                        }
+                        else
+                        {
+                          var ln = tempAttribName.length;
+                          tempAttribName[ln] = attribRes[j].name;
+                          var firstIndex = tmpOoptionFinalAr.length;
+                          tmpOoptionFinalAr[firstIndex] = new Array();
+                          tmpOoptionFinalAr[firstIndex] = {};
+                          tmpOoptionFinalAr[firstIndex]['label'] = attribRes[j].name;
+                          tmpOoptionFinalAr[firstIndex]['options'] = new Array();
+                           
+                          tmpOoptionFinalAr[firstIndex]['options'][0] = {};
+                          tmpOoptionFinalAr[firstIndex]['options'][0]['id'] = tmpOptionIdArray[i];
+                          tmpOoptionFinalAr[firstIndex]['options'][0]['size'] = tmpOptionValue[i];
+                        }
+                      }
+                    }
+                  }
+                  options.sizesoptions = tmpOoptionFinalAr;
+                  //console.log(tmpOoptionFinalAr);
+                  callback(err);
+              });
+             //callback(err); 
+            }); 
+          }    
+        ],
+        function(err)
+        {
+          //console.log(options);
+          return res.json({"status":'success',"msg":'Fetch all products options.',listProductOptions:options});
+        });
+    }
+    else 
+    {
+      return res.json({"status":'error',"msg":'Product is not avaible.'})
+    }
+  });
+
+}
+
+function fetchingSizes(attributIds,callback)
+{
+    Attribute.find({_id: {$in : attributIds}},function(error,attribRes){
+       if(error){
+           
+       }else{
+           callback(error,attribRes);
+        }
+   });
+}
+
+
+function fetchingImage(pid, callback)
+{
+   ProductImage.findOne({product_id:pid},function(error,fetchallFeatProdsImgs)
+   {
+     callback(error,fetchallFeatProdsImgs.large_image_1);
+   });
+}
+
+function fetchingBrand(bid, callback)
+{
+  Brand.findOne({_id:bid},function(error,fetchAllBrands)
+  { 
+    callback(error,fetchAllBrands);
+  });
+}
+
+function fetchingColors(listOfColors,callback)
+ {
+    Color.find({_id:{$in:listOfColors}},function(error, fetchListOfColors)
+    { 
+        callback(error,fetchListOfColors);
+    });
+ }
+ 
+
+function fetchingSizesVales(listOfSizesVal,callback)
+{
+  AttributeOptions.find({_id:{$in:listOfSizesVal}},function(error, listOfSizesValues)
+  { 
+    callback(error,listOfSizesValues);
+  });
+}
+
+
+function fetchingSortProduct(bid,type,price,itfits,callback)
+{
+  //var typeSort = (type == 'latest') ? "{ _id:-1 }" : "{ productview :-1 }";
+  //var priceSort = (price == 'low') ? "{price: 1 }" : "{ price :-1 }";
+
+  Product.find({brand_id:bid},{},function(error,fetchallFeatProds)
+  {
+    callback(error,fetchallFeatProds);
+  }).sort( {_id:-1,price:-1} );
+}
+
+
+function fetchingFilterProduct(bid,saveFilterSort,callback)
+{
+  var catId     = saveFilterSort.filter.catId;
+  var subcatid  = saveFilterSort.filter.subcatid;
+  var minprice  = saveFilterSort.filter.minprice;
+  var maxprice  = saveFilterSort.filter.maxprice;
+  var color     = saveFilterSort.filter.color;
+  var sort      = saveFilterSort.sort;
+  var filter    = saveFilterSort.filter;
+
+  //var typeSort = (saveFilterSort.sort.type == 'latest') ? "{ _id:-1 }" : "{ productview :-1 }";
+  //var priceSort = (saveFilterSort.sort.price == 'low') ? "{price: 1 }" : "{ price :-1 }";
+
+
+  if((filter) && (sort))
+  { console.log('ssssssssssssssssssssssss');
+    Product.find(
+    {
+      brand_id:bid,
+      category_id:catId,
+      sub_category_id:{$in:subcatid},
+      price:{$gt:minprice},
+      price:{$lt:maxprice}
+    },
+    function(error,fetchallFeatProds)
+    {
+      callback(error,fetchallFeatProds);
+    }).sort( {_id:-1,price:-1} );
+  }
+  else if(filter)
+  { console.log('fffffffffffffffffffffff');
+    Product.find(
+    {
+      brand_id:bid,
+      category_id:catId,
+      sub_category_id:{$in:subcatid},
+      price:{$gt:minprice},
+      price:{$lt:maxprice}
+    },
+    function(error,fetchallFeatProds)
+    {
+      callback(error,fetchallFeatProds);
+    });
+  }
+  else if(sort)
+  {
+    console.log('hhhhhhhhhhhhhhhhhhhhh');
+    Product.find({brand_id:bid},{},function(error,fetchallFeatProds)
+    {
+      callback(error,fetchallFeatProds);
+    }).sort( {_id:-1,price:-1} );
+  }
+
+  
+}
+
+function fetchingConfigProduct(bid,sizes, callback)
+{
+  Product.find({brand_id:bid,attribute:{$in:sizes}},function(error,fetchallFeatProds)
+  {
+    callback(error,fetchallFeatProds);
+  });
+}
+
+function fetchingProduct(bid, callback)
+{
+  Product.find({brand_id:bid},function(error,fetchallFeatProds)
+  {
+    callback(error,fetchallFeatProds);
+  });
+}
+
+function fetchingAllImage(pid, callback)
+{
+  ProductImage.find({product_id:pid},function(error,fetchallAllOfProduct)
+  {
+    callback(error,fetchallAllOfProduct);
+  });
+}
+
+function fetchFollowUnFollow(bid,uid, callback)
+{
+  Follow.find({user_id:uid,brand_id:bid},function(error,fetchFollowUnFollowBrand)
+  {
+    callback(error,fetchFollowUnFollowBrand);
+  })
+}
+
+
+function fetchingAllWLAndLikeProducts(pid,callback)
+{
+  //console.log(pid);
+  Product.find({_id:{$in:pid}},function(error,fetchallFeatProds)
+  {
+    var wlAndLikeProductsArray = []; 
+    async.eachSeries(fetchallFeatProds, function(ProductId, callback)
+    {
+        var productObj              = {};
+        productObj._id              = ProductId._id;
+        productObj.name             = ProductId.name;
+        productObj.sku              = ProductId.sku;
+        productObj.description      = ProductId.description;
+        productObj.price            = ProductId.price;
+
+        /* Use asyn Parallel method for waiting those functions value */
+        async.parallel
+        (
+          [
+              function(callback)
+              {
+                fetchingImage(ProductId._id, function(err, res){
+                  productObj.large_image  = res;
+                  callback(err);  
+                });
+              },
+              function(callback)
+              {
+                fetchingBrand(ProductId.brand_id,function(err, res){
+                  productObj.brand = res;
+                  callback(err); //Forgot to add
+                });
+              }  
+          ], 
+          function(err)
+          {
+            wlAndLikeProductsArray.push(productObj);
+            callback(err); 
+          }
+        )
+      }, 
+      function(err) 
+      {
+        callback(err,wlAndLikeProductsArray);
+      });
+  }); 
+}

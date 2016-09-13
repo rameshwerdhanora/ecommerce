@@ -14,7 +14,7 @@ var storage =   Multer.diskStorage({
   }
 });
 /* Create Instance for upload folder */
-var uploadBrand = Multer({ storage : storage}).single('brand_logo');
+var uploadBrand = Multer({ storage : storage}).any();
 
 /* Get the list of all brand name with imformation */
 exports.listOfBrand = (req, res) => {
@@ -28,22 +28,23 @@ exports.listOfBrand = (req, res) => {
 };
 
 /* Add Brand page  */
-exports.addBrand = (req, res) => {
-  res.render('brand/add_brand', {
-    title: 'Brand'
-  });
-};
+// exports.addBrand = (req, res) => {
+//   res.render('brand/add_brand', {
+//     title: 'Brand'
+//   });
+// };
 
 /* Save Brand Information */
 exports.saveBrand = (req,res) => {
-    uploadBrand(req,res,function(err) {
+	uploadBrand(req,res,function(err) {
         if(err) {
             return res.end("Error uploading file.");
         }
         
-        var newname = req.file.path.replace('public/','');
+        //var newname = req.file.path.replace('public/','');
         var brandIns 			= new Brand();
-        brandIns.brand_logo 	= newname;
+        brandIns.brand_logo 	= req.files[0].path.replace('public/','');
+        brandIns.brand_cover 	= req.files[1].path.replace('public/','');
         brandIns.brand_name  	= req.body.brand_name;
        	brandIns.brand_desc 	= req.body.brand_desc;
        	brandIns.user_id 		= req.user._id; 
@@ -55,10 +56,9 @@ exports.saveBrand = (req,res) => {
         	}
         	else 
         	{
-        		res.redirect('/listofbrand');
+        		res.redirect('/brand/list');
         	}
         });
-         
     });
 };
 
@@ -68,12 +68,13 @@ exports.removeBrand = (req,res) => {
 	{
 		if(error)
 		{
-			res.send({status:'error',msg:error});
+			req.flash('message', 'Something Wrong!!');
 		}
 		else
 		{
-			res.send({status:'success',msg:'Remove Successfully.'});
+			req.flash('message', 'Remove Successfully.');
 		}
+		return res.redirect('/brand/list');
 	});
 };
  
@@ -98,9 +99,10 @@ exports.updateBrand = (req,res) => {
 
 	uploadBrand(req,res,function(err) 
 	{
-		var newname = req.file.path.replace('public/','');
+		//var newname = req.file.path.replace('public/','');
 		updateData = {
-			'brand_logo' 	: newname,
+			'brand_logo' 	: req.files[0].path.replace('public/',''),
+			'brand_cover' 	: req.files[1].path.replace('public/',''),
 			'brand_name'	: req.body.brand_name,
 		    'brand_desc'	: req.body.brand_desc,
 		    'user_id'		: req.body.user_id 

@@ -1,0 +1,26 @@
+extends ../layout
+
+block content
+  .page-header
+    h3 List of All Categories
+
+    a.addcategory.categorybuttons(href='/addcategory', title='Add Category') Add Category | 
+    a.rmvcategory.categorybuttons(href='/rmvcategory', title='Remove Category') Remove Category
+    table(width='100%')
+     tr
+      th Sr.no
+      th Name
+      th Active
+      th Remove
+      th Edit
+     each getAllCategory in getAllCategories 
+      tr(class='categoryTr_#{getAllCategory._id}')
+       td 1
+       td #{getAllCategory.name}
+       td #{getAllCategory.is_active}
+       td 
+        a.edit_category(href='#' onclick='make_sure_for_category("#{getAllCategory._id}")') Remove
+       td 
+        a.edit_category(href='/editcategory/#{getAllCategory._id}') Edit
+
+          

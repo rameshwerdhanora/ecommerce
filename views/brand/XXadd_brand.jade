@@ -1,0 +1,25 @@
+extends ../layout
+
+block content
+  .page-header
+    h3 Add New Brand
+
+    form(name='addbrand', action='/savebrand', method='POST', enctype='multipart/form-data')
+      table(cellpadding='0', cellspacing='0', width='100%')
+        tr
+          td Brand Logo
+          td
+            input.brand_logo(type='file', name='brand_logo', required='required')
+        tr
+          td Brand Name
+          td
+            input.brand_name(type='text', name='brand_name', value='', required='required')
+        tr
+          td Description
+          td
+            textarea.brand_desc(name='brand_desc')
+        tr
+          td(colspan='2')
+            a(href='/listofbrand') Cancel | 
+            input.savebrand(type='submit', name='savebrand', value='Save Brand')
+           

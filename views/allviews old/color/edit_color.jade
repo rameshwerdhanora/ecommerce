@@ -1,0 +1,23 @@
+extends ../layout
+
+block content
+  .page-header
+    h3 Edit Color
+
+    form(name='addcolor', action='/updatecolor', method='POST' enctype='multipart/form-data')
+      table(cellpadding='0', cellspacing='0', width='100%')
+        tr
+          td Color Code
+          td
+            input.color_logo(type='file', name='color_logo', required='required') 
+        tr
+          td Color Name
+          td
+            input.color_name(type='text', name='color_name',value='#{fetchColor.color_name}', required='required')
+        tr
+          td(colspan='2')
+            input(type='hidden' value='#{fetchColor.user_id}' name='user_id')
+            input(type='hidden' value='#{fetchColor._id}' name='_id')
+            a(href='/listofcolor') Cancel | 
+            input.savecolor(type='submit', name='savecolor', value='Save Color')
+           

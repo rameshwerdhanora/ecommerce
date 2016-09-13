@@ -1,0 +1,26 @@
+extends ../layout
+
+block content
+  .page-header
+    h3 List of All Sizes
+
+    a.addsize.sizebuttons(href='/addsize', title='Add Size') Add Size | 
+    a.rmvsize.sizebuttons(href='/rmvsize', title='Remove Size') Remove Size
+    table(width='100%')
+     tr
+      th Sr.no
+      th Size Name
+      th Gender
+      th Remove
+      th Edit
+     each getAllSize in getAllSizes 
+      tr(class='sizeTr_#{getAllSize._id}')
+       td 1
+       td #{getAllSize.size_name}
+       td #{getAllSize.gender}
+       td 
+        a.edit_size(href='#' onclick='make_sure_for_size("#{getAllSize._id}")') Remove
+       td 
+        a.edit_size(href='/editsize/#{getAllSize._id}') Edit
+
+          

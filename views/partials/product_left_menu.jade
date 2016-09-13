@@ -1,0 +1,44 @@
+.customer-cl
+        h2 CATALOG
+        ul
+          if activeClass == 1
+            li.active
+              a(href='/product/list') Manage Products
+          else
+            li
+              a(href='/product/list') Manage Products
+
+          if activeClass == 2
+            li.active
+              a(href='/category/list') Manage Categories
+          else
+            li
+              a(href='/category/list') Manage Categories
+
+          if activeClass == 3
+            li.active
+              a(href='/color/list') Manage Colors
+          else
+            li
+              a(href='/color/list') Manage Colors
+
+          if activeClass == 4
+            li.active
+              a(href='/size/list') Manage Sizes
+          else
+            li
+              a(href='/size/list') Manage Sizes
+
+          if activeClass == 5
+            li.active
+              a(href='/brand/list') Manage Brands
+          else
+            li
+              a(href='/brand/list') Manage Brands
+
+          if activeClass == 6
+            li.active
+              a(href='/attribute/list') Manage Attributes
+          else
+            li
+              a(href='/attribute/list') Manage Attributes

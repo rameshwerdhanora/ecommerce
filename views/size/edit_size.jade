@@ -1,32 +1,53 @@
 extends ../layout
 
 block content
-  .page-header
-    h3 Edit Size
+  .col-sm-9.midlle-bar
+    .large-title-row
+      | Add New Size
 
-    form(name='addsize', action='/updatesize', method='POST')
-      input(type='hidden' value='#{fetchSize.user_id}' name='user_id')
-      input(type='hidden' value='#{fetchSize._id}' name='_id')
-      a(href='/listofsize') Cancel | 
-      input.savesize(type='submit', name='savesize', value='Save Size')
+    .top-btns.clearfix
+     .btn-s-right
+         
+    
+    .customer-box.clearfix
+      include ../partials/product_left_menu    
+      .profile-cl
+       .profile-top-row
+          h2 Add New Size
+        h3.sub-heading 
+          | SIZES  
+        .profile-form-box.users-in
 
-      table#POITable(cellpadding='0', cellspacing='0', width='100%')
-        tr
-          td Size Name
-          td(colspan='4')
-            input.size_name(type='text', name='size_name', value='#{fetchSize.size_name}', required='required')
-          td
-            select.sizegender(name='gender')
-             option(value='male', selected=(fetchSize.gender == 'male')) Male
-             option(value='female', selected=(fetchSize.gender == 'female')) female
-        tr 
-          td Select Attribute
-          td 
-            select(multiple='multiple' name='listofattrmap' class='listofattrmap')
-              each fetchAllAttributes in fetchAllAttribute
-               option(value='#{fetchAllAttributes._id}') #{fetchAllAttributes.name} 
-          td Published
-          td
-            select.sizepublished(name='is_published')
-             option(value='true', selected=(fetchSize.is_published == 'true')) Yes
-             option(value='false', selected=(fetchSize.is_published == 'false')) No
+          form(name='addsize', action='/updatesize', method='POST')
+            
+            // a(href='/listofsize') Cancel | 
+            
+
+            table#POITable(cellpadding='0', cellspacing='0', width='100%')
+              tr
+                td Size Name
+                td(colspan='4')
+                  input.size_name(type='text', name='size_name', value='#{fetchSize.size_name}', required='required')
+              tr   
+                td Gender 
+                td
+                  select.sizegender(name='gender')
+                   option(value='male', selected=(fetchSize.gender == 'male')) Male
+                   option(value='female', selected=(fetchSize.gender == 'female')) female
+              tr 
+                td Select Attribute
+                td 
+                  select(multiple='multiple' name='listofattrmap' class='listofattrmap')
+                    each fetchAllAttributes in fetchAllAttribute
+                     option(value='#{fetchAllAttributes._id}') #{fetchAllAttributes.name} 
+              tr       
+                td Published
+                td
+                  select.sizepublished(name='is_published')
+                   option(value='true', selected=(fetchSize.is_published == 'true')) Yes
+                   option(value='false', selected=(fetchSize.is_published == 'false')) No
+              tr
+                td(colspan='2' style='text-align:center;')
+                  input(type='hidden' value='#{fetchSize.user_id}' name='user_id')
+                  input(type='hidden' value='#{fetchSize._id}' name='_id')
+                  input.savesize(type='submit', name='savesize', value='Update')     

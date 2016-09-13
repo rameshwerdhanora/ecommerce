@@ -2,26 +2,11 @@ extends ../layout
 
 block content
   .col-sm-9.midlle-bar
-  .large-title-row
-    img(src='/images/title-icon3.png', alt='icon')
-    |  PRODUCTS
-  .customer-box.clearfix
-    form(method='post', action='/attribute/save')
-      .customer-cl
-        h2 CATALOG
-        ul
-          li
-            a(href='#') Manage Products
-          li
-            a(href='#') Manage Categories
-          li
-            a(href='/color/list') Manage Colors
-          li
-            a(href='/size/list') Manage Sizes
-          li
-            a(href='/brand/list') Manage Brands
-          li.active
-            a(href='/attribute/create') Create Attribute
+    .large-title-row
+      img(src='/images/title-icon3.png', alt='icon')
+      |  ATTRIBUTES
+    .customer-box.clearfix
+      include ../partials/product_catlog
       .profile-cl
         .profile-top-row
           h2 CREATE ATTRIBUTE
@@ -35,13 +20,23 @@ block content
               .profile-frm-row
                 .profile-frm-cl1  Catalog input type
                 .profile-frm-cl2
-                  select#select(name='type', required='required')
+                  select#select.attributeType(name='type', required='required')
                     option(value='text') Text Field
                     option(value='select') Select
-                    option(value='checkbox') Checkbox
                     option(value='multiselect') Multi Select
                     option(value='textarea') Textarea
                     option(value='radio') Radio
+                    
+                  
+              .profile-frm-row.dnone.addAttribOptionHeaderRow
+                .profile-frm-cl1 
+                    span.yes-cl Option
+                .profile-frm-cl2
+                  span.yes-cl 
+                    input#is_required2.css-checkbox(type='button', name='addMoreAttribBtn', value='Add option')
+                    
+              
+                    
               .profile-frm-row
                 .profile-frm-cl1 Values required?
                 .profile-frm-cl2
@@ -89,9 +84,3 @@ block content
                     label.css-label(for='is_published2') No            
             .btn-btm
               button(type='submit') ADD ATTRIBUTE
-<<<<<<< HEAD
-=======
-
-            
-           
->>>>>>> eadfc303cbd32eeddb936750b9824fa24f33dd99

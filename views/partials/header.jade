@@ -1,61 +1,7 @@
 header
-  .container
-<<<<<<< HEAD
-    .navbar-header
-      button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
-        span.sr-only Toggle navigation
-        span.icon-bar
-        span.icon-bar
-        span.icon-bar
-      a.navbar-brand(href='/')
-        i.fa.fa-cube
-        | Project name
-    .collapse.navbar-collapse
-      ul.nav.navbar-nav
-        li(class=(title == 'Home') ? 'active' : undefined)
-          a(href='/') Home
-        li(class=(title == 'API Examples') ? 'active' : undefined)
-          a(href='/api') API Examples
-        li(class=(title == 'Contact') ? 'active' : undefined)
-          a(href='/contact') Contact
-        li(class=(title == 'Brand') ? 'active' : undefined)
-          a(href='/listofbrand') Brand
-        li(class=(title == 'Color') ? 'active' : undefined)
-          a(href='/listofcolor') Color
-        li(class=(title == 'Size') ? 'active' : undefined)
-          a(href='/listofsize') Size
-        li(class=(title == 'Product') ? 'active' : undefined)
-          a(href='/listofproducts') Product
-        li(class=(title == 'Create Attribute') ? 'active' : undefined)
-          a(href='/attribute/list') Create Attribute
-        li(class=(title == 'Category') ? 'active' : undefined)
-          a(href='/listofcategories') Create Category
-        li(class=(title == 'SubCategory') ? 'active' : undefined)
-          a(href='/listofsubcategories') Create Sub Category
-      ul.nav.navbar-nav.navbar-right
-        if !user
-          li(class=(title == 'Login') ? 'active' : undefined)
-            a(href='/login') Login
-          li(class=(title == 'Create Account') ? 'active' : undefined)
-            a(href='/signup') Create Account
-        else
-          li.dropdown(class=(title == 'Account Management') ? 'active' : undefined)
-            a.dropdown-toggle(href='#', data-toggle='dropdown')
-              if user.profile.picture
-                img(src='#{user.profile.picture}')
-              else
-                img(src='#{user.gravatar(60)}')
-              | #{user.profile.name || user.email || user.id}&nbsp;
-              i.caret
-            ul.dropdown-menu
-              li
-                a(href='/account') My Account
-              li.divider
-              li
-                a(href='/logout') Logout
-=======
+  #content.container
     .logo
-      a(href='/')
+      a(href='#')
         img(src='/images/logo.png', alt='icon')
     .top-left
       .top-l-1
@@ -68,12 +14,107 @@ header
           input#textfield(type='text', name='textfield', placeholder='SEARCH')
     .top-right
       ul
-        li
-          a(href='/logout')
+        li.dropdown
+          a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
             img(src='/images/user-icon.png', alt='icon')
-        li
-          a(href='#')
+          ul.dropdown-menu.my-account-box
+            li.profile-img
+              a(href='#')
+                span.my-name Ravikant Sharma
+                span.my-photo
+                  img(src='/images/noPhoto2.png', alt='img')
+            li
+              a(href='#')
+                i.fa.fa-check-square-o
+                |  My Task
+            li
+              a(href='#')
+                i.fa.fa-edit
+                |  My Profile
+            li
+              a(href='#')
+                i.fa.fa-pencil
+                |  Edit My Details
+            li
+              a(href='#')
+                i.fa.fa-arrow-left
+                |  Sign Out
+        li.dropdown
+          a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
             img(src='/images/notifaction-icon.png', alt='icon')
           span.noti-itme 5
-// header end
->>>>>>> eadfc303cbd32eeddb936750b9824fa24f33dd99
+          .dropdown-menu.my-account-box.notifation
+            h2.noti-tital Notifications
+            ul.user-list
+              li
+                .u-list-l
+                  a(href='#')
+                    img(src='/images/img-1.png', alt='img')
+                .u-list-m
+                  span.time-us-l  11:17am 
+                  h4 Ash Arn
+                  p Saw the writing under one...
+              li
+                .u-list-l
+                  a(href='#')
+                    img(src='/images/img-1.png', alt='img')
+                .u-list-m
+                  span.time-us-l  11:17am 
+                  h4 Geno Roefaro
+                  p Saw the writing under one...
+              li
+                .u-list-l
+                  a(href='#')
+                    img(src='/images/img-1.png', alt='img')
+                .u-list-m
+                  span.time-us-l  11:17am 
+                  h4 Ash Arn
+                  p Saw the writing under one...
+              li
+                .u-list-l
+                  a(href='#')
+                    img(src='/images/img-1.png', alt='img')
+                .u-list-m
+                  span.time-us-l  11:17am 
+                  h4 Geno Roefaro
+                  p Saw the writing under one...
+              .user-list
+              li
+                .u-list-l
+                  a(href='#')
+                    img(src='/images/img-1.png', alt='img')
+                .u-list-m
+                  span.time-us-l  11:17am 
+                  h4 Ash Arn
+                  p Saw the writing under one...
+              .user-list
+              li
+                .u-list-l
+                  a(href='#')
+                    img(src='/images/img-1.png', alt='img')
+                .u-list-m
+                  span.time-us-l  11:17am 
+                  h4 Ash Arn
+                  p Saw the writing under one...
+              .user-list
+              li
+                .u-list-l
+                  a(href='#')
+                    img(src='/images/img-1.png', alt='img')
+                .u-list-m
+                  span.time-us-l  11:17am 
+                  h4 Ash Arn
+                  p Saw the writing under one...            
+              li
+                .u-list-l
+                  a(href='#')
+                    img(src='/images/img-1.png', alt='img')
+                .u-list-m
+                  span.time-us-l  11:17am 
+                  h4 Geno Roefaro
+                  p Saw the writing under one...
+              li.all-view
+                span
+                  a(href='#') View All > 
+              // header end
+

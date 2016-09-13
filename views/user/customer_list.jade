@@ -29,13 +29,13 @@ block content
                 th
                   a(href='#')
                     img(src='/images/delete-icon.png', alt='Delete')
-              if getCustomers.keys(users).length > 0
+              if getCustomers.length > 0
                 each getCustomer in getCustomers       
                   tr
                     td(align='center')
                       input#checkbox4(type='checkbox', name='checkbox4')
                     td 
-                      a.ord-title(href='/customer/view/#{getCustomer._id}') #{getCustomer.first_name} #{getCustomer.last_name}
+                      a.ord-title(href='/customer/view/#{getCustomer._id}/1') #{getCustomer.first_name} #{getCustomer.last_name}
                     td 1439 S. Rimhurst AVe.
                     td GLENDORA
                     td CA

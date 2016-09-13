@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
 
 const permissionSchema = new mongoose.Schema({
-  parent_id:String,
-  name: String
+  name: String,
+  display_name : String,
+  description : String,
+  created : String
 });
 
 const Permission = mongoose.model('Permission', permissionSchema);

@@ -1,26 +1,42 @@
 extends ../layout
 
 block content
-  .page-header
-    h3 List of All Sizes
-
-    a.addsize.sizebuttons(href='/addsize', title='Add Size') Add Size | 
-    a.rmvsize.sizebuttons(href='/rmvsize', title='Remove Size') Remove Size
-    table(width='100%')
-     tr
-      th Sr.no
-      th Size Name
-      th Gender
-      th Remove
-      th Edit
-     each getAllSize in getAllSizes 
-      tr(class='sizeTr_#{getAllSize._id}')
-       td 1
-       td #{getAllSize.size_name}
-       td #{getAllSize.gender}
-       td 
-        a.edit_size(href='#' onclick='make_sure_for_size("#{getAllSize._id}")') Remove
-       td 
-        a.edit_size(href='/editsize/#{getAllSize._id}') Edit
+  .col-sm-9.midlle-bar
+    .large-title-row
+      | List of All Sizes
+      
+    .top-btns.clearfix
+     .btn-s-right
+        a.default-btn(href='/size/add', title='Add Size') Add Size
+        //a.default-btn(href='/rmvsize', title='Remove Size') Remove Size | 
+    
+    .customer-box.clearfix
+      include ../partials/product_left_menu
+      .profile-cl
+        .profile-top-row
+          h2 MANAGE SIZES
+        h3.sub-heading 
+          | SIZES  
+        .profile-form-box.users-in
+          .low-tbl-box
+            table(width='100%')
+             tr
+              th Sr.no
+              th Size Name
+              th Gender
+              th Edit
+              th Remove
+             - var number =1;
+             each getAllSize in getAllSizes 
+              tr(class='sizeTr_#{getAllSize._id}')
+               td #{number}
+               td #{getAllSize.size_name}
+               td #{getAllSize.gender}
+               td 
+                a.edit_size(href='/size/edit/#{getAllSize._id}') Edit
+               td 
+                a.edit_size(href='/size/delete/#{getAllSize._id}') 
+                  img(src='/images/delete-icon.png') 
+               - number++    
 
           
