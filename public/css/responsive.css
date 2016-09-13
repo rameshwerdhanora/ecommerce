@@ -337,7 +337,6 @@ font-size: 16px;
 }
 }
 @media screen and (max-width:1023px) {
->>>>>>> f2a298c68b30e97c2e447cb340283263b6e07345
 .customer-cl ul li {
 	font-size: 14px;
 	font-weight: 600;
@@ -659,7 +658,6 @@ header {
   max-width: 100%;
 }
 
->>>>>>> f2a298c68b30e97c2e447cb340283263b6e07345
 .new-ord-box,
 .today-sale-box,
 .shipping-total-box {
@@ -707,7 +705,6 @@ header {
 	.large-title-row{
 		font-size:25px;
 	}
->>>>>>> f2a298c68b30e97c2e447cb340283263b6e07345
 .top-left {
 	width: 70%;
 }

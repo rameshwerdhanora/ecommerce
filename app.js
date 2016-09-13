@@ -333,13 +333,13 @@ app.get('/user/view/:id/:activeClass',  userAppControlleraAdmin.userView);
 app.get('/user/edit/:id/:activeClass',  userAppControlleraAdmin.userEdit);
 app.post('/user/update',  userAppControlleraAdmin.userUpdate);
 app.get('/user/delete/:userId',  userAppControlleraAdmin.userDelete);
-app.get('/user/shipping/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
-app.get('/user/paymentMethod/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
-app.get('/user/order/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
-app.get('/user/reviews/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
-app.get('/user/account/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
-app.get('/user/linkedAccount/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
-app.get('/user/notifications/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
+// app.get('/user/shipping/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
+// app.get('/user/paymentMethod/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
+// app.get('/user/order/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
+// app.get('/user/reviews/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
+// app.get('/user/account/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
+// app.get('/user/linkedAccount/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
+// app.get('/user/notifications/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
 
 /* Customer */
 app.get('/customer/list',  userAppControlleraAdmin.customerList);
@@ -349,7 +349,6 @@ app.post('/customer/update',  userAppControlleraAdmin.customerUpdate);
 app.get('/customer/delete/:customerId',  userAppControlleraAdmin.customerDelete);
 app.get('/customer/changePassword/:customerId',  userAppControlleraAdmin.customerChangePassword);
 app.post('/customer/changePasswordSave',  userAppControlleraAdmin.customerChangePasswordSave);
-<<<<<<< Updated upstream
 app.get('/customer/notification',  userAppControlleraAdmin.notification);
 app.post('/customer/saveNotification',  userAppControlleraAdmin.saveNotification);
 app.get('/customer/linkedAccounts',  userAppControlleraAdmin.linkedAccounts);
@@ -360,10 +359,9 @@ app.get('/customer/productPreview',  userAppControlleraAdmin.productPreview);
 app.get('/customer/order',  userAppControlleraAdmin.order);
 app.get('/customer/payments',  userAppControlleraAdmin.payments);
 
-=======
 app.get('/customer/address/:customerId/:activeClass',  userAppControlleraAdmin.customerAddressList);
 app.post('/customer/address/save/:customerId/:activeClass',  userAppControlleraAdmin.customerAddressSave);
->>>>>>> Stashed changes
+
 
 /**
  * API examples routes.

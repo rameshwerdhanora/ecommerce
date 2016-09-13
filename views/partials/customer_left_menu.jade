@@ -1,6 +1,5 @@
 h2 CUSTOMER
 ul
-<<<<<<< Updated upstream
   li(class=(activeClass == 1)?'active':'')
       a(href='/customer/list') Profile
   li(class=(activeClass == 2)?'active':'')
@@ -17,31 +16,3 @@ ul
     a(href='/customer/linkedAccounts') Linked Accounts
   li(class=(activeClass == 8)?'active':'')
     a(href='/customer/notification') Notifications
-=======
-  if activeClass == 1
-    li.active
-      a(href='/customer/view/#{getCustomerDetails[0]._id}/1') Profile
-  else
-    li
-      a(href='/customer/view/#{getCustomerDetails[0]._id}/1') Profile
-
-  if activeClass == 2
-    li.active
-      a(href='/customer/address/#{getCustomerDetails[0]._id}/2') Addresses
-  else
-    li
-      a(href='/customer/address/#{getCustomerDetails[0]._id}/2') Addresses      
-
-  li
-    a(href='#') Payment Methods
-  li
-    a(href='#') Orders
-  li
-    a(href='#') Product Reviews
-  li
-    a(href='#') Account
-  li
-    a(href='#') Linked Accounts
-  li
-    a(href='#') Notifications
->>>>>>> Stashed changes

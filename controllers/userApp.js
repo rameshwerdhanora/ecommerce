@@ -1,9 +1,7 @@
 const User = require('../models/userApp');
 const Permission = require('../models/permissions');
 const UserPermission = require('../models/userPermissions');
-<<<<<<< Updated upstream
 const Notification = require('../models/notification');
-=======
 const Address   = require('../models/address');
 
 
@@ -188,7 +186,6 @@ exports.userList = (req, res) => {
 		});
 	});	
 };
->>>>>>> Stashed changes
 
 /**
  * GET /signup/vendor
@@ -332,7 +329,6 @@ exports.userDelete = (req,res) => {
 			res.flash('success','Remove Successfully.');
 			res.redirect('/user/list');
 		}
-<<<<<<< Updated upstream
 	});	
 };
 
@@ -347,8 +343,6 @@ exports.customerChangePasswordSave = (req, res) => {
 	User.findByIdAndUpdate(req.body._id,updateData, function(error, updateRes)
 	{
 		res.redirect('/customer/view/'+req.body._id);
-=======
->>>>>>> Stashed changes
 	});
 };
 
