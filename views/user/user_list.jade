@@ -1,0 +1,115 @@
+extends ../layout
+block content
+  .col-sm-9.midlle-bar
+    .large-title-row
+      img(src='/images/title-icon.png', alt='icon')
+      |  USERS
+    .customer-box.clearfix
+      .customer-cl
+        h2 USERS
+        ul
+          li.active
+            a(href='/user/list') Manage Users
+          li
+            a(href='/user/add') Add User
+      .profile-cl
+        .profile-top-row
+          h2 MANAG USERS
+        .profile-form-box.users-in
+          #tabs-222574.customer-tabs
+            .edit-btn-cl
+              a(href='#')
+                img(alt='Delete', src='/images/delete-icon.png')
+            ul.nav.nav-tabs
+              li.active
+                a(href='#panel-278853', data-toggle='tab') Customers 
+              li
+                a(href='#panel-4338', data-toggle='tab') Shops
+            .tab-content
+              #panel-278853.tab-pane.active
+                .low-tbl-box.order-txt
+                  form(action='', method='post', name='form2')
+                    table(width='100%', cellspacing='0', cellpadding='0', border='0')
+                      tbody
+                        tr
+                          th(align='center')
+                            input#checkbox2(type='checkbox', name='checkbox2')
+                          th Photo
+                          th username
+                          th Name
+                          th PassworD
+                          th User SInce
+                          th Total
+                          th STATUS
+                          th
+                        if getCustomers.length > 0
+                          each getCustomer in getCustomers 
+                            tr
+                              td(align='center')
+                                input#checkbox4(type='checkbox', name='checkbox4')
+                              td
+                                img(src='/images/user-img.png', alt='img')
+                              td @#{getCustomer.user_name} 
+                              td.ord-title 
+                                a.ord-title(href='/customer/view/#{getCustomer._id}/1') #{getCustomer.first_name} #{getCustomer.last_name}
+                              td ********** 
+                              td 30 Jan 2015 8:05 AM
+                              td $103.00
+                              td
+                                | ONLINE 
+                                span.online-icon
+                                  img(src='/images/online-icon.png', alt='online')
+                              td
+                                a.edit-btn.view-btn(href='#')
+                                  span
+                                    img(src='/images/eye-icon.png', alt='icon')
+                                  |                               VIEW    
+                        else
+                          tr
+                            td(colspan=12)
+                              | No Customers  
+              #panel-4338.tab-pane
+                .low-tbl-box.order-txt
+                  form(action='', method='post', name='form2')
+                    table(width='100%', cellspacing='0', cellpadding='0', border='0')
+                      tbody
+                        tr
+                          th(align='center')
+                            input#checkbox2(type='checkbox', name='checkbox2')
+                          th Photo
+                          th Name
+                          th User SInce
+                          th SHOP TYPE
+                          th Address
+                          th City
+                          th  State
+                          th ZIP CODE
+                          th Country
+                          th E-MAil ADDRESS
+                          th
+                        if getUsers.length > 0
+                          each getUser in getUsers 
+                            tr
+                              td(align='center')
+                                input#checkbox4(type='checkbox', name='checkbox4')
+                              td
+                                img(src='/images/fake-icon.png', alt='img')
+                              td.ord-title 
+                                a.ord-title(href='/user/view/#{getUser._id}/1') #{getUser.first_name} #{getUser.last_name}
+                              td 30 Jan 2015 8:05 AM
+                              td Brand 
+                              td 1439 S. Rimhurst Ave.
+                              td Glednora
+                              td CA 
+                              td  91740 
+                              td USA
+                              td #{getUser.email_id}
+                              td
+                                a.edit-btn.view-btn(href='#')
+                                  span
+                                    img(src='/images/eye-icon.png', alt='icon')
+                                  |  VIEW
+                        else
+                          tr
+                            td(colspan=12)
+                              | No Customers  

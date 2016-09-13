@@ -1,0 +1,139 @@
+extends ../layout
+block content
+  .col-sm-9.midlle-bar
+    .large-title-row
+      img(src='/images/title-icon.png', alt='icon')
+      |  #{getCustomerDetails[0].first_name} #{getCustomerDetails[0].last_name}
+    .righsub-nav.clearfix
+      .left-sub
+        ul
+          li
+            a(href='#')
+              img(src='/images/sub-nav-arrow.png', alt='arrow')
+          li
+            a(href='/customer/list') Back
+          li
+            a(href='javascript:deleteCustomer("#{getCustomerDetails[0]._id}");') Delete USER 
+          li
+            a(href='/customer/changePassword/#{getCustomerDetails[0]._id}') Reset Password 
+    .customer-box.clearfix
+      .customer-cl
+         include ../partials/customer_left_menu
+      .profile-cl
+        if (messages.message && messages.message.length > 0)
+          .message.message
+            span= messages.message
+        .profile-top-row.product_brand
+          h2
+            | ADDRESSES 
+            a(href='#')
+              img(src='/images/delete-icon.png')
+        .profile-form-box.reviews
+          .omer_address
+            p.blng-title SHIP ADDRESSES
+            table(border='0', cellpadding='0', cellspacing='0')
+              tr
+                td(align='center')
+                  input(type='checkbox')
+                td
+                  p Home
+                  p 1439 S. Rimhurst Ave
+                  p Glendora, CA 91740
+                td(align='right')
+                  button EDIT
+          .omer_address
+            p.blng-title.top-bdr BILLING ADDRESSES
+            table(border='0', cellpadding='0', cellspacing='0')
+              tr
+                td(align='center')
+                  input(type='checkbox')
+                td
+                  p Home
+                  p 1439 S. Rimhurst Ave
+                  p Glendora, CA 91740
+                td(align='right')
+                  button EDIT
+          .address_btn
+            a#modal-104833.default-btn(href='#modal-container-104833', role='button', data-toggle='modal') ADD ADDRESS
+
+  #modal-container-104833.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+    .modal-dialog.popup-wdt-1
+      form(name='form2', method='post', action='/customer/address/save/#{getCustomerDetails[0]._id}/2')
+        .modal-content
+          .modal-header
+            button.close(type='button', data-dismiss='modal', aria-hidden='true')
+              img(src='/images/close-icon.png', alt='icon')
+            h4#myModalLabel.modal-title  Add a new Address 
+          .modal-body
+            .manage-cat-form
+              .color-row.radio-row
+                .cl-name
+                  | Shipping
+                .cl-inp
+                  input#radio2.css-checkbox(type='radio', name='addressType', value='Shipping')
+                  label.css-label(for='radio2')
+              .color-row.radio-row
+                .cl-name.or-txt or 
+              .color-row.radio-row
+                .cl-name Billing
+                .cl-inp
+                  input#radio2.css-checkbox(type='radio', name='addressType', value='Billing')
+                  label.css-label(for='radio3')
+              .color-row
+                .cl-name First Name 
+                .cl-inp
+                  .select-item
+                    input(name='first_name', type='text')
+              .color-row
+                .cl-name Last Name 
+                .cl-inp
+                  .select-item
+                    input(name='last_name', type='text')
+              .color-row
+                .cl-name Contact No 1 
+                .cl-inp
+                  .select-item
+                    input(name='contact_no1', type='text')
+              .color-row
+                .cl-name Contact No 2 
+                .cl-inp
+                  .select-item
+                    input(name='contact_no2', type='text')
+              .color-row
+                .cl-name Address Line 1 
+                .cl-inp
+                  .select-item
+                    input(name='address_line1', type='text')
+              .color-row
+                .cl-name Adress Line 2 
+                .cl-inp
+                  .select-item
+                    input(name='address_line2', type='text')
+              .color-row
+                .cl-name City 
+                .cl-inp
+                  .select-item
+                    input(name='city', type='text')
+              .color-row
+                .cl-name State 
+                .cl-inp
+                  .select-item
+                    input(name='state', type='text')
+              .color-row
+                .cl-name Country 
+                .cl-inp
+                  .select-item
+                    input(name='country', type='text', value='')
+              .color-row
+                .cl-name
+                  | Zip Code
+                .cl-inp
+                  .select-item
+                    input(name='postal_code', type='text')
+              .color-row.billing-txt
+                input#radio.css-checkbox(type='radio', name='radio', value='radio')
+                label.css-label(for='radio') Billing is same as shipping
+          .modal-footer
+            button(type='submit')  Save 
+          
+               
