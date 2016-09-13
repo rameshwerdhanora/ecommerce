@@ -21,6 +21,7 @@ const expressValidator = require('express-validator');
 const sass = require('node-sass-middleware');
 const multer = require('multer');
 const upload = multer({ dest: path.join(__dirname, 'uploads') });
+//var flash = require('connect-flash');
 
 
 const constants = require('./constants/constants');
@@ -83,6 +84,8 @@ const app = express();
  * Connect to MongoDB.
  */
 mongoose.connect(process.env.MONGODB_URI || process.env.MONGOLAB_URI);
+mongoose.Promise = global.Promise;
+
 mongoose.connection.on('error', () => {
   console.error('MongoDB Connection Error. Please make sure that MongoDB is running.');
   process.exit(1);
@@ -350,7 +353,10 @@ app.get('/order',  orderController.list);
 app.get('/order/detail',  orderController.detail);
 
 app.get('/emailtemplate/list',  emailController.list);
-app.get('/emailtemplate/edit',  emailController.edit);
+app.post('/emailtemplate/save',  emailController.saveTemplate);
+app.get('/emailtemplate/add',  emailController.addTemplate);
+app.get('/emailtemplate/edit/:templateId',  emailController.edit);
+app.post('/emailtemplate/update',  emailController.update);
 
  
 /* Signup users */

@@ -2,6 +2,15 @@ extends ../layout
 block content
   .col-sm-9.midlle-bar
       .large-title-row
+        .bg-success.text-success
+            | #{messages.success}
+        .bg-info.text-info
+            | #{messages.info}
+        .bg-warning.text-warning
+            | #{messages.warning}
+        .bg-danger.text-danger
+            | #{messages.danger}
+      .large-title-row
         img(src='/images/title-icon.png', alt='icon')
         |  User
         .edit-btn-cl.select-item
@@ -10,24 +19,23 @@ block content
               option ACTIONS
       .customer-box.clearfix
         include left_menu
-        form(action='/emailtemplate/update', method='post', name='form3')
+        form(action='/emailtemplate/save', method='post', name='form3')
             .profile-cl
                 .profile-top-row
-                  h2 Edit Template
+                  h2 Add Template
                   .edit-btn-cl
                     input(type='submit', name='save', value='Save',class='save-btn')
-                    input(type='hidden', name='template_id', value='#{result._id}')
                 .profile-form-box
                   .profile-right-cl
                     form(action='', method='post')
                       .profile-frm-row
-                        .profile-frm-cl1  Name 
+                        .profile-frm-cl1  Name
                         .profile-frm-cl2
-                          input(name='name', type='text',required='true', value='#{result.name}')
+                          input(name='name', type='text', value='',required='true')
                       .profile-frm-row
                         .profile-frm-cl1 Subject 
                         .profile-frm-cl2
-                          input(name='subject', type='text',required='true', value='#{result.subject}')
+                          input(name='subject', type='text', value='',required='true')
                       .profile-frm-row
                         .profile-frm-cl1 User
                         .profile-frm-cl2
@@ -37,6 +45,6 @@ block content
                       .profile-frm-row
                         .editer-box Editer
                         .profile-frm-cl2
-                            textarea(name='content') #{result.content}
+                            textarea(name='content')
 
 

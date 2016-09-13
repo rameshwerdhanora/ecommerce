@@ -65,7 +65,9 @@ exports.saveAttribute = (req,res) => {
    	attrIns.save(function(err,rm){
     	if (err)
     	{
-            res.send({status:'error',error:err});
+            req.flash('errors', ['There is some error occured']);
+            res.redirect('/attribute/list');
+            //res.send({status:'error',error:err});
     	}
     	else 
     	{   
@@ -79,7 +81,7 @@ exports.saveAttribute = (req,res) => {
                     attrbModel.save(function(err){});
                 }
             }
-            req.flash('info', 'Attribute saved successfully');
+            req.flash('success', ['Attribute saved successfully']);
             res.redirect('/attribute/list');
     	}
     });
@@ -91,7 +93,8 @@ exports.deleteAttribute = (req,res) => {
 	{
 		if(error)
 		{
-			res.send({status:'error',msg:error});
+                    //req.flash('errors', ['There is no such attribute found']);
+                    res.send({status:'error',msg:error});
 		}
 		else
 		{
@@ -106,7 +109,7 @@ exports.edit = (req,res) => {
 	{
 		if(error)
 		{
-			//res.send({status:'error',msg:error});
+			req.flash('errors', ['There is no such attribute found']);
                         res.redirect('/attribute/list');
 		}
 		else 
@@ -131,6 +134,7 @@ exports.updateAttribute = (req,res) => {
 	};
 	Attribute.findByIdAndUpdate(req.body._id,updateData, function(error, updateRes)
 	{
+            req.flash('success', ['Attribute updated successfully']);
             res.redirect('/attribute/list');
 	});
 };
@@ -170,7 +174,3 @@ exports.addAttributeOption = (req,res) => {
     });
     
 };
-
-
-
-
