@@ -20,7 +20,12 @@ const userAppSchema = new mongoose.Schema({
   isFomo : String,
   is_deleted : String,
   created : String,
-  updated : String 
+  updated : String,
+  facebook:String,
+  twitter:String,
+  instagram:String,
+  tumblr:String,
+  pinterest:String,
 });
 
 const UserApp = mongoose.model('UserApp', userAppSchema);

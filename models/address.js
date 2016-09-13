@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
-const addressSchema = new mongoose.Schema({
-	
+const customerAddressSchema = new mongoose.Schema({
 	user_id : String,
 	address_type : String,
 	contact_no1 : String,
@@ -14,6 +13,6 @@ const addressSchema = new mongoose.Schema({
 	country : String
 });
 
-const Address = mongoose.model('Address', addressSchema);
+const CustomerAddress = mongoose.model('CustomerAddress', customerAddressSchema);
 
-module.exports = Address;
+module.exports = CustomerAddress;

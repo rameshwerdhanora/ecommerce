@@ -2,7 +2,7 @@
 const Multer 	= require('multer');
 const Color		= require('../models/color');
 
-/* Define Folder name where our user porfile stored */
+/* Define Folder name where our color image store */
 var storage =   Multer.diskStorage({
   destination: function (req, file, callback) {
     callback(null, 'public/uploads/color_logo');
@@ -20,7 +20,7 @@ exports.listOfColor = (req, res) => {
 	Color.find({},function(error,getAllColors){
 		if(getAllColors)
 		{
-			res.render('color/list', { title: 'Color',getAllColors:getAllColors});
+			res.render('color/list', { title: 'Color',getAllColors:getAllColors,activeClass:3});
 		}
 	});	
  

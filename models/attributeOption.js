@@ -5,6 +5,8 @@ const attributeOptionSchema = new mongoose.Schema({
 	value : String
 });
 
-const Attribute_option = mongoose.model('Attribute_option', attributeOptionSchema);
 
-module.exports = Attribute_option;
+const AttributeOption = mongoose.model('AttributeOption', attributeOptionSchema);
+
+module.exports = AttributeOption;
+

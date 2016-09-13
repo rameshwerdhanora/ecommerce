@@ -1,0 +1,61 @@
+extends ../layout
+block content
+  .col-sm-9.midlle-bar
+    .large-title-row
+      img(src='/images/title-icon.png', alt='icon')
+      |  #{getUserDetails[0].first_name} #{getUserDetails[0].last_name}
+    .righsub-nav.clearfix
+      .left-sub
+        ul
+          li
+            a(href='#')
+              img(src='/images/sub-nav-arrow.png', alt='arrow')
+          li
+            a(href='/user/list') Back
+          li
+            a(href='javascript:deleteUser("#{getUserDetails[0]._id}");') Delete USER 
+          li
+            a(href='/user/changePassword/#{getUserDetails[0]._id}') Reset Password 
+    .customer-box.clearfix
+      .customer-cl
+        include ../partials/user_left_menu
+      .profile-cl
+        .profile-top-row
+          h2 SHOP PROFILE
+          .edit-btn-cl
+            a.edit-btn(href='/user/edit/#{getUserDetails[0]._id}/#{activeClass}') EDIT
+        .profile-form-box
+          .profile-right-cl
+            form(action='', method='post')
+              .profile-frm-row
+                .profile-frm-cl1
+                  | Brand Name
+                .profile-frm-cl2
+                  input(name='', type='text', value='#{getUserDetails[0].first_name} #{getUserDetails[0].last_name}')
+              .profile-frm-row
+                .profile-frm-cl1 Address
+                .profile-frm-cl2
+                  input(name='', type='text', value='')
+              .profile-frm-row
+                .profile-frm-cl1 City
+                .profile-frm-cl2
+                  input(name='', type='text', value='')
+              .profile-frm-row
+                .profile-frm-cl1 State
+                .profile-frm-cl2
+                  input(name='', type='text', value='')
+              .profile-frm-row
+                .profile-frm-cl1 Zip Code 
+                .profile-frm-cl2
+                  input(name='', type='text', value='')
+              .profile-frm-row
+                .profile-frm-cl1 Country
+                .profile-frm-cl2
+                  input(name='', type='text', value='')
+              .profile-frm-row
+                .profile-frm-cl1 Bio
+                .profile-frm-cl2
+                  textarea.large-in
+                    | #{getUserDetails[0].bio}
+          .etik-sms Etiqett will use this information to contact you.
+

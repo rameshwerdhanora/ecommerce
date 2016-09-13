@@ -2,61 +2,59 @@ extends ../layout
 
 block content
   .col-sm-9.midlle-bar
+    
     .large-title-row
-      | Add New Size
-
+        |Add New Size
     .top-btns.clearfix
      .btn-s-right
-         
-    
+        //a.default-btn(href='/size/add', title='Add Size') Add Size
+        
     .customer-box.clearfix
-      include ../partials/product_left_menu    
-      .profile-cl
-       .profile-top-row
-          h2 Add New Size
-        h3.sub-heading 
-          | SIZES  
-        .profile-form-box.users-in
-          .low-tbl-box
-        form(name='addsize', action='/size/save', method='POST')
-          //a(href='/listofsize') Cancel | 
-          
-          table#POITable(cellpadding='0', cellspacing='0', width='100%' class="sizeaddedit")
-            tr
-              td Size Name
-              td
-                input.size_name(type='text', name='size_name', value='', required='required')
-            tr    
-              td Select Gender
-              td
-                select.sizegender(name='gender')
-                 option(value='male') Male
-                 option(value='female') female
-            tr 
-              td Select Attribute
-              td 
-                select(multiple='multiple' name='listofattrmap' class='listofattrmap')
-                  each fetchAllAttributes in fetchAllAttribute
-                   option(value='#{fetchAllAttributes._id}') #{fetchAllAttributes.name}
-            tr  
-              td Published
-              td
-                select.sizepublished(name='is_published')
-                 option(value='true') Yes
-                 option(value='false') No
-            tr
-              td(colspan='2' style='text-align:center;')
-                input.savesize(type='submit', name='savesize', value='Save Size')
+        include ../partials/product_left_menu
+        .profile-cl
+            form(name='addsize', action='/size/save', method='POST')
+                .profile-top-row
+                    a(href='/size/list') Cancel | 
+                    input.savesize(type='submit', name='savesize', value='Save Size')
+                .profile-form-box
+                    .profile-frm-row
+                        .profile-frm-cl1
+                            | Size Name
+                        .profile-frm-cl2
+                            input.size_name(type='text', name='size_name', value='', required='required')
+                            
+                    .profile-frm-row
+                        .profile-frm-cl1
+                            |Select Gender
+                        .profile-frm-cl2
+                            select.sizegender(name='gender')
+                                option(value='male') Male
+                                option(value='female') female
+                                option(value='unisex') Unisex
+                    .profile-frm-row
+                        .profile-frm-cl1
+                            |Select Attribute
+                        .profile-frm-cl2
+                            select(multiple='multiple' name='listofattrmap' class='listofattrmap')
+                                each fetchAllAttributes in fetchAllAttribute
+                                    option(value='#{fetchAllAttributes._id}') #{fetchAllAttributes.name}
+                                    
 
-            //tr.tr_clone
-            //  td Sizes
-             // td
-              //  input.size_code(type='text', name='size_code[]', value='', required='required')
-              //td  
-               // input.size_label(type='text', name='size_label[]', value='', required='required')
-             // td  
-              //  input.add_more(type='button', name='add_more', value='add more' onclick="add_more_size()")
-              //td  
-               // input.delete_more(type='button', name='delete_more', value='Delete' onclick="deleteRow(this)")  
-            
-           
+                    .profile-frm-row
+                        .profile-frm-cl1
+                            |Published
+                        .profile-frm-cl2                        
+                            select.sizepublished(name='is_published')
+                             option(value='true') Yes
+                             option(value='false') No
+
+                    //tr.tr_clone
+                    //  td Sizes
+                     // td
+                      //  input.size_code(type='text', name='size_code[]', value='', required='required')
+                      //td  
+                       // input.size_label(type='text', name='size_label[]', value='', required='required')
+                     // td  
+                      //  input.add_more(type='button', name='add_more', value='add more' onclick="add_more_size()")
+                      //td  
+                       // input.delete_more(type='button', name='delete_more', value='Delete' onclick="deleteRow(this)")  

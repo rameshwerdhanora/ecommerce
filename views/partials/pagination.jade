@@ -1,10 +1,33 @@
-if totalPage > 1
-    ul.pagination
-        - for (var x = 1; x <= totalPage; x++)
-          if currentPage == x
-            li.active
-             span.active #{currentPage}
-          else
-            li
-             span
-              a(href='?page='+x) #{x}
+- if(totalPage > 0){
+    - currentPage = parseInt(currentPage)
+     ul.pagination
+        - var links = 3;
+        - var scls = (currentPage  == 1)?'disabled':'';
+        - var lcls = (totalPage == currentPage)?'disabled':'';
+
+        - var firstCls = (currentPage == 1)?'disabled':'';
+        li(class=firstCls)
+            span
+                a(href='?page=1') First
+        li(class=scls)
+            span
+                a(href='?page='+(currentPage-1)) &laquo;        
+
+        - for (var i=1; i<=totalPage; i++){
+            - var cpageCls = (currentPage == i)?'active':'';
+            - if( ((i >= (currentPage-links)) && (i <= currentPage)) || ((i <= (currentPage+links)) && (i > currentPage))){
+                li(class=cpageCls)
+                  span
+                    a(href='?page='+i ) #{i}
+            - } 
+        - }
+
+        li(class=lcls)
+            span
+                a(href='?page='+(currentPage+1)) &raquo;
+
+        - var firstCls = (currentPage == totalPage)?'disabled':'';
+        li(class=firstCls)
+            span
+                a(href='?page='+totalPage) Last
+- }

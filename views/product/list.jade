@@ -7,7 +7,8 @@ block content
       |  PRODUCTS
     .top-btns.clearfix
       .btn-s-right
-        a(href='/product/add', title='Add Size') ADD PRODUCT  
+        a.default-btn(href='#modal-container', title='Add Product', role='button', data-toggle='modal') ADD PRODUCT  
+        //a.default-btn(href='/product/add', title='Add Size', role='button', data-toggle='modal') ADD PRODUCT  
     .customer-box.clearfix
       include ../partials/product_left_menu
       .profile-cl
@@ -15,7 +16,7 @@ block content
           h2 MANAGE PRODUCTS
         .profile-form-box.users-in
           .low-tbl-box.large-table.order-txt
-            form(action='', method='post', name='form2')
+            
               table(width='100%', cellspacing='0', cellpadding='0', border='0')
                 tbody
                   tr
@@ -75,4 +76,225 @@ block content
                           a.edit_product(href='#' onclick='make_sure_for_product("#{fetchAllProduct._id}")') Remove             
                   else
                     tr
-                      td(colspan=13) No Products      
+                      td(colspan=13) No Products    
+    
+
+    // --- add product popup --
+    #modal-container.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+      .modal-dialog.popup-wdt-2
+        form(name='addproduct', action='/product/save', method='POST' enctype='multipart/form-data')
+          .modal-content.add_product
+            .modal-header
+              button.close(type='button', data-dismiss='modal', aria-hidden='true')  × 
+              .clearfix
+            .modal-body
+              .cam_upload
+                a(href='#')
+                  img(src='/images/upload_cam.png')
+              ul.up-list
+                li
+                  .fileUpload
+                    span.custom-span +
+                    p.custom-para UPLOAD PHOTO
+                    input#uploadBtn.upload(type='file')
+                li
+                  .fileUpload
+                    span.custom-span +
+                    p.custom-para UPLOAD PHOTO
+                    input#uploadBtn.upload(type='file')
+                li
+                  .fileUpload
+                    span.custom-span +
+                    p.custom-para UPLOAD PHOTO
+                    input#uploadBtn.upload(type='file')
+
+              .profile-right-cl.popup_product
+                form(method='post', action='')
+                  .profile-frm-row
+                    .profile-frm-cl1 PRODUCT NAME
+                    .profile-frm-cl2
+                      input.product_name(type='text', name='name', value='', required='required')
+                  .profile-frm-row
+                    .profile-frm-cl1  PROCUCT BLURB
+                    .profile-frm-cl2
+                      input(type='text', value='', name='')
+                  .profile-frm-row.product_select
+                    .profile-frm-cl1 BRAND
+                    .profile-frm-cl2
+                      select.product_brand(name='brand_id', required='required')
+                           option(value='0') Select Brand
+                           each allBrand in allBrands
+                            option(value='#{allBrand._id}') #{allBrand.brand_name}
+
+                  .profile-frm-row.product_select
+                    .profile-frm-cl1 SKU-ID
+                    .profile-frm-cl2
+                      input.sku(type='text', name='sku', value='', required='required')
+                  .profile-frm-row.product_select
+                    .profile-frm-cl1 GENDER
+                    .profile-frm-cl2
+                      select.sml-select
+                        option MALE
+                  .profile-frm-row.product_select
+                    .profile-frm-cl1 CATEGORY
+                    .profile-frm-cl2
+                      select.product_category(name='category_id' onchange='loadSelectedsubCategory(this.value)')
+                        option(value='0') Select Category
+                        each fetchCategory in fetchCategories
+                          option(value='#{fetchCategory._id}') #{fetchCategory.name}
+
+                  .profile-frm-row.product_select
+                    .profile-frm-cl1 SUBCATEGORY
+                    .profile-frm-cl2
+                      select.product_sub_category(name='sub_category_id', required='required')
+                        option(value='0') Select Sub Category
+                        each fetchSubCategory in fetchSubCategories
+                          option(value='#{fetchSubCategory._id}') #{fetchSubCategory.name}
+
+                  .profile-frm-row.product_select
+                    .profile-frm-cl1 PRICE
+                    .profile-frm-cl2
+                      input.product_desc(type='text', name='price', value='', required='required')
+                  .profile-frm-row.product_select
+                    .profile-frm-cl1 COLOR
+                    .profile-frm-cl2
+                      select.color(name='color[]', required='required',multiple='multiple')
+                        each fetchAllColor in fetchAllColors
+                          option(value='#{fetchAllColor._id}') #{fetchAllColor.color_name}
+                        
+                          //div(class='selectColor')
+                            input(type='checkbox' name='color[]' value='#{fetchAllColor._id}') 
+                            img(class='colorName' src='/#{fetchAllColor.color_logo}' height='30px' width='30px')
+                  .profile-frm-row.product_select
+                    .profile-frm-cl3
+                      a(href='#') APPLY DISCOUNT CODE
+
+                  .profile-frm-row.product_select
+                    .profile-frm-cl1
+                    .profile-frm-cl2
+                      select
+                        option CHOOSE COLOR
+
+                  .profile-frm-row
+                    .profile-frm-cl3
+                      a(href='#') ADD COLOR
+                      
+                  .profile-frm-row.product_size
+                    .sg-row
+                      span.sz-txt Size
+                      a(href='#') xs
+                      a(href='#') s
+                      a(href='#') m
+                      a(href='#') l
+                      a(href='#') xl
+                      a(href='#') xxl
+                  .clearfix
+            .modal-footer
+              input.saveproduct(type='submit', name='saveproduct', value='POST TO FEED')
+
+
+
+
+
+
+
+
+    #modal1-container.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+     .modal-dialog.popup-wdt-3
+         form(name='addproduct', action='/product/save', method='POST' enctype='multipart/form-data')
+            .modal-content
+                .modal-header
+                    button.close(type='button', data-dismiss='modal', aria-hidden='true')
+                        img(src='/images/close-icon.png', alt='icon')
+                    h4#myModalLabel.modal-title
+                        | ADD PRODUCT
+                .modal-body
+                  .spc-row.manage-cat-form
+                    .color-row
+                      .cl-name Product Name
+                      .cl-inp
+                        input.product_name(type='text', name='name', value='', required='required')
+
+                    .color-row
+                      .cl-name Product sku
+                      .cl-inp
+                        input.sku(type='text', name='sku', value='', required='required')
+
+                    .color-row
+                      .cl-name Product Description
+                      .cl-inp
+                        textarea.product_desc(rows='5', cols='50', name='description')
+
+                    .color-row
+                      .cl-name Product Category
+                      .cl-inp
+                        select.product_category(name='category_id' onchange='loadSelectedsubCategory(this.value)')
+                             option(value='0') Select Category
+                             each fetchCategory in fetchCategories
+                              option(value='#{fetchCategory._id}') #{fetchCategory.name}
+                    .color-row
+                      .cl-name Product Sub Category
+                      .cl-inp
+                        select.product_sub_category(name='sub_category_id', required='required')
+                             option(value='0') Select Sub Category
+                             each fetchSubCategory in fetchSubCategories
+                              option(value='#{fetchSubCategory._id}') #{fetchSubCategory.name}
+
+                    .color-row
+                      .cl-name Product Brand
+                      .cl-inp
+                        select.product_brand(name='brand_id', required='required')
+                           option(value='0') Select Brand
+                           each allBrand in allBrands
+                            option(value='#{allBrand._id}') #{allBrand.brand_name}
+
+                    .color-row
+                      .cl-name Is Featured
+                      .cl-inp
+                        select.is_featured(name='is_featured', required='required')
+                           option(value='1') yes
+                           option(value='0') no
+
+                    .color-row
+                      .cl-name Product Price
+                      .cl-inp
+                        input.product_desc(type='text', name='price', value='', required='required')
+
+                    .color-row
+                      .cl-name Product Image
+                      .cl-inp
+                        input.product_image(type='file', name='product_image', value='', required='required')
+
+                    .color-row
+                      .cl-name Product Color
+                      .cl-inp
+                        each fetchAllColor in fetchAllColors
+                            div(class='selectColor')
+                             input(type='checkbox' name='color[]' value='#{fetchAllColor._id}') 
+                             img(class='colorName' src='/#{fetchAllColor.color_logo}' height='30px' width='30px') 
+
+                    .color-row.AttributesTr
+                      .cl-name Add Size
+                      .cl-inp
+                        input.add_more(type='button', name='add_more', value='add more' onclick="add_more_size()")
+                         
+
+                    .color-row.clonedRow#rowToClone
+                      .cl-name &nbsp;
+                      .cl-inp
+                        select.attributes(name='attributes[]' onchange='loadAttrValues(this.value,this.id)')
+                          option(value='0') Select Attribute
+                            each fetchAllAttribute in fetchAllAttributes
+                              option(value='#{fetchAllAttribute._id}') #{fetchAllAttribute.name}
+
+                            div#attrValuesDisplay    
+                              .remove
+                                a(href='#' class='removeAttrRow' onclick="remove_row(this.id)") Remove
+                    
+
+                .modal-footer
+                  a(href='/product/list') Cancel 
+                  input.saveproduct(type='submit', name='saveproduct', value='Save Product')
+
+                    
+                    

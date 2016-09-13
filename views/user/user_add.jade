@@ -1,0 +1,78 @@
+extends ../layout
+block content
+  .col-sm-9.midlle-bar
+    .large-title-row
+      img(src='/images/title-icon.png', alt='icon')
+      |  USERS
+    .customer-box.clearfix
+      form(method='post', action='/user/save')
+        .customer-cl
+          h2 USERS
+          ul
+            li
+              a(href='/user/list') Manage Users
+            li.active
+              a(href='/user/add') Add User
+        .profile-cl
+          .profile-top-row
+            h2 ADD USERS
+          .profile-form-box
+            .add-user-cl1.col-sm-6
+              h4 NEW USER
+               if (messages.error && messages.error.length > 0)
+                .message.error
+                  span= messages.error
+              .profile-frm-row
+                .profile-frm-cl1 Shop Name 
+                .profile-frm-cl2
+                  input(type='text', value='', name='#{data ? data.shop_name :""}', required)
+              .profile-frm-row
+                .profile-frm-cl1  First Name
+                .profile-frm-cl2
+                  input(type='text', value='#{data ? data.first_name :""}', name='first_name', required)
+              .profile-frm-row
+                .profile-frm-cl1 Last Name
+                .profile-frm-cl2
+                  input(type='text', value='#{data ? data.last_name :""}', name='last_name', required)
+              .profile-frm-row
+                .profile-frm-cl1 E-mail Address 
+                .profile-frm-cl2
+                  input(type='text', value='#{data ? data.email_id :""}', name='email_id', required)
+              .profile-frm-row
+                .profile-frm-cl1 Password
+                .profile-frm-cl2
+                  input(type='text', value='#{data ? data.password :""}', name='password', required)
+              .profile-frm-row
+                .profile-frm-cl1 Confirm Password 
+                .profile-frm-cl2
+                  input(type='text', value='#{data ? data.password :""}', name='', required)
+              .profile-frm-row.botique-spc
+                .profile-frm-cl1 Boutique 
+                .profile-frm-cl2
+                  input#radio.css-checkbox(type='radio', name='role_id', value='4')
+                  label.css-label(for='radio')
+              .profile-frm-row
+                .profile-frm-cl1 or 
+              .profile-frm-row
+                .profile-frm-cl1  Brand 
+                .profile-frm-cl2
+                  input#radio2.css-checkbox(type='radio', name='role_id', value='3')
+                  label.css-label(for='radio2')
+            .add-user-cl1.col-sm-6
+              h4 PERMISSIONS
+              .perms-box
+                ul.perms-list
+                  if getPermissions
+                    each getPermission in getPermissions
+                      if getPermission.parent_id == 0
+                        li
+                          input#checkbox(type='checkbox', name='permissions[]', value='#{getPermission._id}')
+                          |                     #{getPermission.name}
+                      else
+                        li
+                          ul.perms-sub-list
+                            li
+                              input#checkbox3(type='checkbox', name='permissions[]', value='#{getPermission._id}')
+                              |                         #{getPermission.name}        
+          .btn-btm
+            button(type='submit') ADD USER

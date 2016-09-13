@@ -3,83 +3,9 @@ const Permission = require('../models/permissions');
 const UserPermission = require('../models/userPermissions');
 const Notification = require('../models/notification');
 
-/**
- * GET /signup/vendor
- * Signup user page.
- */
-exports.signupUser = (req, res) => {
-	Permission.find({},function(error,getPermissions){
-		if(getPermissions)
-		{
-			//console.log(getPermissions);
-			res.render('user/create', { title: 'Signup',getPermissions:getPermissions});
-		}
-	});
-};
+const Address   = require('../models/address');
 
-/**
- * POST /signup/saveuser
- * Save users .
- */
-exports.saveUser = (req, res) => {
-	User.findOne({ email_id: req.body.email_id }, function(err, existingEmail){
-		if(existingEmail) 
-		{
-			//console.log(req.body);
-			req.flash('error', 'Email address already exists.');
-			//req.flash('data',req.body);
-      		return res.render('user/create',{data: req.body});
-		} 
-		else 
-		{
-			//console.log(req.body);
-			var userIns        		= new User();
-			userIns.role_id    		= req.body.role_id;
-			userIns.shop_name   	= req.body.shop_name;
-			userIns.user_name   	= '';
-			userIns.password    	= req.body.password;
-		    userIns.email_id       	= req.body.email_id;
-			userIns.first_name  	= req.body.first_name;
-		    userIns.last_name   	= req.body.last_name;
-		    userIns.contact_no  	= '';
-		    userIns.dob   			= '';
-		    userIns.gender   		= '';
-		    userIns.bio   			= '';
-		    userIns.cover_image		= '';
-		    userIns.profile_image   = '';
-		    userIns.social_type   	= '';
-		    userIns.social_id   	= '';
-		    userIns.access_token   	= '';
-		    userIns.is_active   	= true;
-		    userIns.is_deleted   	= false;
-		    userIns.created        	= Date.now();
-		    userIns.updated        	= '';
 
-		    userIns.save(function(error){
-				if(error === null)
-				{	
-					//-- save user permissions
-					for(var i=0; i<req.body.permissions.length; i++){
-						var userPermission = new UserPermission();
-						userPermission.user_id = userIns._id;
-						userPermission.permission_id = req.body.permissions[i];
-						userPermission.created = Date.now();
-						userPermission.save();
-					}
-					
-					// SendMailToUser(req.body);
-					req.flash('error', 'Your details is successfully stored.');
-      				return res.redirect('/signup/user');
-				}
-				else 
-				{
-					req.flash('error', 'Something wrong!!');
-      				return res.render('user/create');
-				}
-		    }); 
-		}
-	});
-};
 
 /**
  * GET /customer/list
@@ -181,6 +107,275 @@ exports.customerChangePassword = (req, res) => {
  */
 exports.customerChangePasswordSave = (req, res) => {
 	updateData = {
+		'password' 		: req.body.password,
+	};
+	User.findByIdAndUpdate(req.body._id,updateData, function(error, updateRes)
+	{
+		res.redirect('/customer/view/'+req.body._id);
+	});
+};
+
+
+/**
+ * GET /customer/address/list
+ * List of Customer Address page.
+ */
+exports.customerAddressList = (req, res) => {
+	User.find({_id:req.params.customerId},function(error,getCustomerDetails){
+		if(getCustomerDetails)
+		{
+			Address.find({ user_id: req.params.customerId}, function(error, availableUserRecord)
+	        {
+	            //console.log(getCustomerDetails);
+				res.render('user/customer_address', { title: 'Customer Address',getCustomerDetails:getCustomerDetails,activeClass:req.params.activeClass,availableUserAddresses:availableUserRecord});
+	        });
+		}
+	});	
+};
+
+
+
+/**
+ * Post /customer/address/save
+ * Save Customer information
+ */
+exports.customerAddressSave = (req, res) => {
+	console.log(req.body);
+	var addressIns              = new Address();
+    addressIns.user_id          = req.params.customerId;
+    addressIns.address_type     = req.body.addressType;
+    addressIns.first_name     	= req.body.first_name;
+    addressIns.last_name     	= req.body.last_name;
+    addressIns.contact_no1      = req.body.contact_no1;
+    addressIns.contact_no2      = req.body.contact_no2;
+    addressIns.address_line1    = req.body.address_line1;
+    addressIns.address_line2    = req.body.address_line2;
+    addressIns.city             = req.body.city;
+    addressIns.state            = req.body.state;
+    addressIns.country          = req.body.country;
+    addressIns.postal_code      = req.body.postal_code;
+
+    addressIns.save(function(error,addressObject)
+    {
+        if (error)
+        {
+            req.flash('error',error);
+        }
+        else
+        {
+            req.flash('success','Added Successfully.');
+			res.redirect('/customer/address/'+req.params.customerId+'/'+req.params.activeClass);
+        }
+    });
+};
+
+
+/**
+ * GET /user/list
+ * User List - here we need to get both users and customers in seprate columns
+ */
+exports.userList = (req, res) => {
+	//-- get customers
+	User.find({role_id:5},function(error,getCustomers){
+		User.find({role_id:{$ne : 5}},function(error,getUsers){
+
+		// if(getCustomers)
+		// {
+			//console.log(getUsers);
+			res.render('user/user_list', { title: 'User List',getCustomers:getCustomers,getUsers:getUsers});
+		//}
+		});
+	});	
+};
+
+
+/**
+ * GET /signup/vendor
+ * Signup user page.
+ */
+exports.userAdd = (req, res) => {
+	Permission.find({},function(error,getPermissions){
+		if(getPermissions)
+		{
+			//console.log(getPermissions);
+			res.render('user/user_add', { title: 'New User',getPermissions:getPermissions});
+		}
+	});
+};
+
+/**
+ * POST /signup/saveuser
+ * Save users .
+ */
+exports.userSave = (req, res) => {
+	User.findOne({ email_id: req.body.email_id }, function(err, existingEmail){
+		if(existingEmail) 
+		{
+			//console.log(req.body);
+			req.flash('error', 'Email address already exists.');
+			//req.flash('data',req.body);
+      		return res.render('user/user_add',{data: req.body});
+		} 
+		else 
+		{
+			//console.log(req.body);
+			var userIns        		= new User();
+			userIns.role_id    		= req.body.role_id;
+			userIns.shop_name   	= req.body.shop_name;
+			userIns.user_name   	= '';
+			userIns.password    	= req.body.password;
+		    userIns.email_id       	= req.body.email_id;
+			userIns.first_name  	= req.body.first_name;
+		    userIns.last_name   	= req.body.last_name;
+		    userIns.contact_no  	= '';
+		    userIns.dob   			= '';
+		    userIns.gender   		= '';
+		    userIns.bio   			= '';
+		    userIns.cover_image		= '';
+		    userIns.profile_image   = '';
+		    userIns.social_type   	= '';
+		    userIns.social_id   	= '';
+		    userIns.access_token   	= '';
+		    userIns.is_active   	= true;
+		    userIns.is_deleted   	= false;
+		    userIns.created        	= Date.now();
+		    userIns.updated        	= '';
+
+		    userIns.save(function(error){
+				if(error === null)
+				{	
+					//-- save user permissions
+					for(var i=0; i<req.body.permissions.length; i++){
+						var userPermission = new UserPermission();
+						userPermission.user_id = userIns._id;
+						userPermission.permission_id = req.body.permissions[i];
+						userPermission.created = Date.now();
+						userPermission.save();
+					}
+					
+					// SendMailToUser(req.body);
+					req.flash('error', 'Your details is successfully stored.');
+      				return res.redirect('/user/list');
+				}
+				else 
+				{
+					req.flash('error', 'Something wrong!!');
+      				return res.render('user/user_add');
+				}
+		    }); 
+		}
+	});
+};
+
+/**
+<<<<<<< HEAD
+ * GET /customer/list
+ * Customer List user page.
+ */
+exports.customerList = (req, res) => {
+	User.find({role_id:5},function(error,getCustomers){
+		if(getCustomers)
+		{
+			//console.log(getCustomers.length);
+			res.render('user/customer_list', { title: 'Customer',getCustomers:getCustomers});
+		}
+	});	
+};
+
+/**
+ * GET /customer/view
+ * Customer user view page.
+ */
+exports.customerView = (req, res) => {
+	User.find({_id:req.params.id},function(error,getCustomerDetails){
+		if(getCustomerDetails)
+		{
+			//console.log(getCustomerDetails);
+			res.render('user/customer_view', { title: 'Customer View',getCustomerDetails:getCustomerDetails,activeClass:req.params.activeClass});
+		}
+	});
+}
+/*
+ * GET /user/view
+ * user view page.
+*/
+exports.userView = (req, res) => {
+	User.find({_id:req.params.id},function(error,getUserDetails){
+		if(getUserDetails)
+		{
+			//console.log(getUserDetails);
+			res.render('user/user_view', { title: 'User View',getUserDetails:getUserDetails,activeClass:req.params.activeClass});
+
+		}
+	});	
+};
+
+
+/**
+ * GET /user/edit
+ * user view page in edit mode.
+ */
+exports.userEdit = (req, res) => {
+	User.find({_id:req.params.id},function(error,getUserDetails){
+		if(getUserDetails)
+		{
+			res.render('user/customer_edit', { title: 'Customer Edit',getCustomerDetails:getCustomerDetails,activeClass:req.params.activeClass});
+
+			//res.render('user/user_edit', { title: 'User Edit',getUserDetails:getUserDetails,activeClass:req.params.activeClass});
+
+		}
+	});	
+};
+
+/**
+ * POST /user/userUpdate
+ * Update user Information
+*/
+exports.userUpdate = (req, res) => {
+	updateData = {
+		'first_name' 	: req.body.first_name,
+		'last_name'		: req.body.last_name,
+	    'address'		: req.body.address, 
+	    'city'			: req.body.city,
+	    'state'			: req.body.state,
+	    'zip_code'		: req.body.zip_code,
+	    'country'		: req.body.country,
+	};
+	User.findByIdAndUpdate(req.body._id,updateData, function(error, updateRes)
+	{
+		res.redirect('/user/list');
+	});
+};
+
+/**
+ * GET /user/delete
+ * Delete user Information
+*/
+exports.userDelete = (req,res) => {
+	User.remove({_id:req.params.userId},function(error,userDelete)
+	{
+		if(error)
+		{
+			res.send({status:'error',msg:error});
+		}
+		else
+		{
+			res.flash('success','Remove Successfully.');
+
+			res.redirect('/customer/list');
+
+			//res.redirect('/user/list');
+
+		}
+	});	
+};
+
+/**
+ * POST /customer/customerChangePasswordSave
+ * Update Customer Change Password Save
+ */
+exports.customerChangePasswordSave = (req, res) => {
+	updateData = {
             'password' 	: req.body.password,
 	};
 	User.findByIdAndUpdate(req.body._id,updateData, function(error, updateRes)
@@ -190,6 +385,35 @@ exports.customerChangePasswordSave = (req, res) => {
 };
 
 /**
+<<<<<<< HEAD
+ * GET /customer/customerChangePassword
+ * Customer Change Password
+ */
+exports.customerChangePassword = (req, res) => {
+	User.find({_id:req.params.customerId},function(error,getCustomerDetails){
+		if(getCustomerDetails)
+		{
+			res.render('user/customer_change_password', { title: 'Change Password',getCustomerDetails:getCustomerDetails});
+		}
+	});	
+};
+
+/**
+ * POST /customer/customerChangePasswordSave
+ * Update Customer Change Password Save
+ */
+exports.customerChangePasswordSave = (req, res) => {
+	updateData = {
+            'password' 	: req.body.password,
+	};
+	User.findByIdAndUpdate(req.body._id,updateData, function(error, updateRes)
+	{
+		res.redirect('/customer/view/'+req.body._id);
+	});
+};
+
+/**
+
  * GET /customer/notifiaction
  * List of Customer Address page.
  */
