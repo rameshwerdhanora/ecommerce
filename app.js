@@ -326,7 +326,7 @@ app.post('/attribute/addAttribOption', passportConfig.isAuthenticated,  attribut
 
 
 /* Order */
-app.get('/order',  orderController.list);
+app.get('/order/list',  orderController.list);
 app.get('/order/detail',  orderController.detail);
 
 app.get('/emailtemplate/list',  emailController.list);

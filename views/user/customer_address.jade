@@ -5,17 +5,7 @@ block content
       img(src='/images/title-icon.png', alt='icon')
       |  #{getCustomerDetails.first_name} #{getCustomerDetails.last_name}
     .righsub-nav.clearfix
-      .left-sub
-        ul
-          li
-            a(href='#')
-              img(src='/images/sub-nav-arrow.png', alt='arrow')
-          li
-            a(href='/customer/list') Back
-          li
-            a(href='javascript:deleteCustomer("#{getCustomerDetails._id}");') Delete USER 
-          li
-            a(href='/customer/changePassword/#{getCustomerDetails._id}') Reset Password 
+      include customer_top_bar
     .customer-box.clearfix
       .customer-cl
          include ../partials/customer_left_menu
@@ -58,7 +48,7 @@ block content
 
   #modal-container-104833.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
     .modal-dialog.popup-wdt-1
-      form(name='form2', method='post', action='/customer/address/save/#{getCustomerDetails._id}/2')
+      form(name='form2', method='post', action='/customer/address/save/#{getCustomerDetails._id}')
         .modal-content
           .modal-header
             button.close(type='button', data-dismiss='modal', aria-hidden='true')

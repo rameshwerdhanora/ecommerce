@@ -124,10 +124,10 @@ exports.customerAddressList = (req, res) => {
 	User.findOne({_id:req.params.customerId},function(error,getCustomerDetails){
 		if(getCustomerDetails)
 		{
-			Address.find({ user_id: req.params.customerId}, function(error, availableUserRecord)
+			Address.find({ user_id: req.params.customerId}, function(error, availableUserAddresses)
 	        {
-	            //console.log(getCustomerDetails);
-				res.render('user/customer_address', { title: 'Customer Address',getCustomerDetails:getCustomerDetails,activeClass:2,availableUserAddresses:availableUserRecord});
+	            console.log(availableUserAddresses);
+				res.render('user/customer_address', { title: 'Customer Address',getCustomerDetails:getCustomerDetails,activeClass:2,availableUserAddresses:availableUserAddresses});
 	        });
 		}
 	});	
@@ -140,7 +140,7 @@ exports.customerAddressList = (req, res) => {
  * Save Customer information
  */
 exports.customerAddressSave = (req, res) => {
-	console.log(req.body);
+	//console.log(req.body);
 	var addressIns              = new Address();
     addressIns.user_id          = req.params.customerId;
     addressIns.address_type     = req.body.addressType;
@@ -164,7 +164,7 @@ exports.customerAddressSave = (req, res) => {
         else
         {
             req.flash('success','Added Successfully.');
-			res.redirect('/customer/address/'+req.params.customerId+'/'+req.params.activeClass);
+			res.redirect('/customer/address/'+req.params.customerId+'/2');
         }
     });
 };

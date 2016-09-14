@@ -2,68 +2,128 @@ extends ../layout
 block content
   .col-sm-9.midlle-bar
     .large-title-row
-        img(src='/images/title-icon.png', alt='icon')
-        |  ASHLEY MOLINA
-      .righsub-nav.clearfix
-        include customer_top_bar        
-        //.right-sub
-          a.save-btn(href='#') SAVE
-      .customer-box.clearfix
-        .customer-cl
-            include ../partials/customer_left_menu
-        .profile-cl
-            .profile-top-row
-              h2 PAYMENTS
-            .profile-form-box
-              form(method='post', action='')
-                ul.brand_payment_brand_view
-                  li Choose your form of payout.
-                  li
-                    .vimo-txt
-                      span.vm-inp
-                        input#radio.css-checkbox(type='radio', name='radio', value='radio')
-                        label.css-label(for='radio')
-                      span.mv-img
-                        img(src='/images/paytm.jpg')
-                    .profile-right-cl4
-                      .profile-frm-row
-                        .profile-frm-cl1 EMAIL
-                        .profile-frm-cl2
-                          input(type='text', value='', name='')
-                  li
-                    .vimo-txt
-                      span.vm-inp
-                        span.vm-inp
-                          input#radio2.css-checkbox(type='radio', name='radio', value='radio')
-                          label.css-label(for='radio2')
-                      span.mv-img
-                        img(src='/images/venmo.jpg')
-                    .profile-right-cl4
-                      .profile-frm-row
-                        .profile-frm-cl1 EMAIL
-                        .profile-frm-cl2
-                          input(type='text', value='', name='')
-                  li
-                    .payment
-                      .profile-right-cl4
-                        .profile-frm-row.first-txt
-                          .profile-frm-cl1
-                            span.vm-inp
-                              input#radio3.css-checkbox(type='radio', name='radio', value='radio')
-                              label.css-label(for='radio3')
-                          .profile-frm-cl2
-                            | Direct Deposit
-                        .profile-frm-row
-                          .profile-frm-cl1 Bank Name
-                          .profile-frm-cl2
-                            input(type='text', value='', name='')
-                        .profile-frm-row
-                          .profile-frm-cl1 Account Number
-                          .profile-frm-cl2
-                            input(type='text', value='', name='')
-                        .profile-frm-row
-                          .profile-frm-cl1 Routing Number
-                          .profile-frm-cl2
-                            input(type='text', value='', name='')
-                    .save
-                      button SAVE
+      img(src='/images/title-icon.png', alt='icon')
+      |  #{getCustomerDetails.first_name} #{getCustomerDetails.last_name}
+    .righsub-nav.clearfix
+      include customer_top_bar
+    .customer-box.clearfix
+      .customer-cl
+         include ../partials/customer_left_menu
+      .profile-cl
+        if (messages.message && messages.message.length > 0)
+          .message.message
+            span= messages.message
+        .profile-top-row.product_brand
+          h2
+            | PAYMENT METHODS 
+            a(href='#')
+              img(src='/images/delete-icon.png')
+        .profile-form-box.reviews
+          .omer_address
+            p.blng-title CREDIT CARDS
+            table(border='0', cellpadding='0', cellspacing='0')
+              tr
+                td(align='center')
+                  input(type='checkbox')
+                td
+                  p Home
+                  p 1439 S. Rimhurst Ave
+                  p Glendora, CA 91740
+                td(align='right')
+                  button EDIT
+          .omer_address
+            p.blng-title.top-bdr PAYPAL
+            table(border='0', cellpadding='0', cellspacing='0')
+              tr
+                td(align='center')
+                  input(type='checkbox')
+                td
+                  p Home
+                  p 1439 S. Rimhurst Ave
+                  p Glendora, CA 91740
+                td(align='right')
+                  button EDIT
+          //.address_btn
+            a#modal-104833.default-btn(href='#modal-container-104833', role='button', data-toggle='modal') ADD ADDRESS
+
+  #modal-container-104833.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+    .modal-dialog.popup-wdt-1
+      form(name='form2', method='post', action='/customer/address/save/#{getCustomerDetails._id}/2')
+        .modal-content
+          .modal-header
+            button.close(type='button', data-dismiss='modal', aria-hidden='true')
+              img(src='/images/close-icon.png', alt='icon')
+            h4#myModalLabel.modal-title  Add a new Address 
+          .modal-body
+            .manage-cat-form
+              .color-row.radio-row
+                .cl-name
+                  | Shipping
+                .cl-inp
+                  input#radio2.css-checkbox(type='radio', name='addressType', value='Shipping')
+                  label.css-label(for='radio2')
+              .color-row.radio-row
+                .cl-name.or-txt or 
+              .color-row.radio-row
+                .cl-name Billing
+                .cl-inp
+                  input#radio2.css-checkbox(type='radio', name='addressType', value='Billing')
+                  label.css-label(for='radio3')
+              .color-row
+                .cl-name First Name 
+                .cl-inp
+                  .select-item
+                    input(name='first_name', type='text')
+              .color-row
+                .cl-name Last Name 
+                .cl-inp
+                  .select-item
+                    input(name='last_name', type='text')
+              .color-row
+                .cl-name Contact No 1 
+                .cl-inp
+                  .select-item
+                    input(name='contact_no1', type='text')
+              .color-row
+                .cl-name Contact No 2 
+                .cl-inp
+                  .select-item
+                    input(name='contact_no2', type='text')
+              .color-row
+                .cl-name Address Line 1 
+                .cl-inp
+                  .select-item
+                    input(name='address_line1', type='text')
+              .color-row
+                .cl-name Adress Line 2 
+                .cl-inp
+                  .select-item
+                    input(name='address_line2', type='text')
+              .color-row
+                .cl-name City 
+                .cl-inp
+                  .select-item
+                    input(name='city', type='text')
+              .color-row
+                .cl-name State 
+                .cl-inp
+                  .select-item
+                    input(name='state', type='text')
+              .color-row
+                .cl-name Country 
+                .cl-inp
+                  .select-item
+                    input(name='country', type='text', value='')
+              .color-row
+                .cl-name
+                  | Zip Code
+                .cl-inp
+                  .select-item
+                    input(name='postal_code', type='text')
+              .color-row.billing-txt
+                input#radio.css-checkbox(type='radio', name='radio', value='radio')
+                label.css-label(for='radio') Billing is same as shipping
+          .modal-footer
+            button(type='submit')  Save 
+          
+               
