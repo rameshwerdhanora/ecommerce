@@ -51,7 +51,7 @@ exports.listOfSizeAttribute = (req, res) => {
 			{
 				async.eachSeries(fetchAttributeRes, function(AttrId, callback)
 	    		{
-	    			console.log(AttrId._id);
+	    			 
 	    			var attr 				= {};
 	        		attr['aid']				= AttrId._id;
 	        		attr['name']			= AttrId.name;
@@ -181,7 +181,103 @@ function fetchingAllAttrValue(attributeSizes, callback)
 	});
 }
  
- 
+
+/**
+* GET /api/size/fetchselectedsize/:sizeId/:userId
+* Process to Save user configuration from Application.
+*/
+
+ exports.fetchSelectedSize = (req, res) => {
+
+ 	UserDetails.findOne({user_id:req.params.userId},function(error,fetchUserConfigDetails)
+	{
+		 
+		if(fetchUserConfigDetails.configDetail)
+	 	{	
+	 		var userSize = fetchUserConfigDetails.configDetail[0].Size;
+	 		/*var saveAttr 		= new Array();
+	 		for (var w = 0; w < userSize.length; w++) 
+			{	
+				if(userSize[w].attributeSizes)
+				{
+					saveAttr.push(userSize[w].attributeSizes);
+				}
+				
+			}
+			saveAttrJoin = saveAttr.join(',');
+			console.log(saveAttrJoin);*/
+
+	 		Size.findOne({_id:req.params.sizeId},function(error,fetchAttributeRes)
+			{
+				var mainArr = new  Array();
+				var listofattrmap = fetchAttributeRes.listofattrmap.split(','); 
+				Attribute.find({_id : { $in: listofattrmap}},function(error,fetchAttributeRes)
+				{
+					async.eachSeries(fetchAttributeRes, function(AttrId, callback)
+		    		{
+
+		    			var attr 				= {};
+		        		attr['aid']				= AttrId._id;
+		        		attr['name']			= AttrId.name;
+		        		attr['display_type']	= AttrId.display_type;
+
+		        		async.parallel
+		        		(
+				          	[
+				            	function(callback)
+				             	{
+				                	fetchingAllSelectedAttrValue(AttrId._id, function(err, res){
+				                		attr['values'] = res;
+				                  		callback(err);  
+				                	});
+				              	}
+				          	], 
+				          	function(err)
+				          	{
+				            	mainArr.push(attr);
+				            	callback(err); 
+				          	}
+				        )
+		        	}, 
+			      	function(err)
+			      	{
+						//console.log(mainArr); //This should give you desired result
+			        	return res.json({"status":'success',"msg":'Fetch all attributes.',sizeAttribute:mainArr,selectedsize:userSize});
+			      	}); 	
+				});
+			});
+	 	};	
+
+	});
+
+	
+
+};
+
+function fetchingAllSelectedAttrValue(attId, callback)
+{
+	AttributeOption.find({attribute_id:attId},function(error,fetchAllAttributeOptions)
+	{	
+		/*var checkincollection = saveAttrJoin.split(',');
+		console.log(checkincollection);
+
+		 
+
+		for (var i = 0; i < fetchAllAttributeOptions.length; i++) 
+		{
+			console.log(checkincollection.indexOf(fetchAllAttributeOptions[i]._id));
+			if(checkincollection.indexOf(fetchAllAttributeOptions[i]._id.toString()) != -1)
+			{
+				console.log('If');
+			}
+			else 
+			{
+				console.log('Else');
+			}
+		}*/
+		callback(error,fetchAllAttributeOptions);
+	});
+}
 
 
 

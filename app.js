@@ -227,17 +227,14 @@ app.post('/api/deleteFromCart',  cartAppController.deleteFromCart);
 app.post('/api/emptyCart',  cartAppController.emptyCart);
 app.post('/api/updateIntoCart',  cartAppController.updateIntoCart);
 
-
-
-
-
-
 app.get('/api/listofbrand',  brandAppController.listOfAllBrand);
 app.get('/api/listofsize',  sizeAppController.listOfAllSize);
 app.get('/api/size/:sizeId',  sizeAppController.listOfSizeAttribute);
 app.get('/api/listofcolor',  colorAppController.listOfAllColor);
 
 app.get('/api/size/fetchcofiguration/:userId',  sizeAppController.fetchCofiguration);
+app.get('/api/size/fetchselectedsize/:sizeId/:userId',  sizeAppController.fetchSelectedSize);
+
 
 app.post('/api/saveusercofiguration',  userAppController.saveUserCofiguration);
 
