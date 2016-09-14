@@ -26,6 +26,7 @@ exports.customerList = (req, res) => {
  * Customer user view page.
  */
 exports.customerView = (req, res) => {
+<<<<<<< Updated upstream
 	User.findOne({_id:req.params.id},function(error,getCustomerDetails){
 		if(getCustomerDetails)
 		{
@@ -33,6 +34,15 @@ exports.customerView = (req, res) => {
 			res.render('user/customer_view', { title: 'Customer View',getCustomerDetails:getCustomerDetails,activeClass:req.params.activeClass});
 		}
 	});	
+=======
+    User.find({_id:req.params.id},function(error,getCustomerDetails){
+            if(getCustomerDetails)
+            {
+                    //console.log(getCustomerDetails);
+                    res.render('user/customer_view', { title: 'Customer View',getCustomerDetails:getCustomerDetails,activeClass:req.params.activeClass});
+            }
+    });	
+>>>>>>> Stashed changes
 };
 
 
