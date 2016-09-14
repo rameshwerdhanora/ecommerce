@@ -3,22 +3,11 @@ block content
   .col-sm-9.midlle-bar
     .large-title-row
       img(src='/images/title-icon.png', alt='icon')
-      |  #{getCustomerDetails[0].first_name} #{getCustomerDetails[0].last_name}
+      |  #{getCustomerDetails.first_name} #{getCustomerDetails.last_name}
     form(action='/customer/update', method='post')  
       .righsub-nav.clearfix
-        .left-sub
-          ul
-            li
-              a(href='#')
-                img(src='/images/sub-nav-arrow.png', alt='arrow')
-            li
-              a(href='/customer/view/#{getCustomerDetails[0]._id}') Back
-            li
-              a(href='javascript:deleteCustomer("#{getCustomerDetails[0]._id}");') Delete USER 
-            li
-              a(href='/customer/changePassword/#{getCustomerDetails[0]._id}') Reset Password 
-            li
-              a(href='#') Save and continue edit 
+        include customer_top_bar
+          a(href='#') &nbsp;&nbsp;Save and continue edit
         .right-sub
           button(type='submit') SAVE
       .customer-box.clearfix
@@ -34,12 +23,12 @@ block content
               .profile-frm-row
                 .profile-frm-cl1 First Name
                 .profile-frm-cl2
-                  input(name='first_name', type='text', value='#{getCustomerDetails[0].first_name}')
+                  input(name='first_name', type='text', value='#{getCustomerDetails.first_name}')
               .profile-frm-row
                 .profile-frm-cl1
                   | Last Name
                 .profile-frm-cl2
-                  input(name='last_name', type='text', value='#{getCustomerDetails[0].last_name}')
+                  input(name='last_name', type='text', value='#{getCustomerDetails.last_name}')
               .profile-frm-row
                 .profile-frm-cl1 Address
                 .profile-frm-cl2
@@ -64,4 +53,4 @@ block content
                 .profile-frm-cl1 Bio
                 .profile-frm-cl2
                   .in-div.large-in
-                    | #{getCustomerDetails[0].bio}
+                    | #{getCustomerDetails.bio}

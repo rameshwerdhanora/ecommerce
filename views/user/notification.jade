@@ -6,7 +6,7 @@ block content
         |  ASHLEY MOLINA
        form(method='post',action='/customer/saveNotification')
         .righsub-nav.clearfix
-          include top_bar
+          include customer_top_bar
           .right-sub
             input(type='submit',class='save-btn',value='SAVE')
         .customer-box.clearfix
@@ -15,7 +15,7 @@ block content
           .profile-cl
             .profile-top-row
               h2 NOTIFICATIONS
-              input(type='hidden',name='user_id',value='57a5d75e1dd8d04a1816ae82')
+              input(type='hidden',name='user_id',value='#{getCustomerDetails._id}')
             .profile-form-box
               .omer_notification
                 .omer_notification
@@ -34,13 +34,13 @@ block content
                       p Etiqett News
                     .omer_notification_right
                       span
-                        -if(result.news[0].email == 1)
+                        -if(getCustomerDetails.news[0].email == 1)
                             input#radio.css-checkbox(type='checkbox', name='news[email]', value='1',checked='checked')
                         -else
                             input#radio.css-checkbox(type='checkbox', name='news[email]', value='1')
                         label.css-label(for='news[email]') 
                       span
-                        -if(result.news[0].mobile == 1)
+                        -if(getCustomerDetails.news[0].mobile == 1)
                             input#radio1.css-checkbox(type='checkbox', name='news[mob]', value='1',checked='checked')
                         -else
                             input#radio1.css-checkbox(type='checkbox', name='news[mob]', value='1')
@@ -53,13 +53,13 @@ block content
                       p Items Shipped
                     .omer_notification_right
                       span
-                        -if(result.shipped[0].email == 1)
+                        -if(getCustomerDetails.shipped[0].email == 1)
                             input#radio2.css-checkbox(type='checkbox', name='shipped[email]', value='1',checked="checked")
                         -else
                             input#radio2.css-checkbox(type='checkbox', name='shipped[email]', value='1')
                         label.css-label(for='shipped[email]')
                       span
-                        -if(result.shipped[0].mobile == 1)
+                        -if(getCustomerDetails.shipped[0].mobile == 1)
                             input#radio3.css-checkbox(type='checkbox', name='shipped[mob]', value='1',checked="checked")
                         -else
                             input#radio3.css-checkbox(type='checkbox', name='shipped[mob]', value='1')
@@ -71,13 +71,13 @@ block content
                       p Items Delivered
                     .omer_notification_right
                       span
-                        -if(result.delivery[0].email == 1)
+                        -if(getCustomerDetails.delivery[0].email == 1)
                             input#radio4.css-checkbox(type='checkbox', name='deliver[email]', value='1',checked="checked")
                         -else
                             input#radio4.css-checkbox(type='checkbox', name='deliver[email]', value='1')
                         label.css-label(for='deliver[email]')
                       span
-                        -if(result.delivery[0].mobile == 1)
+                        -if(getCustomerDetails.delivery[0].mobile == 1)
                             input#radio5.css-checkbox(type='checkbox', name='deliver[mob]', value='1',checked="checked")
                         -else
                             input#radio5.css-checkbox(type='checkbox', name='deliver[mob]', value='1')
@@ -89,13 +89,13 @@ block content
                       p Promo Codes
                     .omer_notification_right
                       span
-                        -if(result.promocode[0].email == 1)
+                        -if(getCustomerDetails.promocode[0].email == 1)
                             input#radio6.css-checkbox(type='checkbox', name='promo[email]', value='1',checked="checked")
                         -else
                             input#radio6.css-checkbox(type='checkbox', name='promo[email]', value='1')
                         label.css-label(for='promo[email]')
                       span
-                        -if(result.promocode[0].mobile == 1)
+                        -if(getCustomerDetails.promocode[0].mobile == 1)
                             input#radio7.css-checkbox(type='checkbox', name='promo[mob]', value='1',checked="checked")
                         -else
                             input#radio7.css-checkbox(type='checkbox', name='promo[mob]', value='1')
@@ -107,13 +107,13 @@ block content
                       p New Arrivals
                     .omer_notification_right
                       span
-                        -if(result.new_arrival[0].email == 1)
+                        -if(getCustomerDetails.new_arrival[0].email == 1)
                             input#radio8.css-checkbox(type='checkbox', name='arrival[email]', value='1',checked="checked")
                         -else
                             input#radio8.css-checkbox(type='checkbox', name='arrival[email]', value='1')
                         label.css-label(for='arrival[email]')
                       span
-                        -if(result.new_arrival[0].mobile == 1)
+                        -if(getCustomerDetails.new_arrival[0].mobile == 1)
                             input#radio9.css-checkbox(type='checkbox', name='arrival[mob]', value='1',checked="checked")
                         -else
                             input#radio9.css-checkbox(type='checkbox', name='arrival[mob]', value='1')

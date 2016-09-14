@@ -51,7 +51,7 @@ block content
                                 img(src='/images/user-img.png', alt='img')
                               td @#{getCustomer.user_name} 
                               td.ord-title 
-                                a.ord-title(href='/customer/view/#{getCustomer._id}/1') #{getCustomer.first_name} #{getCustomer.last_name}
+                                a.ord-title(href='/customer/view/#{getCustomer._id}') #{getCustomer.first_name} #{getCustomer.last_name}
                               td ********** 
                               td 30 Jan 2015 8:05 AM
                               td $103.00
@@ -95,7 +95,7 @@ block content
                               td
                                 img(src='/images/fake-icon.png', alt='img')
                               td.ord-title 
-                                a.ord-title(href='/user/view/#{getUser._id}/1') #{getUser.first_name} #{getUser.last_name}
+                                a.ord-title(href='/user/view/#{getUser._id}') #{getUser.first_name} #{getUser.last_name}
                               td 30 Jan 2015 8:05 AM
                               td Brand 
                               td 1439 S. Rimhurst Ave.
