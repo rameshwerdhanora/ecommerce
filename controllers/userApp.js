@@ -370,6 +370,78 @@ exports.userDelete = (req,res) => {
 	});	
 };
 
+/* User Shipping */
+exports.userShipping = (req, res) => {
+    User.find({_id:req.params.userId},function(error,getUserDetails){
+		if(getUserDetails)
+		{
+			//console.log(getUserDetails);
+			res.render('user/user_shipping', { title: 'User Shipping',getUserDetails:getUserDetails,activeClass:req.params.activeClass});
+		}
+	});
+};
+
+/* User Payment Method */
+exports.userPaymentMethod = (req, res) => {
+    User.find({_id:req.params.userId},function(error,getUserDetails){
+		if(getUserDetails)
+		{
+			//console.log(getUserDetails);
+			res.render('user/user_payment_method', { title: 'User Payment Method',getUserDetails:getUserDetails,activeClass:req.params.activeClass});
+		}
+	});
+};
+
+/* User ORder */
+exports.userOrder = (req, res) => {
+    res.render('user/user_order', { title: 'User Order',activeClass:5 });
+};
+
+
+/* User Product Review */
+exports.userProductReview = (req, res) => {
+    User.find({_id:req.params.userId},function(error,getUserDetails){
+		if(getUserDetails)
+		{
+			//console.log(getUserDetails);
+			res.render('user/user_product_review', { title: 'User Payment Review',getUserDetails:getUserDetails,activeClass:req.params.activeClass});
+		}
+	});
+};
+
+/* User Account */
+exports.userAccount = (req, res) => {
+    User.find({_id:req.params.userId},function(error,getUserDetails){
+		if(getUserDetails)
+		{
+			//console.log(getUserDetails);
+			res.render('user/user_account', { title: 'User Account',getUserDetails:getUserDetails,activeClass:req.params.activeClass});
+		}
+	});
+};
+
+/* User Linked Account */
+exports.userLinkedAccount = (req, res) => {
+    User.find({_id:req.params.userId},function(error,getUserDetails){
+		if(getUserDetails)
+		{
+			//console.log(getUserDetails);
+			res.render('user/user_linked_account', { title: 'User Linked Account',getUserDetails:getUserDetails,activeClass:req.params.activeClass});
+		}
+	});
+};
+
+/* User Notifications */
+exports.userNotifications = (req, res) => {
+    User.find({_id:req.params.userId},function(error,getUserDetails){
+		if(getUserDetails)
+		{
+			console.log(getUserDetails);
+			res.render('user/user_notifications', { title: 'User Notifications',getUserDetails:getUserDetails,activeClass:req.params.activeClass});
+		}
+	});
+};
+
 /**
  * POST /customer/customerChangePasswordSave
  * Update Customer Change Password Save

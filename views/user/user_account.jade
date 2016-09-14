@@ -1,0 +1,54 @@
+extends ../layout
+block content
+  .col-sm-9.midlle-bar
+    .large-title-row
+      img(src='/images/title-icon.png', alt='icon')
+      |  #{getUserDetails[0].first_name} #{getUserDetails[0].last_name}
+    .righsub-nav.clearfix
+      .left-sub
+        ul
+          li
+            a(href='#')
+              img(src='/images/sub-nav-arrow.png', alt='arrow')
+          li
+            a(href='/user/list') Back
+          li
+            a(href='javascript:deleteUser("#{getUserDetails[0]._id}");') Delete USER 
+          li
+            a(href='/user/changePassword/#{getUserDetails[0]._id}') Reset Password 
+    .customer-box.clearfix
+      .customer-cl
+        include ../partials/user_left_menu
+      .profile-cl
+          .profile-top-row
+            h2 Account
+          .profile-form-box
+            .shop-acc-box
+              form(action='', method='post')
+                .profile-frm-row
+                  .profile-frm-cl1  USERNAME
+                  .profile-frm-cl2
+                    input(name='', type='text', value='#{getUserDetails[0].user_name}')
+                .profile-frm-row
+                  .profile-frm-cl1  PASSWORD
+                  .profile-frm-cl2
+                    input(name='', type='text', value='#{getUserDetails[0].email_id}')
+                .profile-frm-row
+                  .profile-frm-cl1 E-MAIL ADDRESS
+                  .profile-frm-cl2
+                    input(name='', type='text', value='*************')
+                - if(getUserDetails[0].social_type == 'facebook')
+                  .length-box
+                      | Logged In With
+                      .btn-btm
+                        button.fb-btns(type='button')
+                          i.fa.fa-facebook
+                          |  Facebook
+                  //-else if(getUserDetails[0].social_type == 'google')
+                      .length-box
+                          | Logged In With
+                          .btn-btm
+                            button.fb-btns(type='button')
+                              i.fa.fa-facebook
+                              |  Google plus
+                  

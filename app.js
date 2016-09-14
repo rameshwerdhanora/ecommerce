@@ -410,13 +410,13 @@ app.get('/user/view/:id/:activeClass',  userAppControlleraAdmin.userView);
 app.get('/user/edit/:id/:activeClass',  userAppControlleraAdmin.userEdit);
 app.post('/user/update',  userAppControlleraAdmin.userUpdate);
 app.get('/user/delete/:userId',  userAppControlleraAdmin.userDelete);
-// app.get('/user/shipping/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
-// app.get('/user/paymentMethod/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
-// app.get('/user/order/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
-// app.get('/user/reviews/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
-// app.get('/user/account/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
-// app.get('/user/linkedAccount/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
-// app.get('/user/notifications/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
+app.get('/user/shipping/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
+app.get('/user/paymentMethod/:userId/:activeClass',  userAppControlleraAdmin.userPaymentMethod);
+app.get('/user/order/:userId/:activeClass',  userAppControlleraAdmin.userOrder);
+app.get('/user/reviews/:userId/:activeClass',  userAppControlleraAdmin.userProductReview);
+app.get('/user/account/:userId/:activeClass',  userAppControlleraAdmin.userAccount);
+app.get('/user/linkedAccount/:userId/:activeClass',  userAppControlleraAdmin.userLinkedAccount);
+app.get('/user/notifications/:userId/:activeClass',  userAppControlleraAdmin.userNotifications);
 
 /* Customer */
 app.get('/customer/list',  userAppControlleraAdmin.customerList);
