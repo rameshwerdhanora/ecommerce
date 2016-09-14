@@ -2,15 +2,6 @@ extends ../layout
 block content
   .col-sm-9.midlle-bar
       .large-title-row
-        .bg-success.text-success
-            | #{messages.success}
-        .bg-info.text-info
-            | #{messages.info}
-        .bg-warning.text-warning
-            | #{messages.warning}
-        .bg-danger.text-danger
-            | #{messages.danger}
-      .large-title-row
         img(src='/images/title-icon.png', alt='icon')
         |  User
         .edit-btn-cl.select-item
@@ -19,6 +10,7 @@ block content
               option ACTIONS
       .customer-box.clearfix
         include left_menu
+        script(type='text/javascript', src='/js/ckeditor/ckeditor.js')
         form(action='/emailtemplate/save', method='post', name='form3')
             .profile-cl
                 .profile-top-row
@@ -45,6 +37,21 @@ block content
                       .profile-frm-row
                         .editer-box Editer
                         .profile-frm-cl2
-                            textarea(name='content')
+                            textarea(name='content',id='editor')
+        script(type='text/javascript').
+            $(document).ready(function(n){
+                CKEDITOR.editorConfig = function( config ) {
+                        config.language = 'es';
+                        config.uiColor = '#F7B42C';
+                        config.height = 200;
+                        config.toolbarCanCollapse = 'auto';
+                        config.width = true;
+                };
+
+                //var editorElement = CKEDITOR.document.getById( 'content' );
+                CKEDITOR.replace('editor');
+            });
+            
+
 
 

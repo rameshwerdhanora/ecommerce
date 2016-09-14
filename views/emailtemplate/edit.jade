@@ -10,6 +10,7 @@ block content
               option ACTIONS
       .customer-box.clearfix
         include left_menu
+        script(type='text/javascript', src='/js/ckeditor/ckeditor.js')
         form(action='/emailtemplate/update', method='post', name='form3')
             .profile-cl
                 .profile-top-row
@@ -37,6 +38,20 @@ block content
                       .profile-frm-row
                         .editer-box Editer
                         .profile-frm-cl2
-                            textarea(name='content') #{result.content}
+                            textarea(name='content',id='editor') #{result.content}
+                            
+            script(type='text/javascript').
+                $(document).ready(function(n){
+                    CKEDITOR.editorConfig = function( config ) {
+                            config.language = 'es';
+                            config.uiColor = '#F7B42C';
+                            config.height = 200;
+                            config.toolbarCanCollapse = 'auto';
+                            config.width = true;
+                    };
+
+                    //var editorElement = CKEDITOR.document.getById( 'content' );
+                    CKEDITOR.replace('editor');
+                });
 
 
