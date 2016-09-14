@@ -221,11 +221,11 @@ app.get('/api/filter/fetchfilter',  filterAppController.fetchFilterOptions);
 app.get('/api/filter/category/:catId',  filterAppController.fetchSelectedSubCategory);
 
 
-app.post('/api/showCart',  cartAppController.getCartProduct);
-app.post('/api/addTocart',  cartAppController.addTocart);
-app.post('/api/deleteFromCart',  cartAppController.deleteFromCart);
-app.post('/api/emptyCart',  cartAppController.emptyCart);
-app.post('/api/updateIntoCart',  cartAppController.updateIntoCart);
+// app.post('/api/showCart',  cartAppController.getCartProduct);
+// app.post('/api/addTocart',  cartAppController.addTocart);
+// app.post('/api/deleteFromCart',  cartAppController.deleteFromCart);
+// app.post('/api/emptyCart',  cartAppController.emptyCart);
+// app.post('/api/updateIntoCart',  cartAppController.updateIntoCart);
 
 app.get('/api/listofbrand',  brandAppController.listOfAllBrand);
 app.get('/api/listofsize',  sizeAppController.listOfAllSize);
@@ -258,10 +258,10 @@ app.post('/brand/update',  brandController.updateBrand);
 app.get('/brand/delete/:brandId',  brandController.removeBrand);
 
 /* Address CRUD Section */
-app.post('/api/getUserAddress',addressAppController.getUserAddress);
-app.post('/api/addUserAddress',addressAppController.addAddress);
-app.post('/api/deleteUserAddress',addressAppController.deleteAddress);
-app.post('/api/updateUserAddress',addressAppController.updateAddress);
+// app.post('/api/getUserAddress',addressAppController.getUserAddress);
+// app.post('/api/addUserAddress',addressAppController.addAddress);
+// app.post('/api/deleteUserAddress',addressAppController.deleteAddress);
+// app.post('/api/updateUserAddress',addressAppController.updateAddress);
 
 
 /* Color CRUD Section */ // Need isAuthenticated code for check user is loggedin.
