@@ -221,11 +221,11 @@ app.get('/api/filter/fetchfilter',  filterAppController.fetchFilterOptions);
 app.get('/api/filter/category/:catId',  filterAppController.fetchSelectedSubCategory);
 
 
-app.post('/api/showCart',  cartAppController.getCartProduct);
-app.post('/api/addTocart',  cartAppController.addTocart);
-app.post('/api/deleteFromCart',  cartAppController.deleteFromCart);
-app.post('/api/emptyCart',  cartAppController.emptyCart);
-app.post('/api/updateIntoCart',  cartAppController.updateIntoCart);
+// app.post('/api/showCart',  cartAppController.getCartProduct);
+// app.post('/api/addTocart',  cartAppController.addTocart);
+// app.post('/api/deleteFromCart',  cartAppController.deleteFromCart);
+// app.post('/api/emptyCart',  cartAppController.emptyCart);
+// app.post('/api/updateIntoCart',  cartAppController.updateIntoCart);
 
 app.get('/api/listofbrand',  brandAppController.listOfAllBrand);
 app.get('/api/listofsize',  sizeAppController.listOfAllSize);
@@ -258,10 +258,10 @@ app.post('/brand/update',  brandController.updateBrand);
 app.get('/brand/delete/:brandId',  brandController.removeBrand);
 
 /* Address CRUD Section */
-app.post('/api/getUserAddress',addressAppController.getUserAddress);
-app.post('/api/addUserAddress',addressAppController.addAddress);
-app.post('/api/deleteUserAddress',addressAppController.deleteAddress);
-app.post('/api/updateUserAddress',addressAppController.updateAddress);
+// app.post('/api/getUserAddress',addressAppController.getUserAddress);
+// app.post('/api/addUserAddress',addressAppController.addAddress);
+// app.post('/api/deleteUserAddress',addressAppController.deleteAddress);
+// app.post('/api/updateUserAddress',addressAppController.updateAddress);
 
 
 /* Color CRUD Section */ // Need isAuthenticated code for check user is loggedin.
@@ -310,26 +310,6 @@ app.get('/subcategory/edit/:subcatId',  categorySubController.editSubCategory);
 app.post('/subcategory/update',  categorySubController.updateSubCategory);
 app.get('/subcategory/delete/:subcatId',  categorySubController.removeSubCategory);
 
-/* Users pages */
-app.get('/user/list',  userAppControlleraAdmin.userList);
-app.get('/user/add',  userAppControlleraAdmin.userAdd);
-app.post('/user/save',  userAppControlleraAdmin.userSave);
-app.get('/user/view/:id/:activeClass',  userAppControlleraAdmin.userView);
-app.get('/user/edit/:id/:activeClass',  userAppControlleraAdmin.userEdit);
-app.post('/user/update',  userAppControlleraAdmin.userUpdate);
-app.get('/user/delete/:userId',  userAppControlleraAdmin.userDelete);
-// app.get('/user/shipping/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
-// app.get('/user/paymentMethod/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
-// app.get('/user/order/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
-// app.get('/user/reviews/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
-// app.get('/user/account/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
-// app.get('/user/linkedAccount/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
-// app.get('/user/notifications/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
-
-app.get('/customer/address/:customerId/:activeClass',  userAppControlleraAdmin.customerAddressList);
-app.post('/customer/address/save/:customerId/:activeClass',  userAppControlleraAdmin.customerAddressSave);
-
-
 /* Attribute CRUD Section */ // Need isAuthenticated code for check user is loggedin.
 app.get('/attribute', passportConfig.isAuthenticated,  attributeController.list);
 app.get('/attribute/list', passportConfig.isAuthenticated,  attributeController.list);
@@ -362,21 +342,24 @@ app.post('/emailtemplate/update',  emailController.update);
 
 /* Customer */
 app.get('/customer/list',  userAppControlleraAdmin.customerList);
-app.get('/customer/view/:id/:activeClass',  userAppControlleraAdmin.customerView);
-app.get('/customer/edit/:id/:activeClass',  userAppControlleraAdmin.customerEdit);
+app.get('/customer/view/:id',  userAppControlleraAdmin.customerView);
+app.get('/customer/edit/:id',  userAppControlleraAdmin.customerEdit);
 app.post('/customer/update',  userAppControlleraAdmin.customerUpdate);
 app.get('/customer/delete/:customerId',  userAppControlleraAdmin.customerDelete);
 app.get('/customer/changePassword/:customerId',  userAppControlleraAdmin.customerChangePassword);
 app.post('/customer/changePasswordSave',  userAppControlleraAdmin.customerChangePasswordSave);
-app.get('/customer/notification',  userAppControlleraAdmin.notification);
+app.get('/customer/notification/:customerId',  userAppControlleraAdmin.notification);
 app.post('/customer/saveNotification',  userAppControlleraAdmin.saveNotification);
-app.get('/customer/linkedAccounts',  userAppControlleraAdmin.linkedAccounts);
+app.get('/customer/linkedAccounts/:customerId',  userAppControlleraAdmin.linkedAccounts);
 app.post('/customer/saveLinkedAccounts',  userAppControlleraAdmin.saveLinkedAccounts);
 
-app.get('/customer/accounts',  userAppControlleraAdmin.accounts);
-app.get('/customer/productPreview',  userAppControlleraAdmin.productPreview);
-app.get('/customer/order',  userAppControlleraAdmin.order);
-app.get('/customer/payments',  userAppControlleraAdmin.payments);
+app.get('/customer/accounts/:customerId',  userAppControlleraAdmin.accounts);
+app.get('/customer/productPreview/:customerId',  userAppControlleraAdmin.productPreview);
+app.get('/customer/order/:customerId',  userAppControlleraAdmin.order);
+app.get('/customer/payments/:customerId',  userAppControlleraAdmin.payments);
+app.get('/customer/address/:customerId',  userAppControlleraAdmin.customerAddressList);
+app.post('/customer/address/save/:customerId',  userAppControlleraAdmin.customerAddressSave);
+
 
 
 /* Address CRUD Section */
@@ -403,38 +386,17 @@ app.get('/api/privacy/fetchnotificationsetting/:userId',privacyAppController.fet
 app.get('/user/list',  userAppControlleraAdmin.userList);
 app.get('/user/add',  userAppControlleraAdmin.userAdd);
 app.post('/user/save',  userAppControlleraAdmin.userSave);
-app.get('/user/view/:id/:activeClass',  userAppControlleraAdmin.userView);
-app.get('/user/edit/:id/:activeClass',  userAppControlleraAdmin.userEdit);
+app.get('/user/view/:id',  userAppControlleraAdmin.userView);
+app.get('/user/edit/:id',  userAppControlleraAdmin.userEdit);
 app.post('/user/update',  userAppControlleraAdmin.userUpdate);
 app.get('/user/delete/:userId',  userAppControlleraAdmin.userDelete);
-app.get('/user/shipping/:userId/:activeClass',  userAppControlleraAdmin.userShipping);
-app.get('/user/paymentMethod/:userId/:activeClass',  userAppControlleraAdmin.userPaymentMethod);
-app.get('/user/order/:userId/:activeClass',  userAppControlleraAdmin.userOrder);
-app.get('/user/reviews/:userId/:activeClass',  userAppControlleraAdmin.userProductReview);
-app.get('/user/account/:userId/:activeClass',  userAppControlleraAdmin.userAccount);
-app.get('/user/linkedAccount/:userId/:activeClass',  userAppControlleraAdmin.userLinkedAccount);
-app.get('/user/notifications/:userId/:activeClass',  userAppControlleraAdmin.userNotifications);
-
-/* Customer */
-app.get('/customer/list',  userAppControlleraAdmin.customerList);
-app.get('/customer/view/:id/:activeClass',  userAppControlleraAdmin.customerView);
-app.get('/customer/edit/:id/:activeClass',  userAppControlleraAdmin.customerEdit);
-app.post('/customer/update',  userAppControlleraAdmin.customerUpdate);
-app.get('/customer/delete/:customerId',  userAppControlleraAdmin.customerDelete);
-app.get('/customer/changePassword/:customerId',  userAppControlleraAdmin.customerChangePassword);
-app.post('/customer/changePasswordSave',  userAppControlleraAdmin.customerChangePasswordSave);
-app.get('/customer/notification',  userAppControlleraAdmin.notification);
-app.post('/customer/saveNotification',  userAppControlleraAdmin.saveNotification);
-app.get('/customer/linkedAccounts',  userAppControlleraAdmin.linkedAccounts);
-app.post('/customer/saveLinkedAccounts',  userAppControlleraAdmin.saveLinkedAccounts);
-
-app.get('/customer/accounts',  userAppControlleraAdmin.accounts);
-app.get('/customer/productPreview',  userAppControlleraAdmin.productPreview);
-app.get('/customer/order',  userAppControlleraAdmin.order);
-app.get('/customer/payments',  userAppControlleraAdmin.payments);
-
-app.get('/customer/address/:customerId/:activeClass',  userAppControlleraAdmin.customerAddressList);
-app.post('/customer/address/save/:customerId/:activeClass',  userAppControlleraAdmin.customerAddressSave);
+app.get('/user/shipping/:userId',  userAppControlleraAdmin.userShipping);
+app.get('/user/paymentMethod/:userId',  userAppControlleraAdmin.userPaymentMethod);
+app.get('/user/order/:userId',  userAppControlleraAdmin.userOrder);
+app.get('/user/reviews/:userId',  userAppControlleraAdmin.userProductReview);
+app.get('/user/account/:userId',  userAppControlleraAdmin.userAccount);
+app.get('/user/linkedAccount/:userId',  userAppControlleraAdmin.userLinkedAccount);
+app.get('/user/notifications/:userId',  userAppControlleraAdmin.userNotifications);
 
 /**
  * API examples routes.

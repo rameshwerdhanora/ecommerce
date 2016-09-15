@@ -2,10 +2,10 @@ extends ../layout
 block content
   .col-sm-9.midlle-bar
     .large-title-row
-        img(src='//images/title-icon.png', alt='icon')
+        img(src='/images/title-icon.png', alt='icon')
         |  ASHLEY MOLINA
       .righsub-nav.clearfix
-        include top_bar        
+        include customer_top_bar        
         //.right-sub
           a.save-btn(href='#') SAVE
       .customer-box.clearfix
@@ -14,8 +14,6 @@ block content
         .profile-cl
             .profile-top-row
               h2 PAYMENTS
-              .edit-btn-cl
-                a.edit-btn(href='#') EDIT
             .profile-form-box
               form(method='post', action='')
                 ul.brand_payment_brand_view

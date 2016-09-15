@@ -314,7 +314,7 @@ exports.postUpdateProfile = function(req,res)
 			{
 				UserDetails.findOne({user_id:req.params.userId},function(error,fetchUserDetails)
 				{
-					if(fetchUserDetails)
+					if(fetchUserDetails.shr_fb)
 					{
 						updateUserDetailsData = 
 						{

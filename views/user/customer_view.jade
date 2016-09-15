@@ -3,19 +3,9 @@ block content
   .col-sm-9.midlle-bar
     .large-title-row
       img(src='/images/title-icon.png', alt='icon')
-      |  #{getCustomerDetails[0].first_name} #{getCustomerDetails[0].last_name}
+      |  #{getCustomerDetails.first_name} #{getCustomerDetails.last_name}
     .righsub-nav.clearfix
-      .left-sub
-        ul
-          li
-            a(href='#')
-              img(src='/images/sub-nav-arrow.png', alt='arrow')
-          li
-            a(href='/customer/list') Back
-          li
-            a(href='javascript:deleteCustomer("#{getCustomerDetails[0]._id}");') Delete USER 
-          li
-            a(href='/customer/changePassword/#{getCustomerDetails[0]._id}') Reset Password 
+      include customer_top_bar
     .customer-box.clearfix
       .customer-cl
         include ../partials/customer_left_menu
@@ -23,7 +13,7 @@ block content
         .profile-top-row
           h2 PROFILE
           .edit-btn-cl
-            a.edit-btn(href='/customer/edit/#{getCustomerDetails[0]._id}/#{activeClass}') EDIT
+            a.edit-btn(href='/customer/edit/#{getCustomerDetails._id}') EDIT
         .profile-form-box
           .profile-left-cl
             img.profile-icons(src='/images/admin.png', alt='img')
@@ -32,11 +22,11 @@ block content
               .profile-frm-row
                 .profile-frm-cl1 First Name
                 .profile-frm-cl2
-                  input(name='', type='text', value='#{getCustomerDetails[0].first_name}')
+                  input(name='', type='text', value='#{getCustomerDetails.first_name}')
               .profile-frm-row
                 .profile-frm-cl1 Last Name
                 .profile-frm-cl2
-                  input(name='', type='text', value='#{getCustomerDetails[0].last_name}')
+                  input(name='', type='text', value='#{getCustomerDetails.last_name}')
               .profile-frm-row
                 .profile-frm-cl1 Address
                 .profile-frm-cl2
@@ -61,4 +51,4 @@ block content
                 .profile-frm-cl1 Bio
                 .profile-frm-cl2
                   textarea.large-in
-                    | #{getCustomerDetails[0].bio}
+                    | #{getCustomerDetails.bio}

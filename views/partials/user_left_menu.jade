@@ -1,18 +1,18 @@
 h2 SHOP
 ul
-  li
-    a(href='/user/view/#{getUserDetails[0]._id}/1') Shop Profile
-  li.active
-    a(href='/user/shipping/#{getUserDetails[0]._id}/2') Shipping
-  li
-    a(href='/user/paymentMethod/#{getUserDetails[0]._id}/3') Payment Methods
-  li
-    a(href='/user/order/#{getUserDetails[0]._id}/4') Orders
-  li
-    a(href='/user/reviews/#{getUserDetails[0]._id}/5') Product Reviews
-  li
-    a(href='/user/account/#{getUserDetails[0]._id}/6') Account
-  li
-    a(href='/user/linkedAccount/#{getUserDetails[0]._id}/7') Linked Accounts
-  li
-    a(href='/user/notifications/#{getUserDetails[0]._id}/8') Notifications
+  li(class=(activeClass == 1)?'active':'')
+    a(href='/user/view/#{getUserDetails._id}') Shop Profile
+  li(class=(activeClass == 2)?'active':'')
+    a(href='/user/shipping/#{getUserDetails._id}') Shipping
+  li(class=(activeClass == 3)?'active':'')
+    a(href='/user/paymentMethod/#{getUserDetails._id}') Payment Methods
+  li(class=(activeClass == 4)?'active':'')
+    a(href='/user/order/#{getUserDetails._id}') Orders
+  li(class=(activeClass == 5)?'active':'')
+    a(href='/user/reviews/#{getUserDetails._id}') Product Reviews
+  li(class=(activeClass == 6)?'active':'')
+    a(href='/user/account/#{getUserDetails._id}') Account
+  li(class=(activeClass == 7)?'active':'')
+    a(href='/user/linkedAccount/#{getUserDetails._id}') Linked Accounts
+  li(class=(activeClass == 8)?'active':'')
+    a(href='/user/notifications/#{getUserDetails._id}') Notifications

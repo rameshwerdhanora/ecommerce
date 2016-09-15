@@ -1,0 +1,11 @@
+.left-sub
+  ul
+    li
+      a(href='#')
+        img(src='/images/sub-nav-arrow.png', alt='arrow')
+    li
+      a(href='/user/list') Back
+    li
+      a(href='javascript:deleteUser("#{getUserDetails._id}");') Delete USER 
+    li
+      a(href='/user/changePassword/#{getUserDetails._id}') Reset Password 

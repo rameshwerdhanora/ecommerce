@@ -3,7 +3,7 @@ block content
   .col-sm-9.midlle-bar
     .large-title-row
       img(src='/images/title-icon.png', alt='icon')
-      |  #{getUserDetails[0].first_name} #{getUserDetails[0].last_name}
+      |  #{getUserDetails.first_name} #{getUserDetails.last_name}
     form(action='/user/update', method='post')  
       .righsub-nav.clearfix
         .left-sub
@@ -12,11 +12,11 @@ block content
               a(href='#')
                 img(src='/images/sub-nav-arrow.png', alt='arrow')
             li
-              a(href='/user/view/#{getUserDetails[0]._id}') Back
+              a(href='/user/view/#{getUserDetails._id}') Back
             li
-              a(href='javascript:deleteUser("#{getUserDetails[0]._id}");') Delete USER 
+              a(href='javascript:deleteUser("#{getUserDetails._id}");') Delete USER 
             li
-              a(href='/user/changePassword/#{getUserDetails[0]._id}') Reset Password 
+              a(href='/user/changePassword/#{getUserDetails._id}') Reset Password 
             li
               a(href='#') Save and continue edit 
         .right-sub
@@ -34,7 +34,7 @@ block content
                   .profile-frm-cl1
                     | Brand Name
                   .profile-frm-cl2
-                    input(name='', type='text', value='#{getUserDetails[0].first_name} #{getUserDetails[0].last_name}')
+                    input(name='', type='text', value='#{getUserDetails.first_name} #{getUserDetails.last_name}')
                 .profile-frm-row
                   .profile-frm-cl1 Address
                   .profile-frm-cl2
@@ -59,4 +59,4 @@ block content
                   .profile-frm-cl1 Bio
                   .profile-frm-cl2
                     textarea.large-in
-                      | #{getUserDetails[0].bio}
+                      | #{getUserDetails.bio}

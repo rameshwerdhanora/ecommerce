@@ -5,7 +5,7 @@ block content
         img(src='/images/title-icon.png', alt='icon')
         |  ASHLEY MOLINA
       .righsub-nav.clearfix
-        include top_bar
+        include customer_top_bar
         //.right-sub
           a.save-btn(href='#') SAVE
       .customer-box.clearfix
@@ -20,23 +20,23 @@ block content
                   .profile-frm-row
                     .profile-frm-cl1  USERNAME
                     .profile-frm-cl2
-                      input(name='', type='text', value='#{result.user_name}')
+                      input(name='', type='text', value='#{getCustomerDetails.user_name}')
                   .profile-frm-row
                     .profile-frm-cl1  PASSWORD
                     .profile-frm-cl2
-                      input(name='', type='text', value='#{result.email_id}')
+                      input(name='', type='text', value='#{getCustomerDetails.email_id}')
                   .profile-frm-row
                     .profile-frm-cl1 E-MAIL ADDRESS
                     .profile-frm-cl2
                       input(name='', type='text', value='*************')
-                  - if(result.social_type == 'facebook')
+                  - if(getCustomerDetails.social_type == 'facebook')
                     .length-box
                         | Logged In With
                         .btn-btm
                           button.fb-btns(type='button')
                             i.fa.fa-facebook
                             |  Facebook
-                    //-else if(result.social_type == 'google')
+                    //-else if(getCustomerDetails.social_type == 'google')
                         .length-box
                             | Logged In With
                             .btn-btm

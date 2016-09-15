@@ -3,7 +3,7 @@ block content
   .col-sm-9.midlle-bar
     .large-title-row
       img(src='/images/title-icon.png', alt='icon')
-      |  #{getUserDetails[0].first_name} #{getUserDetails[0].last_name}
+      |  #{getUserDetails.first_name} #{getUserDetails.last_name}
     .righsub-nav.clearfix
       .left-sub
         ul
@@ -13,9 +13,9 @@ block content
           li
             a(href='/user/list') Back
           li
-            a(href='javascript:deleteUser("#{getUserDetails[0]._id}");') Delete USER 
+            a(href='javascript:deleteUser("#{getUserDetails._id}");') Delete USER 
           li
-            a(href='/user/changePassword/#{getUserDetails[0]._id}') Reset Password 
+            a(href='/user/changePassword/#{getUserDetails._id}') Reset Password 
     .customer-box.clearfix
       .customer-cl
         include ../partials/user_left_menu
@@ -23,7 +23,7 @@ block content
         .profile-top-row
           h2 SHOP PROFILE
           .edit-btn-cl
-            a.edit-btn(href='/user/edit/#{getUserDetails[0]._id}/#{activeClass}') EDIT
+            a.edit-btn(href='/user/edit/#{getUserDetails._id}') EDIT
         .profile-form-box
           .profile-right-cl
             form(action='', method='post')
@@ -31,7 +31,7 @@ block content
                 .profile-frm-cl1
                   | Brand Name
                 .profile-frm-cl2
-                  input(name='', type='text', value='#{getUserDetails[0].first_name} #{getUserDetails[0].last_name}')
+                  input(name='', type='text', value='#{getUserDetails.first_name} #{getUserDetails.last_name}')
               .profile-frm-row
                 .profile-frm-cl1 Address
                 .profile-frm-cl2
@@ -56,6 +56,6 @@ block content
                 .profile-frm-cl1 Bio
                 .profile-frm-cl2
                   textarea.large-in
-                    | #{getUserDetails[0].bio}
+                    | #{getUserDetails.bio}
           .etik-sms Etiqett will use this information to contact you.
 

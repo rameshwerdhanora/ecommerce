@@ -26,13 +26,13 @@ exports.customerList = (req, res) => {
  * Customer user view page.
  */
 exports.customerView = (req, res) => {
-	User.find({_id:req.params.id},function(error,getCustomerDetails){
-		if(getCustomerDetails)
-		{
-			//console.log(getCustomerDetails);
-			res.render('user/customer_view', { title: 'Customer View',getCustomerDetails:getCustomerDetails,activeClass:req.params.activeClass});
-		}
-	});	
+    User.find({_id:req.params.id},function(error,getCustomerDetails){
+            if(getCustomerDetails)
+            {
+                    //console.log(getCustomerDetails);
+                    res.render('user/customer_view', { title: 'Customer View',getCustomerDetails:getCustomerDetails,activeClass:req.params.activeClass});
+            }
+    });	
 };
 
 
@@ -41,10 +41,10 @@ exports.customerView = (req, res) => {
  * Customer user view page in edit mode.
  */
 exports.customerEdit = (req, res) => {
-	User.find({_id:req.params.id},function(error,getCustomerDetails){
+	User.findOne({_id:req.params.id},function(error,getCustomerDetails){
 		if(getCustomerDetails)
 		{
-			res.render('user/customer_edit', { title: 'Customer Edit',getCustomerDetails:getCustomerDetails,activeClass:req.params.activeClass});
+			res.render('user/customer_edit', { title: 'Customer Edit',getCustomerDetails:getCustomerDetails,activeClass:1});
 		}
 	});	
 };
@@ -93,7 +93,7 @@ exports.customerDelete = (req,res) => {
  * Customer Change Password
  */
 exports.customerChangePassword = (req, res) => {
-	User.find({_id:req.params.customerId},function(error,getCustomerDetails){
+	User.findOne({_id:req.params.customerId},function(error,getCustomerDetails){
 		if(getCustomerDetails)
 		{
 			res.render('user/customer_change_password', { title: 'Change Password',getCustomerDetails:getCustomerDetails});
@@ -121,13 +121,13 @@ exports.customerChangePasswordSave = (req, res) => {
  * List of Customer Address page.
  */
 exports.customerAddressList = (req, res) => {
-	User.find({_id:req.params.customerId},function(error,getCustomerDetails){
+	User.findOne({_id:req.params.customerId},function(error,getCustomerDetails){
 		if(getCustomerDetails)
 		{
 			Address.find({ user_id: req.params.customerId}, function(error, availableUserRecord)
 	        {
 	            //console.log(getCustomerDetails);
-				res.render('user/customer_address', { title: 'Customer Address',getCustomerDetails:getCustomerDetails,activeClass:req.params.activeClass,availableUserAddresses:availableUserRecord});
+				res.render('user/customer_address', { title: 'Customer Address',getCustomerDetails:getCustomerDetails,activeClass:2,availableUserAddresses:availableUserRecord});
 	        });
 		}
 	});	
@@ -287,11 +287,11 @@ exports.customerList = (req, res) => {
  * Customer user view page.
  */
 exports.customerView = (req, res) => {
-	User.find({_id:req.params.id},function(error,getCustomerDetails){
+	User.findOne({_id:req.params.id},function(error,getCustomerDetails){
 		if(getCustomerDetails)
 		{
-			//console.log(getCustomerDetails);
-			res.render('user/customer_view', { title: 'Customer View',getCustomerDetails:getCustomerDetails,activeClass:req.params.activeClass});
+			//console.log(getCustomerDetails._id);
+			res.render('user/customer_view', { title: 'Customer View',getCustomerDetails:getCustomerDetails,activeClass:1});
 		}
 	});
 }
@@ -300,11 +300,11 @@ exports.customerView = (req, res) => {
  * user view page.
 */
 exports.userView = (req, res) => {
-	User.find({_id:req.params.id},function(error,getUserDetails){
+	User.findOne({_id:req.params.id},function(error,getUserDetails){
 		if(getUserDetails)
 		{
 			//console.log(getUserDetails);
-			res.render('user/user_view', { title: 'User View',getUserDetails:getUserDetails,activeClass:req.params.activeClass});
+			res.render('user/user_view', { title: 'User View',getUserDetails:getUserDetails,activeClass:1});
 
 		}
 	});	
@@ -316,10 +316,10 @@ exports.userView = (req, res) => {
  * user view page in edit mode.
  */
 exports.userEdit = (req, res) => {
-	User.find({_id:req.params.id},function(error,getUserDetails){
+	User.findOne({_id:req.params.id},function(error,getUserDetails){
 		if(getUserDetails)
 		{
-			res.render('user/customer_edit', { title: 'Customer Edit',getCustomerDetails:getCustomerDetails,activeClass:req.params.activeClass});
+			res.render('user/customer_edit', { title: 'Customer Edit',getCustomerDetails:getCustomerDetails,activeClass:1});
 
 			//res.render('user/user_edit', { title: 'User Edit',getUserDetails:getUserDetails,activeClass:req.params.activeClass});
 
@@ -372,72 +372,72 @@ exports.userDelete = (req,res) => {
 
 /* User Shipping */
 exports.userShipping = (req, res) => {
-    User.find({_id:req.params.userId},function(error,getUserDetails){
+    User.findOne({_id:req.params.userId},function(error,getUserDetails){
 		if(getUserDetails)
 		{
 			//console.log(getUserDetails);
-			res.render('user/user_shipping', { title: 'User Shipping',getUserDetails:getUserDetails,activeClass:req.params.activeClass});
+			res.render('user/user_shipping', { title: 'User Shipping',getUserDetails:getUserDetails,activeClass:2});
 		}
 	});
 };
 
 /* User Payment Method */
 exports.userPaymentMethod = (req, res) => {
-    User.find({_id:req.params.userId},function(error,getUserDetails){
+    User.findOne({_id:req.params.userId},function(error,getUserDetails){
 		if(getUserDetails)
 		{
 			//console.log(getUserDetails);
-			res.render('user/user_payment_method', { title: 'User Payment Method',getUserDetails:getUserDetails,activeClass:req.params.activeClass});
+			res.render('user/user_payment_method', { title: 'User Payment Method',getUserDetails:getUserDetails,activeClass:3});
 		}
 	});
 };
 
 /* User ORder */
 exports.userOrder = (req, res) => {
-    res.render('user/user_order', { title: 'User Order',activeClass:5 });
+    res.render('user/user_order', { title: 'User Order',activeClass:4 });
 };
 
 
 /* User Product Review */
 exports.userProductReview = (req, res) => {
-    User.find({_id:req.params.userId},function(error,getUserDetails){
+    User.findOne({_id:req.params.userId},function(error,getUserDetails){
 		if(getUserDetails)
 		{
 			//console.log(getUserDetails);
-			res.render('user/user_product_review', { title: 'User Payment Review',getUserDetails:getUserDetails,activeClass:req.params.activeClass});
+			res.render('user/user_product_review', { title: 'User Payment Review',getUserDetails:getUserDetails,activeClass:5});
 		}
 	});
 };
 
 /* User Account */
 exports.userAccount = (req, res) => {
-    User.find({_id:req.params.userId},function(error,getUserDetails){
+    User.findOne({_id:req.params.userId},function(error,getUserDetails){
 		if(getUserDetails)
 		{
 			//console.log(getUserDetails);
-			res.render('user/user_account', { title: 'User Account',getUserDetails:getUserDetails,activeClass:req.params.activeClass});
+			res.render('user/user_account', { title: 'User Account',getUserDetails:getUserDetails,activeClass:6});
 		}
 	});
 };
 
 /* User Linked Account */
 exports.userLinkedAccount = (req, res) => {
-    User.find({_id:req.params.userId},function(error,getUserDetails){
+    User.findOne({_id:req.params.userId},function(error,getUserDetails){
 		if(getUserDetails)
 		{
 			//console.log(getUserDetails);
-			res.render('user/user_linked_account', { title: 'User Linked Account',getUserDetails:getUserDetails,activeClass:req.params.activeClass});
+			res.render('user/user_linked_account', { title: 'User Linked Account',getUserDetails:getUserDetails,activeClass:7});
 		}
 	});
 };
 
 /* User Notifications */
 exports.userNotifications = (req, res) => {
-    User.find({_id:req.params.userId},function(error,getUserDetails){
+    User.findOne({_id:req.params.userId},function(error,getUserDetails){
 		if(getUserDetails)
 		{
 			console.log(getUserDetails);
-			res.render('user/user_notifications', { title: 'User Notifications',getUserDetails:getUserDetails,activeClass:req.params.activeClass});
+			res.render('user/user_notifications', { title: 'User Notifications',getUserDetails:getUserDetails,activeClass:8});
 		}
 	});
 };
@@ -490,9 +490,9 @@ exports.customerChangePasswordSave = (req, res) => {
  * List of Customer Address page.
  */
 exports.notification = (req, res) => {
-    Notification.findOne({user_id:'57a5d75e1dd8d04a1816ae82'},function(error,notificationRes){
-        if(notificationRes){
-            res.render('user/notification', { title: 'Customer notification',activeClass:8, result:notificationRes });
+    Notification.findOne({user_id:req.params.customerId},function(error,getCustomerDetails){
+        if(getCustomerDetails){
+            res.render('user/notification', { title: 'Customer notification',activeClass:8, getCustomerDetails:getCustomerDetails });
         }
     });
 };
@@ -550,16 +550,16 @@ exports.saveNotification = (req, res) => {
 
 
 exports.linkedAccounts = (req, res) => {
-	User.findOne({_id:'57d2b91ded308f95487b23c6'},function(error,userRes){
-        if(userRes){
-            res.render('user/linkedaccounts', { title: 'Customer linked account',activeClass:7,result:userRes});
+	User.findOne({_id:req.params.customerId},function(error,getCustomerDetails){
+        if(getCustomerDetails){
+            res.render('user/linkedaccounts', { title: 'Customer linked account',activeClass:7,getCustomerDetails:getCustomerDetails});
         }
     });
 	
 };
 
 exports.saveLinkedAccounts = (req, res) => {
-    User.findOne({_id:'57c82efd484473824441900d'},function(error,getCustomerDetails){
+    User.findOne({_id:req.params.customerId},function(error,getCustomerDetails){
         if(getCustomerDetails){
             res.render('user/customer_address', { title: 'Customer Address',getCustomerDetails:getCustomerDetails,activeClass:req.params.activeClass,availableUserAddresses:availableUserRecord});
         }
@@ -568,9 +568,9 @@ exports.saveLinkedAccounts = (req, res) => {
 };
 
 exports.accounts = (req, res) => {
-    User.findOne({_id:'57d2b91ded308f95487b23c6'},function(error,userRes){
-        if(userRes){
-            res.render('user/accounts', { title: 'Customer accounts',activeClass:6,result:userRes });
+    User.findOne({_id:req.params.customerId},function(error,getCustomerDetails){
+        if(getCustomerDetails){
+            res.render('user/accounts', { title: 'Customer accounts',activeClass:6,getCustomerDetails:getCustomerDetails });
         }
     });
 };
@@ -578,25 +578,23 @@ exports.accounts = (req, res) => {
 
 
 exports.productPreview = (req, res) => {
-    /*User.findOne({_id:'57d2b91ded308f95487b23c6'},function(error,userRes){
-        if(userRes){
-            res.render('user/accounts', { title: 'Customer accounts',activeClass:6,result:userRes });
+    User.findOne({_id:req.params.customerId},function(error,getCustomerDetails){
+        if(getCustomerDetails){
+            res.render('user/productPreview', { title: 'Product review',getCustomerDetails:getCustomerDetails,activeClass:5 });
         }
-    });*/
-    res.render('user/productPreview', { title: 'Product review',activeClass:5 });
+    });
 };
 
 exports.payments = (req, res) => {
-    /*User.findOne({_id:'57d2b91ded308f95487b23c6'},function(error,userRes){
-        if(userRes){
-            res.render('user/accounts', { title: 'Customer accounts',activeClass:6,result:userRes });
+    User.findOne({_id:req.params.customerId},function(error,getCustomerDetails){
+        if(getCustomerDetails){
+            res.render('user/payments', { title: 'Customer Payments',getCustomerDetails:getCustomerDetails,activeClass:3 });
         }
-    });*/
-    res.render('user/payments', { title: 'Payments',activeClass:3 });
+    });
 };
 
 exports.order = (req, res) => {
-    /*User.findOne({_id:'57d2b91ded308f95487b23c6'},function(error,userRes){
+    /*User.findOne({_id:req.params.customerId},function(error,userRes){
         if(userRes){
             res.render('user/accounts', { title: 'Customer accounts',activeClass:6,result:userRes });
         }

@@ -1,18 +1,18 @@
 h2 CUSTOMER
 ul
   li(class=(activeClass == 1)?'active':'')
-      a(href='/customer/list') Profile
+      a(href='/customer/view/#{getCustomerDetails._id}') Profile
   li(class=(activeClass == 2)?'active':'')
-    a(href='#') Addresses
+    a(href='/customer/address/#{getCustomerDetails._id}') Addresses
   li(class=(activeClass == 3)?'active':'')
-    a(href='/customer/payments') Payment Methods
+    a(href='/customer/payments/#{getCustomerDetails._id}') Payment Methods
   li(class=(activeClass == 4)?'active':'')
-    a(href='/customer/order') Orders
+    a(href='/customer/order/#{getCustomerDetails._id}') Orders
   li(class=(activeClass == 5)?'active':'')
-    a(href='/customer/productPreview') Product Reviews
+    a(href='/customer/productPreview/#{getCustomerDetails._id}') Product Reviews
   li(class=(activeClass == 6)?'active':'')
-    a(href='/customer/accounts') Account
+    a(href='/customer/accounts/#{getCustomerDetails._id}') Account
   li(class=(activeClass == 7)?'active':'')
-    a(href='/customer/linkedAccounts') Linked Accounts
+    a(href='/customer/linkedAccounts/#{getCustomerDetails._id}') Linked Accounts
   li(class=(activeClass == 8)?'active':'')
-    a(href='/customer/notification') Notifications
+    a(href='/customer/notification/#{getCustomerDetails._id}') Notifications
