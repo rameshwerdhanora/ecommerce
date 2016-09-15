@@ -267,34 +267,6 @@ exports.userSave = (req, res) => {
 	});
 };
 
-/**
-<<<<<<< HEAD
- * GET /customer/list
- * Customer List user page.
- */
-exports.customerList = (req, res) => {
-	User.find({role_id:5},function(error,getCustomers){
-		if(getCustomers)
-		{
-			//console.log(getCustomers.length);
-			res.render('user/customer_list', { title: 'Customer',getCustomers:getCustomers});
-		}
-	});	
-};
-
-/**
- * GET /customer/view
- * Customer user view page.
- */
-exports.customerView = (req, res) => {
-	User.findOne({_id:req.params.id},function(error,getCustomerDetails){
-		if(getCustomerDetails)
-		{
-			//console.log(getCustomerDetails._id);
-			res.render('user/customer_view', { title: 'Customer View',getCustomerDetails:getCustomerDetails,activeClass:1});
-		}
-	});
-}
 /*
  * GET /user/view
  * user view page.
@@ -440,34 +412,6 @@ exports.userNotifications = (req, res) => {
 			res.render('user/user_notifications', { title: 'User Notifications',getUserDetails:getUserDetails,activeClass:8});
 		}
 	});
-};
-
-/**
- * POST /customer/customerChangePasswordSave
- * Update Customer Change Password Save
- */
-exports.customerChangePasswordSave = (req, res) => {
-	updateData = {
-            'password' 	: req.body.password,
-	};
-	User.findByIdAndUpdate(req.body._id,updateData, function(error, updateRes)
-	{
-		res.redirect('/customer/view/'+req.body._id);
-	});
-};
-
-/**
-<<<<<<< HEAD
- * GET /customer/customerChangePassword
- * Customer Change Password
- */
-exports.customerChangePassword = (req, res) => {
-	User.find({_id:req.params.customerId},function(error,getCustomerDetails){
-		if(getCustomerDetails)
-		{
-			res.render('user/customer_change_password', { title: 'Change Password',getCustomerDetails:getCustomerDetails});
-		}
-	});	
 };
 
 /**
