@@ -22,6 +22,7 @@ const sass = require('node-sass-middleware');
 const multer = require('multer');
 const upload = multer({ dest: path.join(__dirname, 'uploads') });
 //var flash = require('connect-flash');
+var fileUpload = require('express-fileupload');
 
 
 const constants = require('./constants/constants');
@@ -148,7 +149,7 @@ app.use(function(req, res, next) {
   next();
 });
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
-
+app.use(fileUpload());
 
 //app.use(paginate.middleware(10, 50));
 
@@ -250,7 +251,7 @@ app.post('/api/card/updatecard',  cardAppController.updateCard);
 
 
 
-app.get('/brand/list',  brandController.listOfBrand);
+app.get('/brand/list/:brandId?',  brandController.listOfBrand);
 //app.get('/brand/add',  brandController.addBrand);
 app.post('/brand/save',  brandController.saveBrand);
 app.get('/brand/edit:brandId',  brandController.editBrand);
@@ -265,7 +266,7 @@ app.get('/brand/delete/:brandId',  brandController.removeBrand);
 
 
 /* Color CRUD Section */ // Need isAuthenticated code for check user is loggedin.
-app.get('/color/list',  colorController.listOfColor);
+app.get('/color/list/:colorId?',  colorController.listOfColor);
 //app.get('/color/add',  colorController.addColor);
 app.get('/color/edit/:colorId',  colorController.editColor);
 app.post('/color/save',  colorController.saveColor);

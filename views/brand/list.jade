@@ -2,6 +2,7 @@ extends ../layout
 
 block content
   .col-sm-9.midlle-bar
+    include ../partials/flash
     .large-title-row
       img(src='/images/title-icon3.png', alt='icon')
       |  PRODUCTS
@@ -11,9 +12,6 @@ block content
     .customer-box.clearfix
       include ../partials/product_left_menu
       .profile-cl
-        if (messages.message && messages.message.length > 0)
-          .message.message
-            span= messages.message
         .profile-top-row
           h2 MANAGE BRANDS
         h3.sub-heading 
@@ -22,34 +20,69 @@ block content
           ul.brand-list
             each getAllBrand in getAllBrands
               li
-                a(id='modal-#{getAllBrand._id}', href='#modal-container-#{getAllBrand._id}',role='button',data-toggle='modal')
+                a(href='/brand/list/#{getAllBrand._id}',role='Edit brand')
                   img(src='/#{getAllBrand.brand_logo}', alt='Logo')
                   | #{getAllBrand.brand_name}
 
           
-
-  #modal-container-104831.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true',)
-    .modal-dialog.popup-wdt-1
-      form(name='addbrand', method='post', action='/brand/save', enctype='multipart/form-data')
-        .modal-content
-          .modal-header
-            button.close(type='button', data-dismiss='modal', aria-hidden='true')
-              img(src='/images/close-icon.png', alt='icon')
-            h4#myModalLabel.modal-title
-              | ADD BRAND
-          .modal-body
-            .upload-box
-              .upload-in
-                input.brand_logo(type='file', name='brand_logo', required='required')
-              p.up-title Upload Logo
-            .color-row
-              .cl-name Brand Name
-              .cl-inp
-                input(name='brand_name', type='text', required='required')
-            .color-row
-              .cl-name Brand Description
-              .cl-inp
-                textarea(name='brand_desc', required='required')
-          .modal-footer
-            button(type='submit')
-              | Save
+        
+    #modal-container-104831.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true',)
+        .modal-dialog.popup-wdt-1
+          form(name='addbrand', method='post', action='/brand/save', enctype='multipart/form-data')
+            .modal-content
+              .modal-header
+                button.close(type='button', data-dismiss='modal', aria-hidden='true')
+                  img(src='/images/close-icon.png', alt='icon')
+                h4#myModalLabel.modal-title
+                  | ADD BRAND
+              .modal-body
+                .upload-box
+                  .upload-in
+                    input.brand_logo(type='file', name='brand_logo', required='required')
+                  p.up-title Upload Logo
+                .color-row
+                  .cl-name Brand Name
+                  .cl-inp
+                    input(name='brand_name', type='text', required='required')
+                .color-row
+                  .cl-name Brand Description
+                  .cl-inp
+                    textarea(name='brand_desc', required='required')
+              .modal-footer
+                button(type='submit')
+                  | Save
+              
+    -if(editRes){
+    a#modal-104832.default-btn(href='#modal-container-104832', role='button', data-toggle='modal') 
+    #modal-container-104832.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true',)
+        .modal-dialog.popup-wdt-1
+          form(name='addbrand', method='post', action='/brand/update', enctype='multipart/form-data')
+            input(type='hidden',name='brandId',value='#{editRes._id}')
+            .modal-content
+              .modal-header
+                button.close(type='button', data-dismiss='modal', aria-hidden='true')
+                  img(src='/images/close-icon.png', alt='icon')
+                h4#myModalLabel.modal-title
+                  | Update BRAND
+              .modal-body
+                .upload-box
+                  .upload-in
+                    input.brand_logo(type='file', name='brand_logo')
+                  p.up-title Upload Logo
+                .color-row
+                  .cl-name Brand Name
+                  .cl-inp
+                    input(name='brand_name', type='text', required='required',value="#{editRes.brand_name}")
+                .color-row
+                  .cl-name Brand Description
+                  .cl-inp
+                    textarea(name='brand_desc', required='required') #{editRes.brand_desc}
+              .modal-footer
+                button(type='submit')
+                  | Save
+         script(type='text/javascript').
+            $(document).ready(function(n){
+                //$('#modal-container-1').modal('show');
+                $('#modal-104832').trigger('click');
+            });
+    -}

@@ -17,12 +17,23 @@ var uploadBrand = Multer({ storage : storage}).any();
 
 /* Get the list of all brand name with imformation */
 exports.listOfBrand = (req, res) => {
-	Brand.find({},function(error,getAllBrands){
-		if(getAllBrands)
-		{
-			res.render('brand/list', { title: 'Brand',getAllBrands:getAllBrands,activeClass:5});
-		}
-	});	
+    Brand.find({},function(error,getAllBrands){
+        if(getAllBrands)
+        {
+            
+            if(req.params.brandId){
+                Brand.findOne({_id:req.params.brandId},function(error,brandRes){
+                    if(error){
+                        req.flash('errors', 'Something went wrong!!');
+                    }else{
+                        res.render('brand/list', { title: 'Brand',getAllBrands:getAllBrands,activeClass:5,editRes:brandRes});
+                    }
+                });
+            }else{
+                res.render('brand/list', { title: 'Brand',getAllBrands:getAllBrands,activeClass:5,editRes:false});
+            }
+        }
+    });	
  
 };
 
@@ -39,7 +50,6 @@ exports.saveBrand = (req,res) => {
         if(err) {
             return res.end("Error uploading file.");
         }
-        
         //var newname = req.file.path.replace('public/','');
         var brandIns 			= new Brand();
         brandIns.brand_logo 	= req.files[0].path.replace('public/','');
@@ -55,6 +65,7 @@ exports.saveBrand = (req,res) => {
         	}
         	else 
         	{
+                    req.flash('success',['Brand added successfully']);
         		res.redirect('/brand/list');
         	}
         });
@@ -98,17 +109,19 @@ exports.updateBrand = (req,res) => {
 
 	uploadBrand(req,res,function(err) 
 	{
+            //console.log()
 		//var newname = req.file.path.replace('public/','');
-		updateData = {
-			'brand_logo' 	: req.files[0].path.replace('public/',''),
-			'brand_cover' 	: req.files[1].path.replace('public/',''),
+		updateData = { 
+			//'brand_logo' 	: req.files[0].path.replace('public/',''),
+			//'brand_cover' 	: req.files[1].path.replace('public/',''),
 			'brand_name'	: req.body.brand_name,
 		    'brand_desc'	: req.body.brand_desc,
 		    'user_id'		: req.body.user_id 
 		};
-		Brand.findByIdAndUpdate(req.body._id,updateData, function(error, updateRes)
+		Brand.findByIdAndUpdate(req.body.brandId,updateData, function(error, updateRes)
 		{
-			res.redirect('/listofbrand');
+                    req.flash('success',['Brand has been updated successfully']);
+                    res.redirect('/brand/list');
 		});
 	});
 };
