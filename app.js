@@ -380,17 +380,17 @@ app.get('/customer/payments',  userAppControlleraAdmin.payments);
 
 
 /* Address CRUD Section */
-app.post('/api/getUserAddress',addressAppController.getUserAddress);
+/*app.post('/api/getUserAddress',addressAppController.getUserAddress);
 app.post('/api/addUserAddress',addressAppController.addAddress);
 app.post('/api/deleteUserAddress',addressAppController.deleteAddress);
-app.post('/api/updateUserAddress',addressAppController.updateAddress);
+app.post('/api/updateUserAddress',addressAppController.updateAddress);*/
 
 /* cart CRUD Section */
-app.post('/api/showCart',cartAppController.getCartProduct);
+/*app.post('/api/showCart',cartAppController.getCartProduct);
 app.post('/api/addToCart',cartAppController.addTocart);
 app.post('/api/deleteFromCart',cartAppController.deleteFromCart);
 app.post('/api/emptyCart',cartAppController.emptyCart);
-app.post('/api/updateIntoCart',cartAppController.updateIntoCart);
+app.post('/api/updateIntoCart',cartAppController.updateIntoCart);*/
 
 /* privacy CRUD Section */
 app.post('/api/privacy/privacysetting',privacyAppController.privacySettingofUser);
