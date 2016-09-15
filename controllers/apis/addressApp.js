@@ -1,5 +1,5 @@
 /* Load required library */
-const Address   = require('../../models/address');
+const CustomerAddress   = require('../../models/address');
 
 /*
  *Web serive to save user address into database 
@@ -8,7 +8,7 @@ exports.addAddress = (req,res) => {
 
     if(req.body.device_token !== '')
     {
-        var addressIns              = new Address();
+        var addressIns              = new CustomerAddress();
         addressIns.user_id          = req.body.user_id;
         addressIns.address_type     = req.body.addressType;
         addressIns.contact_no1      = req.body.contact_no1;
@@ -43,7 +43,7 @@ exports.addAddress = (req,res) => {
 exports.getUserAddress = (req,res) => {
 
     if(req.body.device_token !== ''){
-        Address.find({ user_id: req.body.user_id}, function(error, availableUserRecord) 
+        CustomerAddress.find({ user_id: req.body.user_id}, function(error, availableUserRecord) 
         {
             if(availableUserRecord)
             {
@@ -71,7 +71,7 @@ exports.deleteAddress = (req,res) => {
     if(req.body.device_token !== '')
     {
          
-        Address.remove({_id:req.body.addressId,user_id: req.body.user_id},function(error,deleteAddress)
+        CustomerAddress.remove({_id:req.body.addressId,user_id: req.body.user_id},function(error,deleteAddress)
         {
             if(error)
             {
@@ -108,7 +108,7 @@ exports.updateAddress = (req,res) => {
             country         : req.body.country
         };
          
-        Address.findByIdAndUpdate(req.body._id,updateAddDetails,function(err,updateRes)
+        CustomerAddress.findByIdAndUpdate(req.body._id,updateAddDetails,function(err,updateRes)
         {
             if (err)
             {
