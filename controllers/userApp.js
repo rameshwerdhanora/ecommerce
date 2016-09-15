@@ -492,6 +492,17 @@ exports.customerChangePasswordSave = (req, res) => {
 exports.notification = (req, res) => {
     Notification.findOne({user_id:req.params.customerId},function(error,getCustomerDetails){
         if(getCustomerDetails){
+            console.log(getCustomerDetails);
+            res.render('user/notification', { title: 'Customer notification',activeClass:8, getCustomerDetails:getCustomerDetails });
+        }else{
+            getCustomerDetails = { _id: '',
+                user_id: req.params.customerId,
+                new_arrival: [ { mobile: 0, email: 0 } ],
+                promocode: [ { mobile: 0, email: 0 } ],
+                delivery: [ { mobile: 0, email: 0 } ],
+                shipped: [ { mobile: 0, email: 0} ],
+                news: [ { mobile: 0, email: 0 } ] 
+            };
             res.render('user/notification', { title: 'Customer notification',activeClass:8, getCustomerDetails:getCustomerDetails });
         }
     });
