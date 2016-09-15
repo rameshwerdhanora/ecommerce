@@ -41,6 +41,10 @@ block content
                     input.brand_logo(type='file', name='brand_logo', required='required')
                   p.up-title Upload Logo
                 .color-row
+                  .cl-name Brand Cover
+                  .cl-inp
+                    input(name='brand_cover', type='file', required='required')  
+                .color-row
                   .cl-name Brand Name
                   .cl-inp
                     input(name='brand_name', type='text', required='required')
@@ -56,7 +60,7 @@ block content
     a#modal-104832.default-btn(href='#modal-container-104832', role='button', data-toggle='modal') 
     #modal-container-104832.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true',)
         .modal-dialog.popup-wdt-1
-          form(name='addbrand', method='post', action='/brand/update', enctype='multipart/form-data')
+          form(name='editbrand', method='post', action='/brand/update', enctype='multipart/form-data')
             input(type='hidden',name='brandId',value='#{editRes._id}')
             .modal-content
               .modal-header
@@ -73,6 +77,10 @@ block content
                   .cl-name Brand Name
                   .cl-inp
                     input(name='brand_name', type='text', required='required',value="#{editRes.brand_name}")
+                .color-row
+                  .cl-name Brand Cover
+                  .cl-inp
+                    input(name='brand_cover', type='file', required='required',value="#{editRes.brand_cover}")    
                 .color-row
                   .cl-name Brand Description
                   .cl-inp

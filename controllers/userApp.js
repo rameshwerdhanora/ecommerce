@@ -434,25 +434,26 @@ exports.customerChangePasswordSave = (req, res) => {
  * List of Customer Address page.
  */
 exports.notification = (req, res) => {
-    Notification.findOne({user_id:req.params.customerId},function(error,getCustomerDetails){
-        if(getCustomerDetails){
-            console.log(getCustomerDetails);
-            res.render('user/notification', { title: 'Customer notification',activeClass:8, getCustomerDetails:getCustomerDetails });
+    Notification.findOne({user_id:req.params.customerId},function(error,resultRes){
+        if(resultRes){
+            res.render('user/notification', { title: 'Customer notification',activeClass:8, getCustomerDetails:{_id:req.params.customerId}, result:resultRes });
         }else{
-            getCustomerDetails = { _id: '',
+            resultRes = { _id: '',
                 user_id: req.params.customerId,
                 new_arrival: [ { mobile: 0, email: 0 } ],
                 promocode: [ { mobile: 0, email: 0 } ],
                 delivery: [ { mobile: 0, email: 0 } ],
                 shipped: [ { mobile: 0, email: 0} ],
-                news: [ { mobile: 0, email: 0 } ] 
+                news: [ { mobile: 0, email: 0 } ] ,
+                user_id:req.params.customerId
             };
-            res.render('user/notification', { title: 'Customer notification',activeClass:8, getCustomerDetails:getCustomerDetails });
+            res.render('user/notification', { title: 'Customer notification',activeClass:8, getCustomerDetails:{_id:req.params.customerId},result:resultRes });
         }
     });
 };
 
 exports.saveNotification = (req, res) => {
+    console.log(req.body.user_id);
     if(req.body.arrival){
         var arrival_email = (req.body.arrival.email != 'undefined')?req.body.arrival.email:'0';
         var arrival_mob = (req.body.arrival.mob != 'undefined')?req.body.arrival.mob:'0';
@@ -498,7 +499,7 @@ exports.saveNotification = (req, res) => {
     };
     Notification.update({user_id:req.body.user_id},updateData,{upsert:true},function(error,updateRes){
         if(updateRes){
-            res.redirect('/customer/notification'); 
+            res.redirect('/customer/notification/'+req.body.user_id); 
         }
     });
 };
