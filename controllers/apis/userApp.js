@@ -90,7 +90,6 @@ exports.postSignupManuallySave = function(req,res)
 						if(error === null)
 						{	
 							// SendMailToUser(req.body);
-							// SendMailToUser(req.body);
 							return res.json({"status":'success',"msg":'Your details is successfully stored.',
 								"newId":userIns._id,
 								"username" : userIns.user_name,
@@ -556,11 +555,11 @@ exports.postBioImage = function(req,res)
 	if(req.body.device_token !== '')
   	{
 		updateBioData = {
-		    'bio'	 : req.body.dob,
+		    'bio'	 : req.body.user_bio,
 		    'updated': Date.now()
 		};
-
-		User.findByIdAndUpdate(req.params.user_id,updateBioData, function(error, updateExistingBio)
+		 
+		User.findByIdAndUpdate(req.body.user_id,updateBioData, function(error, updateExistingBio)
 		{
 			if(updateExistingBio)
 			{	
@@ -652,6 +651,8 @@ function sendMailToUser (user, done)
 		done(err);
 	});
 }
+
+
 
 
 
