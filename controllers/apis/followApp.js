@@ -7,6 +7,8 @@
 const async 	= require('async');
 const Follow 	= require('../../models/follow');
 const Brand     = require('../../models/brand');
+const Like 		= require('../../models/like');
+ 
 
 /**
  * GET /api/follow/:userId/:brandId
@@ -15,13 +17,13 @@ const Brand     = require('../../models/brand');
 
 
 exports.followUnFollowBrand = (req, res) => {
-	Follow.findOne({user_id:req.params.userId},function(error,fetchFollowBrand)
+	Follow.findOne({user_id:req.params.userId,brand_id:req.params.brandId},function(error,fetchFollowBrand)
 	{
 		if(fetchFollowBrand)
 		{
 			Follow.remove({user_id:req.params.userId,brand_id:req.params.brandId},function(error,unfollowBrand)
 			{
-				return res.json({"status":'success',"msg":'This brand successfully unfollow from your list.'});
+				return res.json({"status":'success',"msg":'This brand successfully in unfollow your list.'});
 			});
 		}
 		else 
@@ -46,9 +48,6 @@ exports.followUnFollowBrand = (req, res) => {
    
 };
 
-
-
-
 /**
  * GET /api/listoffollow/:userId
  * Process for follow unfollow brand.
@@ -68,7 +67,6 @@ exports.followUnFollowBrand = (req, res) => {
 
 			Brand.find({_id:{$in:tempArr}},function(error,fetchBrandDetails)
 			{
-				 
 		     	async.eachSeries(fetchBrandDetails, function(brandId, callback)
 		    	{
 		    		 
@@ -83,7 +81,20 @@ exports.followUnFollowBrand = (req, res) => {
 			    function(err)
 			    {
 			    	//console.log(allFollowBrandList);
-			    	return res.json({"status":'success',"msg":'Found list of your follow brands.',brandList:allFollowBrandList});
+
+			    	Like.find({user_id:req.params.userId},{product_id:true,_id:false},function(error,fetchAllLikeByUser)
+          			{
+          				if(fetchAllLikeByUser != '')
+          				{
+          					return res.json({"status":'success',"msg":'Found list of your follow brands.',brandList:allFollowBrandList,like_count:fetchAllLikeByUser.length});
+          				}
+          				else 
+          				{
+          					return res.json({"status":'success',"msg":'Found list of your follow brands.',brandList:allFollowBrandList,like_count:'0'});
+          				}
+          			});
+
+			    	
 			    });
 			});
 		}
