@@ -1062,6 +1062,120 @@ exports.addCartOptions = (req, res) => {
 
 }
 
+/**
+ * GET /api/product/fetchcheck
+ * Process for Fetch Brand it fits Product
+ */
+
+exports.fetchcheck = (req, res) => {
+
+  Product.find({category_id:'57c437ee46bc895414c8f646',sub_category_id:{$in:['57c447b3610b7c94196e75fa']}},{attribute:true,_id:true},function(error,fetchAllSizeAccToCat){
+    if(fetchAllSizeAccToCat)
+    {
+      var options = {};
+      async.parallel
+        ([
+          function(callback)
+          {  
+            fetchingAllSizes(fetchAllSizeAccToCat, function(err, fetchAllSizeAccToCatasd)
+            {
+              options.allvalues = fetchAllSizeAccToCatasd;
+              callback(err); 
+            });
+          }
+        ],
+        function(err){
+          //console.log(options);
+           return res.json({"status":'success',"msg":'Found All Size according to selections.',allsizes:options})
+        });
+    }
+    else 
+    {
+      return res.json({"status":'error',"msg":'Not found any size according your selections.'})
+    } 
+
+  })
+};
+
+
+function fetchingAllSizes(fetchAllSizeAccToCat,callback)
+{
+    var mainObj = [];
+    var ArrayIns = new Array();
+    for(var size=0;size<fetchAllSizeAccToCat.length;size++)
+    {
+      if(fetchAllSizeAccToCat[size].attribute != '')
+      {
+        ArrayIns.push(fetchAllSizeAccToCat[size].attribute);
+      }
+    }
+    ArrayInsjoin = ArrayIns.join(',');
+    ArrayInssplit = ArrayInsjoin.split(',');
+
+    uniqueArrayForAttId = ArrayInssplit.filter(function(elem, pos) {
+        return ArrayInssplit.indexOf(elem) == pos;
+    });
+
+    AttributeOptions.find({_id:{$in:uniqueArrayForAttId}},function(error,listAllValues)
+    {
+      var AttrOptiAr = new Array();
+
+      for(var e=0;e<listAllValues.length;e++)
+      {
+        if(listAllValues[e].attribute_id != '')
+        {
+          AttrOptiAr.push(listAllValues[e].attribute_id);
+
+        }
+      }
+
+    uniqueArrayNew = AttrOptiAr.filter(function(elem, pos) {
+      return AttrOptiAr.indexOf(elem) == pos;
+    });
+
+    Attribute.find({_id:{$in:AttrOptiAr}},function(error,listAllVas)
+    {
+      if(listAllVas)
+      {
+        var finalSndAr = new Array();
+        async.eachSeries(listAllVas, function(listAllVas, callback)
+        {
+          var temp            = {};
+          temp._id            = listAllVas._id;
+          temp.attribute_name = listAllVas.name;
+          temp.display_type   = listAllVas.display_type;
+
+          async.parallel
+          ([
+            function(callback)
+            {  
+             
+              AttributeOptions.find({attribute_id:listAllVas._id},function(error,listAllAttrOptionsValues)
+              {    
+                  console.log(listAllAttrOptionsValues); 
+                  temp.options = listAllAttrOptionsValues;
+                  callback(error);
+              }); 
+             
+            }
+          ],
+          function(err)
+          {  
+            finalSndAr.push(temp);
+            callback(err);
+          }); 
+        },
+        function(err)
+        {
+          callback(err,finalSndAr);
+        });
+      }
+    });
+  });
+
+
+}
+
 function fetchingSizes(attributIds,callback)
 {
     Attribute.find({_id: {$in : attributIds}},function(error,attribRes){
