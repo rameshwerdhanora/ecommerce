@@ -82,7 +82,7 @@ exports.followUnFollowBrand = (req, res) => {
 		    	},
 			    function(err)
 			    {
-			    	console.log(allFollowBrandList);
+			    	//console.log(allFollowBrandList);
 			    	return res.json({"status":'success',"msg":'Found list of your follow brands.',brandList:allFollowBrandList});
 			    });
 			});
