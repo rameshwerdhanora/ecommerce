@@ -258,7 +258,7 @@ app.get('/brand/list/:brandId?',  brandController.listOfBrand);
 app.post('/brand/save',  brandController.saveBrand);
 
 
-app.get('/brand/edit/:brandId',  brandController.editBrand);
+//app.get('/brand/edit/:brandId',  brandController.editBrand);
 app.post('/brand/update',  brandController.updateBrand);
 app.get('/brand/delete/:brandId',  brandController.removeBrand);
 
@@ -299,7 +299,9 @@ app.get('/product/loadattrvalues/:attrId',  productController.loadAttrValues);
 
 
 /* Category CRUD Section */ // Need isAuthenticated code for check user is loggedin.
-app.get('/category/list',  categoryController.listOfCategories);
+//app.get('/category/list',  categoryController.listOfCategories);
+//app.get('/category/list/:categoryId?',  categoryController.listOfCategories);
+app.get('/category/list/:categoryId?/:subCatFlag?',  categoryController.listOfCategories);
 app.get('/category/add',  categoryController.addCategory);
 app.post('/category/save',  categoryController.saveCategory);
 app.get('/category/edit/:catId',  categoryController.editCategory);
@@ -308,12 +310,12 @@ app.get('/category/delete/:catId',  categoryController.removeCategory);
 
 
 /* Sub Category CRUD Section */ // Need isAuthenticated code for check user is loggedin.
-app.get('/subcategory/list',  categorySubController.listOfSubCategories);
-app.get('/subcategory/add',  categorySubController.addSubCategory);
+//app.get('/subcategory/list',  categorySubController.listOfSubCategories);
+//app.get('/subcategory/add',  categorySubController.addSubCategory);
 app.post('/subcategory/save',  categorySubController.saveSubCategory);
-app.get('/subcategory/edit/:subcatId',  categorySubController.editSubCategory);
+//app.get('/subcategory/edit/:subcatId',  categorySubController.editSubCategory);
 app.post('/subcategory/update',  categorySubController.updateSubCategory);
-app.get('/subcategory/delete/:subcatId',  categorySubController.removeSubCategory);
+//app.get('/subcategory/delete/:subcatId',  categorySubController.removeSubCategory);
 
 /* Attribute CRUD Section */ // Need isAuthenticated code for check user is loggedin.
 app.get('/attribute', passportConfig.isAuthenticated,  attributeController.list);

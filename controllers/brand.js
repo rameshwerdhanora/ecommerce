@@ -1,6 +1,7 @@
 /* Add Multer Library for upload image */
 const Multer 	= require('multer');
 const Brand		= require('../models/brand');
+const Constants 		= require('../constants/constants');
 
 /* Define Folder name where our user porfile stored */
 var storage =   Multer.diskStorage({
@@ -17,23 +18,35 @@ var uploadBrand = Multer({ storage : storage}).any();
 
 /* Get the list of all brand name with imformation */
 exports.listOfBrand = (req, res) => {
-    Brand.find({},function(error,getAllBrands){
-        if(getAllBrands)
-        {
-            
+    
+    var page = (req.query.page == undefined)?1:req.query.page;
+    page = (page == 0)?1:page;
+    var skipRecord = (page-1)*Constants.RECORDS_PER_PAGE;
+    
+    
+    Brand.count(function(err, totalRecord) { 
+        var totalPage = Math.ceil(totalRecord/Constants.RECORDS_PER_PAGE);
+        Brand.find()
+                .limit(Constants.RECORDS_PER_PAGE)
+                .skip(skipRecord)
+                .sort('-_id')
+                .exec(function(error,getAllBrands){
             if(req.params.brandId){
                 Brand.findOne({_id:req.params.brandId},function(error,brandRes){
                     if(error){
                         req.flash('errors', 'Something went wrong!!');
                     }else{
-                        res.render('brand/list', { title: 'Brand',getAllBrands:getAllBrands,activeClass:5,editRes:brandRes});
+                        res.render('brand/list', { title: 'Brand',getAllBrands:getAllBrands,activeClass:5,editRes:brandRes,currentPage:page, totalRecord:totalRecord, totalPage:totalPage});
                     }
                 });
             }else{
-                res.render('brand/list', { title: 'Brand',getAllBrands:getAllBrands,activeClass:5,editRes:false});
+                res.render('brand/list', { title: 'Brand',getAllBrands:getAllBrands,activeClass:5,editRes:false,currentPage:page, totalRecord:totalRecord, totalPage:totalPage});
             }
-        }
-    });	
+        });
+    });
+    
+    
+    
  
 };
 

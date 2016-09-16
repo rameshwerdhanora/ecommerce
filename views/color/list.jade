@@ -1,88 +1,85 @@
 extends ../layout
 
 block content
-  .col-sm-9.midlle-bar
-    include ../partials/flash
-    .large-title-row
-      img(src='/images/title-icon3.png', alt='icon')
-      |  PRODUCTS
-    .top-btns.clearfix
-      .btn-s-right
-        a#modal-104831.default-btn(href='#modal-container-104831', role='button', data-toggle='modal') ADD COLOR
-    .customer-box.clearfix
-      include ../partials/product_left_menu
-      .profile-cl
-        if (messages.message && messages.message.length > 0)
-          .message.message
-            span= messages.message
+    .col-sm-9.midlle-bar
+        include ../partials/flash
+        .large-title-row
+          img(src='/images/title-icon3.png', alt='icon')
+          |  PRODUCTS
+        .top-btns.clearfix
+          .btn-s-right
+            a#modal-104831.default-btn(href='#modal-container-104831', role='button', data-toggle='modal') ADD COLOR
+        .customer-box.clearfix
+          include ../partials/product_left_menu
+          .profile-cl
+            if (messages.message && messages.message.length > 0)
+              .message.message
+                span= messages.message
 
-        .profile-top-row
-          h2 MANAGE COLORS
-        h3.sub-heading 
-          | COLORS  
-        .profile-form-box
-          ul.brand-list
-            each getAllColor in getAllColors
-              li
-                a(href="/color/list/#{getAllColor._id}")
-                  span
-                    img(src='/#{getAllColor.color_logo}', alt='Logo')
-                  | #{getAllColor.color_name}
+            .profile-top-row
+              h2 MANAGE COLORS
+            h3.sub-heading 
+              | COLORS  
+            .profile-form-box
+              ul.brand-list
+                each getAllColor in getAllColors
+                  li
+                    a(href="/color/list/#{getAllColor._id}")
+                      span
+                        img(src='/#{getAllColor.color_logo}', alt='Logo')
+                      | #{getAllColor.color_name}
+                      
+            include ../partials/pagination
 
-  
-    #modal-container-104831.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
-      .modal-dialog.popup-wdt-1
-        form(name='addColor', method='post', action='/color/save', enctype='multipart/form-data')
-          .modal-content
-            .modal-header
-              button.close(type='button', data-dismiss='modal', aria-hidden='true')
-                img(src='/images/close-icon.png', alt='icon')
-              h4#myModalLabel.modal-title
-                | ADD COLOR
-            .modal-body
-              .upload-box
-                .upload-in
-                  input.color_logo(type='file', name='color_logo', required='required')
-                p.up-title Upload color swatch
-              .color-row.spc-row
-                .cl-name COLOR NAME
-                .cl-inp
-                  input(name='color_name', type='text')
-            .modal-footer
-              button(type='submit')
-                | Save
-                
-                
-    -if(editRes){
-    a#modal-104832.default-btn.dnone(href='#modal-container-104832', role='button', data-toggle='modal')
-    #modal-container-104832.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
-        .modal-dialog.popup-wdt-1
-          form(name='addColor', method='post', action='/color/update', enctype='multipart/form-data')
-            input(type='hidden',name='colorId',value='#{editRes._id}')
-            .modal-content
-              .modal-header
-                button.close(type='button', data-dismiss='modal', aria-hidden='true')
-                  img(src='/images/close-icon.png', alt='icon')
-                h4#myModalLabel.modal-title
-                  | Update COLOR
-              .modal-body
-                .upload-box
-                  .upload-in
-                    input.color_logo(type='file', name='color_logo')
-                  p.up-title Upload color swatch
-                .color-row.spc-row
-                  .cl-name COLOR NAME
-                  .cl-inp
-                    input(name='color_name', type='text',value='#{editRes.color_name}')
-              .modal-footer
-                button(type='submit')
-                  | Save
-             script(type='text/javascript').
-                $(document).ready(function(n){
-                    $('#modal-104832').trigger('click');
-                });
-    -}
+        #modal-container-104831.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+          .modal-dialog.popup-wdt-1
+            form(name='addColor', method='post', action='/color/save', enctype='multipart/form-data')
+              .modal-content
+                .modal-header
+                  button.close(type='button', data-dismiss='modal', aria-hidden='true')
+                    img(src='/images/close-icon.png', alt='icon')
+                  h4#myModalLabel.modal-title
+                    | ADD COLOR
+                .modal-body
+                  .upload-box
+                    .upload-in
+                      input.color_logo(type='file', name='color_logo', required='required')
+                    p.up-title Upload color
+                  .color-row.spc-row
+                    .cl-name COLOR NAME
+                    .cl-inp
+                      input(name='color_name', type='text', required='required')
+                .modal-footer
+                  button(type='submit')
+                    | Save
 
 
-                  
-  
+        -if(editRes){
+        a#modal-104832.default-btn.dnone(href='#modal-container-104832', role='button', data-toggle='modal')
+        #modal-container-104832.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+            .modal-dialog.popup-wdt-1
+              form(name='updateColor', method='post', action='/color/update', enctype='multipart/form-data')
+                input(type='hidden',name='colorId',value='#{editRes._id}')
+                .modal-content
+                    .modal-header
+                      button.close(type='button', data-dismiss='modal', aria-hidden='true')
+                        img(src='/images/close-icon.png', alt='icon')
+                      h4#myModalLabel.modal-title
+                        | Update COLOR
+                    .modal-body
+                      .upload-box
+                        .upload-in
+                          input.color_logo(type='file', name='color_logo')
+                        p.up-title Upload color
+                      .color-row.spc-row
+                        .cl-name COLOR NAME
+                        .cl-inp
+                          input(name='color_name', type='text',value='#{editRes.color_name}', required='required')
+                    .modal-footer
+                      button(type='submit')
+                        | Save
+                script(type='text/javascript').
+                    $(document).ready(function(n){
+                        $('#modal-104832').trigger('click');
+                    });
+        -}
