@@ -4,7 +4,9 @@
 	@File : Follow Un-follow
 */
 
+const async 	= require('async');
 const Follow 	= require('../../models/follow');
+const Brand     = require('../../models/brand');
 
 /**
  * GET /api/follow/:userId/:brandId
@@ -19,7 +21,7 @@ exports.followUnFollowBrand = (req, res) => {
 		{
 			Follow.remove({user_id:req.params.userId,brand_id:req.params.brandId},function(error,unfollowBrand)
 			{
-				return res.json({"status":'success',"msg":'This brand successfully in unfollow your list.'});
+				return res.json({"status":'success',"msg":'This brand successfully unfollow from your list.'});
 			});
 		}
 		else 
@@ -44,3 +46,51 @@ exports.followUnFollowBrand = (req, res) => {
    
 };
 
+
+
+
+/**
+ * GET /api/listoffollow/:userId
+ * Process for follow unfollow brand.
+ */
+
+ exports.listOfFollowUser = (req, res) => {
+
+ 	Follow.find({user_id:req.params.userId},function(error,fetchFollowBrand)
+	{
+		if(fetchFollowBrand)
+		{	
+			var allFollowBrandList = [];
+			var tempArr = []; 
+			for (var i = 0; i < fetchFollowBrand.length; i++) {
+				tempArr.push(fetchFollowBrand[i].brand_id);
+			}
+
+			Brand.find({_id:{$in:tempArr}},function(error,fetchBrandDetails)
+			{
+				 
+		     	async.eachSeries(fetchBrandDetails, function(brandId, callback)
+		    	{
+		    		 
+		    		var tempObj 		= {};
+		    		tempObj._id 		= brandId._id;
+			    	tempObj.brand_name 	= brandId.brand_name;
+			    	tempObj.brand_logo 	= brandId.brand_logo;
+			    	tempObj.brand_desc 	= brandId.brand_desc;
+			    	allFollowBrandList.push(tempObj);
+			    	callback();
+		    	},
+			    function(err)
+			    {
+			    	console.log(allFollowBrandList);
+			    	return res.json({"status":'success',"msg":'Found list of your follow brands.',brandList:allFollowBrandList});
+			    });
+			});
+		}
+		else 
+		{
+			return res.json({"status":'error',"msg":'You have not follow any brand yet.'});
+		}
+	});
+
+ }
