@@ -213,6 +213,7 @@ app.post('/api/product/sortupdate',productAppController.saveSort);
 app.get('/api/product/fetchfilter/:brandId/:userId',productAppController.fetchFilterValues);
 
 app.get('/api/follow/:userId/:brandId',followAppController.followUnFollowBrand);
+app.get('/api/listoffollow/:userId',followAppController.listOfFollowUser);
 
 app.get('/api/brand/details/:brandId',productAppController.BrandDetailView);
 app.get('/api/brand/itfits/:brandId/:userId',productAppController.BrandItFitsProducts);
@@ -220,6 +221,7 @@ app.get('/api/brand/itfits/:brandId/:userId',productAppController.BrandItFitsPro
 /* Filter Controller */
 app.get('/api/filter/fetchfilter',  filterAppController.fetchFilterOptions);
 app.get('/api/filter/category/:catId',  filterAppController.fetchSelectedSubCategory);
+app.get('/api/product/fetchcheck',  productAppController.fetchcheck);
 
 
 // app.post('/api/showCart',  cartAppController.getCartProduct);
