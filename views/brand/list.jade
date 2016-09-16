@@ -53,8 +53,8 @@ block content
                   .cl-inp
                     textarea(name='brand_desc', required='required')
               .modal-footer
-                button(type='submit')
-                  | Save
+                input(type='submit',value='| Save',name='save')
+                  
               
     -if(editRes){
     a#modal-104832.default-btn(href='#modal-container-104832', role='button', data-toggle='modal') 
@@ -80,7 +80,7 @@ block content
                 .color-row
                   .cl-name Brand Cover
                   .cl-inp
-                    input(name='brand_cover', type='file', required='required',value="#{editRes.brand_cover}")    
+                    input(name='brand_cover', type='file',value="#{editRes.brand_cover}")    
                 .color-row
                   .cl-name Brand Description
                   .cl-inp

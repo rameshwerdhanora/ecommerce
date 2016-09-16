@@ -47,7 +47,7 @@ exports.saveColor = (req,res) => {
 		if(err) {
             return res.end("Error uploading file.");
         }
-
+ 
         var fileName 			= req.file.path.replace('public/','');
 	    var colorIns 			= new Color();
 	    colorIns.color_logo 	= fileName;

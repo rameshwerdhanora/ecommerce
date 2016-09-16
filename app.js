@@ -22,7 +22,7 @@ const sass = require('node-sass-middleware');
 const multer = require('multer');
 const upload = multer({ dest: path.join(__dirname, 'uploads') });
 //var flash = require('connect-flash');
-var fileUpload = require('express-fileupload');
+
 
 
 const constants = require('./constants/constants');
@@ -149,7 +149,7 @@ app.use(function(req, res, next) {
   next();
 });
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
-app.use(fileUpload());
+
 
 //app.use(paginate.middleware(10, 50));
 
@@ -256,7 +256,9 @@ app.post('/api/card/updatecard',  cardAppController.updateCard);
 app.get('/brand/list/:brandId?',  brandController.listOfBrand);
 //app.get('/brand/add',  brandController.addBrand);
 app.post('/brand/save',  brandController.saveBrand);
-app.get('/brand/edit:brandId',  brandController.editBrand);
+
+
+app.get('/brand/edit/:brandId',  brandController.editBrand);
 app.post('/brand/update',  brandController.updateBrand);
 app.get('/brand/delete/:brandId',  brandController.removeBrand);
 
