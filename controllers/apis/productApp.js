@@ -118,13 +118,26 @@ exports.listOfAllWishlist = (req, res) => {
 
      fetchingAllWLAndLikeProducts(wlProdId,function(err, fetchWishlistProducts)
      {
+
         if(fetchWishlistProducts.length > 0)
         {
-          return res.json({"status":'success',"msg":'Fetch all your wishlist products.',fetchAllWishlistByUsers:fetchWishlistProducts});
+          Like.find({user_id:req.params.userId},{product_id:true,_id:false},function(error,fetchAllLikeByUser)
+          {
+            if(fetchAllLikeByUser != '')
+            {
+               
+              return res.json({"status":'success',"msg":'Fetch all your wishlist products.',fetchAllWishlistByUsers:fetchWishlistProducts,like_count:fetchAllLikeByUser.length});
+            }
+            else 
+            {
+              return res.json({"status":'success',"msg":'Fetch all your wishlist products.',fetchAllWishlistByUsers:fetchWishlistProducts,like_count:'0'});
+            }
+            
+          });  
         }
         else 
         {
-          return res.json({"status":'error',"msg":'Products not added in your wishlist'});
+          return res.json({"status":'error',"msg":'Products not added in your wishlist yet.'});
         }
         
      });
@@ -154,12 +167,14 @@ exports.listOfAllLike = (req, res) => {
       {
         lkProdId.push(fetchAllLikeByUser[lk].product_id);
       }
+
+
        
      fetchingAllWLAndLikeProducts(lkProdId,function(err, fetchLikeProducts)
      {
         if(fetchLikeProducts.length > 0)
         {
-          return res.json({"status":'success',"msg":'Fetch all your like products.',fetchAllLikeByUsers:fetchLikeProducts});
+          return res.json({"status":'success',"msg":'Fetch all your like products.',fetchAllLikeByUsers:fetchLikeProducts,like_count:lkProdId.length});
         }
         else 
         {
@@ -355,7 +370,10 @@ function callItsFitsWithConfigData(sizes,brands,userId,req,res)
           ],
           function(err)
           {
-            allBrdProd.push(bArr);
+            if(bArr.product != '')
+            {
+              allBrdProd.push(bArr);
+            }
             callback(err);
           })
         }, 
