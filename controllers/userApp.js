@@ -2,8 +2,9 @@ const User = require('../models/userApp');
 const Permission = require('../models/permissions');
 const UserPermission = require('../models/userPermissions');
 const Notification = require('../models/notification');
-
 const Address   = require('../models/address');
+const ShopShipping   = require('../models/shopShipping');
+const PaymentMethod   = require('../models/userPaymentMethod');
 
 
 
@@ -356,10 +357,43 @@ exports.userShipping = (req, res) => {
     User.findOne({_id:req.params.userId},function(error,getUserDetails){
 		if(getUserDetails)
 		{
-			//console.log(getUserDetails);
-			res.render('user/user_shipping', { title: 'User Shipping',getUserDetails:getUserDetails,activeClass:2});
+			ShopShipping.findOne({ user_id: req.params.userId}, function(error, availableShopShipping)
+	        {
+				//console.log(availableShopShipping);
+				res.render('user/user_shipping', { title: 'User Shipping',getUserDetails:getUserDetails,activeClass:2,availableShopShipping:availableShopShipping});
+			});
 		}
 	});
+};
+
+/**
+ * POST /user/shipping/save/
+ * User Shipping Save
+ */
+exports.userShippingSave = (req, res) => {
+	var shippingInfo            	 = new ShopShipping();
+    shippingInfo.user_id        	 = req.params.userId;
+    shippingInfo.address        	 = req.body.address,
+    shippingInfo.city    			 = req.body.city;
+    shippingInfo.postal_code    	 = req.body.postal_code;
+    shippingInfo.state    			 = req.body.state;
+    shippingInfo.country    		 = req.body.country;
+    shippingInfo.shipping_account    = req.body.shipping_account;
+    shippingInfo.shipping_username   = req.body.shipping_username;
+    shippingInfo.shipping_password   = req.body.shipping_password;
+
+	shippingInfo.save(function(error,shippingObject)
+    {
+        if (error)
+        {
+            req.flash('error',error);
+        }
+        else
+        {
+            req.flash('success','Shipping Saved Successfully.');
+			res.redirect('/user/shipping/'+req.params.userId);
+        }
+    });
 };
 
 /* User Payment Method */
@@ -367,10 +401,46 @@ exports.userPaymentMethod = (req, res) => {
     User.findOne({_id:req.params.userId},function(error,getUserDetails){
 		if(getUserDetails)
 		{
-			//console.log(getUserDetails);
-			res.render('user/user_payment_method', { title: 'User Payment Method',getUserDetails:getUserDetails,activeClass:3});
+			PaymentMethod.findOne({ user_id: req.params.userId}, function(error, availablePaymentMethod)
+	        {
+	        	if(availablePaymentMethod == null)
+	        	{
+	        		availablePaymentMethod = [];
+	        	}
+				//console.log(availablePaymentMethod);
+				res.render('user/user_payment_method', { title: 'User Payment Method',getUserDetails:getUserDetails,activeClass:3,availablePaymentMethod:availablePaymentMethod});
+			});
+			
 		}
 	});
+};
+
+/**
+ * POST /user/paymentMethod/save/
+ * User payment Method save
+ */
+exports.userPaymentMethodSave = (req, res) => {
+	var paymentMethodInfo            	 = new PaymentMethod();
+    paymentMethodInfo.user_id        	 = req.params.userId;
+    paymentMethodInfo.payment_type    	 = req.body.payment_type,
+    paymentMethodInfo.paypal_email 		 = req.body.paypal_email;
+    paymentMethodInfo.venmo_email    	 = req.body.venmo_email;
+    paymentMethodInfo.direct_deposit_bank_name  = req.body.direct_deposit_bank_name;
+    paymentMethodInfo.direct_deposit_account_no = req.body.direct_deposit_account_no;
+    paymentMethodInfo.direct_deposit_routing_no = req.body.direct_deposit_routing_no;
+
+	paymentMethodInfo.save(function(error,paymentMethodObject)
+    {
+        if (error)
+        {
+            req.flash('error',error);
+        }
+        else
+        {
+            req.flash('success','Payment Method Saved Successfully.');
+			res.redirect('/user/paymentMethod/'+req.params.userId);
+        }
+    });
 };
 
 /* User ORder */

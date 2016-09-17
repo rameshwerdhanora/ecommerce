@@ -13,7 +13,7 @@ block content
           .profile-top-row
             h2 PAYMENTS
           .profile-form-box
-            form(method='post', action='')
+            form(method='post', action='/user/paymentMethod/save/#{getUserDetails._id}')
               ul.brand_payment_brand_view
                 li Choose your form of payout.
                 li
@@ -27,7 +27,7 @@ block content
                     .profile-frm-row
                       .profile-frm-cl1 EMAIL
                       .profile-frm-cl2
-                        input(type='text', value='', name='')
+                        input(type='text', value='#{availablePaymentMethod.paypal_email ? availablePaymentMethod.paypal_email :""}', name='paypal_email')
                 li
                   .vimo-txt
                     span.vm-inp
@@ -40,7 +40,7 @@ block content
                     .profile-frm-row
                       .profile-frm-cl1 EMAIL
                       .profile-frm-cl2
-                        input(type='text', value='', name='')
+                        input(type='text', value='#{availablePaymentMethod.venmo_email ? availablePaymentMethod.venmo_email :""}', name='venmo_email')
                 li
                   .payment
                     .profile-right-cl4
@@ -54,14 +54,14 @@ block content
                       .profile-frm-row
                         .profile-frm-cl1 Bank Name
                         .profile-frm-cl2
-                          input(type='text', value='', name='')
+                          input(type='text', value='#{availablePaymentMethod.direct_deposit_bank_name ? availablePaymentMethod.direct_deposit_bank_name :""}', name='direct_deposit_bank_name')
                       .profile-frm-row
                         .profile-frm-cl1 Account Number
                         .profile-frm-cl2
-                          input(type='text', value='', name='')
+                          input(type='text', value='#{availablePaymentMethod.direct_deposit_account_no ? availablePaymentMethod.direct_deposit_account_no :""}', name='direct_deposit_account_no')
                       .profile-frm-row
                         .profile-frm-cl1 Routing Number
                         .profile-frm-cl2
-                          input(type='text', value='', name='')
+                          input(type='text', value='#{availablePaymentMethod.direct_deposit_routing_no ? availablePaymentMethod.direct_deposit_routing_no :""}', name='direct_deposit_routing_no')
                   .save
-                    button SAVE
+                    button(type='submit') SAVE 
