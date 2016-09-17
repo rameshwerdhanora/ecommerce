@@ -388,6 +388,8 @@ app.get('/api/privacy/fetchprivacysetting/:userId',privacyAppController.fetchPri
 app.post('/api/privacy/notificationsetting',privacyAppController.notificationSettingofUser);
 app.get('/api/privacy/fetchnotificationsetting/:userId',privacyAppController.fetchNotificationSetting);
 
+/* MY Profile */
+app.get('/myprofile/:id',  userAppControlleraAdmin.myProfile);
 
 /* Users pages */
 app.get('/user/list',  userAppControlleraAdmin.userList);

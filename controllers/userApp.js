@@ -26,11 +26,11 @@ exports.customerList = (req, res) => {
  * Customer user view page.
  */
 exports.customerView = (req, res) => {
-    User.find({_id:req.params.id},function(error,getCustomerDetails){
+    User.findOne({_id:req.params.id},function(error,getCustomerDetails){
             if(getCustomerDetails)
             {
                     //console.log(getCustomerDetails);
-                    res.render('user/customer_view', { title: 'Customer View',getCustomerDetails:getCustomerDetails,activeClass:req.params.activeClass});
+                    res.render('user/customer_view', { title: 'Customer View',getCustomerDetails:getCustomerDetails,activeClass:1});
             }
     });	
 };
@@ -126,8 +126,17 @@ exports.customerAddressList = (req, res) => {
 		{
 			Address.find({ user_id: req.params.customerId}, function(error, availableUserAddresses)
 	        {
-	            console.log(availableUserAddresses);
-				res.render('user/customer_address', { title: 'Customer Address',getCustomerDetails:getCustomerDetails,activeClass:2,availableUserAddresses:availableUserAddresses});
+	            //console.log(availableUserAddresses);
+	            var shippingAddress =[];
+	            var billingAddress = [];
+	            availableUserAddresses.forEach(function(item, index) {
+				  	if(availableUserAddresses[index].address_type == 'Shipping')
+	            		shippingAddress.push(availableUserAddresses[index]);
+	            	else
+	            		billingAddress.push(availableUserAddresses[index]);
+				});  
+
+				res.render('user/customer_address', { title: 'Customer Address',getCustomerDetails:getCustomerDetails,activeClass:2,billingAddressObj:billingAddress,shippingAddressObj:shippingAddress});
 	        });
 		}
 	});	
@@ -164,7 +173,7 @@ exports.customerAddressSave = (req, res) => {
         else
         {
             req.flash('success','Added Successfully.');
-			res.redirect('/customer/address/'+req.params.customerId+'/2');
+			res.redirect('/customer/address/'+req.params.customerId);
         }
     });
 };
@@ -413,6 +422,25 @@ exports.userNotifications = (req, res) => {
 		}
 	});
 };
+
+
+/**
+ * GET myProfile
+ * My Profile view page in edit mode.
+ */
+exports.myProfile = (req, res) => {
+	User.findOne(req.body._id,function(error,getProfileDetails){
+		if(getProfileDetails)
+		{
+			console.log(getProfileDetails);
+			res.render('user/myprofile_view', { title: 'My Profile',getProfileDetails:getProfileDetails});
+
+			//res.render('user/user_edit', { title: 'User Edit',getUserDetails:getUserDetails,activeClass:req.params.activeClass});
+
+		}
+	});	
+};
+
 
 /**
  * POST /customer/customerChangePasswordSave
