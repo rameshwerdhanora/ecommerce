@@ -1,13 +1,11 @@
 const mongoose = require('mongoose');
 
-const customerAddressSchema = new mongoose.Schema({
+const orderDetailsSchema = new mongoose.Schema({
 	order_id : String,
-	user_id : String,
-	product : Array,
-	created : String,
-	updated : String
+	index : String,
+	data : Array 
 });
 
-const CustomerAddress = mongoose.model('CustomerAddress', customerAddressSchema);
+const OrderDetails = mongoose.model('OrderDetails', orderDetailsSchema);
 
-module.exports = CustomerAddress;
+module.exports = OrderDetails;
