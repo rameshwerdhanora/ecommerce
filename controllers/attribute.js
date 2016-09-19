@@ -37,7 +37,8 @@ exports.list = (req, res) => {
 /* Add Attribute page  */
 exports.create = (req, res) => {
   res.render('attribute/create', {   
-    title: 'Create Attribute'
+    title: 'Create Attribute',
+    activeClass:6
   });
 };
 

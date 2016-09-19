@@ -1,19 +1,21 @@
 const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema({
-	users_id : String,
-	category_id : String,
+        name : String,
+        blurb : String,
+        gender : String,
+        category_id : String,
 	sub_category_id : String,
 	brand_id : String,
-	name : String,
-	blurb : String,
-	sku : String,
+        sku : String,
+        price : String,
+        description : String,
+	users_id : String,
 	description : String,
-	price : String,
 	productview:String,
 	is_featured : String,
 	color : Array,
-	attribute : Array,
+	attribute : Array,// It's attribute option iD's
 	created : String,
 	updated : String
 });

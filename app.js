@@ -288,7 +288,8 @@ app.post('/size/update',  sizeController.updateSize);
 
 
 /* Products CRUD Section */ // Need isAuthenticated code for check user is loggedin.
-app.get('/product/list',  productController.listOfProducts);
+app.get('/product/list/:productId?',  productController.listOfProducts);
+app.post('/product/getAttrib',  productController.getAttrib);
 app.get('/product/add',  productController.addProduct);
 app.post('/product/save',  productController.saveProduct);
 app.get('/product/edit/:productId',  productController.editProduct);
