@@ -57,6 +57,7 @@ const addressAppController      = require('./controllers/apis/addressApp');
 const shippingAppController     = require('./controllers/apis/shippingApp');
 const cartAppController         = require('./controllers/apis/cartApp');
 const privacyAppController      = require('./controllers/apis/privacyApp');
+const orderAppController        = require('./controllers/apis/orderApp');
 
 const brandController          = require('./controllers/brand');
 const colorController          = require('./controllers/color');
@@ -224,11 +225,14 @@ app.get('/api/filter/category/:catId',  filterAppController.fetchSelectedSubCate
 app.post('/api/product/fetchcheck',  productAppController.fetchcheck);
 
 
-// app.post('/api/showCart',  cartAppController.getCartProduct);
-// app.post('/api/addTocart',  cartAppController.addTocart);
-// app.post('/api/deleteFromCart',  cartAppController.deleteFromCart);
-// app.post('/api/emptyCart',  cartAppController.emptyCart);
-// app.post('/api/updateIntoCart',  cartAppController.updateIntoCart);
+app.post('/api/showCart',  cartAppController.getCartProduct);
+app.post('/api/addTocart',  cartAppController.addTocart);
+app.post('/api/deleteFromCart',  cartAppController.deleteFromCart);
+app.post('/api/emptyCart',  cartAppController.emptyCart);
+app.post('/api/updateIntoCart',  cartAppController.updateIntoCart);
+app.get('/api/cart/mycart/:userId',  cartAppController.myCartWithBrands)
+app.get('/api/cart/showcartaccbrand/:userId/:brandId',  cartAppController.showCartAccBrand);
+app.post('/api/order/saveorder',orderAppController.saveUserFinalOrder)
 
 app.get('/api/listofbrand',  brandAppController.listOfAllBrand);
 app.get('/api/listofsize',  sizeAppController.listOfAllSize);
@@ -263,10 +267,10 @@ app.post('/brand/update',  brandController.updateBrand);
 app.get('/brand/delete/:brandId',  brandController.removeBrand);
 
 /* Address CRUD Section */
-// app.post('/api/getUserAddress',addressAppController.getUserAddress);
-// app.post('/api/addUserAddress',addressAppController.addAddress);
-// app.post('/api/deleteUserAddress',addressAppController.deleteAddress);
-// app.post('/api/updateUserAddress',addressAppController.updateAddress);
+app.post('/api/getUserAddress',addressAppController.getUserAddress);
+app.post('/api/addUserAddress',addressAppController.addAddress);
+app.post('/api/deleteUserAddress',addressAppController.deleteAddress);
+app.post('/api/updateUserAddress',addressAppController.updateAddress);
 
 
 /* Color CRUD Section */ // Need isAuthenticated code for check user is loggedin.
