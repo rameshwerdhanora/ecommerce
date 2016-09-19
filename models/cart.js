@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cartSchema = new mongoose.Schema({
 	user_id : String,
 	product_id : String,
+	brand_id : String,
 	quantity:String,
 	size:String,//Comma separated
 	color_id:String,
