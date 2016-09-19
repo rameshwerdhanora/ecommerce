@@ -2,8 +2,9 @@ const User = require('../models/userApp');
 const Permission = require('../models/permissions');
 const UserPermission = require('../models/userPermissions');
 const Notification = require('../models/notification');
-
 const Address   = require('../models/address');
+const ShopShipping   = require('../models/shopShipping');
+const PaymentMethod   = require('../models/userPaymentMethod');
 
 
 
@@ -26,11 +27,11 @@ exports.customerList = (req, res) => {
  * Customer user view page.
  */
 exports.customerView = (req, res) => {
-    User.find({_id:req.params.id},function(error,getCustomerDetails){
+    User.findOne({_id:req.params.id},function(error,getCustomerDetails){
             if(getCustomerDetails)
             {
                     //console.log(getCustomerDetails);
-                    res.render('user/customer_view', { title: 'Customer View',getCustomerDetails:getCustomerDetails,activeClass:req.params.activeClass});
+                    res.render('user/customer_view', { title: 'Customer View',getCustomerDetails:getCustomerDetails,activeClass:1});
             }
     });	
 };
@@ -124,10 +125,19 @@ exports.customerAddressList = (req, res) => {
 	User.findOne({_id:req.params.customerId},function(error,getCustomerDetails){
 		if(getCustomerDetails)
 		{
-			Address.find({ user_id: req.params.customerId}, function(error, availableUserRecord)
+			Address.find({ user_id: req.params.customerId}, function(error, availableUserAddresses)
 	        {
-	            //console.log(getCustomerDetails);
-				res.render('user/customer_address', { title: 'Customer Address',getCustomerDetails:getCustomerDetails,activeClass:2,availableUserAddresses:availableUserRecord});
+	            //console.log(availableUserAddresses);
+	            var shippingAddress =[];
+	            var billingAddress = [];
+	            availableUserAddresses.forEach(function(item, index) {
+				  	if(availableUserAddresses[index].address_type == 'Shipping')
+	            		shippingAddress.push(availableUserAddresses[index]);
+	            	else
+	            		billingAddress.push(availableUserAddresses[index]);
+				});  
+
+				res.render('user/customer_address', { title: 'Customer Address',getCustomerDetails:getCustomerDetails,activeClass:2,billingAddressObj:billingAddress,shippingAddressObj:shippingAddress});
 	        });
 		}
 	});	
@@ -140,7 +150,7 @@ exports.customerAddressList = (req, res) => {
  * Save Customer information
  */
 exports.customerAddressSave = (req, res) => {
-	console.log(req.body);
+	//console.log(req.body);
 	var addressIns              = new Address();
     addressIns.user_id          = req.params.customerId;
     addressIns.address_type     = req.body.addressType;
@@ -164,7 +174,7 @@ exports.customerAddressSave = (req, res) => {
         else
         {
             req.flash('success','Added Successfully.');
-			res.redirect('/customer/address/'+req.params.customerId+'/'+req.params.activeClass);
+			res.redirect('/customer/address/'+req.params.customerId);
         }
     });
 };
@@ -267,34 +277,6 @@ exports.userSave = (req, res) => {
 	});
 };
 
-/**
-<<<<<<< HEAD
- * GET /customer/list
- * Customer List user page.
- */
-exports.customerList = (req, res) => {
-	User.find({role_id:5},function(error,getCustomers){
-		if(getCustomers)
-		{
-			//console.log(getCustomers.length);
-			res.render('user/customer_list', { title: 'Customer',getCustomers:getCustomers});
-		}
-	});	
-};
-
-/**
- * GET /customer/view
- * Customer user view page.
- */
-exports.customerView = (req, res) => {
-	User.findOne({_id:req.params.id},function(error,getCustomerDetails){
-		if(getCustomerDetails)
-		{
-			//console.log(getCustomerDetails._id);
-			res.render('user/customer_view', { title: 'Customer View',getCustomerDetails:getCustomerDetails,activeClass:1});
-		}
-	});
-}
 /*
  * GET /user/view
  * user view page.
@@ -375,10 +357,43 @@ exports.userShipping = (req, res) => {
     User.findOne({_id:req.params.userId},function(error,getUserDetails){
 		if(getUserDetails)
 		{
-			//console.log(getUserDetails);
-			res.render('user/user_shipping', { title: 'User Shipping',getUserDetails:getUserDetails,activeClass:2});
+			ShopShipping.findOne({ user_id: req.params.userId}, function(error, availableShopShipping)
+	        {
+				//console.log(availableShopShipping);
+				res.render('user/user_shipping', { title: 'User Shipping',getUserDetails:getUserDetails,activeClass:2,availableShopShipping:availableShopShipping});
+			});
 		}
 	});
+};
+
+/**
+ * POST /user/shipping/save/
+ * User Shipping Save
+ */
+exports.userShippingSave = (req, res) => {
+	var shippingInfo            	 = new ShopShipping();
+    shippingInfo.user_id        	 = req.params.userId;
+    shippingInfo.address        	 = req.body.address,
+    shippingInfo.city    			 = req.body.city;
+    shippingInfo.postal_code    	 = req.body.postal_code;
+    shippingInfo.state    			 = req.body.state;
+    shippingInfo.country    		 = req.body.country;
+    shippingInfo.shipping_account    = req.body.shipping_account;
+    shippingInfo.shipping_username   = req.body.shipping_username;
+    shippingInfo.shipping_password   = req.body.shipping_password;
+
+	shippingInfo.save(function(error,shippingObject)
+    {
+        if (error)
+        {
+            req.flash('error',error);
+        }
+        else
+        {
+            req.flash('success','Shipping Saved Successfully.');
+			res.redirect('/user/shipping/'+req.params.userId);
+        }
+    });
 };
 
 /* User Payment Method */
@@ -386,10 +401,46 @@ exports.userPaymentMethod = (req, res) => {
     User.findOne({_id:req.params.userId},function(error,getUserDetails){
 		if(getUserDetails)
 		{
-			//console.log(getUserDetails);
-			res.render('user/user_payment_method', { title: 'User Payment Method',getUserDetails:getUserDetails,activeClass:3});
+			PaymentMethod.findOne({ user_id: req.params.userId}, function(error, availablePaymentMethod)
+	        {
+	        	if(availablePaymentMethod == null)
+	        	{
+	        		availablePaymentMethod = [];
+	        	}
+				//console.log(availablePaymentMethod);
+				res.render('user/user_payment_method', { title: 'User Payment Method',getUserDetails:getUserDetails,activeClass:3,availablePaymentMethod:availablePaymentMethod});
+			});
+			
 		}
 	});
+};
+
+/**
+ * POST /user/paymentMethod/save/
+ * User payment Method save
+ */
+exports.userPaymentMethodSave = (req, res) => {
+	var paymentMethodInfo            	 = new PaymentMethod();
+    paymentMethodInfo.user_id        	 = req.params.userId;
+    paymentMethodInfo.payment_type    	 = req.body.payment_type,
+    paymentMethodInfo.paypal_email 		 = req.body.paypal_email;
+    paymentMethodInfo.venmo_email    	 = req.body.venmo_email;
+    paymentMethodInfo.direct_deposit_bank_name  = req.body.direct_deposit_bank_name;
+    paymentMethodInfo.direct_deposit_account_no = req.body.direct_deposit_account_no;
+    paymentMethodInfo.direct_deposit_routing_no = req.body.direct_deposit_routing_no;
+
+	paymentMethodInfo.save(function(error,paymentMethodObject)
+    {
+        if (error)
+        {
+            req.flash('error',error);
+        }
+        else
+        {
+            req.flash('success','Payment Method Saved Successfully.');
+			res.redirect('/user/paymentMethod/'+req.params.userId);
+        }
+    });
 };
 
 /* User ORder */
@@ -442,33 +493,24 @@ exports.userNotifications = (req, res) => {
 	});
 };
 
-/**
- * POST /customer/customerChangePasswordSave
- * Update Customer Change Password Save
- */
-exports.customerChangePasswordSave = (req, res) => {
-	updateData = {
-            'password' 	: req.body.password,
-	};
-	User.findByIdAndUpdate(req.body._id,updateData, function(error, updateRes)
-	{
-		res.redirect('/customer/view/'+req.body._id);
-	});
-};
 
 /**
-<<<<<<< HEAD
- * GET /customer/customerChangePassword
- * Customer Change Password
+ * GET myProfile
+ * My Profile view page in edit mode.
  */
-exports.customerChangePassword = (req, res) => {
-	User.find({_id:req.params.customerId},function(error,getCustomerDetails){
-		if(getCustomerDetails)
+exports.myProfile = (req, res) => {
+	User.findOne(req.body._id,function(error,getProfileDetails){
+		if(getProfileDetails)
 		{
-			res.render('user/customer_change_password', { title: 'Change Password',getCustomerDetails:getCustomerDetails});
+			console.log(getProfileDetails);
+			res.render('user/myprofile_view', { title: 'My Profile',getProfileDetails:getProfileDetails});
+
+			//res.render('user/user_edit', { title: 'User Edit',getUserDetails:getUserDetails,activeClass:req.params.activeClass});
+
 		}
 	});	
 };
+
 
 /**
  * POST /customer/customerChangePasswordSave
@@ -490,14 +532,26 @@ exports.customerChangePasswordSave = (req, res) => {
  * List of Customer Address page.
  */
 exports.notification = (req, res) => {
-    Notification.findOne({user_id:req.params.customerId},function(error,getCustomerDetails){
-        if(getCustomerDetails){
-            res.render('user/notification', { title: 'Customer notification',activeClass:8, getCustomerDetails:getCustomerDetails });
+    Notification.findOne({user_id:req.params.customerId},function(error,resultRes){
+        if(resultRes){
+            res.render('user/notification', { title: 'Customer notification',activeClass:8, getCustomerDetails:{_id:req.params.customerId}, result:resultRes });
+        }else{
+            resultRes = { _id: '',
+                user_id: req.params.customerId,
+                new_arrival: [ { mobile: 0, email: 0 } ],
+                promocode: [ { mobile: 0, email: 0 } ],
+                delivery: [ { mobile: 0, email: 0 } ],
+                shipped: [ { mobile: 0, email: 0} ],
+                news: [ { mobile: 0, email: 0 } ] ,
+                user_id:req.params.customerId
+            };
+            res.render('user/notification', { title: 'Customer notification',activeClass:8, getCustomerDetails:{_id:req.params.customerId},result:resultRes });
         }
     });
 };
 
 exports.saveNotification = (req, res) => {
+    console.log(req.body.user_id);
     if(req.body.arrival){
         var arrival_email = (req.body.arrival.email != 'undefined')?req.body.arrival.email:'0';
         var arrival_mob = (req.body.arrival.mob != 'undefined')?req.body.arrival.mob:'0';
@@ -543,7 +597,7 @@ exports.saveNotification = (req, res) => {
     };
     Notification.update({user_id:req.body.user_id},updateData,{upsert:true},function(error,updateRes){
         if(updateRes){
-            res.redirect('/customer/notification'); 
+            res.redirect('/customer/notification/'+req.body.user_id); 
         }
     });
 };

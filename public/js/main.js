@@ -1,12 +1,82 @@
+function getSizeOptions(gender,appendId){
+    $.ajax({
+            type: "POST",
+            url: "/product/getAttrib",
+            data: {gender:gender},
+            dataType: 'json',
+            success: function(res){
+                $(".product_size").remove();
+                if(res.status == 'success'){
+                    var html = '';
+                    for(var i=0; i < res.data.length;i++){//size
+                        
+                        
+                        for(var j=0; j < res.data[i].attributes.length;j++){
+                            html+='<div class=" profile-frm-row product_size"><div class="sg-row"><span class="sz-txt">';
+                            html+= res.data[i].size;
+                            html+= ' ('+res.data[i].attributes[j].attribute +') ';
+                            if(res.data[i].attributes[j].options.length){
+                                for(var k = 0; k < res.data[i].attributes[j].options.length; k++){
+                                       //html+= '<a href="#">'+ res.data[i].attributes[j].options[k].value+'</a>';
+                                        if(attributeOptions.indexOf(res.data[i].attributes[j].options[k].id) == -1){
+                                            html+= '<input type="checkbox" value="'+res.data[i].attributes[j].options[k].id+'" name="size[]" />'+ res.data[i].attributes[j].options[k].value+'';//'+res.data[i].attributes[j].attributeId+'
+                                        }else{
+                                            html+= '<input checked="checked" type="checkbox" value="'+res.data[i].attributes[j].options[k].id+'" name="size[]" />'+ res.data[i].attributes[j].options[k].value+'';//'+res.data[i].attributes[j].attributeId+'
+                                        }
+                                        
+                                }
+                                html+='</span></div></div>';
+                            }else{
+                                html+='No option found</span></div></div><div class="clearfix"></div>';
+                            }
+                            
+                        }
+                        //html+='</span></div></div>';
+                        
+                        
+                        
+                        /*html.='<div class=" profile-frm-row product_size"><div class="sg-row">';
+                          span.sz-txt Size
+                          a(href='#') xs
+                          a(href='#') s
+                          a(href='#') m
+                          a(href='#') l
+                          a(href='#') xl
+                          a(href='#') xxl*/
+                    }
+                    $("#"+appendId).after(html);
+                }else{
+                    //res.data.
+                }
+            }
+        });
+}
 $(document).ready(function() {
-
+    $('#product_gender').change(function(n){
+        getSizeOptions($(this).val(),'addClrBtn1');
+    });
+        
+        
+    
+    $("#addMoreColor").click(function(n){
+        if($('.slctClr').length < $("#color option").length){
+            var cln = $("#lastColorSelect").clone();
+            cln.attr('id','');
+            $(".slctClr:last").after(cln);
+        }else{
+            alert("Color drop down are reached to the number of option available in it");
+        }
+        /*$('select[name="color[]"]').each(function(n){
+            console.log($(this).val());
+        });*/
+    });
 	var selectedColors = $('.selectedColors').val();
 	if(selectedColors !== undefined)
 	{
 	  	//alert(selectedColors);
 	}
  
-  // Place JavaScript code here...
+    // Place JavaScript code here...
   
     /* Attribut Page:  To add more attribut Row */
     $("input[type='button'][name='addMoreAttribBtn']").click(function(n){
@@ -224,7 +294,7 @@ function make_sure_for_product(id)
 {
 	$.ajax({
 		type: "GET",
-		url: "/removeproduct/"+id,
+		url: "/product/delete/"+id,
 		async: false,
 		success: function(result)
 		{
@@ -357,7 +427,7 @@ function loadSelectedsubCategory(catId)
 				}
 				else
 				{
-					$(".product_sub_category").after('<span class="subCategoryError">Not any sub category.</span>');
+					//$(".product_sub_category").after('<span class="subCategoryError">Not any sub category.</span>');
 				}
 				$(".product_sub_category option").remove();
 				$(".product_sub_category").append(optionArray);

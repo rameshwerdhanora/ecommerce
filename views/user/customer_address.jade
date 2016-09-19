@@ -5,17 +5,7 @@ block content
       img(src='/images/title-icon.png', alt='icon')
       |  #{getCustomerDetails.first_name} #{getCustomerDetails.last_name}
     .righsub-nav.clearfix
-      .left-sub
-        ul
-          li
-            a(href='#')
-              img(src='/images/sub-nav-arrow.png', alt='arrow')
-          li
-            a(href='/customer/list') Back
-          li
-            a(href='javascript:deleteCustomer("#{getCustomerDetails._id}");') Delete USER 
-          li
-            a(href='/customer/changePassword/#{getCustomerDetails._id}') Reset Password 
+      include customer_top_bar
     .customer-box.clearfix
       .customer-cl
          include ../partials/customer_left_menu
@@ -32,33 +22,45 @@ block content
           .omer_address
             p.blng-title SHIP ADDRESSES
             table(border='0', cellpadding='0', cellspacing='0')
-              tr
-                td(align='center')
-                  input(type='checkbox')
-                td
-                  p Home
-                  p 1439 S. Rimhurst Ave
-                  p Glendora, CA 91740
-                td(align='right')
-                  button EDIT
+              if shippingAddressObj.length > 0
+                each shippingAddress in shippingAddressObj  
+                  tr
+                    td(align='center')
+                      input(type='checkbox')
+                    td
+                      p #{shippingAddress.address_line1}
+                      p #{shippingAddress.address_line2}
+                      p #{shippingAddress.postal_code}, #{shippingAddress.city} #{shippingAddress.country}
+                    td(align='right')
+                      button EDIT
+              else
+                tr
+                  td(colspan=3)
+                    | No Address            
           .omer_address
             p.blng-title.top-bdr BILLING ADDRESSES
             table(border='0', cellpadding='0', cellspacing='0')
-              tr
-                td(align='center')
-                  input(type='checkbox')
-                td
-                  p Home
-                  p 1439 S. Rimhurst Ave
-                  p Glendora, CA 91740
-                td(align='right')
-                  button EDIT
+              if billingAddressObj.length > 0
+                each billingAddress in billingAddressObj  
+                  tr
+                    td(align='center')
+                      input(type='checkbox')
+                    td
+                      p #{billingAddress.address_line1}
+                      p #{billingAddress.address_line2}
+                      p #{billingAddress.postal_code}, #{billingAddress.city} #{billingAddress.country}
+                    td(align='right')
+                      button EDIT
+              else
+                tr
+                  td(colspan=3)
+                    | No Address
           .address_btn
             a#modal-104833.default-btn(href='#modal-container-104833', role='button', data-toggle='modal') ADD ADDRESS
 
   #modal-container-104833.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
     .modal-dialog.popup-wdt-1
-      form(name='form2', method='post', action='/customer/address/save/#{getCustomerDetails._id}/2')
+      form(name='form2', method='post', action='/customer/address/save/#{getCustomerDetails._id}')
         .modal-content
           .modal-header
             button.close(type='button', data-dismiss='modal', aria-hidden='true')

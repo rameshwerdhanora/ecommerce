@@ -10,7 +10,7 @@ exports.list = (req, res) => {
         return res.redirect('/login');
     }
     
-    console.log(req.user);
+    
     var page = (req.query.page == undefined)?1:req.query.page;
     page = (page == 0)?1:page;
     var skipRecord = (page-1)*Constants.RECORDS_PER_PAGE;

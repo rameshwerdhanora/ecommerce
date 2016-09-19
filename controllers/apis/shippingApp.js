@@ -136,7 +136,7 @@ exports.getShppingRate = (req,res) => {
                     mainRes.push(tempRes);
                 }
             }
-            //console.log(mainRes);
+            console.log(mainRes);
             return res.send({status:'success',msg:'Shiiping Rates are shown in the list',data:mainRes});
         });
     }else{

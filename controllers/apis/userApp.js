@@ -90,7 +90,13 @@ exports.postSignupManuallySave = function(req,res)
 						if(error === null)
 						{	
 							// SendMailToUser(req.body);
-							return res.json({"status":'success',"msg":'Your details is successfully stored.',"newId":userIns._id});
+							return res.json({"status":'success',"msg":'Your details is successfully stored.',
+								"newId":userIns._id,
+								"username" : userIns.user_name,
+								"email_id" : userIns.email_id,
+								"first_name" : userIns.first_name,
+								"last_name" : userIns.last_name
+							});
 						}
 						else 
 						{
@@ -128,11 +134,11 @@ exports.postLoginManually = function(req,res)
 				{
 					if(fetchUserDetails)
 					{
-						return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,configData:fetchUserDetails.configDetail});
+						return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:fetchUserDetails.configDetail});
 					}
 					else 
 					{
-						return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,configData:''});
+						return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:''});
 					}
 				});
 				
@@ -549,11 +555,11 @@ exports.postBioImage = function(req,res)
 	if(req.body.device_token !== '')
   	{
 		updateBioData = {
-		    'bio'	 : req.body.dob,
+		    'bio'	 : req.body.user_bio,
 		    'updated': Date.now()
 		};
-
-		User.findByIdAndUpdate(req.params.user_id,updateBioData, function(error, updateExistingBio)
+		 
+		User.findByIdAndUpdate(req.body.user_id,updateBioData, function(error, updateExistingBio)
 		{
 			if(updateExistingBio)
 			{	
@@ -645,6 +651,8 @@ function sendMailToUser (user, done)
 		done(err);
 	});
 }
+
+
 
 
 

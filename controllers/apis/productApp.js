@@ -118,13 +118,26 @@ exports.listOfAllWishlist = (req, res) => {
 
      fetchingAllWLAndLikeProducts(wlProdId,function(err, fetchWishlistProducts)
      {
+
         if(fetchWishlistProducts.length > 0)
         {
-          return res.json({"status":'success',"msg":'Fetch all your wishlist products.',fetchAllWishlistByUsers:fetchWishlistProducts});
+          Like.find({user_id:req.params.userId},{product_id:true,_id:false},function(error,fetchAllLikeByUser)
+          {
+            if(fetchAllLikeByUser != '')
+            {
+               
+              return res.json({"status":'success',"msg":'Fetch all your wishlist products.',fetchAllWishlistByUsers:fetchWishlistProducts,like_count:fetchAllLikeByUser.length});
+            }
+            else 
+            {
+              return res.json({"status":'success',"msg":'Fetch all your wishlist products.',fetchAllWishlistByUsers:fetchWishlistProducts,like_count:'0'});
+            }
+            
+          });  
         }
         else 
         {
-          return res.json({"status":'error',"msg":'Products not added in your wishlist'});
+          return res.json({"status":'error',"msg":'Products not added in your wishlist yet.'});
         }
         
      });
@@ -154,12 +167,14 @@ exports.listOfAllLike = (req, res) => {
       {
         lkProdId.push(fetchAllLikeByUser[lk].product_id);
       }
+
+
        
      fetchingAllWLAndLikeProducts(lkProdId,function(err, fetchLikeProducts)
      {
         if(fetchLikeProducts.length > 0)
         {
-          return res.json({"status":'success',"msg":'Fetch all your like products.',fetchAllLikeByUsers:fetchLikeProducts});
+          return res.json({"status":'success',"msg":'Fetch all your like products.',fetchAllLikeByUsers:fetchLikeProducts,like_count:lkProdId.length});
         }
         else 
         {
@@ -355,7 +370,10 @@ function callItsFitsWithConfigData(sizes,brands,userId,req,res)
           ],
           function(err)
           {
-            allBrdProd.push(bArr);
+            if(bArr.product != '')
+            {
+              allBrdProd.push(bArr);
+            }
             callback(err);
           })
         }, 
@@ -1059,6 +1077,122 @@ exports.addCartOptions = (req, res) => {
       return res.json({"status":'error',"msg":'Product is not avaible.'})
     }
   });
+
+}
+
+/**
+ * POST /api/product/fetchcheck
+ * Process for Fetch Brand it fits Product
+ */
+
+exports.fetchcheck = (req, res) => {
+
+  var category_id     = req.body.category_id;
+  var sub_category_id = req.body.sub_category_id;
+  Product.find({category_id:category_id,sub_category_id:{$in:[sub_category_id]}},{attribute:true,_id:true},function(error,fetchAllSizeAccToCat){
+    if(fetchAllSizeAccToCat)
+    {
+      var options = {};
+      async.parallel
+        ([
+          function(callback)
+          {  
+            fetchingAllSizes(fetchAllSizeAccToCat, function(err, fetchAllSizeAccToCatasd)
+            {
+              options.allvalues = fetchAllSizeAccToCatasd;
+              callback(err); 
+            });
+          }
+        ],
+        function(err){
+          //console.log(options);
+           return res.json({"status":'success',"msg":'Found All Size according to selections.',allsizes:options})
+        });
+    }
+    else 
+    {
+      return res.json({"status":'error',"msg":'Not found any size according your selections.'})
+    } 
+
+  })
+};
+
+
+function fetchingAllSizes(fetchAllSizeAccToCat,callback)
+{
+    var mainObj = [];
+    var ArrayIns = new Array();
+    for(var size=0;size<fetchAllSizeAccToCat.length;size++)
+    {
+      if(fetchAllSizeAccToCat[size].attribute != '')
+      {
+        ArrayIns.push(fetchAllSizeAccToCat[size].attribute);
+      }
+    }
+    ArrayInsjoin = ArrayIns.join(',');
+    ArrayInssplit = ArrayInsjoin.split(',');
+
+    uniqueArrayForAttId = ArrayInssplit.filter(function(elem, pos) {
+        return ArrayInssplit.indexOf(elem) == pos;
+    });
+
+    AttributeOptions.find({_id:{$in:uniqueArrayForAttId}},function(error,listAllValues)
+    {
+      var AttrOptiAr = new Array();
+
+      for(var e=0;e<listAllValues.length;e++)
+      {
+        if(listAllValues[e].attribute_id != '')
+        {
+          AttrOptiAr.push(listAllValues[e].attribute_id);
+
+        }
+      }
+
+    uniqueArrayNew = AttrOptiAr.filter(function(elem, pos) {
+      return AttrOptiAr.indexOf(elem) == pos;
+    });
+
+    Attribute.find({_id:{$in:AttrOptiAr}},function(error,listAllVas)
+    {
+      if(listAllVas)
+      {
+        var finalSndAr = new Array();
+        async.eachSeries(listAllVas, function(listAllVas, callback)
+        {
+          var temp            = {};
+          temp._id            = listAllVas._id;
+          temp.attribute_name = listAllVas.name;
+          temp.display_type   = listAllVas.display_type;
+
+          async.parallel
+          ([
+            function(callback)
+            {  
+             
+              AttributeOptions.find({attribute_id:listAllVas._id},function(error,listAllAttrOptionsValues)
+              {    
+                  console.log(listAllAttrOptionsValues); 
+                  temp.options = listAllAttrOptionsValues;
+                  callback(error);
+              }); 
+             
+            }
+          ],
+          function(err)
+          {  
+            finalSndAr.push(temp);
+            callback(err);
+          }); 
+        },
+        function(err)
+        {
+          callback(err,finalSndAr);
+        });
+      }
+    });
+  });
+
 
 }
 

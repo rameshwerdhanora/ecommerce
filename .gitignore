@@ -28,3 +28,4 @@ bower_components
 Thumbs.db
 /NodeJsApplication/nbproject/private/
 /nbproject/private/
+/public/uploads/*

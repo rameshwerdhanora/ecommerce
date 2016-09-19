@@ -1,0 +1,45 @@
+extends ../layout
+block content
+  .col-sm-9.midlle-bar
+    .large-title-row
+      img(src='/images/title-icon.png', alt='icon')
+      |  #{getProfileDetails.first_name} #{getProfileDetails.last_name}
+    .customer-box.clearfix
+      .customer-cl
+        h2 My Profile
+        ul
+          li.active
+            a(href='/myprofile/#{getProfileDetails._id}') My Profile
+      .profile-cl
+        .profile-top-row
+          h2 SHOP PROFILE
+          .edit-btn-cl
+            button(type='submit') SAVE
+        .profile-form-box
+          .profile-right-cl
+            form(action='', method='post')
+              .profile-frm-row
+                .profile-frm-cl1
+                  | Brand Name
+                .profile-frm-cl2
+                  input(name='', type='text', value='#{getProfileDetails.first_name} #{getProfileDetails.last_name}')
+              .profile-frm-row
+                .profile-frm-cl1 Address
+                .profile-frm-cl2
+                  input(name='', type='text', value='')
+              .profile-frm-row
+                .profile-frm-cl1 City
+                .profile-frm-cl2
+                  input(name='', type='text', value='')
+              .profile-frm-row
+                .profile-frm-cl1 State
+                .profile-frm-cl2
+                  input(name='', type='text', value='')
+              .profile-frm-row
+                .profile-frm-cl1 Zip Code 
+                .profile-frm-cl2
+                  input(name='', type='text', value='')
+              .profile-frm-row
+                .profile-frm-cl1 Country
+                .profile-frm-cl2
+                  input(name='', type='text', value='')

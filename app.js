@@ -24,6 +24,7 @@ const upload = multer({ dest: path.join(__dirname, 'uploads') });
 //var flash = require('connect-flash');
 
 
+
 const constants = require('./constants/constants');
 
 
@@ -212,6 +213,7 @@ app.post('/api/product/sortupdate',productAppController.saveSort);
 app.get('/api/product/fetchfilter/:brandId/:userId',productAppController.fetchFilterValues);
 
 app.get('/api/follow/:userId/:brandId',followAppController.followUnFollowBrand);
+app.get('/api/listoffollow/:userId',followAppController.listOfFollowUser);
 
 app.get('/api/brand/details/:brandId',productAppController.BrandDetailView);
 app.get('/api/brand/itfits/:brandId/:userId',productAppController.BrandItFitsProducts);
@@ -219,6 +221,7 @@ app.get('/api/brand/itfits/:brandId/:userId',productAppController.BrandItFitsPro
 /* Filter Controller */
 app.get('/api/filter/fetchfilter',  filterAppController.fetchFilterOptions);
 app.get('/api/filter/category/:catId',  filterAppController.fetchSelectedSubCategory);
+app.post('/api/product/fetchcheck',  productAppController.fetchcheck);
 
 
 // app.post('/api/showCart',  cartAppController.getCartProduct);
@@ -250,10 +253,12 @@ app.post('/api/card/updatecard',  cardAppController.updateCard);
 
 
 
-app.get('/brand/list',  brandController.listOfBrand);
+app.get('/brand/list/:brandId?',  brandController.listOfBrand);
 //app.get('/brand/add',  brandController.addBrand);
 app.post('/brand/save',  brandController.saveBrand);
-app.get('/brand/edit:brandId',  brandController.editBrand);
+
+
+//app.get('/brand/edit/:brandId',  brandController.editBrand);
 app.post('/brand/update',  brandController.updateBrand);
 app.get('/brand/delete/:brandId',  brandController.removeBrand);
 
@@ -265,7 +270,7 @@ app.get('/brand/delete/:brandId',  brandController.removeBrand);
 
 
 /* Color CRUD Section */ // Need isAuthenticated code for check user is loggedin.
-app.get('/color/list',  colorController.listOfColor);
+app.get('/color/list/:colorId?',  colorController.listOfColor);
 //app.get('/color/add',  colorController.addColor);
 app.get('/color/edit/:colorId',  colorController.editColor);
 app.post('/color/save',  colorController.saveColor);
@@ -283,7 +288,8 @@ app.post('/size/update',  sizeController.updateSize);
 
 
 /* Products CRUD Section */ // Need isAuthenticated code for check user is loggedin.
-app.get('/product/list',  productController.listOfProducts);
+app.get('/product/list/:productId?',  productController.listOfProducts);
+app.post('/product/getAttrib',  productController.getAttrib);
 app.get('/product/add',  productController.addProduct);
 app.post('/product/save',  productController.saveProduct);
 app.get('/product/edit/:productId',  productController.editProduct);
@@ -294,7 +300,9 @@ app.get('/product/loadattrvalues/:attrId',  productController.loadAttrValues);
 
 
 /* Category CRUD Section */ // Need isAuthenticated code for check user is loggedin.
-app.get('/category/list',  categoryController.listOfCategories);
+//app.get('/category/list',  categoryController.listOfCategories);
+//app.get('/category/list/:categoryId?',  categoryController.listOfCategories);
+app.get('/category/list/:categoryId?/:subCatFlag?',  categoryController.listOfCategories);
 app.get('/category/add',  categoryController.addCategory);
 app.post('/category/save',  categoryController.saveCategory);
 app.get('/category/edit/:catId',  categoryController.editCategory);
@@ -303,12 +311,12 @@ app.get('/category/delete/:catId',  categoryController.removeCategory);
 
 
 /* Sub Category CRUD Section */ // Need isAuthenticated code for check user is loggedin.
-app.get('/subcategory/list',  categorySubController.listOfSubCategories);
-app.get('/subcategory/add',  categorySubController.addSubCategory);
+//app.get('/subcategory/list',  categorySubController.listOfSubCategories);
+//app.get('/subcategory/add',  categorySubController.addSubCategory);
 app.post('/subcategory/save',  categorySubController.saveSubCategory);
-app.get('/subcategory/edit/:subcatId',  categorySubController.editSubCategory);
+//app.get('/subcategory/edit/:subcatId',  categorySubController.editSubCategory);
 app.post('/subcategory/update',  categorySubController.updateSubCategory);
-app.get('/subcategory/delete/:subcatId',  categorySubController.removeSubCategory);
+//app.get('/subcategory/delete/:subcatId',  categorySubController.removeSubCategory);
 
 /* Attribute CRUD Section */ // Need isAuthenticated code for check user is loggedin.
 app.get('/attribute', passportConfig.isAuthenticated,  attributeController.list);
@@ -326,7 +334,7 @@ app.post('/attribute/addAttribOption', passportConfig.isAuthenticated,  attribut
 
 
 /* Order */
-app.get('/order',  orderController.list);
+app.get('/order/list',  orderController.list);
 app.get('/order/detail',  orderController.detail);
 
 app.get('/emailtemplate/list',  emailController.list);
@@ -381,6 +389,8 @@ app.get('/api/privacy/fetchprivacysetting/:userId',privacyAppController.fetchPri
 app.post('/api/privacy/notificationsetting',privacyAppController.notificationSettingofUser);
 app.get('/api/privacy/fetchnotificationsetting/:userId',privacyAppController.fetchNotificationSetting);
 
+/* MY Profile */
+app.get('/myprofile/:id',  userAppControlleraAdmin.myProfile);
 
 /* Users pages */
 app.get('/user/list',  userAppControlleraAdmin.userList);
@@ -391,7 +401,9 @@ app.get('/user/edit/:id',  userAppControlleraAdmin.userEdit);
 app.post('/user/update',  userAppControlleraAdmin.userUpdate);
 app.get('/user/delete/:userId',  userAppControlleraAdmin.userDelete);
 app.get('/user/shipping/:userId',  userAppControlleraAdmin.userShipping);
+app.post('/user/shipping/save/:userId',  userAppControlleraAdmin.userShippingSave);
 app.get('/user/paymentMethod/:userId',  userAppControlleraAdmin.userPaymentMethod);
+app.post('/user/paymentMethod/save/:userId',  userAppControlleraAdmin.userPaymentMethodSave);
 app.get('/user/order/:userId',  userAppControlleraAdmin.userOrder);
 app.get('/user/reviews/:userId',  userAppControlleraAdmin.userProductReview);
 app.get('/user/account/:userId',  userAppControlleraAdmin.userAccount);

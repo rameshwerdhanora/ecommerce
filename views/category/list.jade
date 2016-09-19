@@ -2,6 +2,7 @@ extends ../layout
 
 block content
   .col-sm-9.midlle-bar
+    include ../partials/flash
     .large-title-row
       img(src='/images/title-icon3.png', alt='icon')
       |  PRODUCTS
@@ -21,169 +22,237 @@ block content
               h4 MENS
               ul.catg-list
                 li
-                  a.catg-open(href='#') MENS
+                  a.catg-open(href='javascript:void(0);') MENS
             .catg-in-cl2
               h4 CATEGORIES
               ul.catg-list
+                -for(var i = 0;i<result.male.length;i++){
                 li
-                  a.catg-open(href='#') SHIRTS
+                  a.catg-open(href='/category/list/#{result.male[i].id}',class=(result.male[i].subcategory.length > 0)?'catg-open':'catg-close') #{result.male[i].name}
                   ul.catg-sub-list
-                    li
-                      a.catg-open(href='#') SS TEE
-                      ul.catg-sub-list
+                    -for(var j = 0;j < result.male[i].subcategory.length;j++){
                         li
-                          a(href='#') XS, S, M, L ,XL,XXL,3XL
-                    li
-                      a.catg-close(href='#') LS TEE 
-                    li
-                      a.catg-close(href='#') SS BUTTONDOWN
-                    li
-                      a.catg-close(href='#') LS BUTTONDOWN
-                    li
-                      a.catg-close(href='#') HENLEY
-                    li
-                      a.catg-close(href='#') POLO
-                li
-                  a.catg-close(href='#') PANTS 
-                li
-                  a.catg-close(href='#') DENIM
-                li
-                  a.catg-close(href='#') OUTWERWEAR
-                li
-                  a.catg-close(href='#') HATS
-                li
-                  a.catg-close(href='#') ACTIVEWEAR
-                li
-                  a.catg-close(href='#') SWEATERS
-                li
-                  a.catg-close(href='#') SWEATSHIRTS
-                li
-                  a.catg-close(href='#') FOOTWEAR
-                li
-                  a.catg-close(href='#') ACCESSORIES
+                          a.catg-open(href='/category/list/#{result.male[i].subcategory[j].id}/1')  #{result.male[i].subcategory[j].name}
+                          //ul.catg-sub-list
+                            li
+                              a(href='#') XS, S, M, L ,XL,XXL,3XL
+                    -}
+                -}
+                
           .catg-left
             .catg-in-cl1
               h4 WOMENS
               ul.catg-list
                 li
-                  a.catg-open(href='#') WOMENS
+                  a.catg-open(href='javascript:void(0);') WOMENS
             .catg-in-cl2
               h4 CATEGORIES
               ul.catg-list
+                -for(var i = 0;i<result.female.length;i++){
                 li
-                  a.catg-open(href='#') SHIRTS
+                  a.catg-open(href='/category/list/#{result.female[i].id}')  #{result.female[i].name}
                   ul.catg-sub-list
+                    -for(var j = 0;j < result.female[i].subcategory.length;j++){
                     li
-                      a.catg-open(href='#') SS Top
-                      ul.catg-sub-list
+                      a.catg-open(href='/category/list/#{result.female[i].subcategory[j].id}/1')  #{result.female[i].subcategory[j].name}
+                      //ul.catg-sub-list
                         li
                           a(href='#') XS, S, M, L ,XL,XXL,3XL
-                    li
-                      a.catg-close(href='#') LS TEE 
-                    li
-                      a.catg-close(href='#') SS BUTTONDOWN
-                    li
-                      a.catg-close(href='#') LS BUTTONDOWN
-                    li
-                      a.catg-close(href='#') HENLEY
-                    li
-                      a.catg-close(href='#') POLO
-                li
-                  a.catg-close(href='#') PANTS 
-                li
-                  a.catg-close(href='#') DENIM
-                li
-                  a.catg-close(href='#') OUTWERWEAR
-                li
-                  a.catg-close(href='#') HATS
-                li
-                  a.catg-close(href='#') ACTIVEWEAR
-                li
-                  a.catg-close(href='#') SWEATERS
-                li
-                  a.catg-close(href='#') SWEATSHIRTS
-                li
-                  a.catg-close(href='#') FOOTWEAR
-                li
-                  a.catg-close(href='#') ACCESSORIES
+                    -}
+                -}
+                
   
-  #modal-container-104831.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
-    .modal-dialog.popup-wdt-1
-      form(name='addCategory', method='post', action='/category/save')
-        .modal-content
-          .modal-header
-            button.close(type='button', data-dismiss='modal', aria-hidden='true')
-              img(src='/images/close-icon.png', alt='icon')
-            h4#myModalLabel.modal-title  ADD CATEGORY 
-          .modal-body
-            .manage-cat-form
-              .color-row
-                .cl-name Category Name
-                .cl-inp
-                  input.cat_name(type='text', name='name', value='', required='required')
-              .color-row
-                .cl-name
-                  | Gender
-                .cl-inp
-                  .select-item
-                    select
-                      option
-              .color-row
-                .cl-name
-                  | Size Correlation
-                .cl-inp
-                  .select-item
-                    select
-                      option
-              .color-row
-                .cl-name Description
-                .cl-inp
-                  textarea.description(name='description')
-          .modal-footer
-            button(type='button')  Save 
 
 
-  #modal-container-104832.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
-    .modal-dialog.popup-wdt-1
-      form(name='addCategory', method='post', action='/subcategory/save')
-        .modal-content
-          .modal-header
-            button.close(type='button', data-dismiss='modal', aria-hidden='true')
-              img(src='/images/close-icon.png', alt='icon')
-            h4#myModalLabel.modal-title  ADD SUBCATEGORY 
-          .modal-body
-            .manage-cat-form
-              .color-row
-                .cl-name Subcategory Name
-                .cl-inp
-                  input(name='', type='text')
-              .color-row
-                .cl-name
-                  | Gender
-                .cl-inp
-                  .select-item
-                    select
-                      option
-              .color-row
-                .cl-name
-                  | Parent Category
-                .cl-inp
-                  .select-item
-                    select
-                      option
-              .color-row
-                .cl-name
-                  | Sizing Correlation
-                .cl-inp
-                  .select-item
-                    select
-                      option
-              .color-row
-                .cl-name Description
-                .cl-inp
-                  textarea#textarea(name='textarea')
-          .modal-footer
-            button(type='button')  Save 
+
+    #modal-container-104831.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+      .modal-dialog.popup-wdt-1
+          form(name='addCategory', method='post', action='/category/save')
+              .modal-content
+                  .modal-header
+                      button.close(type='button', data-dismiss='modal', aria-hidden='true')
+                        img(src='/images/close-icon.png', alt='icon')
+                      h4#myModalLabel.modal-title  ADD CATEGORY 
+                  .modal-body
+                      .manage-cat-form
+                          .color-row
+                              .cl-name Category Name
+                              .cl-inp
+                                input.cat_name(type='text', name='name', value='', required='required')
+                          .color-row
+                              .cl-name
+                                | Gender
+                              .cl-inp
+                                  .select-item
+                                      select.select-item(name="gender",required='required')
+                                          option(value='male', selected='') Male
+                                          option(value='female', selected='') female
+                          .color-row
+                              .cl-name Active
+                              .cl-inp
+                                  .select-item
+                                      select.select-item(name="is_active")
+                                        option(value='1') Yes
+                                        option(value='0') No
+
+                          .color-row
+                              .cl-name Description
+                              .cl-inp
+                                textarea.description(name='description',requird='required')
+                  .modal-footer
+                      input(type='submit',value='Save')
+                    
+
+
+   
+    -if(catFlag){
+    #modal-container-104833.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+      .modal-dialog.popup-wdt-1
+          form(name='updateCategory', method='post', action='/category/update')
+              input(type='hidden',name='CatId',value='#{catRs._id}')
+              .modal-content
+                  .modal-header
+                      button.close(type='button', data-dismiss='modal', aria-hidden='true')
+                        img(src='/images/close-icon.png', alt='icon')
+                      h4#myModalLabel.modal-title  UPDATE CATEGORY 
+                  .modal-body
+                      .manage-cat-form
+                          .color-row
+                              .cl-name Category Name
+                              .cl-inp
+                                input.cat_name(type='text', name='name', value='#{catRs.name}', required='required')
+                          .color-row
+                              .cl-name
+                                | Gender
+                              .cl-inp
+                                  .select-item
+                                      select.select-item(name="gender",required='required')
+                                          option(value='male', selected=(catRs.gender == 'male')) Male
+                                          option(value='female', selected=(catRs.gender == 'female')) female
+                          .color-row
+                              .cl-name Active
+                              .cl-inp
+                                  .select-item
+                                      select.select-item(name="is_active")
+                                        option(value='1',selected=(catRs.gender == 1)) Yes
+                                        option(value='0',selected=(catRs.gender == 0)) No
+
+                          .color-row
+                              .cl-name Description
+                              .cl-inp
+                                textarea.description(name='description',requird='required') #{catRs.description}
+                  .modal-footer
+                      input(type='submit',value='Save')
+          a#modal-104833.dnone(href='#modal-container-104833', role='button', data-toggle='modal') 
+          script(type='text/javascript').
+              $(document).ready(function(n){
+                  $('#modal-104833').trigger('click');
+              });
+    -}
+
+    #modal-container-104832.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+      .modal-dialog.popup-wdt-1
+          form(name='addSubCategory', method='post', action='/subcategory/save')
+              
+              .modal-content
+                  .modal-header
+                    button.close(type='button', data-dismiss='modal', aria-hidden='true')
+                      img(src='/images/close-icon.png', alt='icon')
+                    h4#myModalLabel.modal-title  ADD SUBCATEGORY 
+                  .modal-body
+                      .manage-cat-form
+                          .color-row
+                            .cl-name Subcategory Name
+                            .cl-inp
+                              input.cat_name(type='text', name='name', value='', required='required')
+
+                          .color-row
+                            .cl-name
+                              | Parent Category
+                            .cl-inp
+                              .select-item
+                                  select.parent_cat(name='parent_id',required='required')
+                                      option(value='') Select Parent Category
+                                      each getAllCategory in getAllCategories
+                                       option(value='#{getAllCategory._id}') #{getAllCategory.name}
+                          //.color-row
+                            .cl-name
+                              | Sizing Correlation
+                            .cl-inp
+                              .select-item
+                                select
+                                  option
+                          .color-row
+                              .cl-name Active
+                              .cl-inp
+                                  .select-item
+                                      select.select-item(name="is_active")
+                                        option(value='1') Yes
+                                        option(value='0') No
+                          .color-row
+                              .cl-name Description
+                              .cl-inp
+                                textarea.description(name='description',requird='required') 
+
+                  .modal-footer
+                    input(type='submit', value='Save', name='saveFrm')  
+
+
+
+
+    -if(subCatFlag){
+    #modal-container-104834.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+      .modal-dialog.popup-wdt-1
+          form(name='updateSubCat', method='post', action='/subcategory/update')
+              input(type='hidden',name='subCatId',value='#{catRs._id}')
+              .modal-content
+                  .modal-header
+                    button.close(type='button', data-dismiss='modal', aria-hidden='true')
+                      img(src='/images/close-icon.png', alt='icon')
+                    h4#myModalLabel.modal-title  UPDATE SUBCATEGORY 
+                  .modal-body
+                      .manage-cat-form
+                          .color-row
+                            .cl-name Subcategory Name
+                            .cl-inp
+                              input.cat_name(type='text', name='name', value='#{catRs.name}', required='required')
+
+                          .color-row
+                            .cl-name
+                              | Parent Category
+                            .cl-inp
+                              .select-item
+                                  select.parent_cat(name='parent_id',required='required')
+                                      option(value='') Select Parent Category
+                                      each getAllCategory in getAllCategories
+                                       option(value='#{getAllCategory._id}',selected=(catRs.parent_id == getAllCategory._id)) #{getAllCategory.name}
+                          //.color-row
+                            .cl-name
+                              | Sizing Correlation
+                            .cl-inp
+                              .select-item
+                                select
+                                  option
+                          .color-row
+                              .cl-name Active
+                              .cl-inp
+                                  .select-item
+                                      select.select-item(name="is_active")
+                                        option(value='1',selected=(catRs.gender == 1)) Yes
+                                        option(value='0',selected=(catRs.gender == 0)) No
+                          .color-row
+                              .cl-name Description
+                              .cl-inp
+                                textarea.description(name='description',requird='required') #{catRs.description}
+
+                  .modal-footer
+                    input(type='submit', value='Save', name='saveFrm')  
+        a#modal-104834.dnone(href='#modal-container-104834', role='button', data-toggle='modal') 
+        script(type='text/javascript').
+            $(document).ready(function(n){
+                $('#modal-104834').trigger('click');
+            });
+    -}
 
 
             

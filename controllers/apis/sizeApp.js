@@ -139,7 +139,7 @@ exports.fetchCofiguration = function(req,res){
 					             		}
 					             		else
 					             		{
-					             			tmpAr['values'] = '';
+					             			tmpAr['values'] = new Array;
 					             			callback();  
 					             		}
 					             	}	
@@ -258,23 +258,6 @@ function fetchingAllSelectedAttrValue(attId, callback)
 {
 	AttributeOption.find({attribute_id:attId},function(error,fetchAllAttributeOptions)
 	{	
-		/*var checkincollection = saveAttrJoin.split(',');
-		console.log(checkincollection);
-
-		 
-
-		for (var i = 0; i < fetchAllAttributeOptions.length; i++) 
-		{
-			console.log(checkincollection.indexOf(fetchAllAttributeOptions[i]._id));
-			if(checkincollection.indexOf(fetchAllAttributeOptions[i]._id.toString()) != -1)
-			{
-				console.log('If');
-			}
-			else 
-			{
-				console.log('Else');
-			}
-		}*/
 		callback(error,fetchAllAttributeOptions);
 	});
 }
