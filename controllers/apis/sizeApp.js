@@ -261,10 +261,3 @@ function fetchingAllSelectedAttrValue(attId, callback)
 		callback(error,fetchAllAttributeOptions);
 	});
 }
-
-
-
-
-
-
-
