@@ -1081,7 +1081,7 @@ exports.addCartOptions = (req, res) => {
 }
 
 /**
- * GET /api/product/fetchcheck
+ * POST /api/product/fetchcheck
  * Process for Fetch Brand it fits Product
  */
 
@@ -1089,11 +1089,6 @@ exports.fetchcheck = (req, res) => {
 
   var category_id     = req.body.category_id;
   var sub_category_id = req.body.sub_category_id;
-
-  //console.log(req.body)
-  // 57c437ee46bc895414c8f646
-  // 57c447b3610b7c94196e75fa
-
   Product.find({category_id:category_id,sub_category_id:{$in:[sub_category_id]}},{attribute:true,_id:true},function(error,fetchAllSizeAccToCat){
     if(fetchAllSizeAccToCat)
     {
