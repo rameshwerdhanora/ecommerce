@@ -192,7 +192,7 @@ exports.userList = (req, res) => {
 		// if(getCustomers)
 		// {
 			//console.log(getUsers);
-			res.render('user/user_list', { title: 'User List',getCustomers:getCustomers,getUsers:getUsers});
+			res.render('user/user_list', { title: 'User List',getCustomers:getCustomers,getUsers:getUsers,left_activeClass:5});
 		//}
 		});
 	});	
