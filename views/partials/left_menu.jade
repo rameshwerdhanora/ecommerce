@@ -4,11 +4,11 @@
         .nav-left
           .nav-in
             ul
-              li.active
+                li(class=(left_activeClass == 1)?'active':'')
                 a(href='/')
                   img(src='/images/left-icon1.png', alt='icon')
                   |  Dashboard 
-              li.dropdown
+              li(class=(left_activeClass == 2)?'active':'')
                 a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', href='/order/list')
                   img(src='/images/left-icon2.png', alt='icon')
                   | Orders                    
@@ -25,7 +25,7 @@
                     a(href='#') Add User
                     
 
-              li
+              li(class=(left_activeClass == 3)?'active':'')
                 a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
                   img(src='/images/left-icon3.png', alt='icon')
                   | Products
@@ -43,7 +43,7 @@
                     a(href='#') Add Product
                   
                     
-              li
+              li(class=(left_activeClass == 4)?'active':'')
                 a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
                   img(src='/images/left-icon4.png', alt='icon')
                   | Customers
@@ -61,7 +61,7 @@
                     a(href='#') Add Customer
                   
                     
-              li
+              li(class=(left_activeClass == 5)?'active':'')
                 a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
                   img(src='/images/left-icon5.png', alt='icon')
                   | USERS
@@ -79,7 +79,7 @@
                     a(href='#') ADD USERS
                   
                     
-              li
+              li(class=(left_activeClass == 6)?'active':'')
                 a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
                   img(src='/images/left-icon6.png', alt='icon')
                   | System
@@ -111,3 +111,4 @@
               li
                 a(href='#')
                   i.fa-envelope.fa
+

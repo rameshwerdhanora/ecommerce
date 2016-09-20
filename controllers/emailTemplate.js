@@ -23,7 +23,7 @@ exports.list = (req, res) => {
                 .sort('-_id')
                 .exec(function(error,getAllTemplate){
             if(getAllTemplate){
-                res.render('emailtemplate/list', {title: 'Email Template List',activeFlag:1,resultRes:getAllTemplate, currentPage:page, totalRecord:totalRecord, totalPage:totalPage,});
+                res.render('emailtemplate/list', {title: 'Email Template List',activeFlag:1,resultRes:getAllTemplate, currentPage:page, totalRecord:totalRecord, totalPage:totalPagey,left_activeClass:6});
             }
         });
     });

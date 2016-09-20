@@ -23,7 +23,7 @@ exports.list = (req, res) => {
                     .exec(function(error,getAllAttributes){
                 if(getAllAttributes){
                     //var msg = req.flash('message');
-                    res.render('attribute/list', {title: 'Attribute List', getAllAttributes:getAllAttributes, currentPage:page, totalRecord:totalRecord, totalPage:totalPage, activeClass:6 });
+                    res.render('attribute/list', {title: 'Attribute List', getAllAttributes:getAllAttributes, currentPage:page, totalRecord:totalRecord, totalPage:totalPage, activeClass:6,left_activeClass:3 });
                 }
             });
         /*}else{
@@ -38,6 +38,7 @@ exports.list = (req, res) => {
 exports.create = (req, res) => {
   res.render('attribute/create', {   
     title: 'Create Attribute',
+    left_activeClass:3,
     activeClass:6
   });
 };
@@ -117,7 +118,7 @@ exports.edit = (req,res) => {
 		else 
 		{
                     
-                    res.render('attribute/edit', { title: 'Edit Attribute',fetchAttribute:fetchAttribute});
+                    res.render('attribute/edit', { left_activeClass:3,title: 'Edit Attribute',fetchAttribute:fetchAttribute});
 		}
 	});
 };
