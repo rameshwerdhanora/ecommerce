@@ -45,7 +45,7 @@ exports.listOfSizeAttribute = (req, res) => {
 		if(fetchAttributeRes)
 		{
 			var mainArr = new  Array();
-			var listofattrmap = fetchAttributeRes.listofattrmap.split(','); 
+			var listofattrmap = fetchAttributeRes.listofattrmap.toString().split(','); 
 
 			Attribute.find({_id : { $in: listofattrmap}},function(error,fetchAttributeRes)
 			{
@@ -201,7 +201,7 @@ function fetchingAllAttrValue(attributeSizes, callback)
 				if(userSize[w].attributeSizes)
 				{
 					saveAttr.push(userSize[w].attributeSizes);
-				}
+				} 
 				
 			}
 			saveAttrJoin = saveAttr.join(',');
@@ -210,7 +210,7 @@ function fetchingAllAttrValue(attributeSizes, callback)
 	 		Size.findOne({_id:req.params.sizeId},function(error,fetchAttributeRes)
 			{
 				var mainArr = new  Array();
-				var listofattrmap = fetchAttributeRes.listofattrmap.split(','); 
+				var listofattrmap = fetchAttributeRes.listofattrmap.toString().split(','); 
 				Attribute.find({_id : { $in: listofattrmap}},function(error,fetchAttributeRes)
 				{
 					async.eachSeries(fetchAttributeRes, function(AttrId, callback)

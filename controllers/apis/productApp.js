@@ -659,7 +659,7 @@ exports.saveFilter = (req, res) => {
         filterSortIns.date         = Date.now();
         filterSortIns.save(function(error)
         {
-          console.log(error);
+          //console.log(error);
           if(error)
           {
             return res.json({"status":'error',"msg":'Something Wrong.'});
@@ -734,7 +734,7 @@ exports.fetchFilterValues = (req, res) => {
 
   FilterSort.findOne({user_id:req.params.userId},function(error,saveFilterSort)
   {
-    console.log(saveFilterSort);
+    //console.log(saveFilterSort);
       if(saveFilterSort)
       {
         brandDetailsWithFilterAndSort(saveFilterSort,req, res);

@@ -239,16 +239,21 @@ exports.emptyCart = (req,res) => {
  *Web serive to save user address into database 
  */
 exports.updateIntoCart = (req,res) => {
+
     if(req.body.device_token !== ''){
+
         updateData = {
             quantity : req.body.quantity
         };
+
         if(req.body.quantity){
-            CustomerAddress.findByIdAndUpdate(req.body.id,updateData,function(err,updateRes){
+
+            Cart.findByIdAndUpdate(req.body.id,updateData,function(err,updateRes)
+            {
                 if (err){
                     return res.send({status:'error',error:err});
                 }else{
-                    return res.json({"status":'success',"msg":'Cart updated successfully'});
+                    return res.json({"status":'success',"msg":'Cart updated successfully',quantity:req.body.quantity});
                 }
             });
         }else{// if 0 quantity set then delete the product from the cart.
@@ -338,7 +343,7 @@ exports.updateIntoCart = (req,res) => {
                                         });
                                         
                                     });
-                                }/*,
+                                },
                                 function(callback)
                                 {
                                     
@@ -366,7 +371,7 @@ exports.updateIntoCart = (req,res) => {
                                     codeAr['07'] = 'UPS Worldwide Express';
                                     codeAr['54'] = 'Worldwide Express Plus';
                                     codeAr['08'] = 'UPS Worldwide Expedited';
-                                    codeAr['65'] =  'UPS World Wide Saver';
+                                    codeAr['65'] = 'UPS World Wide Saver';
                                     
                                     data = {
                                             pickup_type: 'daily_pickup', // optional, can be: 'daily_pickup', 'customer_counter', 'one_time_pickup', 'on_call_air', 'suggested_retail_rates', 'letter_center', 'air_service_center'
@@ -452,27 +457,36 @@ exports.updateIntoCart = (req,res) => {
                                         }
                                         ups.rates(data,options, function(err, result) {
                                             var mainRes = new Array();
-                                            if(result.Response.ResponseStatusCode == 1){
-                                                for(var i = 0;i < result.RatedShipment.length;i++){
-                                                    var tempRes = {};
-                                                    tempRes.Code = result.RatedShipment[i].Service.Code;
-                                                    tempRes.serviceName = codeAr[result.RatedShipment[i].Service.Code];
-                                                    //tempRes.BillingWeight  = result.RatedShipment[i].BillingWeight.Weight;
-                                                    //tempRes.UnitOfMeasurement  = result.RatedShipment[i].BillingWeight.UnitOfMeasurement.Code;
-                                                    //tempRes.TransportationCharges  = result.RatedShipment[i].TransportationCharges.MonetaryValue;
-                                                    //tempRes.ServiceOptionsCharges  = result.RatedShipment[i].ServiceOptionsCharges.MonetaryValue;
-                                                    tempRes.TotalCharges  = result.RatedShipment[i].TotalCharges.MonetaryValue;
-                                                    mainRes.push(tempRes);
+                                            if(result.Response != null)
+                                            {
+                                                if(result.Response.ResponseStatusCode == 1){
+                                                    for(var i = 0;i < result.RatedShipment.length;i++){
+                                                        var tempRes = {};
+                                                        tempRes.Code = result.RatedShipment[i].Service.Code;
+                                                        tempRes.serviceName = codeAr[result.RatedShipment[i].Service.Code];
+                                                        //tempRes.BillingWeight  = result.RatedShipment[i].BillingWeight.Weight;
+                                                        //tempRes.UnitOfMeasurement  = result.RatedShipment[i].BillingWeight.UnitOfMeasurement.Code;
+                                                        //tempRes.TransportationCharges  = result.RatedShipment[i].TransportationCharges.MonetaryValue;
+                                                        //tempRes.ServiceOptionsCharges  = result.RatedShipment[i].ServiceOptionsCharges.MonetaryValue;
+                                                        tempRes.TotalCharges  = result.RatedShipment[i].TotalCharges.MonetaryValue;
+                                                        mainRes.push(tempRes); 
+                                                    }
                                                 }
+                                                brandObj.shipping = mainRes;
                                             }
-                                            brandObj.shipping = mainRes;
+                                            else 
+                                            {
+                                                brandObj.shipping = new Array();
+                                            }
+                                            
+                                            
                                             //console.log(mainRes);
                                             callback(err);
                                             //brandObj.shipping = mainRes;
                                             //return res.send({status:'success',msg:'Shiiping Rates are shown in the list',data:mainRes});
                                         });
                                                                      
-                                }*/
+                                }
                             ],
                             function(err)
                             {
@@ -503,114 +517,234 @@ exports.updateIntoCart = (req,res) => {
  }
 
 /**
- * GET /api/cart/showcartaccbrand/:userId/:brandId
+ * POST /api/cart/showcartaccbrand
  * Process for Fetch all products of brand in cart.
  */ 
 
 exports.showCartAccBrand = (req,res) => {
 
-    Cart.find({user_id:req.params.userId,brand_id:req.params.brandId},function(error,fetchAllProductsOfBrand)
+    if(req.body.device_token != '')
     {
-        if(fetchAllProductsOfBrand)
+        Cart.find({user_id:req.body.user_id,brand_id:req.body.brand_id},function(error,fetchAllProductsOfBrand)
         {
-            var tempCartProduct = new Array();
-            var totalPrice = 0; 
-            async.eachSeries(fetchAllProductsOfBrand, function(CproductRes, callback)
+            if(fetchAllProductsOfBrand)
             {
-                pArr = {}; 
-                pArr.quantity =  CproductRes.quantity;
-                async.parallel
-                (
-                    [
-                        function(callback)
-                        {
-                            getProduct(CproductRes.product_id, function(err, pres)
+                var tempCartProduct = new Array();
+                var totalPrice = 0; 
+                async.eachSeries(fetchAllProductsOfBrand, function(CproductRes, callback)
+                {
+                    pArr = {}; 
+                    pArr._id =  CproductRes._id;
+                    pArr.quantity =  CproductRes.quantity;
+                    async.parallel
+                    (
+                        [
+                            function(callback)
                             {
-                                if(err){
-                                    pArr.name = '';
-                                    pArr.sku = '';
-                                    pArr.price = 0;
-                                }
-                                else
+                                getProduct(CproductRes.product_id, function(err, pres)
                                 {
-                                    pArr.name = pres.name;
-                                    pArr.sku = pres.sku;
-                                    pArr.price = pres.price;
-                                    totalPrice+=parseInt(pres.price);
-                                }
-                                    
-                                    callback(err);
-                            });
-                        },
-                        function(callback)
-                        {
-                            fetchingImage(CproductRes.product_id, function(err, res)
-                            {
-                                pArr.image  = res;
-                                callback(err);  
-                            });
-                        },
-                        function(callback)
-                        {
-                            getProductColor(CproductRes.color_id, function(err, cres)
-                            {  
-                                if(cres)
-                                {
-                                    pArr.color = cres.color_name;
-                                }
-                                else
-                                {
-                                    pArr.color = '';
-                                }
-                                callback(err);
-                            });
-                        },
-                        function(callback)
-                        {// To get attribut name and option name
-                            var optionIds = CproductRes.size.split(',');
-                            getOptAttribute(optionIds,function(err,opRes){
-                                var tmpAttributeKey = new Array();
-                                var tmpOptionValue = new Array();
-                                for(var kk=0;kk<opRes.length;kk++){
-                                    tmpAttributeKey[kk] = opRes[kk].attribute_id;
-                                    tmpOptionValue[kk] = opRes[kk].value;
-                                }
-                                var tmpOoptionFinalAr = new Array();
-                                getAttrib(tmpAttributeKey,function(err,attribRes){
-                                    for(var i=0;i<tmpAttributeKey.length;i++){
-                                        for(j=0;j<attribRes.length;j++){
-                                            if(attribRes[j]._id == tmpAttributeKey[i]){
-                                                tmpOoptionFinalAr[i] = new Array();
-                                                tmpOoptionFinalAr[i][0] = attribRes[j].name; 
-                                                tmpOoptionFinalAr[i][1] = tmpOptionValue[i];
-                                            }
-                                        }
+                                    if(err){
+                                        pArr.name = '';
+                                        pArr.sku = '';
+                                        pArr.price = 0;
                                     }
-                                    pArr.options = tmpOoptionFinalAr;
+                                    else
+                                    {
+                                        pArr.name = pres.name;
+                                        pArr.sku = pres.sku;
+                                        pArr.realprice = pres.price;
+                                        pArr.price = pres.price * CproductRes.quantity;
+                                        totalPrice += parseInt(pres.price) * CproductRes.quantity;
+                                    }
+                                        
+                                        callback(err);
+                                });
+                            },
+                            function(callback)
+                            {
+                                fetchingImage(CproductRes.product_id, function(err, res)
+                                {
+                                    pArr.image  = res;
+                                    callback(err);  
+                                });
+                            },
+                            function(callback)
+                            {
+                                getProductColor(CproductRes.color_id, function(err, cres)
+                                {  
+                                    if(cres)
+                                    {
+                                        pArr.color = cres.color_name;
+                                    }
+                                    else
+                                    {
+                                        pArr.color = '';
+                                    }
                                     callback(err);
                                 });
-                            });
+                            },
+                            function(callback)
+                            {// To get attribut name and option name
+                                var optionIds = CproductRes.size.split(',');
+                                getOptAttribute(optionIds,function(err,opRes){
+                                    var tmpAttributeKey = new Array();
+                                    var tmpOptionValue = new Array();
+                                    for(var kk=0;kk<opRes.length;kk++){
+                                        tmpAttributeKey[kk] = opRes[kk].attribute_id;
+                                        tmpOptionValue[kk] = opRes[kk].value;
+                                    }
+                                    var tmpOoptionFinalAr = new Array();
+                                    getAttrib(tmpAttributeKey,function(err,attribRes){
+                                        for(var i=0;i<tmpAttributeKey.length;i++){
+                                            for(j=0;j<attribRes.length;j++){
+                                                if(attribRes[j]._id == tmpAttributeKey[i]){
+                                                    tmpOoptionFinalAr[i] = new Array();
+                                                    tmpOoptionFinalAr[i][0] = attribRes[j].name; 
+                                                    tmpOoptionFinalAr[i][1] = tmpOptionValue[i];
+                                                }
+                                            }
+                                        }
+                                        pArr.options = tmpOoptionFinalAr;
+                                        callback(err);
+                                    });
+                                });
+                            }
+                        ],
+                        function(err)
+                        {
+                            pArr.subTotal = totalPrice;
+                            pArr.tax = '10';                    // Farmula is remaining.
+                            pArr.shipping = '7';                 // shipping is remaining.
+                            pArr.total = totalPrice + parseInt(10) + parseInt(7);
+                            tempCartProduct.push(pArr);
+                            callback(err); 
                         }
-                    ],
-                    function(err)
-                    {
-                        tempCartProduct.push(pArr);
-                        callback(err); 
-                    }
-                )
-            },
-            function(err){
-                return res.json({"status":'success',"msg":'List of all products of selected brand.',tempCartProduct:tempCartProduct});
-            });
-        }
-        else 
-        {
-            return res.json({"status":'error',"msg":'Unable to found any product for this brand.'});
-        }
-    });
-
-
-
+                    )
+                },
+                function(err){
+                    return res.json({"status":'success',"msg":'List of all products of selected brand.',tempCartProduct:tempCartProduct});
+                });
+            }
+            else 
+            {
+                return res.json({"status":'error',"msg":'Unable to found any product for this brand.'});
+            }
+        });
+    }
+    else 
+    {
+        return res.json({"status":'error',"msg":'Device token is not avaible.'})
+    }
 };
+
+/**
+ * POST /api/cart/finalcheckoutdisplay
+ * Process for Fetch all products of brand in cart.
+ */ 
+
+exports.finalCheckoutDisplay = (req,res) => {
+    
+    if(req.body.device_token != '')
+    {
+        Cart.find({user_id:req.body.user_id},function(error,fetchAllProductsWithBrands)
+        {
+            if(fetchAllProductsWithBrands)
+            {
+                var finalBrandArr   = new Array();
+                var brandArr        = new Array();
+                var produArr        = new Array();
+                var productPriceArr = new Array();
+
+                for (var b = 0; b < fetchAllProductsWithBrands.length; b++) 
+                {
+                    brandArr.push(fetchAllProductsWithBrands[b].brand_id);
+                    produArr.push(fetchAllProductsWithBrands[b].product_id);
+                }
+
+                uniqueArrayForBrandId = brandArr.filter(function(elem, pos) {
+                    return brandArr.indexOf(elem) == pos;
+                });
+
+                 
+                Brand.find({_id:{$in:uniqueArrayForBrandId}},function(error,fetchAllBrandDetails)
+                {
+                    if(fetchAllBrandDetails)
+                    {
+                        var finalPrice = 0;
+                        async.eachSeries(fetchAllBrandDetails, function(BrandId, callback)
+                        {
+                            var brandObj = {};
+                            brandObj.brand_id   = BrandId._id;
+                            brandObj.brand_name = BrandId.brand_name;
+                            brandObj.brand_logo = BrandId.brand_logo;
+
+                            async.parallel
+                            (
+                                [
+                                    function(callback)
+                                    {
+                                        Cart.find({user_id:req.body.user_id,brand_id:BrandId._id},function(err,listOfOtherData)
+                                        {
+                                            var sumQuantity = 0;
+                                            for (var tq = 0; tq < listOfOtherData.length; tq++) 
+                                            {   
+                                                sumQuantity += parseInt(listOfOtherData[tq].quantity);
+                                                
+                                            }
+
+                                            brandObj.totalQuantity = sumQuantity;
+
+                                            var sumPrice = 0;
+                                            async.eachSeries(listOfOtherData, function(ProductId, callback)
+                                            {   
+                                                Product.findOne({_id:ProductId.product_id},function(error,fetchProductPrice)
+                                                {
+                                                    sumPrice += parseInt(fetchProductPrice.price) * parseInt(ProductId.quantity);
+                                                    callback(err);
+                                                });
+                                            },
+                                            function(err)
+                                            {
+                                                brandObj.finalPrice = sumPrice;
+                                                callback(err);
+                                            });
+                                            
+                                        });
+                                    }
+                                ],
+                                function(err)
+                                {
+                                    finalPrice += brandObj.finalPrice;
+                                    finalBrandArr.push(brandObj);
+                                    callback(err);
+                                }
+                            );
+                            
+                        },
+                        function(err){
+                            var tax = '10';
+                            var shipping_charge = '10';
+                            var totalCartPrice = parseInt(finalPrice) + parseInt(tax) + parseInt(shipping_charge);
+                            return res.json({"status":'success',"msg":'Found your cart data.',finalOrder:finalBrandArr,subTotal:finalPrice,tax:tax,shipping_charge:shipping_charge,totalCartPrice:totalCartPrice});
+                        });
+                    }
+                    else 
+                    {
+                         return res.json({"status":'error',"msg":'Unable to found any brands.'});
+                    }
+                })
+            }
+
+        });
+    }
+    else 
+    {
+        return res.json({"status":'error',"msg":'Device token is not avaible.'})
+    }
+};
+
+
+
+
 
  

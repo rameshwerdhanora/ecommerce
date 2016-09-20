@@ -10,14 +10,18 @@ exports.addAddress = (req,res) => {
     {
         var addressIns              = new CustomerAddress();
         addressIns.user_id          = req.body.user_id;
-        addressIns.address_type     = req.body.addressType;
-        addressIns.contact_no1      = req.body.contact_no1;
-        addressIns.contact_no2      = req.body.contact_no2;
+        addressIns.firstname        = req.body.firstname;
+        addressIns.lastname         = req.body.lastname;
+        addressIns.shiptype         = req.body.shiptype;
+        addressIns.contact_no       = req.body.contact_no;
         addressIns.address_line1    = req.body.address_line1;
         addressIns.address_line2    = req.body.address_line2;
         addressIns.city             = req.body.city;
         addressIns.postal_code      = req.body.postal_code;
         addressIns.country          = req.body.country;
+        addressIns.billmode         = req.body.billmode;
+        addressIns.add_type         = req.body.add_type;
+        
 
         addressIns.save(function(error,addressObject)
         {
@@ -27,7 +31,27 @@ exports.addAddress = (req,res) => {
             }
             else
             {
-                return res.json({status:'success',msg:'Address saved successfully',addressId:addressObject._id});
+                if(req.body.billmode != '1')
+                {
+                    addressIns.add_type   = 'Billing';
+                    addressIns.save(function(error,addressBillObject)
+                    {
+                        if (error)
+                        {
+                            return res.json({status:'error',error:err});
+                        }
+                        else 
+                        {
+                            return res.json({status:'success',msg:'Address saved successfully',shippingId:addressObject._id,billingId:addressBillObject._id});
+                        }
+                    });
+                }
+                else 
+                {
+                    return res.json({status:'success',msg:'Address saved successfully',addressId:addressObject._id});
+                }
+
+                
             }
         });
     }
@@ -42,8 +66,9 @@ exports.addAddress = (req,res) => {
  */
 exports.getUserAddress = (req,res) => {
 
-    if(req.body.device_token !== ''){
-        CustomerAddress.find({ user_id: req.body.user_id}, function(error, availableUserRecord) 
+    if(req.body.device_token !== '')
+    {
+        CustomerAddress.find({ user_id: req.body.user_id,add_type:req.body.add_type}, function(error, availableUserRecord) 
         {
             if(availableUserRecord)
             {
@@ -98,16 +123,18 @@ exports.updateAddress = (req,res) => {
     {
         updateAddDetails = 
         {
-            address_type    : req.body.addressType,
-            contact_no1     : req.body.contact_no1,
-            contact_no2     : req.body.contact_no2,            
+            firstname       : req.body.firstname,
+            lastname        : req.body.lastname,
+            shiptype        : req.body.shiptype,
+            contact_no      : req.body.contact_no,
             address_line1   : req.body.address_line1,            
             address_line2   : req.body.address_line2,            
             city            : req.body.city,            
             postal_code     : req.body.postal_code,            
-            country         : req.body.country
-        };
-         
+            country         : req.body.country,
+            billmode        : req.body.billmode
+        }    
+ 
         CustomerAddress.findByIdAndUpdate(req.body._id,updateAddDetails,function(err,updateRes)
         {
             if (err)

@@ -1,15 +1,16 @@
 const mongoose = require('mongoose');
 
 const ordersSchema = new mongoose.Schema({
-	customer_id : String,
+	user_id : String,
 	order_number : String,
-	payment_type : String,
-	card_type : String,
-	card_number : String,
-	card_holder_name : String,
-	sub_total : String,
+	payment_details : Array,
+	shipping_address : Array,
+	billing_address : Array,
+	order_tracking : String,
+	subtotal : String,
 	tax : String,
 	shipping_charges : String,
+	totalprice : String,
 	order_date : String
 });
 
