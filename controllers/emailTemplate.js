@@ -10,12 +10,12 @@ exports.list = (req, res) => {
         return res.redirect('/login');
     }
     
-    
     var page = (req.query.page == undefined)?1:req.query.page;
     page = (page == 0)?1:page;
     var skipRecord = (page-1)*Constants.RECORDS_PER_PAGE;
     
     EmailTemplate.count(function(err, totalRecord) { 
+        
         var totalPage = Math.ceil(totalRecord/Constants.RECORDS_PER_PAGE);
         EmailTemplate.find()
                 .limit(Constants.RECORDS_PER_PAGE)
@@ -23,7 +23,7 @@ exports.list = (req, res) => {
                 .sort('-_id')
                 .exec(function(error,getAllTemplate){
             if(getAllTemplate){
-                res.render('emailtemplate/list', {title: 'Email Template List',activeFlag:1,resultRes:getAllTemplate, currentPage:page, totalRecord:totalRecord, totalPage:totalPagey,left_activeClass:6});
+                res.render('emailtemplate/list', {title: 'Email Template List',activeFlag:1,resultRes:getAllTemplate, currentPage:page, totalRecord:totalRecord, totalPage:totalPage,left_activeClass:6});
             }
         });
     });
@@ -35,7 +35,7 @@ exports.list = (req, res) => {
  * add email Template
  */
 exports.addTemplate = (req,res) => {
-    res.render('emailtemplate/add', {title: 'Add Email Template',activeFlag:2});
+    res.render('emailtemplate/add', {title: 'Add Email Template',activeFlag:2,left_activeClass:6});
 }
 
 
