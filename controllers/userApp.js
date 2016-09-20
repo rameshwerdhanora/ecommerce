@@ -17,7 +17,7 @@ exports.customerList = (req, res) => {
 		if(getCustomers)
 		{
 			//console.log(getCustomers.length);
-			res.render('user/customer_list', { title: 'Customer',getCustomers:getCustomers});
+			res.render('user/customer_list', { left_activeClass:4, title: 'Customer',getCustomers:getCustomers});
 		}
 	});	
 };
@@ -31,7 +31,7 @@ exports.customerView = (req, res) => {
             if(getCustomerDetails)
             {
                     //console.log(getCustomerDetails);
-                    res.render('user/customer_view', { title: 'Customer View',getCustomerDetails:getCustomerDetails,activeClass:1});
+                    res.render('user/customer_view', { title: 'Customer View',getCustomerDetails:getCustomerDetails,activeClass:1,left_activeClass:4});
             }
     });	
 };
@@ -137,7 +137,7 @@ exports.customerAddressList = (req, res) => {
 	            		billingAddress.push(availableUserAddresses[index]);
 				});  
 
-				res.render('user/customer_address', { title: 'Customer Address',getCustomerDetails:getCustomerDetails,activeClass:2,billingAddressObj:billingAddress,shippingAddressObj:shippingAddress});
+				res.render('user/customer_address', { title: 'Customer Address',getCustomerDetails:getCustomerDetails,activeClass:2,billingAddressObj:billingAddress,shippingAddressObj:shippingAddress,left_activeClass:4});
 	        });
 		}
 	});	
@@ -537,7 +537,7 @@ exports.notification = (req, res) => {
         User.findOne({_id:req.params.customerId},function(error,getCustomerDetails){
             if(getCustomerDetails){
                 if(resultRes){
-                    res.render('user/notification', { title: 'Customer notification',activeClass:8, getCustomerDetails:getCustomerDetails, result:resultRes });
+                    res.render('user/notification', { title: 'Customer notification',activeClass:8, getCustomerDetails:getCustomerDetails, result:resultRes,left_activeClass:4 });
                 }else{
                     resultRes = { _id: '',
                         user_id: req.params.customerId,
@@ -548,7 +548,7 @@ exports.notification = (req, res) => {
                         news: [ { mobile: 0, email: 0 } ] ,
                         user_id:req.params.customerId
                     };
-                    res.render('user/notification', { title: 'Customer notification',activeClass:8, getCustomerDetails:getCustomerDetails,result:resultRes });
+                    res.render('user/notification', { title: 'Customer notification',activeClass:8, getCustomerDetails:getCustomerDetails,result:resultRes,left_activeClass:4 });
                 }
             }
         });
@@ -612,7 +612,7 @@ exports.saveNotification = (req, res) => {
 exports.linkedAccounts = (req, res) => {
 	User.findOne({_id:req.params.customerId},function(error,getCustomerDetails){
         if(getCustomerDetails){
-            res.render('user/linkedaccounts', { title: 'Customer linked account',activeClass:7,getCustomerDetails:getCustomerDetails});
+            res.render('user/linkedaccounts', { title: 'Customer linked account',activeClass:7,getCustomerDetails:getCustomerDetails,left_activeClass:4});
         }
     });
 	
@@ -621,16 +621,16 @@ exports.linkedAccounts = (req, res) => {
 exports.saveLinkedAccounts = (req, res) => {
     User.findOne({_id:req.params.customerId},function(error,getCustomerDetails){
         if(getCustomerDetails){
-            res.render('user/customer_address', { title: 'Customer Address',getCustomerDetails:getCustomerDetails,activeClass:req.params.activeClass,availableUserAddresses:availableUserRecord});
+            res.render('user/customer_address', { title: 'Customer Address',getCustomerDetails:getCustomerDetails,activeClass:req.params.activeClass,availableUserAddresses:availableUserRecord,left_activeClass:4});
         }
     });
-    res.render('user/linkedaccounts', { title: 'Customer linked account',activeClass:7});
+    res.render('user/linkedaccounts', { title: 'Customer linked account',activeClass:7,left_activeClass:4});
 };
 
 exports.accounts = (req, res) => {
     User.findOne({_id:req.params.customerId},function(error,getCustomerDetails){
         if(getCustomerDetails){
-            res.render('user/accounts', { title: 'Customer accounts',activeClass:6,getCustomerDetails:getCustomerDetails });
+            res.render('user/accounts', { title: 'Customer accounts',activeClass:6,getCustomerDetails:getCustomerDetails,left_activeClass:4 });
         }
     });
 };
@@ -640,7 +640,7 @@ exports.accounts = (req, res) => {
 exports.productPreview = (req, res) => {
     User.findOne({_id:req.params.customerId},function(error,getCustomerDetails){
         if(getCustomerDetails){
-            res.render('user/productPreview', { title: 'Product review',getCustomerDetails:getCustomerDetails,activeClass:5 });
+            res.render('user/productPreview', { title: 'Product review',getCustomerDetails:getCustomerDetails,activeClass:5,left_activeClass:4 });
         }
     });
 };
@@ -648,7 +648,7 @@ exports.productPreview = (req, res) => {
 exports.payments = (req, res) => {
     User.findOne({_id:req.params.customerId},function(error,getCustomerDetails){
         if(getCustomerDetails){
-            res.render('user/payments', { title: 'Customer Payments',getCustomerDetails:getCustomerDetails,activeClass:3 });
+            res.render('user/payments', { title: 'Customer Payments',getCustomerDetails:getCustomerDetails,activeClass:3,left_activeClass:4 });
         }
     });
 };
@@ -659,6 +659,6 @@ exports.order = (req, res) => {
             res.render('user/accounts', { title: 'Customer accounts',activeClass:6,result:userRes });
         }
     });*/
-    res.render('user/order', { title: 'Order',activeClass:4 });
+    res.render('user/order', { title: 'Order',activeClass:4,left_activeClass:4 });
 };
 
