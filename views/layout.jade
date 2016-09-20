@@ -19,13 +19,13 @@ html
     script(src='/js/main.js')
     script(type='text/javascript').
       $(document).ready(function(){
-      $(".menu-icon").click(function(){
-      if($("body").hasClass("body-nav")){
-      $( "body" ).removeClass( "body-nav" );
-      } else {
-      $( "body" ).addClass("body-nav");
-      }
-      });
+        $(".menu-icon").click(function(){
+            if($("body").hasClass("body-nav")){
+                $( "body" ).removeClass( "body-nav" );
+            } else {
+                $( "body" ).addClass("body-nav");
+            }
+        });
       });
     title #{title}
   body
