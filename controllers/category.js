@@ -37,15 +37,15 @@ exports.listOfCategories = (req, res) => {
                 if(req.params.categoryId && req.params.subCatFlag){
                     SubCategory.findOne({_id:req.params.categoryId },function(error,subcatRs){
                         console.log(subcatRs);
-                        res.render('category/list', { title: 'Category',result:tempResult,activeClass:2,getAllCategories:getAllCategories,catRs:subcatRs,subCatFlag:true,catFlag:false});
+                        res.render('category/list', { title: 'Category',result:tempResult,activeClass:2,getAllCategories:getAllCategories,catRs:subcatRs,subCatFlag:true,catFlag:false,left_activeClass:3});
                     });
                 }else if(req.params.categoryId){
                     Category.findOne({_id:req.params.categoryId },function(error,catRs){
                         console.log(catRs);
-                        res.render('category/list', { title: 'Category',result:tempResult,activeClass:2,getAllCategories:getAllCategories,catRs:catRs,subCatFlag:false,catFlag:true});
+                        res.render('category/list', { title: 'Category',result:tempResult,activeClass:2,getAllCategories:getAllCategories,catRs:catRs,subCatFlag:false,catFlag:true,left_activeClass:3});
                     });
                 }else{
-                    res.render('category/list', { title: 'Category',result:tempResult,activeClass:2,getAllCategories:getAllCategories,subCatFlag:false,catFlag:false});
+                    res.render('category/list', { title: 'Category',result:tempResult,activeClass:2,getAllCategories:getAllCategories,subCatFlag:false,catFlag:false,left_activeClass:3});
                 }
             });	
         }
@@ -56,7 +56,8 @@ exports.listOfCategories = (req, res) => {
 /* Add Category page  */
 exports.addCategory = (req, res) => {
     res.render('category/add_category', {
-        title: 'Category'
+        title: 'Category',
+        left_activeClass:3
     });
 };
 
@@ -84,7 +85,7 @@ exports.saveCategory = (req,res) => {
 exports.removeCategory = (req,res) => {
     Category.remove({_id:req.params.catId},function(error,removeCategory){
         if(error){
-            req.flash('errors', 'Something Wrong!!');
+            req.flash('message', 'Something Wrong!!');
         }else{
             req.flash('message', 'Remove Successfully.');
         }
