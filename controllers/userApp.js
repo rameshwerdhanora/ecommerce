@@ -229,13 +229,13 @@ exports.userSave = (req, res) => {
 		else 
 		{
 			//console.log(req.body);
-			var userIns        		= new User();
-			userIns.role_id    		= req.body.role_id;
-			userIns.shop_name   	= req.body.shop_name;
-			userIns.user_name   	= '';
-			userIns.password    	= req.body.password;
+                    var userIns        		= new User();
+                    userIns.role_id    		= req.body.role_id;
+                    userIns.shop_name   	= req.body.shop_name;
+                    userIns.user_name   	= '';
+                    userIns.password    	= req.body.password;
 		    userIns.email_id       	= req.body.email_id;
-			userIns.first_name  	= req.body.first_name;
+                    userIns.first_name  	= req.body.first_name;
 		    userIns.last_name   	= req.body.last_name;
 		    userIns.contact_no  	= '';
 		    userIns.dob   			= '';
@@ -325,6 +325,7 @@ exports.userUpdate = (req, res) => {
 	};
 	User.findByIdAndUpdate(req.body._id,updateData, function(error, updateRes)
 	{
+                req.flash('success',['User information updated succcessfully!']);
 		res.redirect('/user/list');
 	});
 };
@@ -533,20 +534,24 @@ exports.customerChangePasswordSave = (req, res) => {
  */
 exports.notification = (req, res) => {
     Notification.findOne({user_id:req.params.customerId},function(error,resultRes){
-        if(resultRes){
-            res.render('user/notification', { title: 'Customer notification',activeClass:8, getCustomerDetails:{_id:req.params.customerId}, result:resultRes });
-        }else{
-            resultRes = { _id: '',
-                user_id: req.params.customerId,
-                new_arrival: [ { mobile: 0, email: 0 } ],
-                promocode: [ { mobile: 0, email: 0 } ],
-                delivery: [ { mobile: 0, email: 0 } ],
-                shipped: [ { mobile: 0, email: 0} ],
-                news: [ { mobile: 0, email: 0 } ] ,
-                user_id:req.params.customerId
-            };
-            res.render('user/notification', { title: 'Customer notification',activeClass:8, getCustomerDetails:{_id:req.params.customerId},result:resultRes });
-        }
+        User.findOne({_id:req.params.customerId},function(error,getCustomerDetails){
+            if(getCustomerDetails){
+                if(resultRes){
+                    res.render('user/notification', { title: 'Customer notification',activeClass:8, getCustomerDetails:getCustomerDetails, result:resultRes });
+                }else{
+                    resultRes = { _id: '',
+                        user_id: req.params.customerId,
+                        new_arrival: [ { mobile: 0, email: 0 } ],
+                        promocode: [ { mobile: 0, email: 0 } ],
+                        delivery: [ { mobile: 0, email: 0 } ],
+                        shipped: [ { mobile: 0, email: 0} ],
+                        news: [ { mobile: 0, email: 0 } ] ,
+                        user_id:req.params.customerId
+                    };
+                    res.render('user/notification', { title: 'Customer notification',activeClass:8, getCustomerDetails:getCustomerDetails,result:resultRes });
+                }
+            }
+        });
     });
 };
 
@@ -597,6 +602,7 @@ exports.saveNotification = (req, res) => {
     };
     Notification.update({user_id:req.body.user_id},updateData,{upsert:true},function(error,updateRes){
         if(updateRes){
+            req.flash('success',['User notification updated successfully!']);
             res.redirect('/customer/notification/'+req.body.user_id); 
         }
     });

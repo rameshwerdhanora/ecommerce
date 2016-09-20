@@ -3,7 +3,7 @@ block content
   .col-sm-9.midlle-bar
     .large-title-row
         img(src='/images/title-icon.png', alt='icon')
-        |  ASHLEY MOLINA
+        |  #{getCustomerDetails.first_name} #{getCustomerDetails.last_name}
        form(method='post',action='/customer/saveNotification')
         .righsub-nav.clearfix
           include customer_top_bar 
