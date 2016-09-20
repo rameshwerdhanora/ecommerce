@@ -41,7 +41,7 @@ exports.addTemplate = (req,res) => {
 
 /**
  * Post
- * Save email Template
+ * Save email Template 
  */
 exports.saveTemplate = (req,res) => {
     var emailTempModel = new EmailTemplate();
