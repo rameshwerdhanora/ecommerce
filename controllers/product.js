@@ -229,9 +229,12 @@ exports.saveProduct = (req, res) => {
                 productImageIns.image_name_4 	= req.files[3].filename;
                 productImageIns.save(function(err){
                     if (err){
-                        res.send({status:'error',error:err});
+                        //res.send({status:'error',error:err});
+                        req.flash('errors', ['Something went wronge']);
+                        res.redirect('/product/list');
                     }else {
-                            res.redirect('/product/list');
+                        req.flash('success', ['Product added successfully.']);
+                        res.redirect('/product/list');
                     }
                 });
             }
@@ -277,14 +280,14 @@ exports.updateProduct = (req, res) => {
                 }
                 ProductImage.update(req.body.productId,updateProductImage, function(error, updateProductImageRes){
                     if(updateProductImageRes){
-                            req.flash('msg', 'Update product images successfully.');
+                            req.flash('success', ['Update product images successfully.']);
                     }else{
-                            req.flash('msg', 'Update product details successfully.');
+                            req.flash('success', ['Update product details successfully.']);
                             res.redirect('/product/list');
                     }
                 });
             }else{
-                req.flash('msg', 'Update product details successfully.');
+                req.flash('success', ['Update product details successfully.']);
                 res.redirect('/product/list');
             }
         });

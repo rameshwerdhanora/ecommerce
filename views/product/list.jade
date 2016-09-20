@@ -2,6 +2,7 @@ extends ../layout
 
 block content
   .col-sm-9.midlle-bar
+    include ../partials/flash
     .large-title-row
       img(src='/images/title-icon.png', alt='icon')
       |  PRODUCTS
@@ -276,7 +277,7 @@ block content
               .modal-footer
                 button#p_edit_dis_btn.btn.btn-primary(type='button') APPLY 
                 
-    a#ancUpProduct.default-btn(href='#modal1-container', title='Add Product', role='button', data-toggle='modal') ADD PRODUCT  
+    a#ancUpProduct.default-btn.dnone(href='#modal1-container', title='Add Product', role='button', data-toggle='modal') 
     #modal1-container.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
       .modal-dialog.popup-wdt-2
         form(name='addproduct', action='/product/update', method='POST' enctype='multipart/form-data')
