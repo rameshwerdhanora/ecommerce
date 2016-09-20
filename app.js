@@ -231,7 +231,8 @@ app.post('/api/deleteFromCart',  cartAppController.deleteFromCart);
 app.post('/api/emptyCart',  cartAppController.emptyCart);
 app.post('/api/updateIntoCart',  cartAppController.updateIntoCart);
 app.get('/api/cart/mycart/:userId',  cartAppController.myCartWithBrands)
-app.get('/api/cart/showcartaccbrand/:userId/:brandId',  cartAppController.showCartAccBrand);
+app.post('/api/cart/showcartaccbrand',  cartAppController.showCartAccBrand);
+app.post('/api/cart/finalcheckoutdisplay',  cartAppController.finalCheckoutDisplay);
 app.post('/api/order/saveorder',orderAppController.saveUserFinalOrder)
 
 app.get('/api/listofbrand',  brandAppController.listOfAllBrand);
