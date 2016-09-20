@@ -17,7 +17,11 @@ const productSchema = new mongoose.Schema({
 	color : Array,
 	attribute : Array,// It's attribute option iD's
 	created : String,
-	updated : String
+	updated : String,
+	dis_name : String,
+	dis_type : String,
+	dis_amount : String
+        
 });
 
 const Product = mongoose.model('Product', productSchema);

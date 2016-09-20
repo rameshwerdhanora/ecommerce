@@ -86,9 +86,40 @@ block content
     
 
     // --- add product popup --
+    <!----- discount coupan popup ---->
+    #modal-container-702679.modal.fade(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+      .modal-dialog.discount_coupan.popup-wdt-1
+        .modal-content
+          .modal-header
+            h4 APPLY DISCOUNT CODE
+          .modal-body
+            .profile-right-cl
+              form(action='', method='post')
+                .profile-frm-row
+                  .profile-frm-cl1 Discount Name
+                  .profile-frm-cl2
+                    input#p_add_dis_name(type='text', name='p_add_dis_name', value='')
+                .profile-frm-row
+                  .profile-frm-cl1 Type of Discount
+                  .profile-frm-cl2
+                    select#p_add_dis_type(name='p_add_dis_type')
+                      option(value='percentage') Percentage
+                      option(value='fixed') Fixed
+                      
+                .profile-frm-row
+                  .profile-frm-cl1 Amount
+                  .profile-frm-cl2
+                    input#p_add_dis_amount(type='text', name='p_add_dis_amount', value='')
+                .clearfix
+              .modal-footer
+                button#p_add_dis_btn.btn.btn-primary(type='button') APPLY 
+
     #modal-container.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
       .modal-dialog.popup-wdt-2
         form(name='addproduct', action='/product/save', method='POST' enctype='multipart/form-data')
+          input#add_dis_name(type='hidden',name='add_dis_name')
+          input#add_dis_type(type='hidden',name='add_dis_type')
+          input#add_dis_amount(type='hidden',name='add_dis_amount')
           .modal-content.add_product
             .modal-header
               button.close(type='button', data-dismiss='modal', aria-hidden='true')  × 
@@ -182,7 +213,10 @@ block content
                           
                   .profile-frm-row.product_select
                     .profile-frm-cl3
-                      a(href='#') APPLY DISCOUNT CODE
+                      //a(href='#') APPLY DISCOUNT CODE
+                       //.discount
+                      a#modal-702679.btn(href='#modal-container-702679', role='button', data-toggle='modal') Apply Discount code
+
                       
                   .profile-frm-row.product_select.slctClr#lastColorSelect
                     .profile-frm-cl1
@@ -194,12 +228,6 @@ block content
                   .profile-frm-row#addClrBtn1
                     .profile-frm-cl3
                       a(href='javascript:void(0);',id='addMoreColor') ADD COLOR
-
-                  
-                         
-
-                  
-                      
                   //.profile-frm-row.product_size
                     .sg-row
                       span.sz-txt Size
@@ -221,11 +249,41 @@ block content
 
 
     -if(editProduct){
+     #modal-container-7026790.modal.fade(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+      .modal-dialog.discount_coupan.popup-wdt-1
+        .modal-content
+          .modal-header
+            h4 APPLY DISCOUNT CODE
+          .modal-body
+            .profile-right-cl
+              form(action='', method='post')
+                .profile-frm-row
+                  .profile-frm-cl1 Discount Name
+                  .profile-frm-cl2
+                    input#p_edit_dis_name(type='text', name='p_edit_dis_name',value='#{productRes.dis_name}')
+                .profile-frm-row
+                  .profile-frm-cl1 Type of Discount
+                  .profile-frm-cl2
+                    select#p_edit_dis_type(name='p_edit_dis_type')
+                      option(value='percentage',selected=(productRes.dis_type == 'percentage')) Percentage
+                      option(value='fixed',selected=(productRes.dis_type == 'fixed')) Fixed
+                      
+                .profile-frm-row
+                  .profile-frm-cl1 Amount
+                  .profile-frm-cl2
+                    input#p_edit_dis_amount(type='text', name='p_edit_dis_amount',value='#{productRes.dis_amount}')
+                .clearfix
+              .modal-footer
+                button#p_edit_dis_btn.btn.btn-primary(type='button') APPLY 
+                
     a#ancUpProduct.default-btn(href='#modal1-container', title='Add Product', role='button', data-toggle='modal') ADD PRODUCT  
     #modal1-container.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
       .modal-dialog.popup-wdt-2
         form(name='addproduct', action='/product/update', method='POST' enctype='multipart/form-data')
           .modal-content.add_product
+            input#edit_dis_name(type='hidden',name='edit_dis_name',value='#{productRes.dis_name}')
+            input#edit_dis_type(type='hidden',name='edit_dis_type',value='#{productRes.dis_type}')
+            input#edit_dis_amount(type='hidden',name='edit_dis_amount',value='#{productRes.dis_amount}')
             input(type='hidden',name='productId',value='#{productRes._id}')
             .modal-header
               button.close(type='button', data-dismiss='modal', aria-hidden='true')  × 
@@ -320,7 +378,7 @@ block content
                   
                   .profile-frm-row.product_select
                     .profile-frm-cl3
-                      a(href='#') APPLY DISCOUNT CODE
+                       a#modal-7026790.btn(href='#modal-container-7026790', role='button', data-toggle='modal') APPLY DISCOUNT CODE
                       
                   -for(var i=0;i< (productRes.color.length -1); i++){
                   .profile-frm-row.product_select.slctClr

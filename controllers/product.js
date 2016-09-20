@@ -204,6 +204,9 @@ exports.saveProduct = (req, res) => {
         productIns.created = Date.now();
         productIns.update = Date.now();
         productIns.users_id = 1;
+        productIns.dis_name = req.body.add_dis_name;
+        productIns.dis_type = req.body.add_dis_type;
+        productIns.dis_amount = req.body.add_dis_amount;
         
         productIns.save(function(err){
             if (err){
@@ -257,7 +260,10 @@ exports.updateProduct = (req, res) => {
             'update' 		: Date.now(),
             'attribute'         : req.body.size,
             'color'             : req.body.color,
-            'gender'             : req.body.gender
+            'gender'            : req.body.gender,
+            'dis_name'          : req.body.edit_dis_name,
+            'dis_type'          : req.body.edit_dis_type,
+            'dis_amount'        : req.body.edit_dis_amount
         };
 
         Product.findByIdAndUpdate(req.body.productId,updateProductData, function(error, updateProductRes){

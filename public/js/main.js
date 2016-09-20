@@ -17,23 +17,20 @@ function getSizeOptions(gender,appendId){
                             html+= ' ('+res.data[i].attributes[j].attribute +') ';
                             if(res.data[i].attributes[j].options.length){
                                 for(var k = 0; k < res.data[i].attributes[j].options.length; k++){
-                                       //html+= '<a href="#">'+ res.data[i].attributes[j].options[k].value+'</a>';
-                                        if(attributeOptions.indexOf(res.data[i].attributes[j].options[k].id) == -1){
-                                            html+= '<input type="checkbox" value="'+res.data[i].attributes[j].options[k].id+'" name="size[]" />'+ res.data[i].attributes[j].options[k].value+'';//'+res.data[i].attributes[j].attributeId+'
-                                        }else{
-                                            html+= '<input checked="checked" type="checkbox" value="'+res.data[i].attributes[j].options[k].id+'" name="size[]" />'+ res.data[i].attributes[j].options[k].value+'';//'+res.data[i].attributes[j].attributeId+'
-                                        }
+                                    //html+= '<a href="#">'+ res.data[i].attributes[j].options[k].value+'</a>';
+                                     if(attributeOptions.indexOf(res.data[i].attributes[j].options[k].id) == -1){
+                                         html+= '<input type="checkbox" value="'+res.data[i].attributes[j].options[k].id+'" name="size[]" />'+ res.data[i].attributes[j].options[k].value+'';//'+res.data[i].attributes[j].attributeId+'
+                                     }else{
+                                         html+= '<input checked="checked" type="checkbox" value="'+res.data[i].attributes[j].options[k].id+'" name="size[]" />'+ res.data[i].attributes[j].options[k].value+'';//'+res.data[i].attributes[j].attributeId+'
+                                     }
                                         
                                 }
                                 html+='</span></div></div>';
                             }else{
                                 html+='No option found</span></div></div><div class="clearfix"></div>';
                             }
-                            
                         }
                         //html+='</span></div></div>';
-                        
-                        
                         
                         /*html.='<div class=" profile-frm-row product_size"><div class="sg-row">';
                           span.sz-txt Size
@@ -52,6 +49,28 @@ function getSizeOptions(gender,appendId){
         });
 }
 $(document).ready(function() {
+    $('#p_add_dis_btn').click(function(n){
+        if($("#p_add_dis_name").val() == '' || $("#p_add_dis_type").val() == '' || $("#p_add_dis_amount").val() == ''){
+            alert('All the fields are required!');
+        }else{
+            $("#add_dis_name").val($("#p_add_dis_name").val());
+            $("#add_dis_type").val($("#p_add_dis_type").val());
+            $("#add_dis_amount").val($("#p_add_dis_amount").val());
+            $('#modal-container-702679').modal('hide');
+            
+        }
+    });
+    $('#p_edit_dis_btn').click(function(n){ 
+        if($("#p_edit_dis_name").val() == '' || $("#p_edit_dis_type").val() == '' || $("#p_edit_dis_amount").val() == ''){
+            alert('All the fields are required!');
+        }else{
+            $("#edit_dis_name").val($("#p_edit_dis_name").val());
+            $("#edit_dis_type").val($("#p_edit_dis_type").val());
+            $("#edit_dis_amount").val($("#p_edit_dis_amount").val());
+            $('#modal-container-7026790').modal('hide');
+            
+        }
+    });
     $('#product_gender').change(function(n){
         getSizeOptions($(this).val(),'addClrBtn1');
     });
