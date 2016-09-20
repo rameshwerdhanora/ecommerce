@@ -118,7 +118,7 @@ exports.edit = (req,res) => {
 		else 
 		{
                     
-                    res.render('attribute/edit', { left_activeClass:3,title: 'Edit Attribute',fetchAttribute:fetchAttribute});
+                    res.render('attribute/edit', { left_activeClass:3,title: 'Edit Attribute',fetchAttribute:fetchAttribute,activeClass:6});
 		}
 	});
 };

@@ -98,7 +98,8 @@ exports.listOfSize = (req, res) => {
                 title: 'Size',
                 fetchAllAttribute:finalRs,
                 result:finalRs,
-                activeClass:4
+                activeClass:4,
+                left_activeClass:3
             });
         }); 
     });	
@@ -109,7 +110,8 @@ exports.addSize = (req, res) => {
 	Attribute.find({},function(error,fetchAllAttribute){
 		res.render('size/add_size', {
 		    title: 'Size',
-		    fetchAllAttribute:fetchAllAttribute
+		    fetchAllAttribute:fetchAllAttribute,
+                    left_activeClass:3
 		});	
 	})	
   

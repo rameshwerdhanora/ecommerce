@@ -36,11 +36,11 @@ exports.listOfBrand = (req, res) => {
                     if(error){
                         req.flash('errors', 'Something went wrong!!');
                     }else{
-                        res.render('brand/list', { title: 'Brand',getAllBrands:getAllBrands,activeClass:5,editRes:brandRes,currentPage:page, totalRecord:totalRecord, totalPage:totalPage});
+                        res.render('brand/list', { title: 'Brand',getAllBrands:getAllBrands,activeClass:5,editRes:brandRes,currentPage:page, totalRecord:totalRecord, totalPage:totalPage,left_activeClass:3});
                     }
                 });
             }else{
-                res.render('brand/list', { title: 'Brand',getAllBrands:getAllBrands,activeClass:5,editRes:false,currentPage:page, totalRecord:totalRecord, totalPage:totalPage});
+                res.render('brand/list', { title: 'Brand',getAllBrands:getAllBrands,activeClass:5,editRes:false,currentPage:page, totalRecord:totalRecord, totalPage:totalPage,left_activeClass:3});
             }
         });
     });

@@ -34,11 +34,11 @@ exports.listOfColor = (req, res) => {
                     if(error){
                         req.flash('errors', 'Something went wrong!!');
                     }else{
-                        res.render('color/list', { title: 'Color',getAllColors:getAllColors,activeClass:3,editRes:resColor,currentPage:page, totalRecord:totalRecord, totalPage:totalPage});
+                        res.render('color/list', { title: 'Color',getAllColors:getAllColors,activeClass:3,editRes:resColor,currentPage:page, totalRecord:totalRecord, totalPage:totalPage,left_activeClass:3});
                     }
                 });
             }else{
-                res.render('color/list', { title: 'Color',getAllColors:getAllColors,activeClass:3,currentPage:page, totalRecord:totalRecord, totalPage:totalPage});
+                res.render('color/list', { title: 'Color',getAllColors:getAllColors,activeClass:3,currentPage:page, totalRecord:totalRecord, totalPage:totalPage,left_activeClass:3});
             }
         });
     });
