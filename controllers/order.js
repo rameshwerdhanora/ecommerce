@@ -7,7 +7,8 @@ exports.list = (req, res) => {
     return res.redirect('/login');
   }	
   res.render('order/list', {
-    title: 'Order List'
+    title: 'Order List',
+    left_activeClass:2
   });
 };
 
