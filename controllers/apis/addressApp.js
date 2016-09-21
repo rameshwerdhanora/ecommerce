@@ -33,25 +33,12 @@ exports.addAddress = (req,res) => {
             {
                 if(req.body.billmode != '1')
                 {
-                    addressIns.add_type   = 'Billing';
-                    addressIns.save(function(error,addressBillObject)
-                    {
-                        if (error)
-                        {
-                            return res.json({status:'error',error:err});
-                        }
-                        else 
-                        {
-                            return res.json({status:'success',msg:'Address saved successfully',shippingId:addressObject._id,billingId:addressBillObject._id});
-                        }
-                    });
+                    saveBillingAddress(req,res,addressObject);
                 }
                 else 
                 {
                     return res.json({status:'success',msg:'Address saved successfully',addressId:addressObject._id});
                 }
-
-                
             }
         });
     }
@@ -61,7 +48,36 @@ exports.addAddress = (req,res) => {
     }
 }
 
-/*
+function saveBillingAddress(req,res,addressObject)
+{
+    var addressInsFB              = new CustomerAddress();
+    addressInsFB.user_id          = req.body.user_id;
+    addressInsFB.firstname        = req.body.firstname;
+    addressInsFB.lastname         = req.body.lastname;
+    addressInsFB.shiptype         = req.body.shiptype;
+    addressInsFB.contact_no       = req.body.contact_no;
+    addressInsFB.address_line1    = req.body.address_line1;
+    addressInsFB.address_line2    = req.body.address_line2;
+    addressInsFB.city             = req.body.city;
+    addressInsFB.postal_code      = req.body.postal_code;
+    addressInsFB.country          = req.body.country;
+    addressInsFB.billmode         = req.body.billmode;
+    addressInsFB.add_type         = 'Billing';
+ 
+    addressInsFB.save(function(error,addressBillObject)
+    {
+        if (error)
+        {
+            return res.json({status:'error',error:err});
+        }
+        else 
+        {
+            return res.json({status:'success',msg:'Address saved successfully',shippingId:addressObject._id,billingId:addressBillObject._id});
+        }
+    });
+}
+ 
+/* 
  * Web service to send all the user addresses
  */
 exports.getUserAddress = (req,res) => {
