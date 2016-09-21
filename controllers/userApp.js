@@ -97,7 +97,7 @@ exports.customerChangePassword = (req, res) => {
 	User.findOne({_id:req.params.customerId},function(error,getCustomerDetails){
 		if(getCustomerDetails)
 		{
-			res.render('user/customer_change_password', { title: 'Change Password',getCustomerDetails:getCustomerDetails});
+			res.render('user/customer_change_password', { title: 'Change Password',getCustomerDetails:getCustomerDetails,activeClass:1,left_activeClass:4});
 		}
 	});	
 };
@@ -110,9 +110,9 @@ exports.customerChangePasswordSave = (req, res) => {
 	updateData = {
 		'password' 		: req.body.password,
 	};
-	User.findByIdAndUpdate(req.body._id,updateData, function(error, updateRes)
+	User.findByIdAndUpdate(req.params.customerId,updateData, function(error, updateRes)
 	{
-		res.redirect('/customer/view/'+req.body._id);
+		res.redirect('/customer/view/'+req.params.customerId);
 	});
 };
 
@@ -286,7 +286,7 @@ exports.userView = (req, res) => {
 		if(getUserDetails)
 		{
 			//console.log(getUserDetails);
-			res.render('user/user_view', { title: 'User View',getUserDetails:getUserDetails,activeClass:1});
+			res.render('user/user_view', { title: 'User View',getUserDetails:getUserDetails,activeClass:1,left_activeClass:5});
 
 		}
 	});	
@@ -301,7 +301,7 @@ exports.userEdit = (req, res) => {
 	User.findOne({_id:req.params.id},function(error,getUserDetails){
 		if(getUserDetails)
 		{
-			res.render('user/customer_edit', { title: 'Customer Edit',getCustomerDetails:getCustomerDetails,activeClass:1});
+			res.render('user/customer_edit', { title: 'Customer Edit',getCustomerDetails:getCustomerDetails,activeClass:1,left_activeClass:5});
 
 			//res.render('user/user_edit', { title: 'User Edit',getUserDetails:getUserDetails,activeClass:req.params.activeClass});
 
@@ -361,7 +361,7 @@ exports.userShipping = (req, res) => {
 			ShopShipping.findOne({ user_id: req.params.userId}, function(error, availableShopShipping)
 	        {
 				//console.log(availableShopShipping);
-				res.render('user/user_shipping', { title: 'User Shipping',getUserDetails:getUserDetails,activeClass:2,availableShopShipping:availableShopShipping});
+				res.render('user/user_shipping', { title: 'User Shipping',getUserDetails:getUserDetails,activeClass:2,availableShopShipping:availableShopShipping,left_activeClass:5});
 			});
 		}
 	});
@@ -409,7 +409,7 @@ exports.userPaymentMethod = (req, res) => {
 	        		availablePaymentMethod = [];
 	        	}
 				//console.log(availablePaymentMethod);
-				res.render('user/user_payment_method', { title: 'User Payment Method',getUserDetails:getUserDetails,activeClass:3,availablePaymentMethod:availablePaymentMethod});
+				res.render('user/user_payment_method', { title: 'User Payment Method',getUserDetails:getUserDetails,activeClass:3,availablePaymentMethod:availablePaymentMethod,left_activeClass:5});
 			});
 			
 		}
@@ -446,7 +446,7 @@ exports.userPaymentMethodSave = (req, res) => {
 
 /* User ORder */
 exports.userOrder = (req, res) => {
-    res.render('user/user_order', { title: 'User Order',activeClass:4 });
+    res.render('user/user_order', { title: 'User Order',activeClass:4,left_activeClass:5 });
 };
 
 
@@ -456,7 +456,7 @@ exports.userProductReview = (req, res) => {
 		if(getUserDetails)
 		{
 			//console.log(getUserDetails);
-			res.render('user/user_product_review', { title: 'User Payment Review',getUserDetails:getUserDetails,activeClass:5});
+			res.render('user/user_product_review', { title: 'User Payment Review',getUserDetails:getUserDetails,activeClass:5,left_activeClass:5});
 		}
 	});
 };
@@ -467,7 +467,7 @@ exports.userAccount = (req, res) => {
 		if(getUserDetails)
 		{
 			//console.log(getUserDetails);
-			res.render('user/user_account', { title: 'User Account',getUserDetails:getUserDetails,activeClass:6});
+			res.render('user/user_account', { title: 'User Account',getUserDetails:getUserDetails,activeClass:6,left_activeClass:5});
 		}
 	});
 };
@@ -478,7 +478,7 @@ exports.userLinkedAccount = (req, res) => {
 		if(getUserDetails)
 		{
 			//console.log(getUserDetails);
-			res.render('user/user_linked_account', { title: 'User Linked Account',getUserDetails:getUserDetails,activeClass:7});
+			res.render('user/user_linked_account', { title: 'User Linked Account',getUserDetails:getUserDetails,activeClass:7,left_activeClass:5});
 		}
 	});
 };
@@ -489,11 +489,37 @@ exports.userNotifications = (req, res) => {
 		if(getUserDetails)
 		{
 			console.log(getUserDetails);
-			res.render('user/user_notifications', { title: 'User Notifications',getUserDetails:getUserDetails,activeClass:8});
+			res.render('user/user_notifications', { title: 'User Notifications',getUserDetails:getUserDetails,activeClass:8,left_activeClass:5});
 		}
 	});
 };
 
+/**
+ * GET /user/userChangePassword
+ * user Change Password
+ */
+exports.userChangePassword = (req, res) => {
+	User.findOne({_id:req.params.userId},function(error,getUserDetails){
+		if(getUserDetails)
+		{
+			res.render('user/user_change_password', { title: 'Change Password',getUserDetails:getUserDetails,activeClass:1,left_activeClass:5});
+		}
+	});	
+};
+
+/**
+ * POST /user/userChangePasswordSave
+ * Update user Change Password Save
+ */
+exports.userChangePasswordSave = (req, res) => {
+	updateData = {
+		'password' 		: req.body.password,
+	};
+	User.findByIdAndUpdate(req.params.userId,updateData, function(error, updateRes)
+	{
+		res.redirect('/user/view/'+req.params.userId);
+	});
+};
 
 /**
  * GET myProfile
@@ -513,19 +539,7 @@ exports.myProfile = (req, res) => {
 };
 
 
-/**
- * POST /customer/customerChangePasswordSave
- * Update Customer Change Password Save
- */
-exports.customerChangePasswordSave = (req, res) => {
-	updateData = {
-            'password' 	: req.body.password,
-	};
-	User.findByIdAndUpdate(req.body._id,updateData, function(error, updateRes)
-	{
-		res.redirect('/customer/view/'+req.body._id);
-	});
-};
+
 
 /**
 

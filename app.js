@@ -360,7 +360,7 @@ app.get('/customer/edit/:id',  userAppControlleraAdmin.customerEdit);
 app.post('/customer/update',  userAppControlleraAdmin.customerUpdate);
 app.get('/customer/delete/:customerId',  userAppControlleraAdmin.customerDelete);
 app.get('/customer/changePassword/:customerId',  userAppControlleraAdmin.customerChangePassword);
-app.post('/customer/changePasswordSave',  userAppControlleraAdmin.customerChangePasswordSave);
+app.post('/customer/changePasswordSave/:customerId',  userAppControlleraAdmin.customerChangePasswordSave);
 app.get('/customer/notification/:customerId',  userAppControlleraAdmin.notification);
 app.post('/customer/saveNotification',  userAppControlleraAdmin.saveNotification);
 app.get('/customer/linkedAccounts/:customerId',  userAppControlleraAdmin.linkedAccounts);
@@ -414,6 +414,9 @@ app.get('/user/reviews/:userId',  userAppControlleraAdmin.userProductReview);
 app.get('/user/account/:userId',  userAppControlleraAdmin.userAccount);
 app.get('/user/linkedAccount/:userId',  userAppControlleraAdmin.userLinkedAccount);
 app.get('/user/notifications/:userId',  userAppControlleraAdmin.userNotifications);
+app.get('/user/changePassword/:userId',  userAppControlleraAdmin.userChangePassword);
+app.post('/user/changePasswordSave/:userId',  userAppControlleraAdmin.userChangePasswordSave);
+
 
 /**
  * API examples routes.
