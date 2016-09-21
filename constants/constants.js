@@ -6,6 +6,7 @@ module.exports = Object.freeze({
     CUSTOMERROLE: '5',
     GPLUSLOGIN : 'googleplus',
     FACEBOOKLOGIN : 'facebook',
-    RECORDS_PER_PAGE: 10
+    RECORDS_PER_PAGE: 10,
+    ORDERNUMBERLEN:9
 
 });
