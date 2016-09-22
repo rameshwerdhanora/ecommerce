@@ -234,6 +234,7 @@ app.get('/api/cart/mycart/:userId',  cartAppController.myCartWithBrands)
 app.post('/api/cart/showcartaccbrand',  cartAppController.showCartAccBrand);
 app.post('/api/cart/finalcheckoutdisplay',  cartAppController.finalCheckoutDisplay);
 app.post('/api/order/saveorder',orderAppController.saveUserFinalOrder)
+app.get('/api/order/listoforder/:userId',  orderAppController.listOfOrderWithStatus);
 
 app.get('/api/listofbrand',  brandAppController.listOfAllBrand);
 app.get('/api/listofsize',  sizeAppController.listOfAllSize);
@@ -242,6 +243,7 @@ app.get('/api/listofcolor',  colorAppController.listOfAllColor);
 
 app.get('/api/size/fetchcofiguration/:userId',  sizeAppController.fetchCofiguration);
 app.get('/api/size/fetchselectedsize/:sizeId/:userId',  sizeAppController.fetchSelectedSize);
+app.post('/api/size/updateusersizes', sizeAppController.updateUserSizes);
 
 
 app.post('/api/saveusercofiguration',  userAppController.saveUserCofiguration);
@@ -340,7 +342,7 @@ app.post('/attribute/addAttribOption', passportConfig.isAuthenticated,  attribut
 
 /* Order */
 app.get('/order/list',  orderController.list);
-app.get('/order/detail',  orderController.detail);
+app.get('/order/detail/:orderId',  orderController.detail);
 
 app.get('/emailtemplate/list',  emailController.list);
 app.post('/emailtemplate/save',  emailController.saveTemplate);
