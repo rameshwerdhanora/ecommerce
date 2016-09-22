@@ -7,6 +7,6 @@ module.exports = Object.freeze({
     GPLUSLOGIN : 'googleplus',
     FACEBOOKLOGIN : 'facebook',
     RECORDS_PER_PAGE: 10,
-    ORDERNUMBERLEN:9
-
+    ORDERNUMBERLEN:9,
+    EMAILTEMPLATETYPE: ['Registration','Forget Password', 'Change Password', 'New Order', 'Trackingnumber']
 });
