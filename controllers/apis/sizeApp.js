@@ -254,6 +254,25 @@ function fetchingAllAttrValue(attributeSizes, callback)
 
 };
 
+/**
+* POST /api/updateusersizes
+* Process to Save user configuration from Application.
+*/
+
+exports.updateUserSizes = function(req,res)
+{
+	if(req.body.device_token !== '')
+  	{
+  		var oldSelectedVal = req.body.selectedsize;
+  	}
+  	else
+  	{
+  		return res.json({"status":'error',"msg":'Device Token is not available.'});
+  	}
+}
+
+
+
 function fetchingAllSelectedAttrValue(attId, callback)
 {
 	AttributeOption.find({attribute_id:attId},function(error,fetchAllAttributeOptions)

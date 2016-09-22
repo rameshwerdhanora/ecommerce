@@ -629,6 +629,9 @@ exports.saveUserCofiguration = function(req,res)
 	});
 }
 
+
+
+
 /* Comman Send mail function for all user purpose */
 function sendMailToUser (user, done) 
 {

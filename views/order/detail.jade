@@ -3,32 +3,33 @@ extends ../layout
 block content
   .col-sm-9.midlle-bar
     .large-title-row.large_tittle
-      img(src='images/title-icon2.png', alt='icon')
+      img(src='/images/title-icon2.png', alt='icon')
       |  ORDERS 
       .right-sub
         a.save-btn(href='#') PRINT INVOICE
     .customer-box.clearfix
       .customer-cl.order_details
         .profile-top-row
-          h2 ORDER # 12345
+          h2 ORDER # #{orderdata.order_number}
+        
         ul
           li
           li
             .order_label
               strong order date:
-            .order_field 07/29/2016
+            .order_field #{orderdata.orderdate}
             .clearfix
           li
           li
             .order_label
               strong Order time:
-            .order_field 8:30 PM PT
+            .order_field #{orderdata.ordertime}
             .clearfix
           li
           li
             .order_label
               strong order status:
-            .order_field SHIPPED
+            .order_field #{orderdata.status}
             .clearfix
           li
       .profile-cl.order_details
@@ -39,19 +40,19 @@ block content
           li
             .order_label
               strong Username:
-            .order_field @ashleyexplainsitall
+            .order_field @#{orderdata.user_name}
             .clearfix
           li
           li
             .order_label
               strong FIRST NAME:
-            .order_field Ashley
+            .order_field #{orderdata.first_name}
             .clearfix
           li
           li
             .order_label
               strong LAST NAME:
-            .order_field Molina
+            .order_field #{orderdata.last_name}
             .clearfix
           li
       .customer-cl.order_details
@@ -61,27 +62,27 @@ block content
           li
             .order_label
               strong Address:
-            .order_field  1439 S. Rimhurst Ave
+            .order_field  #{orderdata.billing_address[0].address_line1} #{orderdata.billing_address[0].address_line2}
             .clearfix
           li
             .order_label
               strong CITY:
-            .order_field  Glendora
+            .order_field  #{orderdata.billing_address[0].city}
             .clearfix
           li
             .order_label
               strong ZIP code:
-            .order_field  91740
+            .order_field  #{orderdata.billing_address[0].postal_code}
             .clearfix
           li
             .order_label
               strong State:
-            .order_field  CA
+            .order_field  #{orderdata.billing_address[0].state}
             .clearfix
           li
             .order_label
               strong Country:
-            .order_field  USA
+            .order_field  #{orderdata.billing_address[0].country}
             .clearfix
       .profile-cl.order_details
         .profile-top-row
@@ -90,148 +91,94 @@ block content
           li
             .order_label
               strong Address:
-            .order_field  1439 S. Rimhurst Ave
+            .order_field  #{orderdata.shipping_address[0].address_line1} #{orderdata.shipping_address[0].address_line2} 
             .clearfix
           li
             .order_label
               strong CITY:
-            .order_field  Glendora
+            .order_field  #{orderdata.shipping_address[0].city}
             .clearfix
           li
             .order_label
               strong ZIP code:
-            .order_field  91740
+            .order_field  #{orderdata.shipping_address[0].postal_code}
             .clearfix
           li
             .order_label
               strong State:
-            .order_field  CA
+            .order_field  #{orderdata.shipping_address[0].state}
             .clearfix
           li
             .order_label
               strong Country:
-            .order_field  USA
+            .order_field  #{orderdata.shipping_address[0].country}
             .clearfix
       .customer-cl.order_details
         .profile-top-row
           h2 ITEMS TO SHIP
-        .product_info
-          .product_img
-            img(src='images/product.jpg')
-          .product_details
-            ul
-              li
-                .order_label
-                  strong PRODUCT:
-                .order_field  Street Tshirt Turbo
-                .clearfix
-              li
-                .order_label
-                  strong SKU:
-                .order_field  MTC-6120
-                .clearfix
-              li
-                .order_label
-                  strong SIZE:
-                .order_field  S
-                .clearfix
-              li
-                .order_label
-                  strong COLOR:
-                .order_field  Black
-                .clearfix
-              li
-                .order_label
-                  strong QTY:
-                .order_field  1
-                .clearfix
-          .product_price $25.00
-          .clearfix
-        .product_info
-          .product_img
-            img(src='images/product.jpg')
-          .product_details
-            ul
-              li
-                .order_label
-                  strong PRODUCT:
-                .order_field  Street Tshirt Turbo
-                .clearfix
-              li
-                .order_label
-                  strong SKU:
-                .order_field  MTC-6120
-                .clearfix
-              li
-                .order_label
-                  strong SIZE:
-                .order_field  S
-                .clearfix
-              li
-                .order_label
-                  strong COLOR:
-                .order_field  Black
-                .clearfix
-              li
-                .order_label
-                  strong QTY:
-                .order_field  1
-                .clearfix
-          .product_price $25.00
-          .clearfix
-        .product_info
-          .product_img
-            img(src='images/product.jpg')
-          .product_details
-            ul
-              li
-                .order_label
-                  strong PRODUCT:
-                .order_field  Street Tshirt Turbo
-                .clearfix
-              li
-                .order_label
-                  strong SKU:
-                .order_field  MTC-6120
-                .clearfix
-              li
-                .order_label
-                  strong SIZE:
-                .order_field  S
-                .clearfix
-              li
-                .order_label
-                  strong COLOR:
-                .order_field  Black
-                .clearfix
-              li
-                .order_label
-                  strong QTY:
-                .order_field  1
-                .clearfix
-          .product_price $25.00
-          .clearfix
+          
+        each productdetails in orderdata.details  
+          .product_info
+            .product_img
+              img(src='/#{productdetails.data[0].productImages.thumb_image_1}' height='97px' width='92px')
+              
+            .product_details
+              ul
+                li
+                  .order_label
+                    strong BRAND:
+                  .order_field  #{productdetails.data[0].brand.brand_name}
+                  .clearfix
+                li
+                  .order_label
+                    strong PRODUCT:
+                  .order_field  #{productdetails.data[0].product.name}
+                  .clearfix
+                li
+                  .order_label
+                    strong SKU:
+                  .order_field  #{productdetails.data[0].product.sku}
+                  .clearfix
+                li
+                  .order_label
+                    strong SIZE:
+                  .order_field  #{productdetails.data[0].options}
+                  .clearfix
+                li
+                  .order_label
+                    strong COLOR:
+                  .order_field  #{productdetails.data[0].color.color_name}
+                  .clearfix
+                li
+                  .order_label
+                    strong QTY:
+                  .order_field  #{productdetails.data[0].quantity}
+                  .clearfix
+             - var total = productdetails.data[0].product.price * productdetails.data[0].quantity   
+            .product_price  $#{total}
+            .clearfix
+        
         .total
-          .total_item TOTAL ITEMS: 4
+          .total_item TOTAL ITEMS: #{orderdata.itemquantity}
           .total_price
             ul
               li
                 .order_label
                   strong SUB TOTAL:
-                .order_field $100.00
+                .order_field $#{orderdata.subtotal}
                 .clearfix
               li
                 .order_label
                   strong TAX:
-                .order_field $9.25
+                .order_field $#{orderdata.tax}
                 .clearfix
               li
                 .order_label
                   strong DELIVERY:
-                .order_field $12.00
+                .order_field $#{orderdata.shipping_charges}
                 .clearfix
           .clearfix
-        .total_money TOTAL $121.25
+        .total_money TOTAL $#{orderdata.totalprice}
       .profile-cl.order_details
         .profile-top-row
           h2 SHIP FROM ADDRESS

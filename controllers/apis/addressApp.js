@@ -31,7 +31,7 @@ exports.addAddress = (req,res) => {
             }
             else
             {
-                if(req.body.billmode != '1')
+                if(req.body.billmode == '1')
                 {
                     saveBillingAddress(req,res,addressObject);
                 }

@@ -531,6 +531,8 @@ exports.showCartAccBrand = (req,res) => {
             {
                 var tempCartProduct = new Array();
                 var totalPrice = 0; 
+                var subTotal = 0;
+                var priceTotalObj = {}; 
                 async.eachSeries(fetchAllProductsOfBrand, function(CproductRes, callback)
                 {
                     pArr = {}; 
@@ -612,19 +614,26 @@ exports.showCartAccBrand = (req,res) => {
                         ],
                         function(err)
                         {
-                            pArr.subTotal = totalPrice;
-                            pArr.tax = '10';                    // Farmula is remaining.
-                            pArr.shipping = '7';                 // shipping is remaining.
-                            pArr.total = totalPrice + parseInt(10) + parseInt(7);
+                            subTotal        += parseInt(totalPrice);
+                            //pArr.subTotal   = parseInt(totalPrice);
                             tempCartProduct.push(pArr);
                             callback(err); 
                         }
                     )
                 },
-                function(err){
-                    return res.json({"status":'success',"msg":'List of all products of selected brand.',tempCartProduct:tempCartProduct});
+                function(err)
+                {
+                    priceTotalObj.tax           = '10';
+                    priceTotalObj.ship_code     = req.body.shipping_array[req.body.index].Code;
+                    priceTotalObj.servicename   = req.body.shipping_array[req.body.index].serviceName;
+                    priceTotalObj.totalcharges  = parseInt(req.body.shipping_array[req.body.index].TotalCharges);
+                    //priceTotalObj.totalcharges  = '6.95'
+                    priceTotalObj.finalTotal    = subTotal + parseInt(priceTotalObj.tax) + parseInt(priceTotalObj.totalcharges);
+                     
+
+                    return res.json({"status":'success',"msg":'List of all products of selected brand.',tempCartProduct:tempCartProduct,shipping_array:req.body.shipping_array,priceTotalObj:priceTotalObj});
                 });
-            }
+            } 
             else 
             {
                 return res.json({"status":'error',"msg":'Unable to found any product for this brand.'});
@@ -645,7 +654,7 @@ exports.showCartAccBrand = (req,res) => {
 exports.finalCheckoutDisplay = (req,res) => {
     
     if(req.body.device_token != '')
-    {
+    { 
         Cart.find({user_id:req.body.user_id},function(error,fetchAllProductsWithBrands)
         {
             if(fetchAllProductsWithBrands)
@@ -671,12 +680,18 @@ exports.finalCheckoutDisplay = (req,res) => {
                     if(fetchAllBrandDetails)
                     {
                         var finalPrice = 0;
+                        var finalquantity = 0;
+                        var index = 0;
+                        var TotalShippingCharges = 0;
                         async.eachSeries(fetchAllBrandDetails, function(BrandId, callback)
                         {
                             var brandObj = {};
-                            brandObj.brand_id   = BrandId._id;
-                            brandObj.brand_name = BrandId.brand_name;
-                            brandObj.brand_logo = BrandId.brand_logo;
+                            brandObj.brand_id       = BrandId._id;
+                            brandObj.brand_name     = BrandId.brand_name;
+                            brandObj.brand_logo     = BrandId.brand_logo;
+                            brandObj.ship_code      = req.body.shipping_array[index].Code;
+                            brandObj.servicename    = req.body.shipping_array[index].serviceName;
+                            brandObj.totalcharges   = parseInt(req.body.shipping_array[index].TotalCharges);
 
                             async.parallel
                             (
@@ -715,17 +730,18 @@ exports.finalCheckoutDisplay = (req,res) => {
                                 function(err)
                                 {
                                     finalPrice += brandObj.finalPrice;
+                                    finalquantity += brandObj.totalQuantity;
+                                    TotalShippingCharges +=  brandObj.totalcharges;
                                     finalBrandArr.push(brandObj);
                                     callback(err);
                                 }
                             );
-                            
+                        index++; 
                         },
                         function(err){
                             var tax = '10';
-                            var shipping_charge = '10';
-                            var totalCartPrice = parseInt(finalPrice) + parseInt(tax) + parseInt(shipping_charge);
-                            return res.json({"status":'success',"msg":'Found your cart data.',finalOrder:finalBrandArr,subTotal:finalPrice,tax:tax,shipping_charge:shipping_charge,totalCartPrice:totalCartPrice});
+                            var totalCartPrice = parseInt(finalPrice) + parseInt(tax) + parseInt(TotalShippingCharges);
+                            return res.json({"status":'success',"msg":'Found your cart data.',finalOrder:finalBrandArr,subTotal:finalPrice,tax:tax,shipping_charge:TotalShippingCharges,totalCartPrice:totalCartPrice,finalquantity:finalquantity,shipping_array:req.body.shipping_array});
                         });
                     }
                     else 

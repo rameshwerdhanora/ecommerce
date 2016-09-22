@@ -1172,7 +1172,6 @@ function fetchingAllSizes(fetchAllSizeAccToCat,callback)
              
               AttributeOptions.find({attribute_id:listAllVas._id},function(error,listAllAttrOptionsValues)
               {    
-                  console.log(listAllAttrOptionsValues); 
                   temp.options = listAllAttrOptionsValues;
                   callback(error);
               }); 
