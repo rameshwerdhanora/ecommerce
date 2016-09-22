@@ -6,7 +6,7 @@ const Notification		= require('../../models/notification');
 * GET /api/listofbrand
 * Fetch All Brands from Application for user configuration
 */
-
+ 
 exports.fetchPrivacySetting = (req, res) => {
 
 	Privacy.findOne({user_id:req.params.userId},function(error,fetchUserPrivacy)

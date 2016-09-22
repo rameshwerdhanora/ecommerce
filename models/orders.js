@@ -6,12 +6,15 @@ const ordersSchema = new mongoose.Schema({
 	payment_details : Array,
 	shipping_address : Array,
 	billing_address : Array,
-	order_tracking : String,
 	subtotal : String,
 	tax : String,
 	shipping_charges : String,
 	totalprice : String,
-	order_date : String
+	order_date : String,
+	status : String,
+	payment_status:String,
+	itemquantity:String,
+	shipping_array:Array
 });
 
 const Orders = mongoose.model('Orders', ordersSchema);

@@ -310,7 +310,7 @@ exports.postUpdateProfile = function(req,res)
 		    'updated'	: Date.now()
 		};
 
-  		User.findByIdAndUpdate(req.body.userId,updateData, function(error, updateExistingVals)
+  		User.findByIdAndUpdate(req.body.userid,updateData, function(error, updateExistingVals)
   		{
 			if(error) 
 			{
@@ -318,7 +318,7 @@ exports.postUpdateProfile = function(req,res)
 			}
 			else 
 			{
-				UserDetails.findOne({user_id:req.params.userId},function(error,fetchUserDetails)
+				UserDetails.findOne({user_id:req.params.userid},function(error,fetchUserDetails)
 				{
 					if(fetchUserDetails.shr_fb)
 					{
@@ -330,7 +330,7 @@ exports.postUpdateProfile = function(req,res)
 						    'enable_filter'	: req.body.enable_filter,
 						    'updated'	: Date.now()
 						};
-						UserDetails.findByIdAndUpdate(req.body.userId,updateUserDetailsData, function(error, updateExistingVals)
+						UserDetails.findByIdAndUpdate(req.body.userid,updateUserDetailsData, function(error, updateExistingVals)
   						{
   							return res.json({"status":'success',"msg":'Your details is successfully Updated.'});
   						});
@@ -628,6 +628,9 @@ exports.saveUserCofiguration = function(req,res)
 		}
 	});
 }
+
+
+
 
 /* Comman Send mail function for all user purpose */
 function sendMailToUser (user, done) 

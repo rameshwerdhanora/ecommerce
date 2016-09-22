@@ -34,6 +34,13 @@ exports.saveUserFinalOrder = (req,res) => {
 		orderIns.order_number 		= orderNumber;
 		orderIns.payment_details 	= req.body.payment_details;
 		orderIns.shipping_address 	= req.body.shipping_address;
+		orderIns.billing_address 	= req.body.billing_address;
+		orderIns.subtotal 			= req.body.subtotal;
+		orderIns.tax 				= req.body.tax;
+		orderIns.shipping_charges 	= req.body.shipping_charges;
+		orderIns.totalprice 		= req.body.totalprice;
+		orderIns.itemquantity 		= req.body.itemquantity;
+		orderIns.order_date 		= Date.now();
 
 		orderIns.save(function(error,saveOrder)
 		{
@@ -105,11 +112,13 @@ exports.saveUserFinalOrder = (req,res) => {
 		                            			if(fetchProductBrandForCart)
 		                            			{
 		                            				finalCartObj.brand = fetchProductBrandForCart;
+		                            				finalCartObj.brand_id = CartRes.brand_id;
 		                            				callback();
 			                           			}
 			                           			else 
 			                           			{
 			                           				finalCartObj.brand = '';
+			                           				finalCartObj.brand_id = CartRes.brand_id;
 		                            				callback();
 			                           			}
 		                            		});
@@ -148,6 +157,7 @@ exports.saveUserFinalOrder = (req,res) => {
 
 		                            	var orderDetailsIns = new OrderDetails;
 		                            	orderDetailsIns.order_id 	= orderIns._id;
+		                            	orderDetailsIns.brand_id 	= finalCartObj.brand_id;
 		                            	orderDetailsIns.index 		= 'product';
 		                            	orderDetailsIns.data 		= finalCartObj;
 		                            	orderDetailsIns.save(function(error,saveOrderDetails){})
@@ -174,6 +184,97 @@ exports.saveUserFinalOrder = (req,res) => {
 	}
 
 }
+
+/**
+ * GET /api/order/listoforder/:userId
+ * Process for List for user order
+ */
+
+exports.listOfOrderWithStatus = (req,res) => {
+
+	Order.find({user_id:req.params.userId},function(error,fetchAllOrdersOfUser)
+	{
+		if(fetchAllOrdersOfUser)
+		{	
+			var OrderArr = new Array();
+			var count = 1;
+			var index = 0;
+			async.eachSeries(fetchAllOrdersOfUser, function(OrderRes, callback)
+	        {
+	        	var orderData = {};
+	        	var dateTime = new Date(parseInt(OrderRes.order_date));
+
+	        	var year  = dateTime.getFullYear();
+        		var month = dateTime.getMonth()+1;
+        		var date  = dateTime.getDate();
+        		finalDate = month+'/'+date+'/'+year
+
+	        	orderData.order_number 	= OrderRes.order_number;
+	        	orderData._id 			= OrderRes._id;
+	        	orderData.status	    = OrderRes.status;
+	        	orderData.itemquantity	= OrderRes.itemquantity;
+	        	orderData.order_date	= finalDate;
+	        	index += count; 
+	        	OrderArr.push(orderData);
+	        	callback(error);
+	        	count++;
+	        },
+	        function(err)
+	        {
+
+	        	return res.json({"status":'success',"msg":'Found your list of orders.',listOfOrders:OrderArr,countOrder:index})
+	        });
+		}
+		else 
+		{
+			return res.json({"status":'error',"msg":'You have not created any order yet.'})
+		}
+	})
+}
+
+/**
+ * GET /api/order/orderdetails/:orderId
+ * Process for order details
+ */
+
+/*exports.detailsOfSelectedOrder = (req,res) => {
+
+	Order.find({_id:req.params.orderId},function(error,fetchOrdersDetails)
+	{
+		if(fetchOrdersDetails)
+		{
+			async.eachSeries(fetchOrdersDetails, function(OrderDetailRes, callback)
+	        {
+	        	var orderData = {};
+	        	var dateTime = new Date(parseInt(OrderRes.order_date));
+
+	        	var year  = dateTime.getFullYear();
+        		var month = dateTime.getMonth()+1;
+        		var date  = dateTime.getDate();
+        		finalDate = month+'/'+date+'/'+year
+
+	        	orderData.orderalldata 	= OrderRes;
+	        	orderData.order_date	= finalDate;
+	        	orderData.expected_date	= finalDate;
+	        	index += count; 
+	        	OrderArr.push(orderData);
+	        	callback(error);
+	        	count++;
+	        },
+	        function(err)
+	        {
+
+	        	return res.json({"status":'success',"msg":'Found your list of orders.',listOfOrders:OrderArr,countOrder:index})
+	        });
+		}
+		else 
+		{
+			return res.json({"status":'error',"msg":'Something Wrong.'})
+		}
+	});
+
+} */
+
 
 function getOptAttribute(opId, callback){
    AttributOption.find({_id: {$in : opId}},function(error,opRes){
