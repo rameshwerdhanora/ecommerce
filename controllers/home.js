@@ -11,3 +11,15 @@ exports.index = (req, res) => {
     left_activeClass:1
   });
 };
+
+
+exports.land = (req, res) => {
+  res.render('home/land', {
+    title: 'Home',
+    left_activeClass:1
+  });
+};
+
+/*exports.emailsubscribe = (req, res) => {
+  console.log(req.body);
+};*/

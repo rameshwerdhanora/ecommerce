@@ -1,0 +1,43 @@
+@media screen and (max-width:960px) {
+.forms-row {
+	padding-left:20px;
+	padding-right:20px;
+}
+}
+
+@media screen and (max-width:767px) {
+	.forms-row {
+
+  padding: 50px 20px;
+
+}
+.landing-main-wrap {
+	background-size: cover;
+}
+.rf-form, .lf-form{
+	width:100%;
+	float:none;
+	max-width:100%;
+}
+
+.rf-form .etis-txt, .etis-txt{
+	float:none;
+	max-width:100%;
+}
+
+}
+@media screen and (max-width:479px) {
+.top-box {
+	margin: auto;
+	padding: 20px;
+}
+.cmg-slogan {
+	font-size: 18px;
+}
+.cmg-slogan span {
+	font-size: 14px;
+}
+.bcm-title{
+	font-size:16px;
+}
+}
