@@ -8,6 +8,7 @@ const cardSchema = new mongoose.Schema({
 	expire_date : String,
 	data:Array,
 	created : String,
+	holdername:String,
 	updated:String
 });
 
