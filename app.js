@@ -186,6 +186,7 @@ app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userControl
 app.post('/api/customer/create/save', userAppController.postSignupManuallySave);
 app.post('/api/customer/forgotpassword', userAppController.postForgetPassword); // Completed
 app.post('/api/customer/changePassword', userAppController.postChangePassword); // Completed
+app.post('/api/customer/changeuserpasswordfromprofile', userAppController.changeUserPasswordFromProfile); // Completed
 
 app.get('/api/customer/fetchuserdetails/:userId', userAppController.getUserProfile);
 app.post('/api/customer/updateprofile', userAppController.postUpdateProfile);
