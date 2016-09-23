@@ -136,6 +136,7 @@ exports.notificationSettingofUser = (req, res) => {
 		  		notificationIns.delivery 	   		= req.body.delivery;
 		  		notificationIns.promocode 	   		= req.body.promocode;
 		  		notificationIns.new_arrival 	   	= req.body.new_arrival;
+		  		notificationIns.user_id              = req.body.user_id;
 		  		notificationIns.date 	       		= Date.now();
 		  		notificationIns.save(function(error)
   				{
