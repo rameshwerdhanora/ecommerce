@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 
 const commonAppSchema = new mongoose.Schema({
 	user_id : String,
-	feedback_subject : String,
+	email : String,
+	//feedback_subject : String,
 	feedback_description : String,
 	created : String
 });
