@@ -17,24 +17,31 @@ const NodeMailer 	  = require('nodemailer');
 
 exports.postLeaveFeedback = function(req,res)
 {
-	var feedbackData = {
-		user_id				:req.body.user_id,
-		email				:req.body.email, 
-		feedback_subject	:req.body.feedback_subject, 
-		feedback_description:req.body.feedback_description, 
-		created				:Date.now() 
-	};
+   if(req.body.device_token != '')
+   {
+      var CommonIns                  = new Common;
+      CommonIns.user_id              = req.body.user_id;
+      CommonIns.email                = req.body.email;
+      //CommonIns.feedback_subject     = req.body.feedback_subject;
+      CommonIns.feedback_description = req.body.feedback_description;
+      CommonIns.created              = Date.now();
 
-   	Common.insert(feedbackData,function(error,insertFeedbackRes)
-   	{
-   		if(error)
-   		{
-   			return res.json({"status":'error',"msg":error});
-   		}
-   		else 
-   		{
-   			return res.json({"status":'success',"msg":'Thank you for giving us feedback. Our team will shortly connect with you.'});
-   		}
-   	});
+      CommonIns.save(function(error)
+      {
+         if(error)
+         {
+            return res.json({"status":'error',"msg":error});
+         }
+         else 
+         {
+            return res.json({"status":'success',"msg":'Thank you for giving us feedback.'});
+         }
+      });      
+   }
+   else 
+   {
+      return res.json({"status":'error',"msg":'Device Token is not available.'});
+   }
+
 }
 
