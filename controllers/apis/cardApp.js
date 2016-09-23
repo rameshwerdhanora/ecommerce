@@ -5,7 +5,7 @@ const Card		= require('../../models/card');
 
 exports.listOfCards = (req, res) => {
 
-		Card.find({user_id:req.params.userId},function(error,getAllCards)
+		Card.find({user_id:req.params.userId},{data:false},function(error,getAllCards)
 		{
 			if(getAllCards)
 			{
@@ -27,6 +27,7 @@ exports.saveCard = (req,res) => {
         cardIns.user_id 		= req.body.user_id;
         cardIns.card_id 		= req.body.data.id;
         cardIns.number 			= req.body.data.number;
+        cardIns.holdername		= req.body.data.first_name;
         cardIns.type 			= req.body.data.type;
         cardIns.expire_date		= req.body.data.expire_month+'/'+req.body.data.expire_year;
         cardIns.data 			= req.body.data;
