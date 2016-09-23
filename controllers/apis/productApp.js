@@ -655,7 +655,7 @@ exports.saveFilter = (req, res) => {
         var filterSortIns          = new FilterSort();
         filterSortIns.user_id      = req.body.user_id;
         filterSortIns.filter       = req.body;
-        filterSortIns.brand_id     = req.body.brand_id;;
+        filterSortIns.brand_id     = req.body.brand_id;
         filterSortIns.date         = Date.now();
         filterSortIns.save(function(error)
         {
@@ -1089,6 +1089,7 @@ exports.fetchcheck = (req, res) => {
 
   var category_id     = req.body.category_id;
   var sub_category_id = req.body.sub_category_id;
+
   Product.find({category_id:category_id,sub_category_id:{$in:[sub_category_id]}},{attribute:true,_id:true},function(error,fetchAllSizeAccToCat){
     if(fetchAllSizeAccToCat)
     {
@@ -1144,7 +1145,7 @@ function fetchingAllSizes(fetchAllSizeAccToCat,callback)
       {
         if(listAllValues[e].attribute_id != '')
         {
-          AttrOptiAr.push(listAllValues[e].attribute_id);
+          AttrOptiAr.push(listAllValues[e].attribute_id); 
 
         }
       }
@@ -1259,6 +1260,7 @@ function fetchingFilterProduct(bid,saveFilterSort,callback)
   var subcatid  = saveFilterSort.filter.subcatid;
   var minprice  = saveFilterSort.filter.minprice;
   var maxprice  = saveFilterSort.filter.maxprice;
+  var size      = saveFilterSort.filter.size;
   var color     = saveFilterSort.filter.color;
   var sort      = saveFilterSort.sort;
   var filter    = saveFilterSort.filter;
@@ -1274,6 +1276,7 @@ function fetchingFilterProduct(bid,saveFilterSort,callback)
       brand_id:bid,
       category_id:catId,
       sub_category_id:{$in:subcatid},
+      attribute:{$in:size},
       price:{$gt:minprice},
       price:{$lt:maxprice}
     },
@@ -1289,6 +1292,7 @@ function fetchingFilterProduct(bid,saveFilterSort,callback)
       brand_id:bid,
       category_id:catId,
       sub_category_id:{$in:subcatid},
+      attribute:{$in:size},
       price:{$gt:minprice},
       price:{$lt:maxprice}
     },
