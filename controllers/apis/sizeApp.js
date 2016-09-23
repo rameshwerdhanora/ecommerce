@@ -255,7 +255,7 @@ function fetchingAllAttrValue(attributeSizes, callback)
 };
 
 /**
-* POST /api/updateusersizes
+* POST /api/size/updateusersizes
 * Process to Save user configuration from Application.
 */
 
@@ -263,7 +263,60 @@ exports.updateUserSizes = function(req,res)
 {
 	if(req.body.device_token !== '')
   	{
-  		var oldSelectedVal = req.body.selectedsize;
+  		 
+  		var newSelectedVal 	= req.body.new_size;
+  		var user_id 		= req.body.user_id;
+
+  		 
+  		UserDetails.findOne({user_id:user_id},function(error,fetchUserSizeData)
+  		{	
+
+  			var tempSize 		= [];
+  			var temSize 		= fetchUserSizeData.configDetail[0].Size;
+  			var configDetailArr = new Array();
+
+	  		for(i=0; i<temSize.length;i++)
+	  		{	
+	  			var tmp = {};
+	  			tmp.attributeId = temSize[i].attributeId;
+	  			
+	  			if(newSelectedVal.attributeId == temSize[i].attributeId)
+	  			{
+	  				tmp.attributeSizes  = newSelectedVal.attributeSizes;
+	  			}
+	  			else
+	  			{
+	  				tmp.attributeSizes  = temSize[i].attributeSizes;
+	  			}
+	  			tempSize.push(tmp);
+	  		}
+
+  			var sizeObj 		= {};
+  			sizeObj.Size  		= tempSize;
+
+  			configDetailArr.push(sizeObj);
+  			var sizeObj 		= {};
+  			sizeObj.brands 		= fetchUserSizeData.configDetail[1].brands;
+  			configDetailArr.push(sizeObj);
+
+  			//console.log(configDetailArr);
+  			var updateData = 
+  			{
+  				'configDetail' : configDetailArr
+  			}
+
+ 			UserDetails.findByIdAndUpdate(fetchUserSizeData._id,updateData,function(error,saveexistingValues)
+	  		{
+	  			if(error)
+	  			{
+	  				return res.json({"status":'error',"msg":'Something Wrong.'});
+	  			}
+	  			else 
+	  			{
+	  				return res.json({"status":'success',"msg":'Your size changes Successfully updated'});
+	  			}
+	  		})
+  		})	
   	}
   	else
   	{
