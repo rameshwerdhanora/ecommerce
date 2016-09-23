@@ -101,56 +101,55 @@ exports.notificationSettingofUser = (req, res) => {
 	if(req.body.device_token !== '')
 	{
 		Notification.findOne({user_id:req.body.user_id},function(error,fetchUserNotification)
-  		{
-  			if(fetchUserNotification)
-  			{	
-  				updateNotificationData = 
-  				{
-					'user_id' 				: req.body.user_id,
-					'enablenotification'	: req.body.enablenotification,
-				    'news'					: req.body.news,
-				    'shipped'				: req.body.shipped,
-				    'delivery' 				: req.body.delivery,
-				    'promocode' 			: req.body.promocode,
-				    'new_arrival'			: req.body.new_arrival
-
-				};
-				Notification.findByIdAndUpdate(fetchUserNotification._id,updateNotificationData, function(error, updateExistingNotiVals)
-  				{
-  					if(error)
-  					{
-  						return res.json({"status":'error',"msg":'Something wrong with your setting.'});
-  					}
-  					else 
-  					{
-  						return res.json({"status":'success',"msg":'Notification is updated successfully.'});
-  					}
-  				});
-  			}
-  			else 
-  			{
-  				var notificationIns			    	= new Notification();
-		  		notificationIns.enablenotification 	= req.body.enablenotification;
-		  		notificationIns.news 	   			= req.body.news;
-		  		notificationIns.shipped 	   		= req.body.shipped;
-		  		notificationIns.delivery 	   		= req.body.delivery;
-		  		notificationIns.promocode 	   		= req.body.promocode;
-		  		notificationIns.new_arrival 	   	= req.body.new_arrival;
-		  		notificationIns.user_id              = req.body.user_id;
-		  		notificationIns.date 	       		= Date.now();
-		  		notificationIns.save(function(error)
-  				{
-  					if(error)
-		  			{
-		  				return res.json({"status":'error',"msg":'Something wrong with your notificaiton setting.'});
-		  			}
-		  			else 
-		  			{
-		  				return res.json({"status":'success',"msg":'Notification is stored successfully.'});
-		  			}
-  				});
-  			}
-  		});
+		{
+			if(fetchUserNotification)
+			{	
+				updateNotificationData = 
+				{
+		          'user_id' 				    : req.body.user_id,
+		          'enablenotification'			: req.body.enablenotification,
+		          'news'					    : req.body.news,
+		          'shipped'				      	: req.body.shipped,
+		          'delivery' 				    : req.body.delivery,
+		          'promocode' 			    	: req.body.promocode,
+		          'new_arrival'			    	: req.body.new_arrival
+    			};
+			Notification.findByIdAndUpdate(fetchUserNotification._id,updateNotificationData, function(error, updateExistingNotiVals)
+				{
+					if(error)
+					{
+						return res.json({"status":'error',"msg":'Something wrong with your setting.'});
+					}
+					else 
+					{
+						return res.json({"status":'success',"msg":'Notification is updated successfully.'});
+					}
+				});
+			}
+			else 
+			{
+			var notificationIns			    	       = new Notification();
+	  		notificationIns.enablenotification 	 = req.body.enablenotification;
+	  		notificationIns.news 	   			       = req.body.news;
+	  		notificationIns.shipped 	   		     = req.body.shipped;
+	  		notificationIns.delivery 	   		     = req.body.delivery;
+	  		notificationIns.promocode 	   		   = req.body.promocode;
+	  		notificationIns.new_arrival 	   	   = req.body.new_arrival;
+        	notificationIns.user_id              = req.body.user_id;
+	  		notificationIns.date 	       		     = Date.now();
+	  		notificationIns.save(function(error)
+				{
+					if(error)
+	  			{
+	  				return res.json({"status":'error',"msg":'Something wrong with your notificaiton setting.'});
+	  			}
+	  			else 
+	  			{
+	  				return res.json({"status":'success',"msg":'Notification is stored successfully.'});
+	  			}
+				});
+			}
+		});
 	}
 	else 
 	{
