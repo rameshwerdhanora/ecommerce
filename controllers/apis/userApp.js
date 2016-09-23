@@ -135,7 +135,7 @@ exports.postLoginManually = function(req,res)
   			if(checkForLogin)
   			{
   				bcrypt.compare(req.body.password, checkForLogin.password, (err, isMatch) => {
-  					
+
 				    if(isMatch) 
 				    {	
 				        UserDetails.findOne({user_id:checkForLogin._id},function(error,fetchUserDetails)
@@ -637,7 +637,7 @@ exports.saveUserCofiguration = function(req,res)
 						return res.json({"status":'success',"msg":'Your configuration successfully added.'});
 					}
 				});
-			}
+			} 
 			
 		}
 	});
@@ -687,6 +687,10 @@ exports.changeUserPasswordFromProfile = function(req,res)
 			            	return res.json({"status":'error',"msg":'Your old password is not correct.'});
 			            }
 			        });
+	  			}
+	  			else 
+	  			{
+	  				return res.json({"status":'error',"msg":'System not found your Username.'});
 	  			}
 	  		})
   		} 
