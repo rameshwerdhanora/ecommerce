@@ -42,17 +42,34 @@ exports.add = (req,res) => {
  * Save email Template 
  */
 exports.save = (req,res) => {
-    console.log(req.body.name);
-    var TagModel = new Tag();
-    TagModel.name = req.body.name;
-    TagModel.createdAt = Date.now();
-    TagModel.updatedAt = Date.now();
-    TagModel.save(function(err) {
-        if (err){
-            req.flash('errors', ['There is some error occured']);
-            res.send({status:'error',error:err});
+    Tag.count({name:req.body.name},function(error,tagRes){
+        if(tagRes == 0){
+            req.assert('name', 'Hash tag is required').notEmpty();
+            var errors = req.validationErrors();  
+            if( !errors){   //No errors were found.  Passed Validation!
+                var TagModel = new Tag();
+                TagModel.name = req.body.name;
+                TagModel.createdAt = Date.now();
+                TagModel.updatedAt = Date.now();
+                TagModel.save(function(err) {
+                    if (err){
+                        req.flash('errors', ['There is some error occured']);
+                        res.redirect('/tag/add');
+                    }else{
+                        req.flash('success', ['Hash tag added successfully']);
+                        res.redirect('/tag/list');
+                    }
+                });
+            }else{
+                var er = new Array();
+                for(var i = 0;i<errors.length;i++){
+                    er.push(errors[i].msg);
+                }
+                req.flash('errors',er);
+                res.redirect('/tag/add');
+            }
         }else{
-            req.flash('success', ['Hash tag added successfully']);
+            req.flash('errors', ['Hash tag is already exist']);
             res.redirect('/tag/list');
         }
     });
@@ -82,13 +99,32 @@ exports.edit = (req, res) => {
  * Save email Template
  */
 exports.update = (req,res) => {
-    updateData = {
-        name : req.body.name,
-        updatedAt : Date.now()
-    };
-    Tag.findByIdAndUpdate(req.body.tagId,updateData, function(error, updateRes)
-    {
-        req.flash('success', ['Tag updated successfully']);
-        res.redirect('/tag/list');
-    });
+    req.assert('name', 'Hash tag is required').notEmpty();
+    var errors = req.validationErrors();  
+    if( !errors){   //No errors were found.  Passed Validation!
+        Tag.count({name:req.body.name,_id:{$ne:req.body.tagId}},function(error,tagRes){
+            if(tagRes == 0){
+
+                updateData = {
+                    name : req.body.name,
+                    updatedAt : Date.now()
+                };
+                Tag.findByIdAndUpdate(req.body.tagId,updateData, function(error, updateRes)
+                {
+                    req.flash('success', ['Tag updated successfully']);
+                    res.redirect('/tag/list');
+                });
+            }else{
+                req.flash('errors', ['Hash tag is already exist']);
+                res.redirect('/tag/edit/'+req.body.tagId);
+            }
+        });
+    }else{
+        var er = new Array();
+        for(var i = 0;i<errors.length;i++){
+            er.push(errors[i].msg);
+        }
+        req.flash('errors',er);
+        res.redirect('/tag/edit/'+req.body.tagId);
+    }
 }
