@@ -595,50 +595,65 @@ exports.notification = (req, res) => {
 };
 
 exports.saveNotification = (req, res) => {
-    console.log(req.body.user_id);
-    if(req.body.arrival){
-        var arrival_email = (req.body.arrival.email != 'undefined')?req.body.arrival.email:'0';
-        var arrival_mob = (req.body.arrival.mob != 'undefined')?req.body.arrival.mob:'0';
-    }else{
-        var arrival_email = '0';
-        var arrival_mob = '0';
-    }
-    if(req.body.shipped){
-        var shipped_email = (req.body.shipped.email != 'undefined')?req.body.shipped.email:'0';
-        var shipped_mob = (req.body.shipped.mob != 'undefined')?req.body.shipped.mob:'0';
-    }else{
-        var shipped_email = '0';
-        var shipped_mob = '0';
+   var updateData = {};
+   updateData.delivery = new Array();
+   updateData.shipped = new Array();
+   updateData.new_arrival = new Array();
+   updateData.promocode = new Array();
+   updateData.news = new Array();
+    if(req.body.arrival != undefined && req.body.arrival.length > 0){
+        if(req.body.arrival[0] == 'mail' ||  req.body.arrival[1] == 'mail'){
+            updateData.new_arrival.push('mail');
+        }
+        if(req.body.arrival[0] == 'mobile' ||  req.body.arrival[1] == 'mobile'){
+            updateData.new_arrival.push('mobile');
+        }
     }
     
-    if(req.body.deliver){
-        var deliver_email = (req.body.deliver.email != 'undefined')?req.body.deliver.email:'0';
-        var deliver_mob = (req.body.deliver.mob != 'undefined')?req.body.deliver.mob:'0';
-    }else{
-        var deliver_email = '0';
-        var deliver_mob = '0';
+    if(req.body.shipped != undefined && req.body.shipped.length > 0){
+        if(req.body.shipped[0] == 'mail' || req.body.shipped[1] == 'mail'){
+            updateData.shipped.push('mail');
+        }
+        if(req.body.shipped[0] == 'mobile' || req.body.shipped[1] == 'mobile'){
+            updateData.shipped.push('mobile');
+        }
     }
-    if(req.body.promo){
-        var promo_email = (req.body.promo.email != 'undefined')?req.body.promo.email:'0';
-        var promo_mob = (req.body.promo.mob != 'undefined')?req.body.promo.mob:'0';
-    }else{
-        var promo_email = '0';
-        var promo_mob = '0';
+    
+    if(req.body.deliver != undefined && req.body.deliver.length > 0){
+        if(req.body.deliver[0] == 'mail' || req.body.deliver[1] == 'mail'){
+            updateData.delivery.push('mail');
+        }
+        if(req.body.deliver[0] == 'mobile' || req.body.deliver[1] == 'mobile'){
+            updateData.delivery.push('mobile');
+        }
     }
-    if(req.body.news){
-        var news_email = (req.body.news.email != 'undefined')?req.body.news.email:'0';
-        var news_mob = (req.body.news.mob != 'undefined')?req.body.news.mob:'0';
-    }else{
-        var news_email = '0';
-        var news_mob = '0';
+    
+    if(req.body.promo != undefined && req.body.promo.length > 0){
+        if(req.body.promo[0] == 'mail' || req.body.promo[1] == 'mail'){
+            updateData.promocode.push('mail');
+        }
+        if(req.body.promo[0] == 'mobile' || req.body.promo[1] == 'mobile' ){
+            updateData.promocode.push('mobile');
+        }
+        
     }
-    updateData = {
-        delivery:{email:deliver_email, mobile:deliver_mob},
-        shipped:{email: shipped_email, mobile:shipped_mob},
-        new_arrival:{email:arrival_email, mobile:arrival_mob},
-        promocode:{email:promo_email, mobile:promo_mob},
-        news:{email:news_email, mobile:news_mob}
-    };
+    if(req.body.news != undefined  && req.body.news.length > 0){
+        if(req.body.news[0] == 'mail' || req.body.news[1] == 'mail'){
+            updateData.news.push('mail');
+        }
+        if(req.body.news[0] == 'mobile' || req.body.news[1] == 'mobile'){
+            updateData.news.push('mobile');
+        }
+    }
+    
+//    
+//    updateData = {
+//        delivery:{email:deliver_email, mobile:deliver_mob},
+//        shipped:{email: shipped_email, mobile:shipped_mob},
+//        new_arrival:{email:arrival_email, mobile:arrival_mob},
+//        promocode:{email:promo_email, mobile:promo_mob},
+//        news:{email:news_email, mobile:news_mob}
+//    };
     Notification.update({user_id:req.body.user_id},updateData,{upsert:true},function(error,updateRes){
         if(updateRes){
             req.flash('success',['User notification updated successfully!']);
