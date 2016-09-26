@@ -681,3 +681,8 @@ header {
 	padding: 0 10px;
 }
 }
+
+
+.ord-tbl tr {
+  border-bottom: 1px solid #bcbcbc;
+}
