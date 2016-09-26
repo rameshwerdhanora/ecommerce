@@ -11,8 +11,8 @@ const AttributeOption	= require('../models/attributeOption');
 const Color				= require('../models/color');
 const Constants 		= require('../constants/constants');
 const Size 		= require('../models/size');
-
-
+const Tag				= require('../models/tag');
+const ProductsHashtag		= require('../models/productHashtag');
 
 
 /* Define Folder name where our user porfile stored */
@@ -49,71 +49,75 @@ exports.listOfProducts = (req, res) => {
                     Brand.find({},function(error,fetchAllBrands){
                         Attribute.find({},function(error,fetchAllAttributes){
                             Color.find({},function(error,fetchAllColors){
-                                /*
-                                res.render('product/add_product', {
-                                    title: 'Product',
-                                    allBrands : fetchAllBrands,
-                                    fetchCategories:fetchCategories,
-                                    fetchSubCategories:fetchSubCategories,
-                                    fetchAllAttributes:fetchAllAttributes,
-                                    fetchAllColors:fetchAllColors
-                                });*/
-                                var tempBrand = {};
-                                for(var i = 0;i< fetchAllBrands.length;i++){
-                                    tempBrand[fetchAllBrands[i]._id] = fetchAllBrands[i].brand_name;
-                                }
-                                var tempCategory = {};
-                                for(var i = 0;i< fetchCategories.length;i++){
-                                    tempCategory[fetchCategories[i]._id] = fetchCategories[i].name;
-                                }
-                                if(req.params.productId){
-                                    //Category.find({is_active:1},function(error,fetchCategories){
-                                        //SubCategory.find({is_active:1},function(error,fetchSubCategories){
-                                            //Brand.find({},function(error,fetchAllBrands){
-                                                //Attribute.find({},function(error,fetchAllAttributes){
-                                                    //Color.find({},function(error,fetchAllColors){
-                                                        Product.findOne({_id:req.params.productId},function(error,productRes){
-                                                            //Color.find(_id:{$in:{productRes.color}},function(error,selectedColor){
-                                                                
-                                                                res.render('product/list', {
-                                                                    title: 'Update product',
-                                                                    fetchAllProducts:fetchAllProducts,
-                                                                    activeClass:1,
-                                                                    left_activeClass:3,
-                                                                    allBrands : fetchAllBrands,
-                                                                    fetchCategories:fetchCategories,
-                                                                    fetchSubCategories:fetchSubCategories,
-                                                                    fetchAllAttributes:fetchAllAttributes,
-                                                                    fetchAllColors:fetchAllColors,
-                                                                    editProduct:true,
-                                                                    productRes:productRes,
-                                                                    brandAr:tempBrand,
-                                                                    categoryAr:tempCategory
-                                                                });
-                                                            //});
-                                                        });
-                                                    //});	
-                                                //});
-                                            //});
-                                        //});
-                                    //});
-                                }else{
-                                    res.render('product/list',{
+                                Tag.find({},function(error,fetchAllTags){
+                                    /*
+                                    res.render('product/add_product', {
                                         title: 'Product',
-                                        fetchAllProducts:fetchAllProducts,
-                                        activeClass:1,
-                                        left_activeClass:3,
                                         allBrands : fetchAllBrands,
                                         fetchCategories:fetchCategories,
                                         fetchSubCategories:fetchSubCategories,
                                         fetchAllAttributes:fetchAllAttributes,
-                                        fetchAllColors:fetchAllColors,
-                                        editProduct:false,
-                                        brandAr:tempBrand,
-                                        categoryAr:tempCategory
-                                    });
-                                }
-                            });	
+                                        fetchAllColors:fetchAllColors
+                                    });*/
+                                    var tempBrand = {};
+                                    for(var i = 0;i< fetchAllBrands.length;i++){
+                                        tempBrand[fetchAllBrands[i]._id] = fetchAllBrands[i].brand_name;
+                                    }
+                                    var tempCategory = {};
+                                    for(var i = 0;i< fetchCategories.length;i++){
+                                        tempCategory[fetchCategories[i]._id] = fetchCategories[i].name;
+                                    }
+                                    if(req.params.productId){
+                                        //Category.find({is_active:1},function(error,fetchCategories){
+                                            //SubCategory.find({is_active:1},function(error,fetchSubCategories){
+                                                //Brand.find({},function(error,fetchAllBrands){
+                                                    //Attribute.find({},function(error,fetchAllAttributes){
+                                                        //Color.find({},function(error,fetchAllColors){
+                                                            Product.findOne({_id:req.params.productId},function(error,productRes){
+                                                                //Color.find(_id:{$in:{productRes.color}},function(error,selectedColor){
+
+                                                                    res.render('product/list', {
+                                                                        title: 'Update product',
+                                                                        fetchAllProducts:fetchAllProducts,
+                                                                        activeClass:1,
+                                                                        left_activeClass:3,
+                                                                        allBrands : fetchAllBrands,
+                                                                        fetchCategories:fetchCategories,
+                                                                        fetchSubCategories:fetchSubCategories,
+                                                                        fetchAllAttributes:fetchAllAttributes,
+                                                                        fetchAllColors:fetchAllColors,
+                                                                        editProduct:true,
+                                                                        productRes:productRes,
+                                                                        brandAr:tempBrand,
+                                                                        categoryAr:tempCategory,
+                                                                        fetchAllTags:fetchAllTags
+                                                                    });
+                                                                //});
+                                                            });
+                                                        //});	
+                                                    //});
+                                                //});
+                                            //});
+                                        //});
+                                    }else{
+                                        res.render('product/list',{
+                                            title: 'Product',
+                                            fetchAllProducts:fetchAllProducts,
+                                            activeClass:1,
+                                            left_activeClass:3,
+                                            allBrands : fetchAllBrands,
+                                            fetchCategories:fetchCategories,
+                                            fetchSubCategories:fetchSubCategories,
+                                            fetchAllAttributes:fetchAllAttributes,
+                                            fetchAllColors:fetchAllColors,
+                                            editProduct:false,
+                                            brandAr:tempBrand,
+                                            categoryAr:tempCategory,
+                                            fetchAllTags:fetchAllTags
+                                        });
+                                    }
+                                });	
+                            }); 
                         });
                     });
                 });
@@ -182,6 +186,7 @@ exports.editProduct = (req, res) => {
 
 /* Save Product */
 exports.saveProduct = (req, res) => {
+    
     uploadProductImage(req,res,function(err){
         if(err){
             return res.end("Error uploading file.");
@@ -210,6 +215,7 @@ exports.saveProduct = (req, res) => {
         productIns.dis_type = req.body.add_dis_type;
         productIns.dis_amount = req.body.add_dis_amount;
         
+        
         productIns.save(function(err){
             if (err){
                 res.send({status:'error',error:err});
@@ -235,8 +241,20 @@ exports.saveProduct = (req, res) => {
                         req.flash('errors', ['Something went wronge']);
                         res.redirect('/product/list');
                     }else {
-                        req.flash('success', ['Product added successfully.']);
-                        res.redirect('/product/list');
+                         var productsHashtagIns = new ProductsHashtag();
+                         productsHashtagIns.product_id = productIns._id;
+                         productsHashtagIns.product_id = req.body.hash_tag;
+                         productsHashtagIns.save(function(err){
+                            if (err){
+                               res.send({status:'error',error:err});
+                            }else{
+                               console.log(req.body.hash_tag);
+
+                            }
+                            req.flash('success', ['Product added successfully.']);
+                               res.redirect('/product/list');
+                        });
+             
                     }
                 });
             }

@@ -240,6 +240,14 @@ block content
                       a(href='#') xxl
                   //.clearfix
                   
+                  .profile-frm-row.product_select
+                    .profile-frm-cl1 Hash Tag
+                    .profile-frm-cl2
+                      select.product_sub_category(name='hash_tag[]', required='required', multiple)
+                        option(value='0') Select Hash Tag
+                        each fetchAllTag in fetchAllTags
+                          option(value='#{fetchAllTag._id}') #{fetchAllTag.name}
+
             .modal-footer
               input.saveproduct(type='submit', name='saveproduct', value='POST TO FEED')
 
