@@ -1,0 +1,30 @@
+extends ../layout
+block content
+  .col-sm-9.midlle-bar
+      .large-title-row
+        img(src='/images/title-icon.png', alt='icon')
+        |  User
+        .edit-btn-cl.select-item
+            //select#select(name='select')
+              option ACTIONS
+      .customer-box.clearfix
+        include left_menu
+        form(action='/tag/save', method='post', name='form3')
+            .profile-cl
+                .profile-top-row
+                  h2 Add hash tag
+                  .edit-btn-cl
+                    input(type='submit', name='save', value='Save',class='save-btn')
+                .profile-form-box
+                  .profile-right-cl
+                    form(action='', method='post')
+                      .profile-frm-row
+                        .profile-frm-cl1  Name
+                        .profile-frm-cl2
+                          input(name='name', type='text', value='',required='true')
+                      
+        
+            
+
+
+

@@ -1,0 +1,49 @@
+extends ../layout
+block content
+    .col-sm-9.midlle-bar
+        include ../partials/flash
+        .large-title-row
+            img(src='/images/title-icon.png', alt='icon')
+            |  User
+            .edit-btn-cl.select-item
+                //form(action='', method='post', name='form3')
+                    select#select(name='select')
+                        option ACTIONS
+        .customer-box.clearfix
+            include left_menu
+            .profile-cl
+                .profile-top-row
+                    h2 Email Templates
+                .low-tbl-box.order-txt
+                    form(name='form2', method='post', action='')
+                      table(width='100%', cellspacing='0', cellpadding='0', border='0')
+                        tbody
+                          tr
+                            th(align='center')
+                              //input#checkbox2(type='checkbox', name='checkbox2')
+                            th
+                              | Name
+                            th Created
+                            th Updated
+                            th Action
+                              //a(href='#')
+                                //img(src='/images/delete-icon.png', alt='delete')
+                          - var count = 1;
+                            if resultRes.length > 0
+                                each record in resultRes 
+                                    tr(class='attrTr_#{record._id}')
+                                      td(align='center') #{count}
+                                      td.ord-title #{record.name}
+                                      td #{dateFormat(parseInt(record.createdAt),'dd-mm-yyyy')}
+                                      td #{dateFormat(parseInt(record.updatedAt), "dd-mm-yyyy")}
+                                      td 
+                                         a.addsize.sizebuttons(href='/tag/edit/#{record._id}', title='Edit has tag') Edit 
+                                         //a.rmvsize.sizebuttons(href='#', onclick='deleteAttribute("#{template._id}")' title='Delete Attribute') Delete
+                                    - count++;
+                            else
+                                tr
+                                 td(colspan=5)
+                                  p No record found
+                include ../partials/pagination
+
+                  
