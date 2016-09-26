@@ -70,6 +70,7 @@ const categorySubController    = require('./controllers/subCategory');
 const attributeController      = require('./controllers/attribute');
 const orderController          = require('./controllers/order');
 const emailController          = require('./controllers/emailTemplate');
+const tagController          =   require('./controllers/tag');
 
 
 /**
@@ -353,6 +354,14 @@ app.post('/emailtemplate/save',  emailController.saveTemplate);
 app.get('/emailtemplate/add',  emailController.addTemplate);
 app.get('/emailtemplate/edit/:templateId',  emailController.edit);
 app.post('/emailtemplate/update',  emailController.update);
+
+app.get('/tag/list',passportConfig.isAuthenticated,  tagController.list);
+app.get('/tag/add', passportConfig.isAuthenticated, tagController.add);
+
+app.post('/tag/save', passportConfig.isAuthenticated, tagController.save);
+app.post('/tag/update', passportConfig.isAuthenticated, tagController.update);
+app.get('/tag/edit/:tagId', passportConfig.isAuthenticated, tagController.edit);
+
 
  
 /* Signup users */

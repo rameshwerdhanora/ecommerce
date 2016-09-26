@@ -25,7 +25,7 @@
                     a(href='#') Add User
                     
 
-              li(class=(left_activeClass == 3)?'active':'')
+              li(class=(left_activeClass == 3)? 'active':'')
                 a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
                   img(src='/images/left-icon3.png', alt='icon')
                   | Products
@@ -41,6 +41,13 @@
                     a(href='/product/list') Product list
                   li
                     a(href='#') Add Product
+                    
+                  li
+                    span.sub-title Hash Tag
+                  li
+                    a(href='/tag/list') Hash Tag list
+                  li
+                    a(href='/tag/add') Add Hash Tag    
                   
                     
               li(class=(left_activeClass == 4)?'active':'')
