@@ -2,45 +2,45 @@ extends ../layout
 block content
   .col-sm-9.midlle-bar
     .large-title-row
-        img(src='/images/title-icon.png', alt='icon')
-        |  #{getCustomerDetails.first_name} #{getCustomerDetails.last_name}
-      .righsub-nav.clearfix
-        include customer_top_bar
-        //.right-sub
-          a.save-btn(href='#') SAVE
-      .customer-box.clearfix
-        .customer-cl
-            include ../partials/customer_left_menu
-        .profile-cl
-            .profile-top-row
-              h2 Account
-            .profile-form-box
-              .shop-acc-box
-                form(action='', method='post')
-                  .profile-frm-row
-                    .profile-frm-cl1  USERNAME
-                    .profile-frm-cl2
-                      input(name='', type='text', value='#{getCustomerDetails.user_name}')
-                  .profile-frm-row
-                    .profile-frm-cl1  PASSWORD
-                    .profile-frm-cl2
-                      input(name='', type='text', value='#{getCustomerDetails.email_id}')
-                  .profile-frm-row
-                    .profile-frm-cl1 E-MAIL ADDRESS
-                    .profile-frm-cl2
-                      input(name='', type='text', value='*************')
-                  - if(getCustomerDetails.social_type == 'facebook')
-                    .length-box
-                        | Logged In With
-                        .btn-btm
-                          button.fb-btns(type='button')
-                            i.fa.fa-facebook
-                            |  Facebook
-                    //-else if(getCustomerDetails.social_type == 'google')
+            img(src='/images/title-icon.png', alt='icon')
+            |  #{getCustomerDetails.first_name} #{getCustomerDetails.last_name}
+          .righsub-nav.clearfix
+            include customer_top_bar
+            //.right-sub
+              a.save-btn(href='#') SAVE
+          .customer-box.clearfix
+            .customer-cl
+                include ../partials/customer_left_menu
+            .profile-cl
+                .profile-top-row
+                  h2 Account
+                .profile-form-box
+                  .shop-acc-box
+                    form(action='', method='post')
+                      .profile-frm-row
+                        .profile-frm-cl1  USERNAME
+                        .profile-frm-cl2
+                          input(name='', type='text', value='#{getCustomerDetails.user_name}')
+                      .profile-frm-row
+                        .profile-frm-cl1  PASSWORD
+                        .profile-frm-cl2
+                          input(name='', type='text', value='#{getCustomerDetails.email_id}')
+                      .profile-frm-row
+                        .profile-frm-cl1 E-MAIL ADDRESS
+                        .profile-frm-cl2
+                          input(name='', type='text', value='*************')
+                      - if(getCustomerDetails.social_type == 'facebook')
                         .length-box
                             | Logged In With
                             .btn-btm
                               button.fb-btns(type='button')
                                 i.fa.fa-facebook
-                                |  Google plus
-                  
+                                |  Facebook
+                        //-else if(getCustomerDetails.social_type == 'google')
+                            .length-box
+                                | Logged In With
+                                .btn-btm
+                                  button.fb-btns(type='button')
+                                    i.fa.fa-facebook
+                                    |  Google plus
+

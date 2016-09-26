@@ -59,42 +59,52 @@ exports.listOfBrand = (req, res) => {
 
 /* Save Brand Information */
 exports.saveBrand = (req,res) => {
-        console.log(req.body);
-        console.log(req.files);
-	uploadBrand(req,res,function(err) {
-        if(err) {
-            req.flash('errors',['Some error is occured please try again']);
-            res.redirect('/brand/list');
-        }
-        var brandIns 		= new Brand();
-        if(req.files.length > 0){
-            for(var i = 0;i < req.files.length;i++){
-                switch(req.files[i].fieldname){
-                    case 'brand_logo':
-                        brandIns.brand_logo = req.files[i].path.replace('public/','');
-                        break;
-                    case 'brand_cover':
-                        brandIns.brand_cover = req.files[i].path.replace('public/','');
-                        break;
+    req.assert('brand_name', 'Brand name is required').notEmpty();
+    req.assert('brand_desc', 'Brand description is required').notEmpty();
+    var errors = req.validationErrors();  
+    if( !errors){   //No errors were found.  Passed Validation!
+        uploadBrand(req,res,function(err) {
+            if(err) {
+                req.flash('errors',['Some error is occured please try again']);
+                res.redirect('/brand/list');
+            }
+            var brandIns 		= new Brand();
+            if(req.files.length > 0){
+                for(var i = 0;i < req.files.length;i++){
+                    switch(req.files[i].fieldname){
+                        case 'brand_logo':
+                            brandIns.brand_logo = req.files[i].path.replace('public/','');
+                            break;
+                        case 'brand_cover':
+                            brandIns.brand_cover = req.files[i].path.replace('public/','');
+                            break;
+                    }
                 }
             }
-        }
-        brandIns.brand_name  	= req.body.brand_name;
-       	brandIns.brand_desc 	= req.body.brand_desc;
-       	brandIns.user_id 		= req.user._id; 
-       	brandIns.save(function(err) 
-        {
-            if (err)
+            brandIns.brand_name  	= req.body.brand_name;
+            brandIns.brand_desc 	= req.body.brand_desc;
+            brandIns.user_id 		= req.user._id; 
+            brandIns.save(function(err) 
             {
-            res.send({status:'error',error:err});
-            }
-            else 
-            {
-                req.flash('success',['Brand added successfully']);
-                    res.redirect('/brand/list');
-            }
+                if (err)
+                {
+                res.send({status:'error',error:err});
+                }
+                else 
+                {
+                    req.flash('success',['Brand added successfully']);
+                        res.redirect('/brand/list');
+                }
+            });
         });
-    });
+    }else{
+        var er = new Array();
+        for(var i = 0;i<errors.length;i++){
+            er.push(errors[i].msg);
+        }
+        req.flash('errors',er);
+        res.redirect('/brand/list');
+    }
 };
 
 /* Update edit details */
