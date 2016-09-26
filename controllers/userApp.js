@@ -1,3 +1,4 @@
+const async           = require('async');
 const User = require('../models/userApp');
 const Permission = require('../models/permissions');
 const UserPermission = require('../models/userPermissions');
@@ -7,7 +8,8 @@ const ShopShipping   = require('../models/shopShipping');
 const PaymentMethod   = require('../models/userPaymentMethod');
 const EmailTemplate = require('../models/emailTemplate');
 const CommonHelper = require('../helpers/commonHelper');
-
+const Order           = require('../models/orders');
+const OrderDetails    = require('../models/orderDetails');
 
 /**
  * GET /customer/list
@@ -132,7 +134,7 @@ exports.customerAddressList = (req, res) => {
 	            var shippingAddress =[];
 	            var billingAddress = [];
 	            availableUserAddresses.forEach(function(item, index) {
-				  	if(availableUserAddresses[index].address_type == 'Shipping')
+				  	if(availableUserAddresses[index].add_type == 'Shipping')
 	            		shippingAddress.push(availableUserAddresses[index]);
 	            	else
 	            		billingAddress.push(availableUserAddresses[index]);
@@ -210,7 +212,7 @@ exports.userAdd = (req, res) => {
 		if(getPermissions)
 		{
 			//console.log(getPermissions);
-			res.render('user/user_add', { title: 'New User',getPermissions:getPermissions});
+			res.render('user/user_add', { title: 'New User',getPermissions:getPermissions,left_activeClass:5});
 		}
 	});
 };
@@ -380,6 +382,10 @@ exports.userShipping = (req, res) => {
 			ShopShipping.findOne({ user_id: req.params.userId}, function(error, availableShopShipping)
 	        {
 				//console.log(availableShopShipping);
+				if(availableShopShipping == null)
+	        	{
+	        		availableShopShipping = [];
+	        	}
 				res.render('user/user_shipping', { title: 'User Shipping',getUserDetails:getUserDetails,activeClass:2,availableShopShipping:availableShopShipping,left_activeClass:5});
 			});
 		}
@@ -463,11 +469,11 @@ exports.userPaymentMethodSave = (req, res) => {
     });
 };
 
-/* User ORder */
+/* User ORder 
 exports.userOrder = (req, res) => {
     res.render('user/user_order', { title: 'User Order',activeClass:4,left_activeClass:5 });
 };
-
+*/
 
 /* User Product Review */
 exports.userProductReview = (req, res) => {
@@ -687,11 +693,86 @@ exports.payments = (req, res) => {
 };
 
 exports.order = (req, res) => {
-    /*User.findOne({_id:req.params.customerId},function(error,userRes){
-        if(userRes){
-            res.render('user/accounts', { title: 'Customer accounts',activeClass:6,result:userRes });
-        }
-    });*/
-    res.render('user/order', { title: 'Order',activeClass:4,left_activeClass:4 });
-};
+    User.findOne({_id:req.params.customerId},function(error,getCustomerDetails){
+        if(getCustomerDetails){
 
+          Order.find({user_id:req.params.customerId},function(error,getAllOrders)
+		  {
+		      if(getAllOrders)
+		      {
+		        var finalOrderData = new Array();
+		        async.eachSeries(getAllOrders, function(OrderIds, callback)
+		        {
+		          var orderObj = {};
+		          var dateTime = new Date(parseInt(OrderIds.order_date));
+		        
+		          //var split = dateTime.split(' ');
+		   
+		          var year  = dateTime.getFullYear();
+		          var month = dateTime.getMonth()+1;
+		          var date  = dateTime.getDate();
+		          finalDate = month+'/'+date+'/'+year 
+
+		          orderObj._id = OrderIds._id;
+		          orderObj.order_number = OrderIds.order_number;
+		          orderObj.status       = OrderIds.status;
+		          orderObj.totalprice   = OrderIds.totalprice;
+		          orderObj.orderdate    = finalDate;
+
+		          async.parallel
+		          (
+		            [
+		                function(callback)
+		                {
+		                  User.findOne({_id:OrderIds.user_id},function(error,fetUserDetails)
+		                  {
+		                    if(fetUserDetails)
+		                    {
+		                      orderObj.user_id    = OrderIds.user_id;
+		                      orderObj.user_name  = fetUserDetails.user_name;
+		                      orderObj.email_id   = fetUserDetails.email_id;
+		                      orderObj.first_name = fetUserDetails.first_name;
+		                      orderObj.last_name  = fetUserDetails.last_name;
+		                      orderObj.gender     = fetUserDetails.gender;
+		                      OrderDetails.findOne({order_id:OrderIds._id},function(error,fetchingAllOrderDetails)
+				                {
+				                    if(fetchingAllOrderDetails)
+				                    {
+				                    	//console.log(fetchingAllOrderDetails);
+				                    	User.findOne({_id:fetchingAllOrderDetails.brand_id},function(error,fetchingShopDetails)
+						                {
+						                	//console.log(fetchingShopDetails);
+				                      		orderObj.shop_name   = fetchingShopDetails.first_name+' '+fetchingShopDetails.last_name;
+						                });
+				                    }
+				                });
+		                    }
+		                    callback(error);
+		                  });
+		                }
+		            ],
+		            function(err)
+		            {
+		              finalOrderData.push(orderObj);
+		              callback(err);
+		            }
+		          );
+		          
+		        },
+		        function(err)
+		        {
+		        //	console.log(finalOrderData);
+		          res.render('user/customer_order', { title: 'Customer Order',activeClass:4,left_activeClass:4,getCustomerDetails:getCustomerDetails,getAllOrders:finalOrderData });
+		        });
+		      }
+		      else 
+		      {
+		        req.flash('success',['Order is not created.']);
+		        res.render('user/customer_order', { title: 'Customer Order',activeClass:4,left_activeClass:4,getCustomerDetails:getCustomerDetails,getAllOrders:''});
+		      }
+		  });
+
+ 
+        }
+    });
+};

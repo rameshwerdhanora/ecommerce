@@ -3,6 +3,7 @@ const async           = require('async');
 const Order           = require('../models/orders');
 const OrderDetails    = require('../models/orderDetails');
 const User            = require('../models/userApp');
+const ShopShipping   = require('../models/shopShipping');
 
 /**
  * GET /order/list
@@ -44,12 +45,15 @@ exports.list = (req, res) => {
                 {
                   User.findOne({_id:OrderIds.user_id},function(error,fetUserDetails)
                   {
-                    orderObj.user_id    = OrderIds.user_id;
-                    orderObj.user_name  = fetUserDetails.user_name;
-                    orderObj.email_id   = fetUserDetails.email_id;
-                    orderObj.first_name = fetUserDetails.first_name;
-                    orderObj.last_name  = fetUserDetails.last_name;
-                    orderObj.gender     = fetUserDetails.gender;
+                    if(fetUserDetails)
+                    {
+                      orderObj.user_id    = OrderIds.user_id;
+                      orderObj.user_name  = fetUserDetails.user_name;
+                      orderObj.email_id   = fetUserDetails.email_id;
+                      orderObj.first_name = fetUserDetails.first_name;
+                      orderObj.last_name  = fetUserDetails.last_name;
+                      orderObj.gender     = fetUserDetails.gender;
+                    }
                     callback(error);
                   });
                 }
@@ -87,13 +91,15 @@ exports.detail = (req, res) => {
   if (!req.user) {
     return res.redirect('/login');
   }	
-
+  
   Order.find({_id:req.params.orderId},function(error,getAllOrders)
   {
     if(getAllOrders)
     {
       var finalOrderDetailData  = new Array();
       var brandIdsArr           = new Array();
+      var shipFromAddress       = new Array();
+
       async.eachSeries(getAllOrders, function(OrderIds, callback)
       {
         var orderDetailObj = {};
@@ -133,12 +139,15 @@ exports.detail = (req, res) => {
               {
                 User.findOne({_id:OrderIds.user_id},function(error,fetUserDetails)
                 {
-                  orderDetailObj.user_id    = OrderIds.user_id;
-                  orderDetailObj.user_name  = fetUserDetails.user_name;
-                  orderDetailObj.email_id   = fetUserDetails.email_id;
-                  orderDetailObj.first_name = fetUserDetails.first_name;
-                  orderDetailObj.last_name  = fetUserDetails.last_name;
-                  orderDetailObj.gender     = fetUserDetails.gender;
+                  if(fetUserDetails)
+                  {
+                    orderDetailObj.user_id    = OrderIds.user_id;
+                    orderDetailObj.user_name  = fetUserDetails.user_name;
+                    orderDetailObj.email_id   = fetUserDetails.email_id;
+                    orderDetailObj.first_name = fetUserDetails.first_name;
+                    orderDetailObj.last_name  = fetUserDetails.last_name;
+                    orderDetailObj.gender     = fetUserDetails.gender;
+                  }
                   callback(error);
                 });
               },
@@ -170,13 +179,28 @@ exports.detail = (req, res) => {
                         });
                         
                         orderDetailObj.brand_id = uniqueArrayForBrandId;
-                        callback(err);
+                        //-- Get Ship from address
+
+                        ShopShipping.find({user_id:{$in:uniqueArrayForBrandId}},function(error,fetchingShoperDetails){
+
+                            if(fetchingShoperDetails)
+                            {
+                              orderDetailObj.shopperDetails = fetchingShoperDetails;
+                              callback(err);
+                            }
+                        });
+                        
+                        // uniqueArrayForBrandId.forEach(function(item, index) {
+                        //     orderDetailObj.shopperDetails = orderDetailObj.brand_id[index];
+                        // });  
+
                     });
                 })
               }
           ],
           function(err)
           {
+            //console.log(finalOrderDetailData);
             finalOrderDetailData.push(orderDetailObj);
             callback(err);
           }
@@ -184,7 +208,7 @@ exports.detail = (req, res) => {
       },
       function(err)
       {
-        console.log(finalOrderDetailData)
+        console.log(finalOrderDetailData[0].shopperDetails);
         res.render('order/detail', { title: 'Order',left_activeClass:2,orderdata:finalOrderDetailData[0]});
       });
     } 

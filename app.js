@@ -416,7 +416,7 @@ app.get('/user/shipping/:userId',  userAppControlleraAdmin.userShipping);
 app.post('/user/shipping/save/:userId',  userAppControlleraAdmin.userShippingSave);
 app.get('/user/paymentMethod/:userId',  userAppControlleraAdmin.userPaymentMethod);
 app.post('/user/paymentMethod/save/:userId',  userAppControlleraAdmin.userPaymentMethodSave);
-app.get('/user/order/:userId',  userAppControlleraAdmin.userOrder);
+//app.get('/user/order/:userId',  userAppControlleraAdmin.userOrder);
 app.get('/user/reviews/:userId',  userAppControlleraAdmin.userProductReview);
 app.get('/user/account/:userId',  userAppControlleraAdmin.userAccount);
 app.get('/user/linkedAccount/:userId',  userAppControlleraAdmin.userLinkedAccount);

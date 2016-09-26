@@ -5610,3 +5610,7 @@ td.visible-print, th.visible-print {
 	display: none!important
 }
 }
+
+.ord-tbl tr td:first-child {
+  max-width: 10px;
+}

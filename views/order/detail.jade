@@ -182,37 +182,38 @@ block content
       .profile-cl.order_details
         .profile-top-row
           h2 SHIP FROM ADDRESS
-        ul
-          li
-            .order_label
-              strong SHOP:
-            .order_field  @ashleyexplainsitall
-            .clearfix
-          li
-            .order_label
-              strong Address:
-            .order_field  1439 S. Rimhurst Ave
-            .clearfix
-          li
-            .order_label
-              strong CITY:
-            .order_field  Glendora
-            .clearfix
-          li
-            .order_label
-              strong ZIP code:
-            .order_field  91740
-            .clearfix
-          li
-            .order_label
-              strong State:
-            .order_field  CA
-            .clearfix
-          li
-            .order_label
-              strong Country:
-            .order_field  USA
-            .clearfix
+        each shopShippingDetail in orderdata.shopperDetails    
+          ul
+            li
+              .order_label
+                strong SHOP:
+              .order_field  @ashleyexplainsitall
+              .clearfix
+            li
+              .order_label
+                strong Address:
+              .order_field  #{shopShippingDetail.address}
+              .clearfix
+            li
+              .order_label
+                strong CITY:
+              .order_field  #{shopShippingDetail.city}
+              .clearfix
+            li
+              .order_label
+                strong ZIP code:
+              .order_field  #{shopShippingDetail.postal_code}
+              .clearfix
+            li
+              .order_label
+                strong State:
+              .order_field  #{shopShippingDetail.state}
+              .clearfix
+            li
+              .order_label
+                strong Country:
+              .order_field  #{shopShippingDetail.country}
+              .clearfix
       .profile-cl.order_details
         .profile-top-row
           h2 PAYMENT METHOD
