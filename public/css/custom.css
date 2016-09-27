@@ -21,3 +21,10 @@
 .chosen-container-multi .chosen-choices li.search-field input[type="text"]{
     width: 144px !important;
 }
+
+.dropdown-backdrop{
+ display:none !important;
+}
+.nav-left .dropdown-menu li a {
+  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+}
