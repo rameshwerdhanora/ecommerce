@@ -1,121 +1,147 @@
 .col-sm-3.left-sidebar
-        .img-1-wrp
-          img(src='/images/img-1.jpg', alt='img')
-        .nav-left
-          .nav-in
-            ul
-              li(class=(left_activeClass == 1)?'active':'')
-                a(href='/dashboard')
-                  img(src='/images/left-icon1.png', alt='icon')
-                  |  Dashboard 
-              li(class=(left_activeClass == 2)?'active':'')
-                a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', href='/order/list')
-                  img(src='/images/left-icon2.png', alt='icon')
-                  | Orders                    
-                ul.easy-sidebar.dropdown-menu
-                  li
-                    span.nav-close
-                      a(href='#')
-                        img(src='/images/close-white.png', alt='close')
-                  li
-                    span.sub-title USERS
-                  li
-                    a(href='#') Mange Users
-                  li
-                    a(href='#') Add User
-                    
+  .img-1-wrp
+    img(src='/images/img-1.jpg', alt='img')
+  .nav-left
+    .nav-in
+      ul
+        li(class=(left_activeClass == 1)?'active':'')
+          a(href='/dashboard')
+            img(src='/images/left-icon1.png', alt='icon')
+            |  Dashboard 
+        li(class=(left_activeClass == 2)?'active':'')
+          a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', href='/order/list')
+            img(src='/images/left-icon2.png', alt='icon')
+            | Orders                    
+          ul.easy-sidebar.dropdown-menu
+            li
+              span.nav-close
+                a(href='#')
+                  img(src='/images/close-white.png', alt='close')
+            li
+              span.sub-title USERS
+            li
+              a(href='#') Mange Users
+            li
+              a(href='#') Add User
+        li(class=(left_activeClass == 3)? 'active':'')
+          a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
+            img(src='/images/left-icon3.png', alt='icon')
+            | Products
+          ul.easy-sidebar.dropdown-menu
+            li
+              span.nav-close
+                a(href='#')
+                  img(src='/images/close-white.png', alt='close')
+            li
+              span.sub-title PRODUCTS
+            li
+              a(href='/product/list') Product list
+            li
+              a(href='/product/list/add') Add Product
+              
+            li
+              span.sub-title Hash Tag
+            li
+              a(href='/tag/list') Hash Tag list
+            li
+              a(href='/tag/add') Add Hash Tag    
+        li(class=(left_activeClass == 4)?'active':'')
+          a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
+            img(src='/images/left-icon4.png', alt='icon')
+            | Customers
+          ul.easy-sidebar.dropdown-menu
+            li
+              span.nav-close
+                a(href='#')
+                  img(src='/images/close-white.png', alt='close')
+            li
+              span.sub-title CUSTOMERS
+            li
+              a(href='/customer/list') Customer list
+            //li
+              //a(href='/user/add') Add Customer
+        - if(user.role_id == 1 || user.role_id == 2)              
+          li(class=(left_activeClass == 5)?'active':'')
+            a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
+              img(src='/images/left-icon5.png', alt='icon')
+              | USERS
+            
+            ul.easy-sidebar.dropdown-menu
+              li
+                span.nav-close
+                  a(href='#')
+                    img(src='/images/close-white.png', alt='close')
+              li
+                span.sub-title USERS
+              li
+                a(href='/user/list') User list
+              li
+                a(href='/user/add') ADD USERS
+        - else if(user.role_id == 3 || user.role_id == 4)              
+          li(class=(left_activeClass == 5)?'active':'')
+            a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
+              img(src='/images/left-icon5.png', alt='icon')
+              | MY SHOP
+            
+            ul.easy-sidebar.dropdown-menu
+              li
+                span.nav-close
+                  a(href='#')
+                    img(src='/images/close-white.png', alt='close')
+              li
+                span.sub-title MY SHOP
+              li
+                a(href='/user/view/#{user._id}') Shop Profile
+              li
+                a(href='/user/shipping/#{user._id}') Shipping
+              li
+                a(href='/user/paymentMethod/#{user._id}') Payment Methods    
+              li
+                a(href='/user/reviews/#{user._id}') Product Reviews  
+              li
+                a(href='/user/account/#{user._id}') Account
+              li
+                a(href='/user/linkedAccount/#{user._id}') Linked Accounts
+              li
+                a(href='/user/notifications/#{user._id}') Notifications     
 
-              li(class=(left_activeClass == 3)? 'active':'')
-                a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
-                  img(src='/images/left-icon3.png', alt='icon')
-                  | Products
-                
-                ul.easy-sidebar.dropdown-menu
-                  li
-                    span.nav-close
-                      a(href='#')
-                        img(src='/images/close-white.png', alt='close')
-                  li
-                    span.sub-title PRODUCTS
-                  li
-                    a(href='/product/list') Product list
-                  li
-                    a(href='/product/list/add') Add Product
-                    
-                  li
-                    span.sub-title Hash Tag
-                  li
-                    a(href='/tag/list') Hash Tag list
-                  li
-                    a(href='/tag/add') Add Hash Tag    
-                  
-                    
-              li(class=(left_activeClass == 4)?'active':'')
-                a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
-                  img(src='/images/left-icon4.png', alt='icon')
-                  | Customers
-                  
-                ul.easy-sidebar.dropdown-menu
-                  li
-                    span.nav-close
-                      a(href='#')
-                        img(src='/images/close-white.png', alt='close')
-                  li
-                    span.sub-title CUSTOMERS
-                  li
-                    a(href='/customer/list') Customer list
-                  //li
-                    //a(href='/user/add') Add Customer
-                  
-                    
-              li(class=(left_activeClass == 5)?'active':'')
-                a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
-                  img(src='/images/left-icon5.png', alt='icon')
-                  | USERS
-                
-                ul.easy-sidebar.dropdown-menu
-                  li
-                    span.nav-close
-                      a(href='#')
-                        img(src='/images/close-white.png', alt='close')
-                  li
-                    span.sub-title USERS
-                  li
-                    a(href='/user/list') User list
-                  li
-                    a(href='/user/add') ADD USERS
-                  
-                    
-              li(class=(left_activeClass == 6)?'active':'')
-                a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
-                  img(src='/images/left-icon6.png', alt='icon')
-                  | System
-                
-                ul.easy-sidebar.dropdown-menu
-                  li
-                    span.nav-close
-                      a(href='javascript:void(0);')
-                        img(src='/images/close-white.png', alt='close')
-                  li
-                    span.sub-title EMAIL
-                  li
-                    a(href='/emailtemplate/list') Email templates
-                  li
-                    a(href='/emailtemplate/add') ADD new template
-                
-          .follow-us-row
-            h4  Follow us
-            ul
               li
-                a(href='#')
-                  i.fa-facebook.fa
+                span.sub-title USERS
               li
-                a(href='#')
-                  i.fa-google-plus.fa
+                a(href='/user/list') Manage Users
               li
-                a(href='#')
-                  i.fa-twitter.fa
-              li
-                a(href='#')
-                  i.fa-envelope.fa
+                a(href='/user/add') Add User     
+              
+        li(class=(left_activeClass == 6)?'active':'')
+          a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
+            img(src='/images/left-icon6.png', alt='icon')
+            | System
+          
+          ul.easy-sidebar.dropdown-menu
+            li
+              span.nav-close
+                a(href='javascript:void(0);')
+                  img(src='/images/close-white.png', alt='close')
+            li
+              span.sub-title EMAIL
+            li
+              a(href='/emailtemplate/list') Email templates
+            li
+              a(href='/emailtemplate/add') ADD new template
+          
+    .follow-us-row
+      h4  Follow us
+      ul
+        li
+          a(href='#')
+            i.fa-facebook.fa
+        li
+          a(href='#')
+            i.fa-google-plus.fa
+        li
+          a(href='#')
+            i.fa-twitter.fa
+        li
+          a(href='#')
+            i.fa-envelope.fa
 
