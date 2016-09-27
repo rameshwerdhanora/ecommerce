@@ -133,15 +133,17 @@ exports.test = (req, res) => {
     var paypal = require('paypal-rest-sdk');
     paypal.configure({
         'mode': 'sandbox', //sandbox or live
-        'client_id': 'AZQKMZDbPg-LJg1oc5yrzBvqqT5pl5H-6s3ihXaqhBtTjuhF0KDMLsH0rS1FPlhoO_EvU9PFOSjtevfr',
-        'client_secret': 'EPCj5dRWe7OBG8Da0_H3Fk9pf275jJl88nyGvtfo9resg0NnBCOU5feCg4Efhyw0pwrz66ZlVPFNqzN1'
+        'client_id': 'AUQMq6AmlUtFQcoefUeYXWoDzRlUJ76XCEGJAX-0kF9yd9vtXZ__cltHnTnAN9I79C4eM9do-xTmxCZO',
+        'client_secret': 'EF_YGSwJZGkIeBM3HytaN5tWc7qeyjwh7poaRN9Y-pwCnYJrTkYqf8eujuJPQ_7RI7rgqH-KR8xUpi0j'
     });
     
     var card_data = {
         "type": "visa",
-        "number": "4111111111111111",
-        "expire_month": "11",
-        "expire_year": "2018",
+        //"number": "4111111111111111",
+        "number": "4311198990428292",
+        
+        "expire_month": "03",
+        "expire_year": "2021",
         "cvv2": "123",
         "first_name": "Joe",
         "last_name": "Shopper"
@@ -162,13 +164,13 @@ exports.test1 = (req, res) => {
     var paypal = require('paypal-rest-sdk');
     paypal.configure({
         'mode': 'sandbox', //sandbox or live
-        'client_id': 'AZQKMZDbPg-LJg1oc5yrzBvqqT5pl5H-6s3ihXaqhBtTjuhF0KDMLsH0rS1FPlhoO_EvU9PFOSjtevfr',
-        'client_secret': 'EPCj5dRWe7OBG8Da0_H3Fk9pf275jJl88nyGvtfo9resg0NnBCOU5feCg4Efhyw0pwrz66ZlVPFNqzN1'
+        'client_id': 'AUQMq6AmlUtFQcoefUeYXWoDzRlUJ76XCEGJAX-0kF9yd9vtXZ__cltHnTnAN9I79C4eM9do-xTmxCZO',
+        'client_secret': 'EF_YGSwJZGkIeBM3HytaN5tWc7qeyjwh7poaRN9Y-pwCnYJrTkYqf8eujuJPQ_7RI7rgqH-KR8xUpi0j'
     });
     
     
 
-    var creditCardId = "CARD-2UT54514WP8055149K7VEPCQ";
+    var creditCardId = "CARD-9SW15281683792236K7VGU3Q";
     //CARD-7HB0913066314063MK7SQMTI
 
     paypal.creditCard.get(creditCardId, function (error, credit_card) {
@@ -189,8 +191,8 @@ exports.test2 = (req, res) => {
     var paypal = require('paypal-rest-sdk');
     paypal.configure({
         'mode': 'sandbox', //sandbox or live
-        'client_id': 'AZQKMZDbPg-LJg1oc5yrzBvqqT5pl5H-6s3ihXaqhBtTjuhF0KDMLsH0rS1FPlhoO_EvU9PFOSjtevfr',
-        'client_secret': 'EPCj5dRWe7OBG8Da0_H3Fk9pf275jJl88nyGvtfo9resg0NnBCOU5feCg4Efhyw0pwrz66ZlVPFNqzN1'
+        'client_id': 'AUQMq6AmlUtFQcoefUeYXWoDzRlUJ76XCEGJAX-0kF9yd9vtXZ__cltHnTnAN9I79C4eM9do-xTmxCZO',
+        'client_secret': 'EF_YGSwJZGkIeBM3HytaN5tWc7qeyjwh7poaRN9Y-pwCnYJrTkYqf8eujuJPQ_7RI7rgqH-KR8xUpi0j'
     });
     
     
@@ -200,16 +202,19 @@ exports.test2 = (req, res) => {
             "payment_method": "credit_card",
             "funding_instruments": [{
                 "credit_card_token": {
-                    "credit_card_id": "CARD-2UT54514WP8055149K7VEPCQ"
+                    "credit_card_id": "CARD-9SW15281683792236K7VGU3Q"
                 }
-            }]
+            }],
+            "payer_info": {
+                "email": "lokesh@mailinator.com"
+            }
         },
        
     
         "transactions": [{
             "amount": {
                 "currency": "USD",
-                "total": "23.93",
+                "total": '23',
                 /*"details": {
                     "subtotal": "19.94",
                      "shipping": "3.99",
@@ -217,13 +222,13 @@ exports.test2 = (req, res) => {
                 }*/
             },
             "description": "KapdeCheckout",
-            "invoice_number": "1420219038",
+            "invoice_number": '343434se5212ererer',
             "item_list": {
                 "items": [{
                    "quantity": "1",
                    "name": "item name 1",
                    "description": "description 1",
-                   "price": "23.93",
+                   "price": '23',
                    "currency": "USD",
                    "sku": "sku 1"
                }],
@@ -240,6 +245,7 @@ exports.test2 = (req, res) => {
  
  
     };
+    console.log(savedCard);
     paypal.payment.create(savedCard, function (error, payment) {
         if (error) {
             console.log(error);
