@@ -314,6 +314,40 @@ exports.listofAllItFitsProd = (req, res) => {
    
 }
 
+
+/**
+ * GET /api/product/discount/:productId/:userId/:coupon
+ * Process for apply discount.
+ * Use AsyncLoop method for waiting data before fetching value
+ */
+
+exports.discountApply = (req, res) => {
+
+  Product.findOne({_id:req.params.productId},function(error,fetchProductCoupon){
+    if(fetchProductCoupon)
+    {
+      var couponCode = req.params.coupon;
+
+      console.log(fetchProductCoupon.dis_name);
+      if(fetchProductCoupon.dis_name === couponCode)
+      {
+        return res.json({"status":'success',"msg":'You entered correct coupon code.'});
+      }
+      else 
+      {
+        return res.json({"status":'error',"msg":'You entered wrong coupon code.'});
+      }
+    }
+    else 
+    {
+      return res.json({"status":'error',"msg":'Unable to found this Product.'});
+    }
+  });
+
+
+};
+
+
 function callItsFitsWithConfigData(sizes,brands,userId,req,res)
 {
    
@@ -1212,7 +1246,13 @@ function fetchingImage(pid, callback)
 {
    ProductImage.findOne({product_id:pid},function(error,fetchallFeatProdsImgs)
    {
-     callback(error,fetchallFeatProdsImgs.large_image_1);
+      if(fetchallFeatProdsImgs.large_image_1){
+        callback(error,fetchallFeatProdsImgs.large_image_1);
+      }
+      else {
+        callback(error,'');
+      }
+      
    });
 }
 
@@ -1256,61 +1296,72 @@ function fetchingSortProduct(bid,type,price,itfits,callback)
 
 function fetchingFilterProduct(bid,saveFilterSort,callback)
 {
-  var catId     = saveFilterSort.filter.catId;
-  var subcatid  = saveFilterSort.filter.subcatid;
-  var minprice  = saveFilterSort.filter.minprice;
-  var maxprice  = saveFilterSort.filter.maxprice;
-  var size      = saveFilterSort.filter.size;
-  var color     = saveFilterSort.filter.color;
-  var sort      = saveFilterSort.sort;
-  var filter    = saveFilterSort.filter;
+    //var query     = {brand_id:bid};
+    var minprice  = saveFilterSort.filter[0].minprice;
+    var maxprice  = saveFilterSort.filter[0].maxprice;
+    var query     = {$and:[ {price:{$gt:minprice}}, {price:{$lt:maxprice}}]};
+    var sort      = saveFilterSort.sort;
+    var filter    = saveFilterSort.filter[0];
+    var typeSort;
+    var priceSort;
 
-  //var typeSort = (saveFilterSort.sort.type == 'latest') ? "{ _id:-1 }" : "{ productview :-1 }";
-  //var priceSort = (saveFilterSort.sort.price == 'low') ? "{price: 1 }" : "{ price :-1 }";
+    query.brand_id = saveFilterSort.filter[0].brand_id;
 
+    if(saveFilterSort.filter[0].catId){
+      query.category_id = saveFilterSort.filter[0].catId;
+    }
+ 
+    if(saveFilterSort.filter[0].subcatid){
+      query.sub_category_id = saveFilterSort.filter[0].subcatid;
+    }
 
-  if((filter) && (sort))
-  { 
-    Product.find(
-    {
-      brand_id:bid,
-      category_id:catId,
-      sub_category_id:{$in:subcatid},
-      attribute:{$in:size},
-      price:{$gt:minprice},
-      price:{$lt:maxprice}
-    },
-    function(error,fetchallFeatProds)
-    {
-      callback(error,fetchallFeatProds);
-    }).sort( {_id:-1,price:-1} );
-  }
-  else if(filter)
-  {  
-    Product.find(
-    {
-      brand_id:bid,
-      category_id:catId,
-      sub_category_id:{$in:subcatid},
-      attribute:{$in:size},
-      price:{$gt:minprice},
-      price:{$lt:maxprice}
-    },
-    function(error,fetchallFeatProds)
-    {
-      callback(error,fetchallFeatProds);
-    });
-  }
-  else if(sort)
-  {
-     
-    Product.find({brand_id:bid},{},function(error,fetchallFeatProds)
-    {
-      callback(error,fetchallFeatProds);
-    }).sort( {_id:-1,price:-1} );
-  }
+    if(saveFilterSort.filter[0].color){
+      query.color = {$in:saveFilterSort.filter[0].color};
+    }
 
-  
+    if(saveFilterSort.filter[0].size){
+      query.attribute = {$in:saveFilterSort.filter[0].size};
+    }
+
+    if(sort.length > 0)
+    {
+      typeSort = (sort.type == 'popular') ? "-1" : "1";
+      priceSort = (sort.price == 'max') ? "1" : "-1";
+    }
+    else 
+    {
+      typeSort = "1";
+      priceSort = "1";
+    }
+
+    if((filter) && (sort.length > 0)){ 
+        Product.find(
+        
+          query
+        ,
+        function(error,fetchallFeatProds)
+        {
+          callback(error,fetchallFeatProds);
+        }).sort({_id:typeSort,price:priceSort});
+    }
+    else if(filter){  
+       
+        Product.find(
+        {
+         query
+        },
+        function(error,fetchallFeatProds)
+        {
+          callback(error,fetchallFeatProds);
+        });
+    }
+    else if(sort){
+
+        Product.find({brand_id:bid},{},function(error,fetchallFeatProds)
+        {
+          callback(error,fetchallFeatProds);
+        }).sort( {_id:typeSort,price:priceSort} );
+    }
 }
 
 function fetchingConfigProduct(bid,sizes, callback)

@@ -17,6 +17,7 @@ const AttributOption    = require('../../models/attributeOption');
 const Attribut          = require('../../models/attribute');
 const ProductImage      = require('../../models/productsImages');
 const Brand             = require('../../models/brand');
+const dateFormat = require('dateformat');
 
 /**
  * POST /api/order/saveorder
@@ -203,18 +204,19 @@ exports.listOfOrderWithStatus = (req,res) => {
 			async.eachSeries(fetchAllOrdersOfUser, function(OrderRes, callback)
 	        {
 	        	var orderData = {};
-	        	var dateTime = new Date(parseInt(OrderRes.order_date));
+	        	//var dateTime = new Date(parseInt(OrderRes.order_date));
 
-	        	var year  = dateTime.getFullYear();
-        		var month = dateTime.getMonth()+1;
-        		var date  = dateTime.getDate();
-        		finalDate = month+'/'+date+'/'+year
+	        	// var year  = dateTime.getFullYear();
+        		// var month = dateTime.getMonth()+1;
+        		// var date  = dateTime.getDate();
+        		// finalDate = month+'/'+date+'/'+year
 
 	        	orderData.order_number 	= OrderRes.order_number;
 	        	orderData._id 			= OrderRes._id;
 	        	orderData.status	    = OrderRes.status;
 	        	orderData.itemquantity	= OrderRes.itemquantity;
-	        	orderData.order_date	= finalDate;
+	        	//orderData.order_date	= finalDate;
+	        	orderData.order_date	= dateFormat(parseInt(OrderRes.order_date),'dd/mm/yyyy');
 	        	index += count; 
 	        	OrderArr.push(orderData);
 	        	callback(error);

@@ -20,13 +20,13 @@ block content
                   .profile-frm-cl2
                     input(name='', type='text', value='#{getUserDetails.user_name}')
                 .profile-frm-row
-                  .profile-frm-cl1  PASSWORD
+                  .profile-frm-cl1  E-MAIL ADDRESS
                   .profile-frm-cl2
                     input(name='', type='text', value='#{getUserDetails.email_id}')
                 .profile-frm-row
-                  .profile-frm-cl1 E-MAIL ADDRESS
+                  .profile-frm-cl1  PASSWORD
                   .profile-frm-cl2
-                    input(name='', type='text', value='*************')
+                    input(name='', type='text', value='',placeholder='*************')
                 - if(getUserDetails.social_type == 'facebook')
                   .length-box
                       | Logged In With
@@ -40,5 +40,5 @@ block content
                           .btn-btm
                             button.fb-btns(type='button')
                               i.fa.fa-facebook
-                              |  Google plus
+                              |  Google plus 
                   
