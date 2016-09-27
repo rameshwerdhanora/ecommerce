@@ -17,6 +17,7 @@ const AttributOption    = require('../../models/attributeOption');
 const Attribut          = require('../../models/attribute');
 const ProductImage      = require('../../models/productsImages');
 const Brand             = require('../../models/brand');
+const dateFormat = require('dateformat');
 
 /**
  * POST /api/order/saveorder
@@ -27,8 +28,8 @@ exports.saveUserFinalOrder = (req,res) => {
 
 	if(req.body.device_token != '')
 	{	
-		var orderNumber = randomString(Constants.ORDERNUMBERLEN);
 
+		var orderNumber = randomString(Constants.ORDERNUMBERLEN);
 		var orderIns 				= new Order;
 		orderIns.user_id 			= req.body.user_id;
 		orderIns.order_number 		= orderNumber;
@@ -39,6 +40,7 @@ exports.saveUserFinalOrder = (req,res) => {
 		orderIns.tax 				= req.body.tax;
 		orderIns.shipping_charges 	= req.body.shipping_charges;
 		orderIns.totalprice 		= req.body.totalprice;
+		orderIns.shipping_array 	= req.body.shipping_array;
 		orderIns.itemquantity 		= req.body.itemquantity;
 		orderIns.order_date 		= Date.now();
 
@@ -202,18 +204,19 @@ exports.listOfOrderWithStatus = (req,res) => {
 			async.eachSeries(fetchAllOrdersOfUser, function(OrderRes, callback)
 	        {
 	        	var orderData = {};
-	        	var dateTime = new Date(parseInt(OrderRes.order_date));
+	        	//var dateTime = new Date(parseInt(OrderRes.order_date));
 
-	        	var year  = dateTime.getFullYear();
-        		var month = dateTime.getMonth()+1;
-        		var date  = dateTime.getDate();
-        		finalDate = month+'/'+date+'/'+year
+	        	// var year  = dateTime.getFullYear();
+        		// var month = dateTime.getMonth()+1;
+        		// var date  = dateTime.getDate();
+        		// finalDate = month+'/'+date+'/'+year
 
 	        	orderData.order_number 	= OrderRes.order_number;
 	        	orderData._id 			= OrderRes._id;
 	        	orderData.status	    = OrderRes.status;
 	        	orderData.itemquantity	= OrderRes.itemquantity;
-	        	orderData.order_date	= finalDate;
+	        	//orderData.order_date	= finalDate;
+	        	orderData.order_date	= dateFormat(parseInt(OrderRes.order_date),'dd/mm/yyyy');
 	        	index += count; 
 	        	OrderArr.push(orderData);
 	        	callback(error);
@@ -237,43 +240,76 @@ exports.listOfOrderWithStatus = (req,res) => {
  * Process for order details
  */
 
-/*exports.detailsOfSelectedOrder = (req,res) => {
+exports.detailsOfSelectedOrder = (req,res) => {
 
-	Order.find({_id:req.params.orderId},function(error,fetchOrdersDetails)
+	Order.findOne({_id:req.params.orderId},function(error,fetchOrdersDetails)
 	{
 		if(fetchOrdersDetails)
-		{
-			async.eachSeries(fetchOrdersDetails, function(OrderDetailRes, callback)
-	        {
-	        	var orderData = {};
-	        	var dateTime = new Date(parseInt(OrderRes.order_date));
+		{	
+			var OrderArr = new Array();
+			var orderData = {};
+			var ProductDetailsArr = new Array();
 
-	        	var year  = dateTime.getFullYear();
-        		var month = dateTime.getMonth()+1;
-        		var date  = dateTime.getDate();
-        		finalDate = month+'/'+date+'/'+year
+        	var dateTime = new Date(parseInt(fetchOrdersDetails.order_date));
 
-	        	orderData.orderalldata 	= OrderRes;
-	        	orderData.order_date	= finalDate;
-	        	orderData.expected_date	= finalDate;
-	        	index += count; 
-	        	OrderArr.push(orderData);
-	        	callback(error);
-	        	count++;
-	        },
-	        function(err)
-	        {
+        	var year  = dateTime.getFullYear();
+    		var month = dateTime.getMonth()+1;
+    		var date  = dateTime.getDate();
+    		finalDate = month+'/'+date+'/'+year
 
-	        	return res.json({"status":'success',"msg":'Found your list of orders.',listOfOrders:OrderArr,countOrder:index})
-	        });
+        	orderData.order_number 		= fetchOrdersDetails.order_number;
+        	orderData.user_id 			= fetchOrdersDetails.user_id;
+        	orderData.totalprice 		= fetchOrdersDetails.totalprice;
+        	orderData.shipping_charges 	= fetchOrdersDetails.shipping_charges;
+        	orderData.tax				= fetchOrdersDetails.subtotal;
+        	orderData.subtotal			= fetchOrdersDetails.subtotal;
+        	orderData.itemquantity		= fetchOrdersDetails.itemquantity;
+        	orderData.shipping_address	= fetchOrdersDetails.shipping_address;
+        	orderData.billing_address	= fetchOrdersDetails.billing_address;
+        	orderData.payment_details	= fetchOrdersDetails.payment_details;
+        	orderData.order_date		= finalDate;
+        	orderData.expected_date		= finalDate;
+
+        	OrderDetails.find({order_id:fetchOrdersDetails._id},function(error,fetchOrdersProductDetails)
+        	{
+				//console.log(fetchOrdersProductDetails);
+				if(fetchOrdersProductDetails)
+				{
+					async.eachSeries(fetchOrdersProductDetails, function(ProductDetails, callback)
+	        		{
+	        			var listofProducts = {};
+	        			listofProducts.product_id 		= ProductDetails.data[0].product._id;
+    					listofProducts.product_name 	= ProductDetails.data[0].product.name;
+    					listofProducts.product_sku 		= ProductDetails.data[0].product.sku;
+    					listofProducts.product_price 	= ProductDetails.data[0].real_price;
+    					listofProducts.price_quan 		= ProductDetails.data[0].price_quan;
+    					listofProducts.product_quantity	= ProductDetails.data[0].quantity;
+    					listofProducts.productImages	= ProductDetails.data[0].productImages.thumb_image_1;
+    					listofProducts.brand_id			= ProductDetails.data[0].brand._id;
+    					listofProducts.brand_name		= ProductDetails.data[0].brand.brand_name;
+    					listofProducts.size_option		= ProductDetails.data[0].options;
+    					listofProducts.color			= ProductDetails.data[0].color;
+    					ProductDetailsArr.push(listofProducts);
+    					callback();
+	        		},
+	        		function(err)
+	        		{
+	        			orderData.alldetailsoforder = ProductDetailsArr;
+	        			return res.json({"status":'success',"msg":'Found your list of orders.',listOfOrders:orderData}) 
+	        		});
+				}
+				else 
+				{
+
+				}
+			})
 		}
 		else 
 		{
 			return res.json({"status":'error',"msg":'Something Wrong.'})
 		}
 	});
-
-} */
+}
 
 
 function getOptAttribute(opId, callback){

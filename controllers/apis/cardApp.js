@@ -5,7 +5,7 @@ const Card		= require('../../models/card');
 
 exports.listOfCards = (req, res) => {
 
-		Card.find({user_id:req.params.userId},function(error,getAllCards)
+		Card.find({user_id:req.params.userId},{data:false},function(error,getAllCards)
 		{
 			if(getAllCards)
 			{
@@ -25,12 +25,17 @@ exports.saveCard = (req,res) => {
 	{
         var cardIns 			= new Card();
         cardIns.user_id 		= req.body.user_id;
-        cardIns.card_name 		= req.body.card_name;
-        cardIns.card_number  	= req.body.card_number;
-       	cardIns.card_date 		= req.body.card_date;
-       	cardIns.card_type 		= req.body.card_type;
+        cardIns.card_id 		= req.body.data.id;
+        cardIns.number 			= req.body.data.number;
+        cardIns.holdername		= req.body.data.first_name;
+        cardIns.type 			= req.body.data.type;
+        cardIns.expire_date		= req.body.data.expire_month+'/'+req.body.data.expire_year;
+        cardIns.data 			= req.body.data;
        	cardIns.created 		= Date.now();
        	cardIns.updated 		= Date.now();
+
+       	/* */
+
        	cardIns.save(function(error) 
         {
         	if (error)
@@ -101,13 +106,14 @@ exports.updateCard = (req,res) => {
 
 	if(req.body.device_token)
 	{
-		updateCardDetails = {
-			'card_name' 	: req.body.card_name,
-			'card_number' 	: req.body.card_number,
-			'card_date'		: req.body.card_date,
-		    'card_type'		: req.body.card_type,
+ 		updateCardDetails = 
+		{
+			'card_id' 		: req.body.data.id,
+			'number' 		: req.body.data.number,
+			'type' 			: req.body.data.type,
+			'expire_date' 	: req.body.data.expire_month+'/'+req.body.data.expire_year,
+			'data' 			: req.body.data,
 		    'updated'		: Date.now() 
-		    
 		};
 
 		Card.update({_id:req.body.card_id,user_id:req.body.user_id},updateCardDetails, function(error, updateCardDetails)

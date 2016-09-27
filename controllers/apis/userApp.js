@@ -7,6 +7,7 @@
 
 /* Load required library */
 const async 			= require('async');
+const bcrypt 			= require('bcrypt-nodejs');
 const NodeMailer 		= require('nodemailer');
 const Passport 			= require('passport');
 const Multer 			= require('multer');
@@ -17,6 +18,7 @@ const UserDetails 		= require('../../models/usersDetails');
 const Brand             = require('../../models/brand');
 const Attribute         = require('../../models/attribute');
 const AttributeOptions  = require('../../models/attributeOption');
+
 
 
 /* Define Folder name where our user porfile stored */
@@ -126,22 +128,34 @@ exports.postLoginManually = function(req,res)
 {
 	if(req.body.device_token !== '')
   	{
-  		User.findOne({ user_name: req.body.user_name,password: req.body.password}, function(error, checkForLogin) {
+
+  		User.findOne({ user_name: req.body.user_name}, function(error, checkForLogin) 
+  		{
   			//console.log(checkForLogin)
   			if(checkForLogin)
   			{
-  				UserDetails.findOne({user_id:checkForLogin._id},function(error,fetchUserDetails)
-				{
-					if(fetchUserDetails)
-					{
-						return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:fetchUserDetails.configDetail});
-					}
-					else 
-					{
-						return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:''});
-					}
-				});
-				
+  				bcrypt.compare(req.body.password, checkForLogin.password, (err, isMatch) => {
+
+				    if(isMatch) 
+				    {	
+				        UserDetails.findOne({user_id:checkForLogin._id},function(error,fetchUserDetails)
+						{
+							if(fetchUserDetails)
+							{
+								return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:fetchUserDetails.configDetail});
+							}
+							else 
+							{
+								return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:''});
+							}
+						});
+				  	}
+				  	else
+				    {
+				    	return res.json({"status":'error',"msg":'Your Password is incorrect.'});
+				    }
+			    });
+			    
   			}
   			else 
   			{
@@ -623,13 +637,73 @@ exports.saveUserCofiguration = function(req,res)
 						return res.json({"status":'success',"msg":'Your configuration successfully added.'});
 					}
 				});
-			}
+			} 
 			
 		}
 	});
 }
 
+exports.changeUserPasswordFromProfile = function(req,res)
+{
+	if(req.body.device_token !== '')
+  	{
+  		var oldPass 			= req.body.old_password;
+  		var newPass 			= req.body.new_password;
+  		var confirm_password 	= req.body.confirm_password;
+  		var user_id 			= req.body.user_id;
 
+  		if(newPass == confirm_password)
+  		{
+  			User.findOne({_id:user_id},function(error,fetchingUserPass)
+	  		{
+	  			if(fetchingUserPass)
+	  			{
+	  				bcrypt.compare(oldPass, fetchingUserPass.password, (err, isMatch) => {
+
+			            if(isMatch) 
+			            {
+			                bcrypt.genSalt(10, function(err, salt) 
+			                {
+					    		bcrypt.hash(newPass, salt, null, (err, hash) => {
+
+									if (err) { return next(err); }
+									User.findByIdAndUpdate(user_id,{password:hash}, function(error, updateExistingPassword)
+									{
+										if(error)
+										{
+											return res.json({"status":'error',"msg":'not stored successfully.'});
+										}
+										else
+										{
+											return res.json({"status":'success',"msg":'Successfully update your password.'});
+										}
+									});
+									//next();
+								});
+						  	});
+			            }
+			            else
+			            {
+			            	return res.json({"status":'error',"msg":'Your old password is not correct.'});
+			            }
+			        });
+	  			}
+	  			else 
+	  			{
+	  				return res.json({"status":'error',"msg":'System not found your Username.'});
+	  			}
+	  		})
+  		} 
+  		else 
+  		{ 
+  			return res.json({"status":'error',"msg":'Your new password and confirm password is match.'});
+  		}
+ 	}
+  	else
+  	{
+  		return res.json({"status":'error',"msg":'Device Token is not available.'});
+  	}
+};
 
 
 /* Comman Send mail function for all user purpose */
@@ -654,6 +728,8 @@ function sendMailToUser (user, done)
 		done(err);
 	});
 }
+
+
 
 
 

@@ -255,7 +255,7 @@ function fetchingAllAttrValue(attributeSizes, callback)
 };
 
 /**
-* POST /api/updateusersizes
+* POST /api/size/updateusersizes
 * Process to Save user configuration from Application.
 */
 
@@ -263,7 +263,81 @@ exports.updateUserSizes = function(req,res)
 {
 	if(req.body.device_token !== '')
   	{
-  		var oldSelectedVal = req.body.selectedsize;
+  		var newSelectedVal 	= req.body.new_size;
+  		var oldSelectedVal 	= req.body.selected_size;
+  		var user_id 		= req.body.user_id;
+ 		 
+ 		console.log('1111111111111'); 
+  		console.log(req.body);
+
+  		console.log('1234'); 
+  		console.log(req.body);
+
+
+  		UserDetails.findOne({user_id:user_id},function(error,fetchUserSizeData)
+  		{	
+  			var tempSize 		= [];
+  			var temSize 		= fetchUserSizeData.configDetail[0].Size;
+  			var configDetailArr = new Array();
+  			var test = false;
+	  		for(i=0; i<temSize.length;i++)
+	  		{	
+	  			var tmp = {};
+	  			tmp.attributeId = temSize[i].attributeId;
+	  			
+	  			if(newSelectedVal.attributeId == temSize[i].attributeId)
+	  			{	
+	  				test = true;
+	  				console.log('IF');
+	  				tmp.attributeSizes  = newSelectedVal.attributeSizes;
+	  			}
+	  			else
+	  			{
+	  				console.log('ELSE');
+	  				tmp.attributeSizes  = temSize[i].attributeSizes;
+	  			}
+	  			tempSize.push(tmp);
+	  		}
+
+	  		if(test == false)
+	  		{
+	  			tempSize.push(newSelectedVal);
+	  		}
+	  		console.log(tempSize);
+
+  			var sizeObj 		= {};
+  			sizeObj.Size  		= tempSize;
+  			configDetailArr.push(sizeObj);
+
+  			var sizeObj 		= {};
+  			sizeObj.brands 		= fetchUserSizeData.configDetail[1].brands;
+  			configDetailArr.push(sizeObj);
+
+  			console.log('ffffffffffff');
+  			console.log(configDetailArr);
+
+
+  			//console.log(updateData);
+  			var updateData = 
+  			{
+  				'configDetail' : configDetailArr
+  			}
+
+  			console.log('sssssssss');
+  			console.log(updateData);
+
+ 			UserDetails.findByIdAndUpdate(fetchUserSizeData._id,updateData,function(error,saveexistingValues)
+	  		{
+	  			if(error)
+	  			{
+	  				return res.json({"status":'error',"msg":'Something Wrong.'});
+	  			}
+	  			else 
+	  			{
+	  				return res.json({"status":'success',"msg":'Your size changes Successfully updated'});
+	  			}
+	  		})
+  		})	
   	}
   	else
   	{

@@ -7,7 +7,7 @@
 
 /* Load required library */
 const async             = require('async');
-const Constants 	= require('../../constants/constants');
+const Constants 	    = require('../../constants/constants');
 const Cart              = require('../../models/cart');
 const Product           = require('../../models/product');
 const Color             = require('../../models/color');
@@ -619,10 +619,12 @@ exports.showCartAccBrand = (req,res) => {
                             tempCartProduct.push(pArr);
                             callback(err); 
                         }
-                    )
+                    ) 
                 },
                 function(err)
-                {
+                {   
+                    // console.log(req.body);
+
                     priceTotalObj.tax           = '10';
                     priceTotalObj.ship_code     = req.body.shipping_array[req.body.index].Code;
                     priceTotalObj.servicename   = req.body.shipping_array[req.body.index].serviceName;
@@ -685,6 +687,7 @@ exports.finalCheckoutDisplay = (req,res) => {
                         var TotalShippingCharges = 0;
                         async.eachSeries(fetchAllBrandDetails, function(BrandId, callback)
                         {
+                            //var req.body.shipping_array[index] = []; 
                             var brandObj = {};
                             brandObj.brand_id       = BrandId._id;
                             brandObj.brand_name     = BrandId.brand_name;
