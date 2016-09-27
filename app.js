@@ -356,6 +356,8 @@ app.get('/emailtemplate/edit/:templateId',  emailController.edit);
 app.post('/emailtemplate/update',  emailController.update);
 
 app.get('/tag/test',passportConfig.isAuthenticated,  tagController.test);
+app.get('/tag/test1',passportConfig.isAuthenticated,  tagController.test1);
+app.get('/tag/test2',passportConfig.isAuthenticated,  tagController.test2);
 app.get('/tag/list',passportConfig.isAuthenticated,  tagController.list);
 app.get('/tag/add', passportConfig.isAuthenticated, tagController.add);
 
