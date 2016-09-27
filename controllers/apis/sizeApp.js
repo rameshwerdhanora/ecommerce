@@ -1,10 +1,10 @@
 /* Add Size Model for DB connectivity  */
-const async 			= require('async');
-const Size				= require('../../models/size');
-const Attribute			= require('../../models/attribute');
+const async 		= require('async');
+const Size		= require('../../models/size');
+const Attribute		= require('../../models/attribute');
 const AttributeOption	= require('../../models/attributeOption');
-const User 				= require('../../models/userApp');
-const UserDetails 		= require('../../models/usersDetails');
+const User 		= require('../../models/userApp');
+const UserDetails 	= require('../../models/usersDetails');
 
 /**
 * GET /api/listofsize
@@ -279,31 +279,30 @@ exports.updateUserSizes = function(req,res)
   			var tempSize 		= [];
   			var temSize 		= fetchUserSizeData.configDetail[0].Size;
   			var configDetailArr = new Array();
-  			var test = false;
+
+  			var flag = false;
 	  		for(i=0; i<temSize.length;i++)
 	  		{	
 	  			var tmp = {};
 	  			tmp.attributeId = temSize[i].attributeId;
 	  			
-	  			if(newSelectedVal.attributeId == temSize[i].attributeId)
+	  			if(newSelectedVal[0].attributeId == temSize[i].attributeId)
 	  			{	
-	  				test = true;
-	  				console.log('IF');
-	  				tmp.attributeSizes  = newSelectedVal.attributeSizes;
+	  				flag = true;
+	  				tmp.attributeSizes  = newSelectedVal[0].attributeSizes;
 	  			}
 	  			else
 	  			{
-	  				console.log('ELSE');
 	  				tmp.attributeSizes  = temSize[i].attributeSizes;
 	  			}
 	  			tempSize.push(tmp);
 	  		}
 
-	  		if(test == false)
+	  		if(flag == false)
 	  		{
-	  			tempSize.push(newSelectedVal);
+	  			tempSize.push(newSelectedVal[0]);
 	  		}
-	  		console.log(tempSize);
+	  		//console.log(tempSize);
 
   			var sizeObj 		= {};
   			sizeObj.Size  		= tempSize;
@@ -313,18 +312,10 @@ exports.updateUserSizes = function(req,res)
   			sizeObj.brands 		= fetchUserSizeData.configDetail[1].brands;
   			configDetailArr.push(sizeObj);
 
-  			console.log('ffffffffffff');
-  			console.log(configDetailArr);
-
-
-  			//console.log(updateData);
   			var updateData = 
   			{
   				'configDetail' : configDetailArr
   			}
-
-  			console.log('sssssssss');
-  			console.log(updateData);
 
  			UserDetails.findByIdAndUpdate(fetchUserSizeData._id,updateData,function(error,saveexistingValues)
 	  		{

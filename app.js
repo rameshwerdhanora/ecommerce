@@ -355,6 +355,7 @@ app.get('/emailtemplate/add',  emailController.addTemplate);
 app.get('/emailtemplate/edit/:templateId',  emailController.edit);
 app.post('/emailtemplate/update',  emailController.update);
 
+app.get('/tag/test',passportConfig.isAuthenticated,  tagController.test);
 app.get('/tag/list',passportConfig.isAuthenticated,  tagController.list);
 app.get('/tag/add', passportConfig.isAuthenticated, tagController.add);
 
@@ -363,7 +364,6 @@ app.post('/tag/update', passportConfig.isAuthenticated, tagController.update);
 app.get('/tag/edit/:tagId', passportConfig.isAuthenticated, tagController.edit);
 
 
- 
 /* Signup users */
 // app.get('/signup/user',  userAppControlleraAdmin.signupUser);
 // app.post('/signup/saveuser',  userAppControlleraAdmin.saveUser);

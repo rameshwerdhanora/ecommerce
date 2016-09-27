@@ -22,13 +22,13 @@ block content
                         .profile-frm-cl2
                           input(name='', type='text', value='#{getCustomerDetails.user_name}')
                       .profile-frm-row
-                        .profile-frm-cl1  PASSWORD
+                        .profile-frm-cl1  E-MAIL ADDRESS
                         .profile-frm-cl2
                           input(name='', type='text', value='#{getCustomerDetails.email_id}')
                       .profile-frm-row
-                        .profile-frm-cl1 E-MAIL ADDRESS
+                        .profile-frm-cl1 PASSWORD
                         .profile-frm-cl2
-                          input(name='', type='text', value='*************')
+                          input(name='', type='text', value='',placeholder='*************')
                       - if(getCustomerDetails.social_type == 'facebook')
                         .length-box
                             | Logged In With
