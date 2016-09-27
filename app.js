@@ -159,7 +159,7 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }))
  * Primary app routes.
  */
 
-app.get('/dashboard', homeController.index);
+app.get('/mypage', homeController.index);
 app.get('/', homeController.land);
 
 app.get('/login', userController.getLogin);
@@ -366,6 +366,7 @@ app.post('/tag/update', passportConfig.isAuthenticated, tagController.update);
 app.get('/tag/edit/:tagId', passportConfig.isAuthenticated, tagController.edit);
 
 
+ 
 /* Signup users */
 // app.get('/signup/user',  userAppControlleraAdmin.signupUser);
 // app.post('/signup/saveuser',  userAppControlleraAdmin.saveUser);
