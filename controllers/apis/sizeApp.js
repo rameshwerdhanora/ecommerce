@@ -1,10 +1,10 @@
 /* Add Size Model for DB connectivity  */
-const async 			= require('async');
-const Size				= require('../../models/size');
-const Attribute			= require('../../models/attribute');
+const async 		= require('async');
+const Size		= require('../../models/size');
+const Attribute		= require('../../models/attribute');
 const AttributeOption	= require('../../models/attributeOption');
-const User 				= require('../../models/userApp');
-const UserDetails 		= require('../../models/usersDetails');
+const User 		= require('../../models/userApp');
+const UserDetails 	= require('../../models/usersDetails');
 
 /**
 * GET /api/listofsize
@@ -263,26 +263,25 @@ exports.updateUserSizes = function(req,res)
 {
 	if(req.body.device_token !== '')
   	{
-  		 
   		var newSelectedVal 	= req.body.new_size;
+  		var oldSelectedVal 	= req.body.selected_size;
   		var user_id 		= req.body.user_id;
 
-  		 
   		UserDetails.findOne({user_id:user_id},function(error,fetchUserSizeData)
   		{	
-
   			var tempSize 		= [];
   			var temSize 		= fetchUserSizeData.configDetail[0].Size;
   			var configDetailArr = new Array();
-
+  			var flag = false;
 	  		for(i=0; i<temSize.length;i++)
 	  		{	
 	  			var tmp = {};
 	  			tmp.attributeId = temSize[i].attributeId;
 	  			
-	  			if(newSelectedVal.attributeId == temSize[i].attributeId)
-	  			{
-	  				tmp.attributeSizes  = newSelectedVal.attributeSizes;
+	  			if(newSelectedVal[0].attributeId == temSize[i].attributeId)
+	  			{	
+	  				flag = true;
+	  				tmp.attributeSizes  = newSelectedVal[0].attributeSizes;
 	  			}
 	  			else
 	  			{
@@ -291,15 +290,21 @@ exports.updateUserSizes = function(req,res)
 	  			tempSize.push(tmp);
 	  		}
 
+	  		if(flag == false)
+	  		{
+	  			tempSize.push(newSelectedVal[0]);
+	  		}
+	  		//console.log(tempSize);
+
   			var sizeObj 		= {};
   			sizeObj.Size  		= tempSize;
-
   			configDetailArr.push(sizeObj);
+
   			var sizeObj 		= {};
   			sizeObj.brands 		= fetchUserSizeData.configDetail[1].brands;
   			configDetailArr.push(sizeObj);
 
-  			//console.log(configDetailArr);
+  			//console.log(updateData);
   			var updateData = 
   			{
   				'configDetail' : configDetailArr
