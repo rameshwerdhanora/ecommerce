@@ -243,8 +243,7 @@ block content
                   .profile-frm-row.product_select
                     .profile-frm-cl1 Hash Tag
                     .profile-frm-cl2
-                      select.product_sub_category(name='hash_tag[]', required='required', multiple)
-                        option(value='0') Select Hash Tag
+                       select.chosen-select(name='hash_tag[]', required='required', data-placeholder='Select hash tag', style='width:250px;', multiple='') 
                         each fetchAllTag in fetchAllTags
                           option(value='#{fetchAllTag._id}') #{fetchAllTag.name}
 
@@ -401,6 +400,29 @@ block content
                   .profile-frm-row#addClrBtn2
                     .profile-frm-cl3
                       a(href='javascript:void(0);',id='addMoreColor') ADD COLOR
+                      
+                  .profile-frm-row.product_select
+                    .profile-frm-cl1 Hash Tag
+                    .profile-frm-cl2
+                       select.chosen-select(name='hash_tag[]', data-placeholder='Select hash tag', multiple='') 
+                        each fetchAllTag in fetchAllTags
+                         - var tempSelect = true
+                         - for(var i=0;i< selectedHashtag.length;i++){
+                            - if(fetchAllTag._id == selectedHashtag[i].hashtag_id){
+                              - var tempSelect = false
+                               option(value="#{fetchAllTag._id}", selected=(fetchAllTag._id == selectedHashtag[i].hashtag_id))  #{fetchAllTag.name}
+                            - } 
+                         - }
+                         - if(tempSelect){
+                            option(value='#{fetchAllTag._id}') #{fetchAllTag.name}
+                         - }
+                           
+                         
+                          
+
+                        
+                        
+                         
 
             .modal-footer
               input.saveproduct(type='submit', name='saveproduct', value='POST TO FEED')
@@ -411,5 +433,4 @@ block content
                 getSizeOptions($("#product_gender_edit").val(),'addClrBtn2');
             });
     -}
-    style.
-        .add_product .modal-body ul li{width:25%;}
+    

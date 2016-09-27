@@ -1,0 +1,23 @@
+.dnone{
+    display: none;
+}
+.chosen-container{
+    display: block;
+    width: 100% !important;
+}
+.chosen-container-multi .chosen-choices li.search-field {
+   
+    width: auto;
+    height: auto;
+}
+.chosen-container-multi .chosen-choices li.search-field {
+
+    border: none;
+}
+.chosen-container .chosen-results li{
+    text-align: left;
+}
+
+.chosen-container-multi .chosen-choices li.search-field input[type="text"]{
+    width: 144px !important;
+}

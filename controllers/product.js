@@ -50,6 +50,7 @@ exports.listOfProducts = (req, res) => {
                         Attribute.find({},function(error,fetchAllAttributes){
                             Color.find({},function(error,fetchAllColors){
                                 Tag.find({},function(error,fetchAllTags){
+                                    
                                     /*
                                     res.render('product/add_product', {
                                         title: 'Product',
@@ -75,7 +76,8 @@ exports.listOfProducts = (req, res) => {
                                                         //Color.find({},function(error,fetchAllColors){
                                                             Product.findOne({_id:req.params.productId},function(error,productRes){
                                                                 //Color.find(_id:{$in:{productRes.color}},function(error,selectedColor){
-
+                                                                   ProductsHashtag.find({product_id:req.params.productId},{hashtag_id:true, _id:false},function(error,selectedHashtag){
+                                                                        
                                                                     res.render('product/list', {
                                                                         title: 'Update product',
                                                                         fetchAllProducts:fetchAllProducts,
@@ -90,8 +92,10 @@ exports.listOfProducts = (req, res) => {
                                                                         productRes:productRes,
                                                                         brandAr:tempBrand,
                                                                         categoryAr:tempCategory,
-                                                                        fetchAllTags:fetchAllTags
+                                                                        fetchAllTags:fetchAllTags,
+                                                                        selectedHashtag:selectedHashtag
                                                                     });
+                                                                });     
                                                                 //});
                                                             });
                                                         //});	
@@ -113,7 +117,7 @@ exports.listOfProducts = (req, res) => {
                                             editProduct:false,
                                             brandAr:tempBrand,
                                             categoryAr:tempCategory,
-                                            fetchAllTags:fetchAllTags
+                                            fetchAllTags:fetchAllTags,
                                         });
                                     }
                                 });	
@@ -241,20 +245,16 @@ exports.saveProduct = (req, res) => {
                         req.flash('errors', ['Something went wronge']);
                         res.redirect('/product/list');
                     }else {
-                         var productsHashtagIns = new ProductsHashtag();
-                         productsHashtagIns.product_id = productIns._id;
-                         productsHashtagIns.product_id = req.body.hash_tag;
-                         productsHashtagIns.save(function(err){
-                            if (err){
-                               res.send({status:'error',error:err});
-                            }else{
-                               console.log(req.body.hash_tag);
-
-                            }
-                            req.flash('success', ['Product added successfully.']);
-                               res.redirect('/product/list');
+                         hashtagIdArr = req.body.hash_tag;
+                         hashtagIdArr.forEach(function(hashtagId) {
+                            var productsHashtagIns = new ProductsHashtag();
+                             productsHashtagIns.product_id = productIns._id;
+                             productsHashtagIns.hashtag_id = hashtagId;
+                             productsHashtagIns.save();
                         });
-             
+                        
+                         req.flash('success', ['Product added successfully.']);
+                         res.redirect('/product/list');
                     }
                 });
             }
@@ -307,6 +307,21 @@ exports.updateProduct = (req, res) => {
                     }
                 });
             }else{
+               ProductsHashtag.remove({product_id:req.body.productId}, function(error, removeHashtag){
+                 if(error){
+                    res.send({status:'error',msg:error});
+                 }else{
+                    hashtagIdArr = req.body.hash_tag;
+                    if(hashtagIdArr){
+                        hashtagIdArr.forEach(function(hashtagId) {
+                           var productsHashtagIns = new ProductsHashtag();
+                           productsHashtagIns.product_id = req.body.productId;
+                           productsHashtagIns.hashtag_id = hashtagId;
+                           productsHashtagIns.save();
+                        });
+                    }
+                 }
+              });
                 req.flash('success', ['Update product details successfully.']);
                 res.redirect('/product/list');
             }
@@ -317,11 +332,13 @@ exports.updateProduct = (req, res) => {
 /* Remove Product */
 exports.removeProduct = (req, res) => {
     Product.remove({_id:req.params.productId}, function(error, removeProductId){
-        if(error){
-            res.send({status:'error',msg:error});
-        }else{
-            res.send({status:'success',msg:'Remove Successfully.'});
-        }
+        ProductsHashtag.remove({product_id:req.params.productId}, function(err, removeHashtag){
+            if(err){
+                res.send({status:'error',msg:error});
+            }else{
+                res.send({status:'success',msg:'Remove Successfully.'});
+            }
+       }); 
     });
 };
 

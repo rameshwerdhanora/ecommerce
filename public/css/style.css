@@ -1710,24 +1710,24 @@ label.css-label {
 	font-weight: normal;
 }
 /* add product popup */
-.add_product .modal-body ul {
+.add_product .modal-body ul.up-list {
 	margin-bottom: 10px;
 	overflow: hidden;
 	margin-top: 10px
 }
-.add_product .modal-body ul li:after {
+.add_product .modal-body ul.up-list li:after {
 	clear: both;
 	content: "";
 }
-.add_product .modal-body ul li {
+.add_product .modal-body ul.up-list li {
 	border-left: 1px solid #aaaaaa;
 	display: inline-block;
 	float: none;
 	height: 125px;
-	width: 27%;
+	width: 25%;
 	vertical-align: top;
 }
-.add_product .modal-body ul li:last-child {
+.add_product .modal-body ul.up-list li:last-child {
 	border-right: 1px solid #aaaaaa;
 }
 .up-list {
