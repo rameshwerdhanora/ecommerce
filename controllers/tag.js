@@ -137,7 +137,38 @@ exports.test = (req, res) => {
         'client_secret': 'EPCj5dRWe7OBG8Da0_H3Fk9pf275jJl88nyGvtfo9resg0NnBCOU5feCg4Efhyw0pwrz66ZlVPFNqzN1'
     });
     
-    var creditCardId = "CARD-7HB0913066314063MK7SQMTI";
+    var card_data = {
+        "type": "visa",
+        "number": "4111111111111111",
+        "expire_month": "11",
+        "expire_year": "2018",
+        "cvv2": "123",
+        "first_name": "Joe",
+        "last_name": "Shopper"
+      };
+
+      paypal.creditCard.create(card_data, function(error, credit_card){
+        if (error) {
+          console.log(error);
+          throw error;
+        } else {
+          console.log("Create Credit-Card Response");
+          console.log(credit_card);
+          res.send(JSON.stringify(credit_card));
+        }
+      });
+};
+exports.test1 = (req, res) => {
+    var paypal = require('paypal-rest-sdk');
+    paypal.configure({
+        'mode': 'sandbox', //sandbox or live
+        'client_id': 'AZQKMZDbPg-LJg1oc5yrzBvqqT5pl5H-6s3ihXaqhBtTjuhF0KDMLsH0rS1FPlhoO_EvU9PFOSjtevfr',
+        'client_secret': 'EPCj5dRWe7OBG8Da0_H3Fk9pf275jJl88nyGvtfo9resg0NnBCOU5feCg4Efhyw0pwrz66ZlVPFNqzN1'
+    });
+    
+    
+
+    var creditCardId = "CARD-2UT54514WP8055149K7VEPCQ";
     //CARD-7HB0913066314063MK7SQMTI
 
     paypal.creditCard.get(creditCardId, function (error, credit_card) {
@@ -147,10 +178,78 @@ exports.test = (req, res) => {
         } else {
             console.log("Retrieve Credit Card Response");
             console.log(JSON.stringify(credit_card));
+            res.send(JSON.stringify(credit_card));
             //res.redirect('/tag/list');
         }
     });
       
-    console.log('ok');
-    //res.redirect('/tag/list');
+};
+
+exports.test2 = (req, res) => {
+    var paypal = require('paypal-rest-sdk');
+    paypal.configure({
+        'mode': 'sandbox', //sandbox or live
+        'client_id': 'AZQKMZDbPg-LJg1oc5yrzBvqqT5pl5H-6s3ihXaqhBtTjuhF0KDMLsH0rS1FPlhoO_EvU9PFOSjtevfr',
+        'client_secret': 'EPCj5dRWe7OBG8Da0_H3Fk9pf275jJl88nyGvtfo9resg0NnBCOU5feCg4Efhyw0pwrz66ZlVPFNqzN1'
+    });
+    
+    
+    var savedCard = {
+        "intent": "sale",
+        "payer": {
+            "payment_method": "credit_card",
+            "funding_instruments": [{
+                "credit_card_token": {
+                    "credit_card_id": "CARD-2UT54514WP8055149K7VEPCQ"
+                }
+            }]
+        },
+       
+    
+        "transactions": [{
+            "amount": {
+                "currency": "USD",
+                "total": "23.93",
+                /*"details": {
+                    "subtotal": "19.94",
+                     "shipping": "3.99",
+                     "tax": "0"
+                }*/
+            },
+            "description": "KapdeCheckout",
+            "invoice_number": "1420219038",
+            "item_list": {
+                "items": [{
+                   "quantity": "1",
+                   "name": "item name 1",
+                   "description": "description 1",
+                   "price": "23.93",
+                   "currency": "USD",
+                   "sku": "sku 1"
+               }],
+            "shipping_address": {
+                "recipient_name": "The Recipient",
+                "line1": "123 Ship City",
+                "city": "Ship City",
+                "country_code": "US",
+                "postal_code": "30303",
+                "state": "GA"
+            }
+        }
+     }]
+ 
+ 
+    };
+    paypal.payment.create(savedCard, function (error, payment) {
+        if (error) {
+            console.log(error);
+            res.send(JSON.stringify(error));
+            //throw error;
+        } else {
+            console.log("Pay with stored card Response");
+            console.log(JSON.stringify(payment));
+            res.send(JSON.stringify(payment));
+        }
+    });
+      
 };
