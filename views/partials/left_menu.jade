@@ -5,7 +5,7 @@
           .nav-in
             ul
               li(class=(left_activeClass == 1)?'active':'')
-                a(href='/')
+                a(href='/dashboard')
                   img(src='/images/left-icon1.png', alt='icon')
                   |  Dashboard 
               li(class=(left_activeClass == 2)?'active':'')
@@ -25,7 +25,7 @@
                     a(href='#') Add User
                     
 
-              li(class=(left_activeClass == 3)?'active':'')
+              li(class=(left_activeClass == 3)? 'active':'')
                 a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
                   img(src='/images/left-icon3.png', alt='icon')
                   | Products
@@ -40,7 +40,14 @@
                   li
                     a(href='/product/list') Product list
                   li
-                    a(href='#') Add Product
+                    a(href='/product/list/add') Add Product
+                    
+                  li
+                    span.sub-title Hash Tag
+                  li
+                    a(href='/tag/list') Hash Tag list
+                  li
+                    a(href='/tag/add') Add Hash Tag    
                   
                     
               li(class=(left_activeClass == 4)?'active':'')
@@ -57,8 +64,8 @@
                     span.sub-title CUSTOMERS
                   li
                     a(href='/customer/list') Customer list
-                  li
-                    a(href='#') Add Customer
+                  //li
+                    //a(href='/user/add') Add Customer
                   
                     
               li(class=(left_activeClass == 5)?'active':'')
@@ -76,7 +83,7 @@
                   li
                     a(href='/user/list') User list
                   li
-                    a(href='#') ADD USERS
+                    a(href='/user/add') ADD USERS
                   
                     
               li(class=(left_activeClass == 6)?'active':'')

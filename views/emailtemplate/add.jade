@@ -2,8 +2,8 @@ extends ../layout
 block content
   .col-sm-9.midlle-bar
       .large-title-row
-        img(src='/images/title-icon.png', alt='icon')
-        |  User
+        img(src='/images/left-icon6.png', alt='icon')
+        |  System
         .edit-btn-cl.select-item
           
             //select#select(name='select')
@@ -32,12 +32,25 @@ block content
                         .profile-frm-cl1 User
                         .profile-frm-cl2
                           .select-item
-                            select#select(name='user_id')
-                              option Shop
+                            select#select(name='user_type')
+                               option(value='customer') Customer
+                               option(value='shop') Shop
                       .profile-frm-row
-                        .editer-box Editer
+                        .profile-frm-cl1 Template Type
                         .profile-frm-cl2
+                          .select-item
+                            select#select(name='template_type')
+                              -for(var i=0;i< emailTemplateType.length;i++){
+                                 option(value='#{emailTemplateType[i].value}') #{emailTemplateType[i].lable}
+                              -}
+                      .profile-frm-row
+                        .editer-box Email Content
+                        .profile-frm-cl2.w610
                             textarea(name='content',id='editor')
+                      .profile-frm-row
+                        .profile-frm-cl1  Mobile Content
+                        .profile-frm-cl2
+                          textarea(name='mobile_content',id='mobile_content')
         script(type='text/javascript').
             $(document).ready(function(n){
                 CKEDITOR.editorConfig = function( config ) {

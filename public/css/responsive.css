@@ -259,90 +259,11 @@ div .vert .simply-scroll-list li {
 .profile-frm-cl2 {
 	width: 60%;
 }
-}
-}
- @media screen and (max-width:1250px) {
-.loign-body {
-	background-size: auto;
-}
-.left-sidebar {
-	width: 25%;
-}
-.midlle-bar {
-	padding: 10px 0 0 10px;
-	width: 75%;
-}
-.shipping-total-box {
-	width: 35%;
-}
-.today-sale-box {
-	padding-left: 10px;
-	padding-right: 10px;
-	width: 37%;
-}
-.new-ord-box {
-	width: 28%;
-}
-.mdl-cmn {
-	margin-top: 10px;
-}
-.right-cmn {
-	margin-top: 10px;
-}
-.wkl-sale {
-	padding-left: 10px;
-	width: 35%;
-}
-.mdl-tab-box {
-	width: 65%;
-}
-.ul-mdl-tab li a {
-	padding: 0 25px;
-	font-size: 17px;
-}
-.sealsLeft h3,
-.sealsRight h3 {
-	font-size: 15px;
-}
-.socialLeft h3,
-.socialRight h3 {
-	font-size: 14px;
-}
-.nav-close {
-	right: 0;
-}
-.customer-cl {
-	width: 30%;
-}
-.profile-cl {
-	width: 69%;
-}
-
-.left-sub ul li {
-font-size: 16px;
-  padding-left: 8px;
-  padding-right: 8px;
-}
-.righsub-nav{
-	margin-bottom:10px;
-}
-.large-title-row{
-	margin-bottom:10px;
-}
-}
-@media screen and (max-width:1140px) {
-.ul-mdl-tab li a {
-	padding: 0 21px;
-	font-size: 16px;
-}
-}
-@media screen and (max-width:1023px) {
 .customer-cl ul li {
 	font-size: 14px;
 	font-weight: 600;
 	padding: 10px 0 10px 10px;
 }
-
 .order_details ul li {
 	padding: 4px 0;
 	font-size: 13px;
@@ -350,7 +271,6 @@ font-size: 16px;
 .order_label {
 	font-size: 13px;
 }
-
 .omer_notification_left {
 	width: 210px;
 }
@@ -360,7 +280,6 @@ font-size: 16px;
 .order-txt table {
 	width: 1000px;
 }
-
 .order-txt.large-table table {
 	width: 1200px;
 }
@@ -502,16 +421,6 @@ h2 {
 	font-size: 12px;
 	padding-top: 5px;
 }
-  font-size: 12px;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-}
- @media screen and (max-width:767px) {
-	 .profile-form-box {
-  padding: 15px;
-}
-
 .sub-title {
 	padding-top: 15px;
 	font-size: 17px;
@@ -582,9 +491,6 @@ body {
 	width: 250px;
 	z-index: 9;
 	left: -100%;
-}
-.body-nav .left-sidebar {
-	left: 0;
 	-webkit-transition: all 0.4s ease-in-out;
 	-moz-transition: all 0.4s ease-in-out;
 	-o-transition: all 0.4s ease-in-out;
@@ -633,31 +539,6 @@ header {
 	float: right;
 	max-width: 100%;
 }
-.customer-cl, .profile-cl{
-	float:none;
-	width:100%;
-	min-height:inherit;
-	margin-bottom:10px;
-	padding:0;
-}
-}
-
- @media screen and (max-width:640px) {
-.righsub-nav{
-	padding: 15px 15px 13px 5px;
-}
- }
-
- @media screen and (max-width:568px) {
-	 .left-sub {
-  float: none;
-  max-width: 100%;
-}
-.right-sub {
-  float: right;
-  max-width: 100%;
-}
-
 .new-ord-box,
 .today-sale-box,
 .shipping-total-box {
@@ -697,14 +578,6 @@ header {
 .large-title-row {
 	font-size: 23px;
 }
-}
-@media screen and (max-width:479px) {
-	.left-sub ul li{
-		line-height:20px;
-	}
-	.large-title-row{
-		font-size:25px;
-	}
 .top-left {
 	width: 70%;
 }
@@ -807,12 +680,9 @@ header {
 .profile-top-row {
 	padding: 0 10px;
 }
-.omer_notification_left > p{
-	text-align:left;
-	width: 150px;
 }
-.omer_notification_left{
-	text-align:left;
-	width:auto;
-}
+
+
+.ord-tbl tr {
+  border-bottom: 1px solid #bcbcbc;
 }

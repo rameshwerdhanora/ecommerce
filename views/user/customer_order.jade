@@ -1,0 +1,33 @@
+extends ../layout
+block content
+  .col-sm-9.midlle-bar
+    .large-title-row
+      img(src='/images/title-icon.png', alt='icon')
+      |  #{getCustomerDetails.first_name} #{getCustomerDetails.last_name}
+    .righsub-nav.clearfix
+      include customer_top_bar
+    .customer-box.clearfix
+      .customer-cl
+        include ../partials/customer_left_menu
+      .profile-cl
+        .profile-top-row.product_brand
+          h2 ORDERS 
+        .profile-form-box.reviews
+          .omer_address.ord-tbl
+            .ord-top.clearfix
+              p.blng-title.pull-left Orders (#{getAllOrders.length})
+              p.blng-title.pull-right STATUS
+            table(border='0', cellpadding='0', cellspacing='0')
+              each getAllOrder in getAllOrders 
+                tr
+                  td  
+                  td
+                    p Order#: #{getAllOrder.order_number}
+                    p Order Date: #{getAllOrder.orderdate}
+                    p Shop: #{getAllOrder.shop_name}
+                  td(align='right')
+                    .ord-r-txt
+                      p
+                        | In Transit
+                      p
+                        img(src='/images/ord-icon1.jpg')             

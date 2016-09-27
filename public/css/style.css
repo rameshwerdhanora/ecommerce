@@ -2622,3 +2622,54 @@ label.css-label {
 
 #modal-container-702679{z-index:9999;}
 #modal-container-7026790{z-index:9999;}
+.w610{
+    width: 610px;
+
+/*order2 page css*/
+.ord-r-txt {
+  color: #55d9fd;
+  display: inline-block;
+  padding: 0 10px;
+  text-align: center;
+  text-transform: uppercase;
+  min-width:100px;
+}
+.ord-r-txt p {
+  text-align: center !important;
+  text-transform: uppercase !important;
+  padding-bottom:5px;
+}
+.ord-tbl table tr td p{
+	line-height:22px;
+}
+.blng-title.pull-right{
+	
+	min-width:100px;
+}
+.ord-tbl tr {
+  border-bottom: 1px solid #bcbcbc;
+}
+
+
+/*order2 page css*/
+.ord-r-txt {
+  color: #55d9fd;
+  display: inline-block;
+  padding: 0 10px;
+  text-align: center;
+  text-transform: uppercase;
+  min-width:100px;
+}
+.ord-r-txt p {
+  text-align: center !important;
+  text-transform: uppercase !important;
+  padding-bottom:5px;
+}
+.ord-tbl table tr td p{
+	line-height:22px;
+}
+.blng-title.pull-right{
+	
+	min-width:100px;
+}
+

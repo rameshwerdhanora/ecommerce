@@ -66,7 +66,7 @@ exports.listOfProducts = (req, res) => {
                                 for(var i = 0;i< fetchCategories.length;i++){
                                     tempCategory[fetchCategories[i]._id] = fetchCategories[i].name;
                                 }
-                                if(req.params.productId){
+                                if(req.params.productId && req.params.productId != 'add'){
                                     //Category.find({is_active:1},function(error,fetchCategories){
                                         //SubCategory.find({is_active:1},function(error,fetchSubCategories){
                                             //Brand.find({},function(error,fetchAllBrands){
@@ -88,7 +88,8 @@ exports.listOfProducts = (req, res) => {
                                                                     editProduct:true,
                                                                     productRes:productRes,
                                                                     brandAr:tempBrand,
-                                                                    categoryAr:tempCategory
+                                                                    categoryAr:tempCategory,
+                                                                    addFlag : false
                                                                 });
                                                             //});
                                                         });
@@ -98,6 +99,11 @@ exports.listOfProducts = (req, res) => {
                                         //});
                                     //});
                                 }else{
+                                    if(req.params.productId == 'add'){
+                                        var addFlag = true;
+                                    }else{
+                                        var addFlag = false;
+                                    }
                                     res.render('product/list',{
                                         title: 'Product',
                                         fetchAllProducts:fetchAllProducts,
@@ -110,7 +116,8 @@ exports.listOfProducts = (req, res) => {
                                         fetchAllColors:fetchAllColors,
                                         editProduct:false,
                                         brandAr:tempBrand,
-                                        categoryAr:tempCategory
+                                        categoryAr:tempCategory,
+                                        addFlag : addFlag
                                     });
                                 }
                             });	

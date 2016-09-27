@@ -2,11 +2,13 @@ const mongoose = require('mongoose');
 
 const cardSchema = new mongoose.Schema({
 	user_id : String,
-	card_name : String,
-	card_number : String,
-	card_date : String,
-	card_type : String,
+	card_id : String,
+	number : String,
+	type : String,
+	expire_date : String,
+	data:Array,
 	created : String,
+	holdername:String,
 	updated:String
 });
 

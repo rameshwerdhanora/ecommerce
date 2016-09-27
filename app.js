@@ -70,6 +70,7 @@ const categorySubController    = require('./controllers/subCategory');
 const attributeController      = require('./controllers/attribute');
 const orderController          = require('./controllers/order');
 const emailController          = require('./controllers/emailTemplate');
+const tagController          =   require('./controllers/tag');
 
 
 /**
@@ -96,7 +97,7 @@ mongoose.connection.on('error', () => {
 /**
  * Express configuration.
  */
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 8081);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(compression());
@@ -157,7 +158,10 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }))
 /**
  * Primary app routes.
  */
-app.get('/', homeController.index);
+
+app.get('/dashboard', homeController.index);
+app.get('/', homeController.land);
+
 app.get('/login', userController.getLogin);
 app.post('/login', userController.postLogin);
 app.get('/logout', userController.logout);
@@ -183,6 +187,7 @@ app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userControl
 app.post('/api/customer/create/save', userAppController.postSignupManuallySave);
 app.post('/api/customer/forgotpassword', userAppController.postForgetPassword); // Completed
 app.post('/api/customer/changePassword', userAppController.postChangePassword); // Completed
+app.post('/api/customer/changeuserpasswordfromprofile', userAppController.changeUserPasswordFromProfile); // Completed
 
 app.get('/api/customer/fetchuserdetails/:userId', userAppController.getUserProfile);
 app.post('/api/customer/updateprofile', userAppController.postUpdateProfile);
@@ -350,6 +355,14 @@ app.get('/emailtemplate/add',  emailController.addTemplate);
 app.get('/emailtemplate/edit/:templateId',  emailController.edit);
 app.post('/emailtemplate/update',  emailController.update);
 
+app.get('/tag/list',passportConfig.isAuthenticated,  tagController.list);
+app.get('/tag/add', passportConfig.isAuthenticated, tagController.add);
+
+app.post('/tag/save', passportConfig.isAuthenticated, tagController.save);
+app.post('/tag/update', passportConfig.isAuthenticated, tagController.update);
+app.get('/tag/edit/:tagId', passportConfig.isAuthenticated, tagController.edit);
+
+
  
 /* Signup users */
 // app.get('/signup/user',  userAppControlleraAdmin.signupUser);
@@ -374,6 +387,7 @@ app.get('/customer/order/:customerId',  userAppControlleraAdmin.order);
 app.get('/customer/payments/:customerId',  userAppControlleraAdmin.payments);
 app.get('/customer/address/:customerId',  userAppControlleraAdmin.customerAddressList);
 app.post('/customer/address/save/:customerId',  userAppControlleraAdmin.customerAddressSave);
+
 
 
 
@@ -411,7 +425,7 @@ app.get('/user/shipping/:userId',  userAppControlleraAdmin.userShipping);
 app.post('/user/shipping/save/:userId',  userAppControlleraAdmin.userShippingSave);
 app.get('/user/paymentMethod/:userId',  userAppControlleraAdmin.userPaymentMethod);
 app.post('/user/paymentMethod/save/:userId',  userAppControlleraAdmin.userPaymentMethodSave);
-app.get('/user/order/:userId',  userAppControlleraAdmin.userOrder);
+//app.get('/user/order/:userId',  userAppControlleraAdmin.userOrder);
 app.get('/user/reviews/:userId',  userAppControlleraAdmin.userProductReview);
 app.get('/user/account/:userId',  userAppControlleraAdmin.userAccount);
 app.get('/user/linkedAccount/:userId',  userAppControlleraAdmin.userLinkedAccount);

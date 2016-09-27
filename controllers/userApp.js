@@ -1,3 +1,4 @@
+const async           = require('async');
 const User = require('../models/userApp');
 const Permission = require('../models/permissions');
 const UserPermission = require('../models/userPermissions');
@@ -5,8 +6,10 @@ const Notification = require('../models/notification');
 const Address   = require('../models/address');
 const ShopShipping   = require('../models/shopShipping');
 const PaymentMethod   = require('../models/userPaymentMethod');
-
-
+const EmailTemplate = require('../models/emailTemplate');
+const CommonHelper = require('../helpers/commonHelper');
+const Order           = require('../models/orders');
+const OrderDetails    = require('../models/orderDetails');
 
 /**
  * GET /customer/list
@@ -131,7 +134,7 @@ exports.customerAddressList = (req, res) => {
 	            var shippingAddress =[];
 	            var billingAddress = [];
 	            availableUserAddresses.forEach(function(item, index) {
-				  	if(availableUserAddresses[index].address_type == 'Shipping')
+				  	if(availableUserAddresses[index].add_type == 'Shipping')
 	            		shippingAddress.push(availableUserAddresses[index]);
 	            	else
 	            		billingAddress.push(availableUserAddresses[index]);
@@ -185,6 +188,7 @@ exports.customerAddressSave = (req, res) => {
  * User List - here we need to get both users and customers in seprate columns
  */
 exports.userList = (req, res) => {
+    
 	//-- get customers
 	User.find({role_id:5},function(error,getCustomers){
 		User.find({role_id:{$ne : 5}},function(error,getUsers){
@@ -208,7 +212,7 @@ exports.userAdd = (req, res) => {
 		if(getPermissions)
 		{
 			//console.log(getPermissions);
-			res.render('user/user_add', { title: 'New User',getPermissions:getPermissions});
+			res.render('user/user_add', { title: 'New User',getPermissions:getPermissions,left_activeClass:5});
 		}
 	});
 };
@@ -221,7 +225,7 @@ exports.userSave = (req, res) => {
 	User.findOne({ email_id: req.body.email_id }, function(err, existingEmail){
 		if(existingEmail) 
 		{
-			//console.log(req.body);
+			console.log(req.body);
 			req.flash('error', 'Email address already exists.');
 			//req.flash('data',req.body);
       		return res.render('user/user_add',{data: req.body});
@@ -237,7 +241,7 @@ exports.userSave = (req, res) => {
 		    userIns.email_id       	= req.body.email_id;
                     userIns.first_name  	= req.body.first_name;
 		    userIns.last_name   	= req.body.last_name;
-		    userIns.contact_no  	= '';
+		    userIns.contact_no  	= req.body.contact_no;
 		    userIns.dob   			= '';
 		    userIns.gender   		= '';
 		    userIns.bio   			= '';
@@ -252,26 +256,43 @@ exports.userSave = (req, res) => {
 		    userIns.updated        	= '';
 
 		    userIns.save(function(error){
-				if(error === null)
-				{	
-					//-- save user permissions
-					for(var i=0; i<req.body.permissions.length; i++){
-						var userPermission = new UserPermission();
-						userPermission.user_id = userIns._id;
-						userPermission.permission_id = req.body.permissions[i];
-						userPermission.created = Date.now();
-						userPermission.save();
-					}
-					
-					// SendMailToUser(req.body);
-					req.flash('error', 'Your details is successfully stored.');
-      				return res.redirect('/user/list');
-				}
-				else 
-				{
-					req.flash('error', 'Something wrong!!');
-      				return res.render('user/user_add');
-				}
+                    if(error === null)
+                    {	
+                        //-- save user permissions
+                        if(req.body.permissions){
+                            for(var i=0; i<req.body.permissions.length; i++){
+                                    var userPermission = new UserPermission();
+                                    userPermission.user_id = userIns._id;
+                                    userPermission.permission_id = req.body.permissions[i];
+                                    userPermission.created = Date.now();
+                                    userPermission.save();
+                            }
+                        }    
+                    
+                    // Get the get template content for 'registration' and call the helper to send the email         
+                    EmailTemplate.findOne({template_type:'registration'},function(error,getTemplateDetail){
+                        var registerTemplateContent = getTemplateDetail.content;
+                        dynamicTemplateContent = registerTemplateContent.replace(/{first_name}/gi, userIns.first_name).replace(/{last_name}/gi, userIns.last_name);  
+                            if(dynamicTemplateContent)
+                            {
+                               CommonHelper.emailTemplate(getTemplateDetail.subject, dynamicTemplateContent, userIns._id);      
+                            }
+                    });
+                    
+                    // Send SMS Using Twilio API to perticular user mobile number
+                    if((userIns.contact_no!='') && isNaN(userIns.contact_no)){
+                        //CommonHelper.sendSms(req, res, smsContent, userId);
+                    }
+
+
+                    req.flash('error', 'Your details is successfully stored.');
+                    return res.redirect('/user/list');
+                    }
+                    else 
+                    {
+                            req.flash('error', 'Something wrong!!');
+                    return res.render('user/user_add');
+                    }
 		    }); 
 		}
 	});
@@ -361,6 +382,10 @@ exports.userShipping = (req, res) => {
 			ShopShipping.findOne({ user_id: req.params.userId}, function(error, availableShopShipping)
 	        {
 				//console.log(availableShopShipping);
+				if(availableShopShipping == null)
+	        	{
+	        		availableShopShipping = [];
+	        	}
 				res.render('user/user_shipping', { title: 'User Shipping',getUserDetails:getUserDetails,activeClass:2,availableShopShipping:availableShopShipping,left_activeClass:5});
 			});
 		}
@@ -444,11 +469,11 @@ exports.userPaymentMethodSave = (req, res) => {
     });
 };
 
-/* User ORder */
+/* User ORder 
 exports.userOrder = (req, res) => {
     res.render('user/user_order', { title: 'User Order',activeClass:4,left_activeClass:5 });
 };
-
+*/
 
 /* User Product Review */
 exports.userProductReview = (req, res) => {
@@ -570,50 +595,65 @@ exports.notification = (req, res) => {
 };
 
 exports.saveNotification = (req, res) => {
-    console.log(req.body.user_id);
-    if(req.body.arrival){
-        var arrival_email = (req.body.arrival.email != 'undefined')?req.body.arrival.email:'0';
-        var arrival_mob = (req.body.arrival.mob != 'undefined')?req.body.arrival.mob:'0';
-    }else{
-        var arrival_email = '0';
-        var arrival_mob = '0';
-    }
-    if(req.body.shipped){
-        var shipped_email = (req.body.shipped.email != 'undefined')?req.body.shipped.email:'0';
-        var shipped_mob = (req.body.shipped.mob != 'undefined')?req.body.shipped.mob:'0';
-    }else{
-        var shipped_email = '0';
-        var shipped_mob = '0';
+   var updateData = {};
+   updateData.delivery = new Array();
+   updateData.shipped = new Array();
+   updateData.new_arrival = new Array();
+   updateData.promocode = new Array();
+   updateData.news = new Array();
+    if(req.body.arrival != undefined && req.body.arrival.length > 0){
+        if(req.body.arrival[0] == 'mail' ||  req.body.arrival[1] == 'mail'){
+            updateData.new_arrival.push('mail');
+        }
+        if(req.body.arrival[0] == 'mobile' ||  req.body.arrival[1] == 'mobile'){
+            updateData.new_arrival.push('mobile');
+        }
     }
     
-    if(req.body.deliver){
-        var deliver_email = (req.body.deliver.email != 'undefined')?req.body.deliver.email:'0';
-        var deliver_mob = (req.body.deliver.mob != 'undefined')?req.body.deliver.mob:'0';
-    }else{
-        var deliver_email = '0';
-        var deliver_mob = '0';
+    if(req.body.shipped != undefined && req.body.shipped.length > 0){
+        if(req.body.shipped[0] == 'mail' || req.body.shipped[1] == 'mail'){
+            updateData.shipped.push('mail');
+        }
+        if(req.body.shipped[0] == 'mobile' || req.body.shipped[1] == 'mobile'){
+            updateData.shipped.push('mobile');
+        }
     }
-    if(req.body.promo){
-        var promo_email = (req.body.promo.email != 'undefined')?req.body.promo.email:'0';
-        var promo_mob = (req.body.promo.mob != 'undefined')?req.body.promo.mob:'0';
-    }else{
-        var promo_email = '0';
-        var promo_mob = '0';
+    
+    if(req.body.deliver != undefined && req.body.deliver.length > 0){
+        if(req.body.deliver[0] == 'mail' || req.body.deliver[1] == 'mail'){
+            updateData.delivery.push('mail');
+        }
+        if(req.body.deliver[0] == 'mobile' || req.body.deliver[1] == 'mobile'){
+            updateData.delivery.push('mobile');
+        }
     }
-    if(req.body.news){
-        var news_email = (req.body.news.email != 'undefined')?req.body.news.email:'0';
-        var news_mob = (req.body.news.mob != 'undefined')?req.body.news.mob:'0';
-    }else{
-        var news_email = '0';
-        var news_mob = '0';
+    
+    if(req.body.promo != undefined && req.body.promo.length > 0){
+        if(req.body.promo[0] == 'mail' || req.body.promo[1] == 'mail'){
+            updateData.promocode.push('mail');
+        }
+        if(req.body.promo[0] == 'mobile' || req.body.promo[1] == 'mobile' ){
+            updateData.promocode.push('mobile');
+        }
+        
     }
-    updateData = {
-        delivery:{email:deliver_email, mobile:deliver_mob},
-        shipped:{email: shipped_email, mobile:shipped_mob},
-        new_arrival:{email:arrival_email, mobile:arrival_mob},
-        promocode:{email:promo_email, mobile:promo_mob},
-        news:{email:news_email, mobile:news_mob}
-    };
+    if(req.body.news != undefined  && req.body.news.length > 0){
+        if(req.body.news[0] == 'mail' || req.body.news[1] == 'mail'){
+            updateData.news.push('mail');
+        }
+        if(req.body.news[0] == 'mobile' || req.body.news[1] == 'mobile'){
+            updateData.news.push('mobile');
+        }
+    }
+    
+//    
+//    updateData = {
+//        delivery:{email:deliver_email, mobile:deliver_mob},
+//        shipped:{email: shipped_email, mobile:shipped_mob},
+//        new_arrival:{email:arrival_email, mobile:arrival_mob},
+//        promocode:{email:promo_email, mobile:promo_mob},
+//        news:{email:news_email, mobile:news_mob}
+//    };
     Notification.update({user_id:req.body.user_id},updateData,{upsert:true},function(error,updateRes){
         if(updateRes){
             req.flash('success',['User notification updated successfully!']);
@@ -668,11 +708,86 @@ exports.payments = (req, res) => {
 };
 
 exports.order = (req, res) => {
-    /*User.findOne({_id:req.params.customerId},function(error,userRes){
-        if(userRes){
-            res.render('user/accounts', { title: 'Customer accounts',activeClass:6,result:userRes });
-        }
-    });*/
-    res.render('user/order', { title: 'Order',activeClass:4,left_activeClass:4 });
-};
+    User.findOne({_id:req.params.customerId},function(error,getCustomerDetails){
+        if(getCustomerDetails){
 
+          Order.find({user_id:req.params.customerId},function(error,getAllOrders)
+		  {
+		      if(getAllOrders)
+		      {
+		        var finalOrderData = new Array();
+		        async.eachSeries(getAllOrders, function(OrderIds, callback)
+		        {
+		          var orderObj = {};
+		          var dateTime = new Date(parseInt(OrderIds.order_date));
+		        
+		          //var split = dateTime.split(' ');
+		   
+		          var year  = dateTime.getFullYear();
+		          var month = dateTime.getMonth()+1;
+		          var date  = dateTime.getDate();
+		          finalDate = month+'/'+date+'/'+year 
+
+		          orderObj._id = OrderIds._id;
+		          orderObj.order_number = OrderIds.order_number;
+		          orderObj.status       = OrderIds.status;
+		          orderObj.totalprice   = OrderIds.totalprice;
+		          orderObj.orderdate    = finalDate;
+
+		          async.parallel
+		          (
+		            [
+		                function(callback)
+		                {
+		                  User.findOne({_id:OrderIds.user_id},function(error,fetUserDetails)
+		                  {
+		                    if(fetUserDetails)
+		                    {
+		                      orderObj.user_id    = OrderIds.user_id;
+		                      orderObj.user_name  = fetUserDetails.user_name;
+		                      orderObj.email_id   = fetUserDetails.email_id;
+		                      orderObj.first_name = fetUserDetails.first_name;
+		                      orderObj.last_name  = fetUserDetails.last_name;
+		                      orderObj.gender     = fetUserDetails.gender;
+		                      OrderDetails.findOne({order_id:OrderIds._id},function(error,fetchingAllOrderDetails)
+				                {
+				                    if(fetchingAllOrderDetails)
+				                    {
+				                    	//console.log(fetchingAllOrderDetails);
+				                    	User.findOne({_id:fetchingAllOrderDetails.brand_id},function(error,fetchingShopDetails)
+						                {
+						                	//console.log(fetchingShopDetails);
+				                      		orderObj.shop_name   = fetchingShopDetails.first_name+' '+fetchingShopDetails.last_name;
+						                });
+				                    }
+				                });
+		                    }
+		                    callback(error);
+		                  });
+		                }
+		            ],
+		            function(err)
+		            {
+		              finalOrderData.push(orderObj);
+		              callback(err);
+		            }
+		          );
+		          
+		        },
+		        function(err)
+		        {
+		        //	console.log(finalOrderData);
+		          res.render('user/customer_order', { title: 'Customer Order',activeClass:4,left_activeClass:4,getCustomerDetails:getCustomerDetails,getAllOrders:finalOrderData });
+		        });
+		      }
+		      else 
+		      {
+		        req.flash('success',['Order is not created.']);
+		        res.render('user/customer_order', { title: 'Customer Order',activeClass:4,left_activeClass:4,getCustomerDetails:getCustomerDetails,getAllOrders:''});
+		      }
+		  });
+
+ 
+        }
+    });
+};

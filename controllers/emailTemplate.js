@@ -35,7 +35,7 @@ exports.list = (req, res) => {
  * add email Template
  */
 exports.addTemplate = (req,res) => {
-    res.render('emailtemplate/add', {title: 'Add Email Template',activeFlag:2,left_activeClass:6});
+    res.render('emailtemplate/add', {title: 'Add Email Template',activeFlag:2,left_activeClass:6,emailTemplateType:Constants.EMAILTEMPLATETYPE});
 }
 
 
@@ -48,7 +48,9 @@ exports.saveTemplate = (req,res) => {
     emailTempModel.name = req.body.name;
     emailTempModel.subject = req.body.subject;
     emailTempModel.content = req.body.content; 
-    emailTempModel.user_id = 1;
+    emailTempModel.mobile_content = req.body.mobile_content; 
+    emailTempModel.template_type = req.body.template_type; 
+    emailTempModel.user_type = req.body.user_type;
     emailTempModel.save(function(err) {
         if (err){
             req.flash('errors', ['There is some error occured']);
@@ -75,8 +77,8 @@ exports.edit = (req, res) => {
             req.flash('errors', ['No record found']);
             res.redirect('/emailtemplate/list');
         }else {
-            
-            res.render('emailtemplate/edit', {title: 'Edit Email Template',result:templateRes});
+            console.log(templateRes);
+            res.render('emailtemplate/edit', {title: 'Edit Email Template',result:templateRes,emailTemplateType:Constants.EMAILTEMPLATETYPE});
         }
     });
 };
@@ -91,7 +93,9 @@ exports.update = (req,res) => {
         name : req.body.name,
         subject : req.body.subject,
         content : req.body.content, 
-        user_id : 1,
+        mobile_content : req.body.mobile_content, 
+        user_type : req.body.user_type,
+        template_type : req.body.template_type
     };
     EmailTemplate.findByIdAndUpdate(req.body.template_id,updateData, function(error, updateRes)
     {

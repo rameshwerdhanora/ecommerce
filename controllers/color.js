@@ -29,16 +29,17 @@ exports.listOfColor = (req, res) => {
             .skip(skipRecord)
             .sort('-_id')
             .exec(function(error,getAllColors){
-            if(req.params.colorId){
+            if(req.params.colorId && req.params.colorId != 'add'){
                 Color.findOne({_id:req.params.colorId},function(error,resColor){
                     if(error){
                         req.flash('errors', 'Something went wrong!!');
                     }else{
-                        res.render('color/list', { title: 'Color',getAllColors:getAllColors,activeClass:3,editRes:resColor,currentPage:page, totalRecord:totalRecord, totalPage:totalPage,left_activeClass:3});
+                        res.render('color/list', { title: 'Color',getAllColors:getAllColors,activeClass:3,editRes:resColor,currentPage:page, totalRecord:totalRecord, totalPage:totalPage,left_activeClass:3,addFlag:false});
                     }
                 });
             }else{
-                res.render('color/list', { title: 'Color',getAllColors:getAllColors,activeClass:3,currentPage:page, totalRecord:totalRecord, totalPage:totalPage,left_activeClass:3});
+                var addFlag = (req.params.colorId == 'add')?true:false;
+                res.render('color/list', { title: 'Color',getAllColors:getAllColors,activeClass:3,currentPage:page, totalRecord:totalRecord, totalPage:totalPage,left_activeClass:3,addFlag:addFlag});
             }
         });
     });
@@ -57,20 +58,31 @@ exports.saveColor = (req,res) => {
         if(err) {
             return res.end("Error uploading file.");
         }
-        var fileName = req.file.path.replace('public/','');
-        var colorIns  = new Color();
-        colorIns.color_logo = fileName;
-        colorIns.color_name  = req.body.color_name;
-        colorIns.user_id = req.user._id; 
-        colorIns.save(function(err){
-            if (err){
-                req.flash('errors',['Some thing goes wronge']);
-                res.send({status:'error',error:err});
-            }else{
-                req.flash('success',['Color has been added successfully']);
-                res.redirect('/color/list');
+        req.assert('color_name', 'Color name is required').notEmpty();
+        var errors = req.validationErrors();  
+        if( !errors){   //No errors were found.  Passed Validation!
+            var fileName = req.file.path.replace('public/','');
+            var colorIns  = new Color();
+            colorIns.color_logo = fileName;
+            colorIns.color_name  = req.body.color_name;
+            colorIns.user_id = req.user._id; 
+            colorIns.save(function(err){
+                if (err){
+                    req.flash('errors',['Some thing goes wronge']);
+                    res.redirect('/color/list');
+                }else{
+                    req.flash('success',['Color has been added successfully']);
+                    res.redirect('/color/list');
+                }
+            });
+        }else{
+            var er = new Array();
+            for(var i = 0;i<errors.length;i++){
+                er.push(errors[i].msg);
             }
-        });
+            req.flash('errors',er);
+            res.redirect('/color/list/add');
+        }
     });
 };
 

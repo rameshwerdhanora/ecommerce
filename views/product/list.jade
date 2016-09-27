@@ -8,7 +8,7 @@ block content
       |  PRODUCTS
     .top-btns.clearfix
       .btn-s-right
-        a.default-btn(href='#modal-container', title='Add Product', role='button', data-toggle='modal') ADD PRODUCT  
+        a#addPrductBtn.default-btn(href='#modal-container', title='Add Product', role='button', data-toggle='modal') ADD PRODUCT  
         //a.default-btn(href='/product/add', title='Add Size', role='button', data-toggle='modal') ADD PRODUCT  
     .customer-box.clearfix
       include ../partials/product_left_menu
@@ -405,3 +405,9 @@ block content
     -}
     style.
         .add_product .modal-body ul li{width:25%;}
+    -if(addFlag){
+        script(type='text/javascript').
+            $(document).ready(function(n){
+                $('#addPrductBtn').trigger('click');
+            });
+    -}

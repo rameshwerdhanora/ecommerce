@@ -39,6 +39,10 @@ block content
                 .profile-frm-cl2
                   input(type='text', value='#{data ? data.email_id :""}', name='email_id', required)
               .profile-frm-row
+                .profile-frm-cl1 Contact Number 
+                .profile-frm-cl2
+                  input(type='text', value='#{data ? data.contact_no :""}', name='contact_no', required)
+              .profile-frm-row
                 .profile-frm-cl1 Password
                 .profile-frm-cl2
                   input(type='text', value='#{data ? data.password :""}', name='password', required)
@@ -49,7 +53,7 @@ block content
               .profile-frm-row.botique-spc
                 .profile-frm-cl1 Boutique 
                 .profile-frm-cl2
-                  input#radio.css-checkbox(type='radio', name='role_id', value='4')
+                  input#radio.css-checkbox(type='radio', name='role_id', value='4',checked='true')
                   label.css-label(for='radio')
               .profile-frm-row
                 .profile-frm-cl1 or 

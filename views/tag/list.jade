@@ -3,8 +3,8 @@ block content
     .col-sm-9.midlle-bar
         include ../partials/flash
         .large-title-row
-            img(src='/images/left-icon6.png', alt='icon')
-            |  System
+            img(src='/images/title-icon.png', alt='icon')
+            |  User
             .edit-btn-cl.select-item
                 //form(action='', method='post', name='form3')
                     select#select(name='select')
@@ -23,21 +23,21 @@ block content
                               //input#checkbox2(type='checkbox', name='checkbox2')
                             th
                               | Name
-                            th Subject 
-                            th User
+                            th Created
+                            th Updated
                             th Action
                               //a(href='#')
                                 //img(src='/images/delete-icon.png', alt='delete')
                           - var count = 1;
                             if resultRes.length > 0
-                                each template in resultRes 
-                                    tr(class='attrTr_#{template._id}')
+                                each record in resultRes 
+                                    tr(class='attrTr_#{record._id}')
                                       td(align='center') #{count}
-                                      td.ord-title #{template.name}
-                                      td #{template.subject}
-                                      td #{template.user_type}
+                                      td.ord-title #{record.name}
+                                      td #{dateFormat(parseInt(record.createdAt),'dd-mm-yyyy')}
+                                      td #{dateFormat(parseInt(record.updatedAt), "dd-mm-yyyy")}
                                       td 
-                                         a.addsize.sizebuttons(href='/emailtemplate/edit/#{template._id}', title='Edit template') Edit 
+                                         a.addsize.sizebuttons(href='/tag/edit/#{record._id}', title='Edit has tag') Edit 
                                          //a.rmvsize.sizebuttons(href='#', onclick='deleteAttribute("#{template._id}")' title='Delete Attribute') Delete
                                     - count++;
                             else
