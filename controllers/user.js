@@ -42,7 +42,8 @@ exports.postLogin = (req, res, next) => {
     req.logIn(user, (err) => {
       if (err) { return next(err); }
       req.flash('success', ['Success! You are logged in.' ]);
-      res.redirect(req.session.returnTo || '/dashboard');
+      var redirectUrl = (req.session.returnTo == '/')?'/dashboard':req.session.returnTo;
+      res.redirect(redirectUrl || '/dashboard');
     });
   })(req, res, next);
 };

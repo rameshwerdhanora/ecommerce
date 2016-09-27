@@ -128,3 +128,29 @@ exports.update = (req,res) => {
         res.redirect('/tag/edit/'+req.body.tagId);
     }
 }
+
+exports.test = (req, res) => {
+    var paypal = require('paypal-rest-sdk');
+    paypal.configure({
+        'mode': 'sandbox', //sandbox or live
+        'client_id': 'AZQKMZDbPg-LJg1oc5yrzBvqqT5pl5H-6s3ihXaqhBtTjuhF0KDMLsH0rS1FPlhoO_EvU9PFOSjtevfr',
+        'client_secret': 'EPCj5dRWe7OBG8Da0_H3Fk9pf275jJl88nyGvtfo9resg0NnBCOU5feCg4Efhyw0pwrz66ZlVPFNqzN1'
+    });
+    
+    var creditCardId = "CARD-7HB0913066314063MK7SQMTI";
+    //CARD-7HB0913066314063MK7SQMTI
+
+    paypal.creditCard.get(creditCardId, function (error, credit_card) {
+        if (error) {
+            //throw error;
+            console.log(error);
+        } else {
+            console.log("Retrieve Credit Card Response");
+            console.log(JSON.stringify(credit_card));
+            //res.redirect('/tag/list');
+        }
+    });
+      
+    console.log('ok');
+    //res.redirect('/tag/list');
+};
