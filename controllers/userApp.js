@@ -886,7 +886,7 @@ exports.shop_linked_account = (req,res) =>{
 exports.shop_account = (req, res) => {
     User.findOne({_id:req.user._id},function(error,getUserDetails){
         if(getUserDetails){
-            res.render('user/shop_account', { title: 'User Account',getCustomerDetails:getUserDetails,activeClass:6,left_activeClass:5});
+            res.render('user/shop_account', { title: 'User Account',getCustomerDetails:getUserDetails,activeClass:5,left_activeClass:5});
         }
     });
 };
