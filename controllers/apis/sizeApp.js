@@ -266,13 +266,6 @@ exports.updateUserSizes = function(req,res)
   		var newSelectedVal 	= req.body.new_size;
   		var oldSelectedVal 	= req.body.selected_size;
   		var user_id 		= req.body.user_id;
- 		 
- 		console.log('1111111111111'); 
-  		console.log(req.body);
-
-  		console.log('1234'); 
-  		console.log(req.body);
-
 
   		UserDetails.findOne({user_id:user_id},function(error,fetchUserSizeData)
   		{	
