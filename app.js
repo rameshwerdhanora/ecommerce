@@ -427,6 +427,16 @@ app.post('/user/shopprofileupdate', passportConfig.isAuthenticated, userAppContr
 app.get('/user/shop_shippping_detail', passportConfig.isAuthenticated, userAppControlleraAdmin.shopShippingdetail);
 app.post('/user/update_shop_shipping_detail', passportConfig.isAuthenticated, userAppControlleraAdmin.shopShippingUpdate);
 
+app.get('/user/shop_product_review', passportConfig.isAuthenticated, userAppControlleraAdmin.shop_product_review);
+app.get('/user/shop_linked_account', passportConfig.isAuthenticated, userAppControlleraAdmin.shop_linked_account);
+
+app.get('/user/shop_account', passportConfig.isAuthenticated, userAppControlleraAdmin.shop_account);
+app.post('/user/shop_account_update', passportConfig.isAuthenticated, userAppControlleraAdmin.shop_account_update);
+
+app.get('/user/shop_notification', passportConfig.isAuthenticated, userAppControlleraAdmin.shop_notification);
+app.post('/user/shop_notification_update', passportConfig.isAuthenticated, userAppControlleraAdmin.shop_notification_update);
+app.get('/user/shop_payment_method', passportConfig.isAuthenticated, userAppControlleraAdmin.shop_payment_method);
+
 
 app.get('/user/list', passportConfig.isAuthenticated, userAppControlleraAdmin.userList);
 app.get('/user/add',  passportConfig.isAuthenticated,userAppControlleraAdmin.userAdd);

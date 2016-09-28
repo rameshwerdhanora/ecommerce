@@ -66,6 +66,7 @@ userAppSchema.pre('save', function (next) {
 });
 
 
+
 /**
  * Helper method for validating user's password.
  */

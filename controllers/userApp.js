@@ -12,6 +12,7 @@ const Order           = require('../models/orders');
 const OrderDetails    = require('../models/orderDetails');
 const Constants 		= require('../constants/constants');
 
+
 /**
  * GET /customer/list
  * Customer List user page.
@@ -606,11 +607,11 @@ exports.notification = (req, res) => {
                 }else{
                     resultRes = { _id: '',
                         user_id: req.params.customerId,
-                        new_arrival: [ { mobile: 0, email: 0 } ],
-                        promocode: [ { mobile: 0, email: 0 } ],
-                        delivery: [ { mobile: 0, email: 0 } ],
-                        shipped: [ { mobile: 0, email: 0} ],
-                        news: [ { mobile: 0, email: 0 } ] ,
+                        new_arrival: [],
+                        promocode: [],
+                        delivery: [],
+                        shipped: [],
+                        news: [] ,
                         user_id:req.params.customerId
                     };
                     res.render('user/notification', { title: 'Customer notification',activeClass:8, getCustomerDetails:getCustomerDetails,result:resultRes,left_activeClass:4 });
@@ -873,5 +874,106 @@ exports.shopShippingUpdate = (req,res) =>{
         res.redirect('/user/shop_shippping_detail');
     });
 }
+exports.shop_product_review = (req,res) =>{
+    res.render('user/shop_product_review', { title: 'Product review',activeClass:4,left_activeClass:5});
+}
+exports.shop_linked_account = (req,res) =>{
+    res.render('user/shop_linked_account', { title: 'Linked Account',activeClass:6,left_activeClass:5});
+}
 
+
+/* User Account */
+exports.shop_account = (req, res) => {
+    User.findOne({_id:req.user._id},function(error,getUserDetails){
+        if(getUserDetails){
+            res.render('user/shop_account', { title: 'User Account',getCustomerDetails:getUserDetails,activeClass:6,left_activeClass:5});
+        }
+    });
+};
+/* User Account */
+exports.shop_account_update = (req, res) => {
+    const bcrypt = require('bcrypt-nodejs');
+    bcrypt.hash(req.body.password, null, null, function(err, hash) {
+        updateData = {
+            password  : hash 
+        };
+        User.update({_id:req.user._id},updateData, function(error, updateRes){
+            if (error){
+                req.flash('errors',['Something went wronge!']);
+                res.redirect('/user/shop_account');
+            }else{
+                req.flash('success','Password updated successfully.');
+                res.redirect('/user/shop_account');
+            }
+        });
+    });
+};
+exports.shop_notification = (req, res) => {
+    //res.render('user/shop_linked_account', { title: 'Linked Account',activeClass:7,left_activeClass:5});
+    Notification.findOne({user_id:req.user._id},function(error,resultRes){
+        console.log(resultRes);
+        if(resultRes){
+            res.render('user/shop_notification', { title: 'Shop User notification',activeClass:7, result:resultRes,left_activeClass:4 });
+        }else{
+            resultRes = {
+                new_arrival: [],
+                promocode: [],
+                delivery: [],
+                shipped: [],
+                news: [] ,
+            };
+            res.render('user/shop_notification', { title: 'Shop User notification',activeClass:7,result:resultRes,left_activeClass:4 });
+        }
+    });
+    
+};
+
+exports.shop_notification_update = (req, res) => {
+   var updateData = {};
+   updateData.delivery = new Array();
+   updateData.shipped = new Array();
+   updateData.new_arrival = new Array();
+   updateData.promocode = new Array();
+   updateData.news = new Array();
+    if(req.body.arrival != undefined && req.body.arrival.length > 0){
+        if(req.body.arrival[0] == 'mail' ||  req.body.arrival[1] == 'mail'){
+            updateData.new_arrival.push('mail');
+        }
+    }
+    
+    if(req.body.shipped != undefined && req.body.shipped.length > 0){
+        if(req.body.shipped[0] == 'mail' || req.body.shipped[1] == 'mail'){
+            updateData.shipped.push('mail');
+        }
+    }
+    
+    if(req.body.deliver != undefined && req.body.deliver.length > 0){
+        if(req.body.deliver[0] == 'mail' || req.body.deliver[1] == 'mail'){
+            updateData.delivery.push('mail');
+        }
+    }
+    
+    if(req.body.promo != undefined && req.body.promo.length > 0){
+        if(req.body.promo[0] == 'mail' || req.body.promo[1] == 'mail'){
+            updateData.promocode.push('mail');
+        }
+        
+    }
+    if(req.body.news != undefined  && req.body.news.length > 0){
+        if(req.body.news[0] == 'mail' || req.body.news[1] == 'mail'){
+            updateData.news.push('mail');
+        }
+    }
+    Notification.update({user_id:req.user._id},updateData,{upsert:true},function(error,updateRes){
+        if(updateRes){
+            req.flash('success',['Shop user notification updated successfully!']);
+            res.redirect('/user/shop_notification'); 
+        }
+    });
+};
+
+
+exports.shop_payment_method = (req, res) => {
+    res.render('user/shop_payment_method', { title: 'Shop User notification',activeClass:3,availablePaymentMethod:'',left_activeClass:4 });
+}
 

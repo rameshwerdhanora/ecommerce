@@ -1,0 +1,95 @@
+extends ../layout
+block content
+  .col-sm-9.midlle-bar
+    include ../partials/flash
+    .large-title-row
+      img(src='/images/title-icon5.png', alt='icon')
+      |  MY SHOP
+      
+    .customer-box.clearfix
+        .customer-cl
+            include ../partials/shop_left_menu
+        .profile-cl
+          .profile-top-row
+            h2 NOTIFICATIONS
+          .profile-form-box
+            .omer_notification
+              .omer_notification
+                form(action='/user/shop_notification_update', method='post')
+                    .omer_notification_box
+                      .omer_notification_left
+                        p  EMAIL NOTIFICATIONS
+                      .omer_notification_right
+                        span
+                          img(src='/images/envolap.png')
+
+                        .clearfix
+                      .clearfix
+                    .omer_notification_box
+                      .omer_notification_left
+                        p Etiqett News
+                      .omer_notification_right
+                        span
+                          -if((result.news.length > 0) && (result.news[0] == 'mail' || result.news[1] == 'mail'))
+                              input#radio.css-checkbox(type='checkbox', name='news[]', value='mail',checked='checked')
+                          -else
+                              input#radio.css-checkbox(type='checkbox', name='news[]', value='mail')
+                          label.css-label(for='news[email]') 
+
+
+                        .clearfix
+                      .clearfix
+                    .omer_notification_box
+                      .omer_notification_left
+                        p Items Shipped
+                      .omer_notification_right
+                        span
+                          -if((result.shipped.length > 0 ) && (result.shipped[0] == 'mail' || result.shipped[1] == 'mail'))
+                              input#radio2.css-checkbox(type='checkbox', name='shipped[]', value='mail',checked="checked")
+                          -else
+                              input#radio2.css-checkbox(type='checkbox', name='shipped[]', value='mail')
+                          label.css-label(for='shipped[email]')
+
+                        .clearfix
+                      .clearfix
+                    .omer_notification_box
+                      .omer_notification_left
+                        p Items Delivered
+                      .omer_notification_right
+                        span
+                          -if(result.delivery.length > 0 && (result.delivery[0] == 'mail' || result.delivery[1] == 'mail'))
+                              input#radio4.css-checkbox(type='checkbox', name='deliver[]', value='mail',checked="checked")
+                          -else
+                              input#radio4.css-checkbox(type='checkbox', name='deliver[]', value='mail')
+                          label.css-label(for='deliver[email]')
+
+                        .clearfix
+                      .clearfix
+                    .omer_notification_box
+                      .omer_notification_left
+                        p Promo Codes
+                      .omer_notification_right
+                        span
+                          -if(result.promocode.length > 0 && (result.promocode[0] == 'mail' || result.promocode[1] == 'mail'))
+                              input#radio6.css-checkbox(type='checkbox', name='promo[]', value='mail',checked="checked")
+                          -else
+                              input#radio6.css-checkbox(type='checkbox', name='promo[]', value='mail')
+                          label.css-label(for='promo[email]')
+
+                        .clearfix
+                      .clearfix
+                    .omer_notification_box
+                      .omer_notification_left
+                        p New Arrivals
+                      .omer_notification_right
+                        span
+                          -if(result.new_arrival.length > 0 && (result.new_arrival[0] == 'mail' || result.new_arrival[1] == 'mail'))
+                              input#radio8.css-checkbox(type='checkbox', name='arrival[]', value='mail',checked="checked")
+                          -else
+                              input#radio8.css-checkbox(type='checkbox', name='arrival[]', value='mail')
+                          label.css-label(for='arrival[email]')
+
+                        .clearfix
+                      .clearfix
+                    .btn-btm
+                        button#profile_up_Btn(type='submit') UPDATE
