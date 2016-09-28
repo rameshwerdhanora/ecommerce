@@ -280,8 +280,7 @@ exports.updateIntoCart = (req,res) => {
 
     Cart.find({user_id:req.params.userId},function(error,fetchAllProductsBrands)
     {
-         
-        if(fetchAllProductsBrands)
+        if(fetchAllProductsBrands.length > 0)
         {
             var finalBrandArr   = new Array();
             var brandArr        = new Array();
@@ -300,7 +299,6 @@ exports.updateIntoCart = (req,res) => {
 
             Brand.find({_id:{$in:uniqueArrayForBrandId}},function(error,fetchAllBrandDetails)
             {
-                 
                 if(fetchAllBrandDetails)
                 {
                     async.eachSeries(fetchAllBrandDetails, function(BrandId, callback)
@@ -321,23 +319,50 @@ exports.updateIntoCart = (req,res) => {
                                         for (var tq = 0; tq < listOfOtherData.length; tq++) 
                                         {   
                                             sumQuantity += parseInt(listOfOtherData[tq].quantity);
-                                            
                                         }
 
                                         brandObj.totalQuantity = sumQuantity;
+                                        var discount = 0;
+                                        var finaldiscount = 0;
 
                                         var sumPrice = 0;
                                         async.eachSeries(listOfOtherData, function(ProductId, callback)
                                         {   
                                             Product.findOne({_id:ProductId.product_id},function(error,fetchProductPrice)
                                             {
+                                                if(ProductId.appliedcoupon == 'yes')
+                                                {
+                                                    if((fetchProductPrice.price != '') && (fetchProductPrice.dis_name != ''))
+                                                    {
+                                                       if(fetchProductPrice.dis_type == 'percentage')
+                                                        {
+                                                            discount = (fetchProductPrice.price  * ProductId.quantity) / 100 * fetchProductPrice.dis_amount;
+                                                        }
+                                                        else 
+                                                        {   
+                                                            discount = fetchProductPrice.dis_amount * ProductId.quantity;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        discount = '';
+                                                    }
+                                                }
+                                                else 
+                                                {
+                                                    discount = '';
+                                                }
+
+                                                finaldiscount += discount;
                                                 sumPrice += parseInt(fetchProductPrice.price) * parseInt(ProductId.quantity);
                                                 callback(err);
                                             });
                                         },
                                         function(err)
-                                        {
-                                           brandObj.finalPrice = sumPrice;
+                                        { 
+                                           brandObj.finalPrice          = sumPrice;
+                                           brandObj.finaldiscount       = finaldiscount;
+                                           brandObj.priceafterdiscount  = sumPrice - finaldiscount;
                                            //console.log(brandObj);
                                            callback(err);
                                         });
@@ -509,7 +534,7 @@ exports.updateIntoCart = (req,res) => {
         }
         else 
         {
-            return res.json({"status":'error',"msg":'You have not added any product.'});
+            return res.json({"status":'success',"msg":'Your Cart is empty yet.'});
         }
 
     });
@@ -533,6 +558,9 @@ exports.showCartAccBrand = (req,res) => {
                 var totalPrice = 0; 
                 var subTotal = 0;
                 var priceTotalObj = {}; 
+                var discount = 0;
+                var finaldiscount = 0;
+                var finalPriceWithDis = 0;
                 async.eachSeries(fetchAllProductsOfBrand, function(CproductRes, callback)
                 {
                     pArr = {}; 
@@ -557,6 +585,39 @@ exports.showCartAccBrand = (req,res) => {
                                         pArr.realprice = pres.price;
                                         pArr.price = pres.price * CproductRes.quantity;
                                         totalPrice += parseInt(pres.price) * CproductRes.quantity;
+
+                                        if(CproductRes.appliedcoupon == 'yes')
+                                        {
+                                            if((pres.price != '') && (pres.dis_name != ''))
+                                            {
+                                                if(pres.dis_type == 'percentage')
+                                                {
+                                                    discount = (pres.price  * CproductRes.quantity) / 100 * pres.dis_amount;
+                                                    pArr.dis_type = '%';
+                                                    pArr.dis_rate = pres.dis_amount;
+                                                }
+                                                else 
+                                                {   
+                                                    discount = pres.dis_amount * CproductRes.quantity;
+                                                    pArr.dis_type = 'flat';
+                                                    pArr.dis_rate = pres.dis_amount;
+                                                }
+                                            }
+                                            else 
+                                            {
+                                                discount = '';
+                                                pArr.dis_type = '';
+                                                pArr.dis_rate = 0;
+                                            }
+                                        }
+                                        else 
+                                        {
+                                            discount = '';
+                                            pArr.dis_type = '';
+                                            pArr.dis_rate = 0;
+                                        }
+                                        pArr.discountprice = discount;
+                                        finaldiscount += discount;
                                     }
                                         
                                         callback(err);
@@ -614,7 +675,8 @@ exports.showCartAccBrand = (req,res) => {
                         ],
                         function(err)
                         {
-                            subTotal        += parseInt(totalPrice);
+                            subTotal            += parseInt(totalPrice);
+                            finalPriceWithDis   = finaldiscount;
                             //pArr.subTotal   = parseInt(totalPrice);
                             tempCartProduct.push(pArr);
                             callback(err); 
@@ -629,8 +691,13 @@ exports.showCartAccBrand = (req,res) => {
                     priceTotalObj.ship_code     = req.body.shipping_array[req.body.index].Code;
                     priceTotalObj.servicename   = req.body.shipping_array[req.body.index].serviceName;
                     priceTotalObj.totalcharges  = parseInt(req.body.shipping_array[req.body.index].TotalCharges);
+                    priceTotalObj.totaldiscount = finalPriceWithDis;
+                    priceTotalObj.totalprice    = subTotal + parseInt(priceTotalObj.tax) + parseInt(priceTotalObj.totalcharges);
+
+                    
                     //priceTotalObj.totalcharges  = '6.95'
-                    priceTotalObj.finalTotal    = subTotal + parseInt(priceTotalObj.tax) + parseInt(priceTotalObj.totalcharges);
+                    priceTotalObj.finalTotal    = subTotal + parseInt(priceTotalObj.tax) + parseInt(priceTotalObj.totalcharges) - finalPriceWithDis;
+
                      
 
                     return res.json({"status":'success',"msg":'List of all products of selected brand.',tempCartProduct:tempCartProduct,shipping_array:req.body.shipping_array,priceTotalObj:priceTotalObj});
@@ -682,9 +749,11 @@ exports.finalCheckoutDisplay = (req,res) => {
                     if(fetchAllBrandDetails)
                     {
                         var finalPrice = 0;
-                        var finalquantity = 0;
+                        var finalquantity = 0; 
                         var index = 0;
                         var TotalShippingCharges = 0;
+                        var finalDiscount = 0;
+
                         async.eachSeries(fetchAllBrandDetails, function(BrandId, callback)
                         {
                             //var req.body.shipping_array[index] = []; 
@@ -713,17 +782,49 @@ exports.finalCheckoutDisplay = (req,res) => {
                                             brandObj.totalQuantity = sumQuantity;
 
                                             var sumPrice = 0;
+                                            var discount = 0;
+                                            var finaldiscount = 0;
+
                                             async.eachSeries(listOfOtherData, function(ProductId, callback)
                                             {   
                                                 Product.findOne({_id:ProductId.product_id},function(error,fetchProductPrice)
                                                 {
+                                                    if(ProductId.appliedcoupon == 'yes')
+                                                    {
+                                                        if((fetchProductPrice.price != '') && (fetchProductPrice.dis_name != ''))
+                                                        {
+                                                            if(fetchProductPrice.dis_type == 'percentage')
+                                                            {
+                                                                discount = (fetchProductPrice.price  * ProductId.quantity) / 100 * fetchProductPrice.dis_amount;
+                                                            }
+                                                            else 
+                                                            {   
+                                                                discount = fetchProductPrice.dis_amount * ProductId.quantity;
+                                                            }
+                                                             
+                                                        }
+                                                        else 
+                                                        {
+                                                            discount = '';
+                                                        }
+                                                    }
+                                                    else 
+                                                    {
+                                                        discount = '';
+                                                    }
+                                                    
+                                                    finaldiscount += discount;
+                                                    
                                                     sumPrice += parseInt(fetchProductPrice.price) * parseInt(ProductId.quantity);
                                                     callback(err);
                                                 });
                                             },
                                             function(err)
                                             {
-                                                brandObj.finalPrice = sumPrice;
+                                                //console.log(finaldiscount); 
+                                                brandObj.finalPrice          = sumPrice;
+                                                brandObj.finaldiscount       = finaldiscount;
+                                                brandObj.priceafterdiscount  = sumPrice - finaldiscount;
                                                 callback(err);
                                             });
                                             
@@ -732,6 +833,7 @@ exports.finalCheckoutDisplay = (req,res) => {
                                 ],
                                 function(err)
                                 {
+                                    finalDiscount += parseFloat(brandObj.finaldiscount) ;
                                     finalPrice += brandObj.finalPrice;
                                     finalquantity += brandObj.totalQuantity;
                                     TotalShippingCharges +=  brandObj.totalcharges;
@@ -743,8 +845,8 @@ exports.finalCheckoutDisplay = (req,res) => {
                         },
                         function(err){
                             var tax = '10';
-                            var totalCartPrice = parseInt(finalPrice) + parseInt(tax) + parseInt(TotalShippingCharges);
-                            return res.json({"status":'success',"msg":'Found your cart data.',finalOrder:finalBrandArr,subTotal:finalPrice,tax:tax,shipping_charge:TotalShippingCharges,totalCartPrice:totalCartPrice,finalquantity:finalquantity,shipping_array:req.body.shipping_array});
+                            var totalCartPrice = parseInt(finalPrice) + parseInt(tax) + parseInt(TotalShippingCharges) - finalDiscount;
+                            return res.json({"status":'success',"msg":'Found your cart data.',finalOrder:finalBrandArr,subTotal:finalPrice,tax:tax,shipping_charge:TotalShippingCharges,totalCartPrice:totalCartPrice,finalquantity:finalquantity,shipping_array:req.body.shipping_array,finalDiscount:finalDiscount});
                         });
                     }
                     else 
