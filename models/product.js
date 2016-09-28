@@ -20,7 +20,8 @@ const productSchema = new mongoose.Schema({
 	updated : String,
 	dis_name : String,
 	dis_type : String,
-	dis_amount : String
+	dis_amount : String,
+        shop_id:String // This is for shop id
         
 });
 

@@ -288,6 +288,8 @@ exports.saveProduct = (req, res) => {
             productIns.dis_name = req.body.add_dis_name;
             productIns.dis_type = req.body.add_dis_type;
             productIns.dis_amount = req.body.add_dis_amount;
+            productIns.shop_id = req.user.shop_id;
+            
 
 
             productIns.save(function(err){

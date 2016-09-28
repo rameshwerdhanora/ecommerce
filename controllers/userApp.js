@@ -253,7 +253,7 @@ exports.userSave = (req, res) => {
                 if(error === null){
                     userIns.shop_id = userIns._id;
                     userIns.save(function(error){});
-                    //-- save user permissions
+                    //-- save user permissions 
                     if(req.body.permissions){
                         for(var i=0; i<req.body.permissions.length; i++){
                             var userPermission = new UserPermission();

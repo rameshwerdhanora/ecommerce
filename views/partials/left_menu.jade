@@ -113,7 +113,7 @@
                 a(href='/user/list') Manage Users
               li
                 a(href='/user/add') Add User     
-              
+        -if(user.role_id == 1 || user.role_id == 2){
         li(class=(left_activeClass == 6)?'active':'')
           a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
             img(src='/images/left-icon6.png', alt='icon')
@@ -130,6 +130,7 @@
               a(href='/emailtemplate/list') Email templates
             li
               a(href='/emailtemplate/add') ADD new template
+        -}
           
     .follow-us-row
       h4  Follow us
