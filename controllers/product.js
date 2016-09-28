@@ -174,70 +174,96 @@ exports.saveProduct = (req, res) => {
         if(err){
             return res.end("Error uploading file.");
         }
-        var fineSku = req.body.sku.replace(' ','-');
-        var productIns = new Product();
-        productIns.name  = req.body.name;
-        productIns.blurb  = req.body.blurb;
-        productIns.description = req.body.blurb;
-        productIns.sku  = fineSku;
-        productIns.gender = req.body.gender;
-        productIns.category_id  = req.body.category_id;
-        productIns.sub_category_id = req.body.sub_category_id;
-        productIns.brand_id = req.body.brand_id;
-        productIns.is_featured = req.body.is_featured;
-        productIns.price  = req.body.price;
-        productIns.color  = req.body.color;
-        productIns.productview = '0';
-        //productIns.attribute = req.body.selectedAttr;
-        productIns.attribute = req.body.size;
-        productIns.user_id = req.user._id; 
-        productIns.created = Date.now();
-        productIns.update = Date.now();
-        productIns.users_id = 1;
-        productIns.dis_name = req.body.add_dis_name;
-        productIns.dis_type = req.body.add_dis_type;
-        productIns.dis_amount = req.body.add_dis_amount;
         
+        /*const readChunk = require('read-chunk'); // npm install read-chunk 
+        const fileType = require('file-type');
+        const buffer = readChunk.sync(req.body.product_image, 0, 262);
         
-        productIns.save(function(err){
-            if (err){
-                res.send({status:'error',error:err});
-            }else {
-                //var finePath = req.files[0].path.replace('public/','');
-                var productImageIns = new ProductImage();
-                productImageIns.product_id  = productIns._id;
-                productImageIns.thumb_image_1 	= req.files[0].path.replace('public/','');;
-                productImageIns.large_image_1 	= req.files[0].path.replace('public/','');;
-                productImageIns.image_name_1 	= req.files[0].filename;
-                productImageIns.thumb_image_2 	= req.files[1].path.replace('public/','');;
-                productImageIns.large_image_2 	= req.files[1].path.replace('public/','');;
-                productImageIns.image_name_2 	= req.files[1].filename;
-                productImageIns.thumb_image_3 	= req.files[2].path.replace('public/','');;
-                productImageIns.large_image_3 	= req.files[2].path.replace('public/','');;
-                productImageIns.image_name_3 	= req.files[2].filename;
-                productImageIns.thumb_image_4 	= req.files[3].path.replace('public/','');;
-                productImageIns.large_image_4 	= req.files[3].path.replace('public/','');;
-                productImageIns.image_name_4 	= req.files[3].filename;
-                productImageIns.save(function(err){
-                    if (err){
-                        //res.send({status:'error',error:err});
-                        req.flash('errors', ['Something went wronge']);
-                        res.redirect('/product/list');
-                    }else {
-                         hashtagIdArr = req.body.hash_tag;
-                         hashtagIdArr.forEach(function(hashtagId) {
-                            var productsHashtagIns = new ProductsHashtag();
-                             productsHashtagIns.product_id = productIns._id;
-                             productsHashtagIns.hashtag_id = hashtagId;
-                             productsHashtagIns.save();
-                        });
-                        
-                         req.flash('success', ['Product added successfully.']);
-                         res.redirect('/product/list');
-                    }
-                });
+        console.log(fileType(buffer));*/
+        
+        req.assert('name', 'Product name is required').notEmpty();    
+        req.assert('blurb', 'Product blurb is required').notEmpty();    
+        req.assert('sku', 'Sku ID is required').notEmpty();
+        req.assert('gender', 'Gender is required').notEmpty();
+        req.assert('category_id', 'Category is required').notEmpty();
+        req.assert('price', 'Price is required').notEmpty();
+        req.assert('color', 'Color is required').notEmpty();
+        var errors = req.validationErrors();  
+        if(!errors){ 
+            var fineSku = req.body.sku.replace(' ','-');
+            var productIns = new Product();
+            productIns.name  = req.body.name;
+            productIns.blurb  = req.body.blurb;
+            productIns.description = req.body.blurb;
+            productIns.sku  = fineSku;
+            productIns.gender = req.body.gender;
+            productIns.category_id  = req.body.category_id;
+            productIns.sub_category_id = req.body.sub_category_id;
+            productIns.brand_id = req.body.brand_id;
+            productIns.is_featured = req.body.is_featured;
+            productIns.price  = req.body.price;
+            productIns.color  = req.body.color;
+            productIns.productview = '0';
+            //productIns.attribute = req.body.selectedAttr;
+            productIns.attribute = req.body.size;
+            productIns.user_id = req.user._id; 
+            productIns.created = Date.now();
+            productIns.update = Date.now();
+            productIns.users_id = 1;
+            productIns.dis_name = req.body.add_dis_name;
+            productIns.dis_type = req.body.add_dis_type;
+            productIns.dis_amount = req.body.add_dis_amount;
+
+
+            productIns.save(function(err){
+                if (err){
+                    res.send({status:'error',error:err});
+                }else {
+                    //var finePath = req.files[0].path.replace('public/','');
+                    var productImageIns = new ProductImage();
+                    productImageIns.product_id  = productIns._id;
+                    productImageIns.thumb_image_1 	= req.files[0].path.replace('public/','');;
+                    productImageIns.large_image_1 	= req.files[0].path.replace('public/','');;
+                    productImageIns.image_name_1 	= req.files[0].filename;
+                    productImageIns.thumb_image_2 	= req.files[1].path.replace('public/','');;
+                    productImageIns.large_image_2 	= req.files[1].path.replace('public/','');;
+                    productImageIns.image_name_2 	= req.files[1].filename;
+                    productImageIns.thumb_image_3 	= req.files[2].path.replace('public/','');;
+                    productImageIns.large_image_3 	= req.files[2].path.replace('public/','');;
+                    productImageIns.image_name_3 	= req.files[2].filename;
+                    productImageIns.thumb_image_4 	= req.files[3].path.replace('public/','');;
+                    productImageIns.large_image_4 	= req.files[3].path.replace('public/','');;
+                    productImageIns.image_name_4 	= req.files[3].filename;
+                    productImageIns.save(function(err){
+                        if (err){
+                            //res.send({status:'error',error:err});
+                            req.flash('errors', ['Something went wronge']);
+                            res.redirect('/product/list');
+                        }else {
+                             hashtagIdArr = req.body.hash_tag;
+                                if(hashtagIdArr){
+                                   hashtagIdArr.forEach(function(hashtagId) {
+                                     var productsHashtagIns = new ProductsHashtag();
+                                     productsHashtagIns.product_id = productIns._id;
+                                     productsHashtagIns.hashtag_id = hashtagId;
+                                     productsHashtagIns.save();
+                                  });
+                             }
+                             req.flash('success', ['Product added successfully.']);
+                             res.redirect('/product/list');
+                        }
+                    });
+                }
+            });
+        }else{
+            var er = new Array();
+            for(var i = 0;i<errors.length;i++){
+                er.push(errors[i].msg);
             }
-        });
+            req.flash('errors',er);
+            res.redirect('/product/list');
+        }
+        
     });
 }; 
 
@@ -247,64 +273,82 @@ exports.updateProduct = (req, res) => {
         if(err){
                 return res.end("Error uploading file.");
         }
-        updateFineSku = req.body.sku.replace(' ','-');
-        updateProductData = {
-            'name'			: req.body.name,
-            'blurb'                 : req.body.blurb,
-            'sku'  			: updateFineSku,
-            'description' 		: req.body.description,
-            'category_id' 		: req.body.category_id,
-            'sub_category_id'	: req.body.sub_category_id,
-            'brand_id' 		: req.body.brand_id,
-            'is_featured'		: req.body.is_featured,
-            'price' 		: req.body.price,
-            'user_id' 		: req.user.productId,
-            'update' 		: Date.now(),
-            'attribute'         : req.body.size,
-            'color'             : req.body.color,
-            'gender'            : req.body.gender,
-            'dis_name'          : req.body.edit_dis_name,
-            'dis_type'          : req.body.edit_dis_type,
-            'dis_amount'        : req.body.edit_dis_amount
-        };
+ 
+        req.assert('name', 'Product name is required').notEmpty();    
+        req.assert('blurb', 'Product blurb is required').notEmpty();    
+        req.assert('sku', 'Sku ID is required').notEmpty();
+        req.assert('gender', 'Gender is required').notEmpty();
+        req.assert('category_id', 'Category is required').notEmpty();
+        req.assert('price', 'Price is required').notEmpty();
+        req.assert('color', 'Color is required').notEmpty();
+        var errors = req.validationErrors();  
+        if(!errors){ 
+            updateFineSku = req.body.sku.replace(' ','-');
+            updateProductData = {
+                'name'			: req.body.name,
+                'blurb'                 : req.body.blurb,
+                'sku'  			: updateFineSku,
+                'description' 		: req.body.description,
+                'category_id' 		: req.body.category_id,
+                'sub_category_id'	: req.body.sub_category_id,
+                'brand_id' 		: req.body.brand_id,
+                'is_featured'		: req.body.is_featured,
+                'price' 		: req.body.price,
+                'user_id' 		: req.user.productId,
+                'update' 		: Date.now(),
+                'attribute'         : req.body.size,
+                'color'             : req.body.color,
+                'gender'            : req.body.gender,
+                'dis_name'          : req.body.edit_dis_name,
+                'dis_type'          : req.body.edit_dis_type,
+                'dis_amount'        : req.body.edit_dis_amount
+            };
 
-        Product.findByIdAndUpdate(req.body.productId,updateProductData, function(error, updateProductRes){
-            if(req.file){
-                var finePath 			= req.file.path.replace('public/','');
-                var updateProductImage 	= {
-                    'product_id'	: req.body.productId,
-                    'thumb_image'	: finePath,
-                    'large_image'	: finePath,
-                    'image_name'	: req.file.filename 
+            Product.findByIdAndUpdate(req.body.productId,updateProductData, function(error, updateProductRes){
+                if(req.file){
+                    var finePath 			= req.file.path.replace('public/','');
+                    var updateProductImage 	= {
+                        'product_id'	: req.body.productId,
+                        'thumb_image'	: finePath,
+                        'large_image'	: finePath,
+                        'image_name'	: req.file.filename 
+                    }
+                    ProductImage.update(req.body.productId,updateProductImage, function(error, updateProductImageRes){
+                        if(updateProductImageRes){
+                                req.flash('success', ['Update product images successfully.']);
+                        }else{
+                                req.flash('success', ['Update product details successfully.']);
+                                res.redirect('/product/list');
+                        }
+                    });
+                }else{
+                   ProductsHashtag.remove({product_id:req.body.productId}, function(error, removeHashtag){
+                     if(error){
+                        res.send({status:'error',msg:error});
+                     }else{
+                        hashtagIdArr = req.body.hash_tag;
+                        if(hashtagIdArr){
+                            hashtagIdArr.forEach(function(hashtagId) {
+                               var productsHashtagIns = new ProductsHashtag();
+                               productsHashtagIns.product_id = req.body.productId;
+                               productsHashtagIns.hashtag_id = hashtagId;
+                               productsHashtagIns.save();
+                            });
+                        }
+                     }
+                  });
+                    req.flash('success', ['Update product details successfully.']);
+                    res.redirect('/product/list');
                 }
-                ProductImage.update(req.body.productId,updateProductImage, function(error, updateProductImageRes){
-                    if(updateProductImageRes){
-                            req.flash('success', ['Update product images successfully.']);
-                    }else{
-                            req.flash('success', ['Update product details successfully.']);
-                            res.redirect('/product/list');
-                    }
-                });
-            }else{
-               ProductsHashtag.remove({product_id:req.body.productId}, function(error, removeHashtag){
-                 if(error){
-                    res.send({status:'error',msg:error});
-                 }else{
-                    hashtagIdArr = req.body.hash_tag;
-                    if(hashtagIdArr){
-                        hashtagIdArr.forEach(function(hashtagId) {
-                           var productsHashtagIns = new ProductsHashtag();
-                           productsHashtagIns.product_id = req.body.productId;
-                           productsHashtagIns.hashtag_id = hashtagId;
-                           productsHashtagIns.save();
-                        });
-                    }
-                 }
-              });
-                req.flash('success', ['Update product details successfully.']);
-                res.redirect('/product/list');
+            });
+        }else{
+            var er = new Array();
+            for(var i = 0;i<errors.length;i++){
+                er.push(errors[i].msg);
             }
-        });
+            req.flash('errors',er);
+            res.redirect('/product/list');
+        }
     });
 };
 
@@ -369,9 +413,12 @@ exports.getAttrib = (req,res)=>{
             }
             Attribute.find({_id:{$in:sizeAr}},function(error,attributRes){
                 var attribAr = new Array();
-                for(var i=0;i < attributRes.length;i++){
+                if(attributRes){
+                  for(var i=0;i < attributRes.length;i++){
                     attribAr.push(attributRes[i]._id);
+                  }
                 }
+                
                 AttributeOption.find({attribute_id:{$in:attribAr}},function(error,attribOptionRes){
                     var mainResult = new Array();
                     var result = {};
@@ -379,22 +426,26 @@ exports.getAttrib = (req,res)=>{
                         result.size = sizeRes[i].size_name;
                         result.attributes = new Array();
                         for(j=0;j < sizeRes[i].listofattrmap.length;j++){
-                            for(var k=0;k<attributRes.length;k++){
-                                if(attributRes[k]._id == sizeRes[i].listofattrmap[j]){
-                                    var rs1 = {};
-                                    rs1.attribute = attributRes[k].name;
-                                    rs1.attributeId = attributRes[k]._id;
-                                    rs1.options = new Array();
-                                    for(var l=0;l < attribOptionRes.length; l++){
-                                        if(attributRes[k]._id  == attribOptionRes[l].attribute_id){
-                                            var tempOption = {};
-                                            tempOption.id= attribOptionRes[l]._id;
-                                            tempOption.value= attribOptionRes[l].value;
-                                            rs1.options.push(tempOption);
+                            if(attributRes){
+                                for(var k=0;k<attributRes.length;k++){
+                                    if(attributRes[k]._id == sizeRes[i].listofattrmap[j]){
+                                        var rs1 = {};
+                                        rs1.attribute = attributRes[k].name;
+                                        rs1.attributeId = attributRes[k]._id;
+                                        rs1.options = new Array();
+                                        if(attribOptionRes){
+                                           for(var l=0;l < attribOptionRes.length; l++){
+                                                if(attributRes[k]._id  == attribOptionRes[l].attribute_id){
+                                                    var tempOption = {};
+                                                    tempOption.id= attribOptionRes[l]._id;
+                                                    tempOption.value= attribOptionRes[l].value;
+                                                    rs1.options.push(tempOption);
+                                                }
+                                           }  
                                         }
+                                        console.log(rs1);
+                                        result.attributes.push(rs1);
                                     }
-                                    console.log(rs1);
-                                    result.attributes.push(rs1);
                                 }
                             }
                         }

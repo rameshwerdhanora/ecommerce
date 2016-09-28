@@ -8,5 +8,5 @@ module.exports = Object.freeze({
     FACEBOOKLOGIN : 'facebook',
     RECORDS_PER_PAGE: 10,
     ORDERNUMBERLEN:9,
-    EMAILTEMPLATETYPE: [{value:'change_password',lable:'Change Password'},{value:'forget_password',lable:'Forget Password'},{value:'new_order',lable:'New Order'},{value:'registration',lable:'Registration'},{value:'rackingnumber',lable:'Trackingnumber'}]
+    EMAILTEMPLATETYPE: [{value:'change_password',lable:'Change Password'},{value:'forget_password',lable:'Forget Password'},{value:'new_order',lable:'New Order'},{value:'new_shipment',lable:'New Shipment'},{value:'registration',lable:'Registration'},{value:'new_account_confirmation_key',lable:'New Account Confirmation Key'}]
 });

@@ -272,7 +272,8 @@ exports.userSave = (req, res) => {
                     // Get the get template content for 'registration' and call the helper to send the email         
                     EmailTemplate.findOne({template_type:'registration'},function(error,getTemplateDetail){
                         var registerTemplateContent = getTemplateDetail.content;
-                        dynamicTemplateContent = registerTemplateContent.replace(/{first_name}/gi, userIns.first_name).replace(/{last_name}/gi, userIns.last_name);  
+                        //dynamicTemplateContent = registerTemplateContent.replace(/{first_name}/gi, userIns.first_name).replace(/{last_name}/gi, userIns.last_name);
+                        dynamicTemplateContent = registerTemplateContent.replace(/{customer_name}/gi, userIns.first_name);
                             if(dynamicTemplateContent)
                             {
                                CommonHelper.emailTemplate(getTemplateDetail.subject, dynamicTemplateContent, userIns._id);      
