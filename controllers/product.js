@@ -175,6 +175,12 @@ exports.editProduct = (req, res) => {
 /* Save Product */
 exports.saveProduct = (req, res) => {
     
+    // If Super user trying to create product then give deny him
+    if(req.user.role_id == Constants.MASTERROLE && req.params.productId == 'add'){
+        req.flash('errors', ['Super admin can not create product. This feature is only for the Shop user']);
+        return res.redirect('/product/list');
+    }
+    
     uploadProductImage(req,res,function(err){
         if(err){
             return res.end("Error uploading file.");
