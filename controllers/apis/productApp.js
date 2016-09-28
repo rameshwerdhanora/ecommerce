@@ -316,35 +316,36 @@ exports.listofAllItFitsProd = (req, res) => {
 
 
 /**
- * GET /api/product/discount/:productId/:userId/:coupon
+ * POST /api/product/discount
  * Process for apply discount.
  * Use AsyncLoop method for waiting data before fetching value
  */
 
 exports.discountApply = (req, res) => {
 
-  Product.findOne({_id:req.params.productId},function(error,fetchProductCoupon){
-    if(fetchProductCoupon)
-    {
-      var couponCode = req.params.coupon;
-
-      console.log(fetchProductCoupon.dis_name);
-      if(fetchProductCoupon.dis_name === couponCode)
+  if(req.body.device_token !== '')
+  { 
+    Product.findOne({_id:req.body.product_id},function(error,fetchProductCoupon){
+      if(fetchProductCoupon)
       {
-        return res.json({"status":'success',"msg":'You entered correct coupon code.'});
+        var couponCode = req.body.coupon;
+        if(fetchProductCoupon.dis_name === couponCode)
+        {
+          return res.json({"status":'success',"msg":'You entered correct coupon code.'});
+        }
+        else 
+        {
+          return res.json({"status":'error',"msg":'You entered wrong coupon code.'});
+        }
       }
       else 
       {
-        return res.json({"status":'error',"msg":'You entered wrong coupon code.'});
+        return res.json({"status":'error',"msg":'Unable to found this Product.'});
       }
+    });
+  }else{
+        return res.json({"status":'error',"msg":'Device Token is not available.'});
     }
-    else 
-    {
-      return res.json({"status":'error',"msg":'Unable to found this Product.'});
-    }
-  });
-
-
 };
 
 
@@ -1174,13 +1175,13 @@ function fetchingAllSizes(fetchAllSizeAccToCat,callback)
     AttributeOptions.find({_id:{$in:uniqueArrayForAttId}},function(error,listAllValues)
     {
       var AttrOptiAr = new Array();
-
+  
       for(var e=0;e<listAllValues.length;e++)
       {
         if(listAllValues[e].attribute_id != '')
         {
           AttrOptiAr.push(listAllValues[e].attribute_id); 
-
+ 
         }
       }
 
