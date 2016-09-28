@@ -24,7 +24,6 @@ const productSchema = new mongoose.Schema({
         shop_id:String // This is for shop id
         
 });
-
 const Product = mongoose.model('Product', productSchema);
 
 module.exports = Product;
