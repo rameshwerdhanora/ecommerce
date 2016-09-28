@@ -199,10 +199,10 @@ header {
 	line-height: 60px;
 	font-weight: 600;
 }
-.nav-left li.active a {
+/*.nav-left li.active a {
 	background: #fff;
-}
-.nav-left li:hover {
+}*/
+.nav-left li:hover, .nav-left li.active {
 	background: #fff url(../images/nav-arrow.png) no-repeat 95% center;
 	transition: all 0.3s ease-out 0s;
 }
