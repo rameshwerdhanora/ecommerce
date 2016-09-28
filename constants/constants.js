@@ -4,6 +4,7 @@ module.exports = Object.freeze({
     BRANDROLE: '3',
     BOUTIQUEROLE: '4',
     CUSTOMERROLE: '5',
+    SHOP_EMPLOYEE: '6',
     GPLUSLOGIN : 'googleplus',
     FACEBOOKLOGIN : 'facebook',
     RECORDS_PER_PAGE: 10,

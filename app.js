@@ -420,17 +420,26 @@ app.get('/api/privacy/fetchnotificationsetting/:userId',privacyAppController.fet
 app.get('/myprofile/:id', passportConfig.isAuthenticated,  userAppControlleraAdmin.myProfile);
 
 /* Users pages */
-app.get('/user/list', passportConfig.isAuthenticated,  userAppControlleraAdmin.userList);
-app.get('/user/add', passportConfig.isAuthenticated,  userAppControlleraAdmin.userAdd);
-app.post('/user/save', passportConfig.isAuthenticated,  userAppControlleraAdmin.userSave);
-app.get('/user/view/:id', passportConfig.isAuthenticated,  userAppControlleraAdmin.userView);
-app.get('/user/edit/:id', passportConfig.isAuthenticated,  userAppControlleraAdmin.userEdit);
-app.post('/user/update', passportConfig.isAuthenticated,  userAppControlleraAdmin.userUpdate);
-app.get('/user/delete/:userId', passportConfig.isAuthenticated,  userAppControlleraAdmin.userDelete);
-app.get('/user/shipping/:userId', passportConfig.isAuthenticated,  userAppControlleraAdmin.userShipping);
-app.post('/user/shipping/save/:userId', passportConfig.isAuthenticated,  userAppControlleraAdmin.userShippingSave);
-app.get('/user/paymentMethod/:userId', passportConfig.isAuthenticated,  userAppControlleraAdmin.userPaymentMethod);
-app.post('/user/paymentMethod/save/:userId', passportConfig.isAuthenticated,  userAppControlleraAdmin.userPaymentMethodSave);
+
+app.get('/user/shopprofile', passportConfig.isAuthenticated, userAppControlleraAdmin.shopProfile);
+app.post('/user/shopprofileupdate', passportConfig.isAuthenticated, userAppControlleraAdmin.shopPfofileUpdate);
+
+app.get('/user/shop_shippping_detail', passportConfig.isAuthenticated, userAppControlleraAdmin.shopShippingdetail);
+app.post('/user/update_shop_shipping_detail', passportConfig.isAuthenticated, userAppControlleraAdmin.shopShippingUpdate);
+
+
+app.get('/user/list', passportConfig.isAuthenticated, userAppControlleraAdmin.userList);
+app.get('/user/add',  passportConfig.isAuthenticated,userAppControlleraAdmin.userAdd);
+app.post('/user/save',  passportConfig.isAuthenticated,userAppControlleraAdmin.userSave);
+app.get('/user/view/:id',  passportConfig.isAuthenticated,userAppControlleraAdmin.userView);
+app.get('/user/edit/:id',  passportConfig.isAuthenticated,userAppControlleraAdmin.userEdit);
+app.post('/user/update',passportConfig.isAuthenticated,  userAppControlleraAdmin.userUpdate);
+app.get('/user/delete/:userId', passportConfig.isAuthenticated, userAppControlleraAdmin.userDelete);
+app.get('/user/shipping/:userId', passportConfig.isAuthenticated, userAppControlleraAdmin.userShipping);
+app.post('/user/shipping/save/:userId', passportConfig.isAuthenticated, userAppControlleraAdmin.userShippingSave);
+app.get('/user/paymentMethod/:userId', passportConfig.isAuthenticated, userAppControlleraAdmin.userPaymentMethod);
+app.post('/user/paymentMethod/save/:userId', passportConfig.isAuthenticated, userAppControlleraAdmin.userPaymentMethodSave);
+
 //app.get('/user/order/:userId',  userAppControlleraAdmin.userOrder);
 app.get('/user/reviews/:userId', passportConfig.isAuthenticated,  userAppControlleraAdmin.userProductReview);
 app.get('/user/account/:userId', passportConfig.isAuthenticated,  userAppControlleraAdmin.userAccount);

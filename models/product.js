@@ -21,7 +21,10 @@ const productSchema = new mongoose.Schema({
 	dis_name : String,
 	dis_type : String,
 	dis_amount : String,
-        shop_id:String // This is for shop id
+        shop_id:String, // This is for shop id
+        
+        address:String,
+        
         
 });
 const Product = mongoose.model('Product', productSchema);

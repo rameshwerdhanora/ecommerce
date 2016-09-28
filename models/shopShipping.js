@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
 const shopShippingSchema = new mongoose.Schema({
-	user_id : String,
+	shop_id : String,
 	address : String,
 	city : String,
-	postal_code : String,
+	zip_code : String,
 	state : String,
 	country : String,
 	shipping_account : String,

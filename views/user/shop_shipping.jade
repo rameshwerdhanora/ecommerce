@@ -1,0 +1,55 @@
+extends ../layout
+block content
+  .col-sm-9.midlle-bar
+    .large-title-row
+      img(src='/images/title-icon5.png', alt='icon')
+      |  MY SHOP
+      
+    .customer-box.clearfix
+      .customer-cl
+        include ../partials/shop_left_menu
+      .profile-cl
+        .profile-top-row
+          h2 SHIPPING
+        .profile-form-box
+          form(action='/user/update_shop_shipping_detail', method='post')
+            .shop-acc-box.shpping-box
+              h4 SHIPPING FROM
+              .profile-frm-row
+                .profile-frm-cl1  Address
+                .profile-frm-cl2
+                  input(name='address', type='text', value='#{availableShopShipping.address ? availableShopShipping.address :""}',required)
+              .profile-frm-row
+                .profile-frm-cl1 City 
+                .profile-frm-cl2
+                  input(name='city', type='text', value='#{availableShopShipping.city ? availableShopShipping.city :""}',required)
+              .profile-frm-row
+                .profile-frm-cl1 Zip Code
+                .profile-frm-cl2
+                  input(name='zip_code', type='text', value='#{availableShopShipping.zip_code ? availableShopShipping.zip_code :""}',required)
+              .profile-frm-row
+                .profile-frm-cl1 State
+                .profile-frm-cl2
+                  input(name='state', type='text', value='#{availableShopShipping.state ? availableShopShipping.state :""}',required)
+              .profile-frm-row
+                .profile-frm-cl1 Country
+                .profile-frm-cl2
+                  input(name='country', type='text', value='#{availableShopShipping.country ? availableShopShipping.country :""}',required)
+            .shop-acc-box.shpping-box
+              h4 SHIPPING ACCOUNT
+              .profile-frm-row
+                .profile-frm-cl1 UPS Account
+                .profile-frm-cl2
+                  input(name='shipping_account', type='text', value='#{availableShopShipping.shipping_account ? availableShopShipping.shipping_account :""}',required)
+              .profile-frm-row
+                .profile-frm-cl1  Username
+                .profile-frm-cl2
+                  input(name='shipping_username', type='text', value='#{availableShopShipping.shipping_username ? availableShopShipping.shipping_username :""}',required)
+              .profile-frm-row
+                .profile-frm-cl1  Password
+                .profile-frm-cl2
+                  input(name='shipping_password', type='password', value='#{availableShopShipping.shipping_password ? availableShopShipping.shipping_password :""}',required)
+              .profile-frm-row
+                .profile-frm-cl1 
+                .profile-frm-cl2  
+                  button(type='submit') SAVE  

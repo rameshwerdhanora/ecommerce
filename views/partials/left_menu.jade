@@ -93,19 +93,24 @@
               li
                 span.sub-title MY SHOP
               li
-                a(href='/user/view/#{user.shop_id}') Shop Profile
+                a(href='/user/shopprofile')
+                    -if(user.role_id == 3 || user.role_id == 4){
+                        | Shop Profile
+                    -}else{
+                        | My profile
+                    -}
               li
-                a(href='/user/shipping/#{user.shop_id}') Shipping
+                a(href='/user/shop_shippping_detail') Shipping
               li
-                a(href='/user/paymentMethod/#{user.shop_id}') Payment Methods    
+                a(href='/user/paymentMethod') Payment Methods    
               li
-                a(href='/user/reviews/#{user.shop_id}') Product Reviews  
+                a(href='/user/reviews') Product Reviews  
               li
-                a(href='/user/account/#{user.shop_id}') Account
+                a(href='/user/account') Account
               li
-                a(href='/user/linkedAccount/#{user.shop_id}') Linked Accounts
+                a(href='/user/linkedAccount') Linked Accounts
               li
-                a(href='/user/notifications/#{user.shop_id}') Notifications     
+                a(href='/user/notifications') Notifications     
 
               li
                 span.sub-title USERS

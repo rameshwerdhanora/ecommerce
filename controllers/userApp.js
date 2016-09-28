@@ -10,6 +10,7 @@ const EmailTemplate = require('../models/emailTemplate');
 const CommonHelper = require('../helpers/commonHelper');
 const Order           = require('../models/orders');
 const OrderDetails    = require('../models/orderDetails');
+const Constants 		= require('../constants/constants');
 
 /**
  * GET /customer/list
@@ -188,19 +189,13 @@ exports.customerAddressSave = (req, res) => {
  * User List - here we need to get both users and customers in seprate columns
  */
 exports.userList = (req, res) => {
-    
-	//-- get customers
-	User.find({role_id:5},function(error,getCustomers){
-		User.find({role_id:{$ne : 5}},function(error,getUsers){
-
-		// if(getCustomers)
-		// {
-			//console.log(getUsers);
-			res.render('user/user_list', { title: 'User List',getCustomers:getCustomers,getUsers:getUsers,left_activeClass:5});
-		//}
-		});
-	});	
+        User.find({role_id:5},function(error,getCustomers){
+            User.find({role_id:{$ne : 5}},function(error,getUsers){
+                res.render('user/user_list', { title: 'User List',getCustomers:getCustomers,getUsers:getUsers,left_activeClass:5});
+            });
+        });	
 };
+
 
 
 /**
@@ -221,17 +216,31 @@ exports.userAdd = (req, res) => {
  * POST /signup/saveuser
  * Save users .
  */
+
 exports.userSave = (req, res) => {
-    User.findOne({ email_id: req.body.email_id }, function(err, existingEmail){
+    User.findOne({$or: [ { email_id: req.body.email_id }, { user_name: req.body.user_name}] }, function(err, existingEmail){
         if(existingEmail){
-            req.flash('errors', ['Email address already exists.']);
-            return res.render('user/user_add',{data: req.body});
+            if(existingEmail.email_id == req.body.email_id){
+                req.flash('errors', ['Email address already exists.']);
+            }else{
+                req.flash('errors', ['Username already exists.']);
+            }
+            
+            Permission.find({},function(error,getPermissions){
+		if(getPermissions){
+                    return res.render('user/user_add',{title: 'New User', data: req.body,getPermissions:getPermissions,left_activeClass:5});
+		}else{
+                    var tmp = new Array();
+                    return res.render('user/user_add',{title: 'New User', data: req.body,getPermissions:tmp,left_activeClass:5});
+                }
+            });
         }else{
             //console.log(req.body);
             var userIns        		= new User();
-            userIns.role_id    		= req.body.role_id;
+            
+            
             userIns.shop_name   	= req.body.shop_name;
-            userIns.user_name   	= '';
+            userIns.user_name   	= req.body.user_name;
             userIns.password    	= req.body.password;
             userIns.email_id       	= req.body.email_id;
             userIns.first_name  	= req.body.first_name;
@@ -249,9 +258,25 @@ exports.userSave = (req, res) => {
             userIns.is_deleted   	= false;
             userIns.created        	= Date.now();
             userIns.updated        	= Date.now();
+            
+            userIns.address        	= req.body.address;
+            userIns.city        	= req.body.city;
+            userIns.state        	= req.body.state;
+            userIns.country        	= req.body.country;
+            userIns.zip                 = req.body.zip;
+            userIns.bio                 = req.body.bio;
+            
+            
             userIns.save(function(error){
                 if(error === null){
-                    userIns.shop_id = userIns._id;
+                    if(req.user.role_id == Constants.MASTERROLE || req.user.role_id == Constants.ADMINROLE){
+                        userIns.shop_id = userIns._id;
+                        userIns.role_id = req.body.role_id;
+                    }else{
+                        userIns.role_id = Constants.SHOP_EMPLOYEE;
+                        userIns.shop_id = req.user.shop_id;
+                    }
+                    
                     userIns.save(function(error){});
                     //-- save user permissions 
                     if(req.body.permissions){
@@ -278,7 +303,7 @@ exports.userSave = (req, res) => {
                     if((userIns.contact_no!='') && isNaN(userIns.contact_no)){
                         //CommonHelper.sendSms(req, res, smsContent, userId);
                     }
-                    req.flash('error', 'Your details is successfully stored.');
+                    req.flash('success', 'Your details is successfully stored.');
                     return res.redirect('/user/list');
                 }else{
                     req.flash('error', 'Something wrong!!');
@@ -297,29 +322,39 @@ exports.userView = (req, res) => {
 	User.findOne({_id:req.params.id},function(error,getUserDetails){
 		if(getUserDetails)
 		{
-			//console.log(getUserDetails);
+			console.log(getUserDetails);
 			res.render('user/user_view', { title: 'User View',getUserDetails:getUserDetails,activeClass:1,left_activeClass:5});
 
 		}
 	});	
 };
 
+/*
+ * GET /user/Shopview
+ * user view page.
+*/
+exports.shopProfile = (req, res) => {
+    User.findOne({shop_id:req.user.shop_id},function(error,getUserDetails){
+        if(getUserDetails){
+            res.render('user/shopProfile', { title: 'Shop view',getUserDetails:getUserDetails,activeClass:1,left_activeClass:5});
+        }
+    });	
+};
+
 
 /**
  * GET /user/edit
  * user view page in edit mode.
- */
+ */ 
 exports.userEdit = (req, res) => {
-	User.findOne({_id:req.params.id},function(error,getUserDetails){
-		if(getUserDetails)
-		{
-			res.render('user/customer_edit', { title: 'Customer Edit',getCustomerDetails:getCustomerDetails,activeClass:1,left_activeClass:5});
-
-			//res.render('user/user_edit', { title: 'User Edit',getUserDetails:getUserDetails,activeClass:req.params.activeClass});
-
-		}
-	});	
+    User.findOne({_id:req.params.id},function(error,getUserDetails){
+        if(getUserDetails){
+            res.render('user/customer_edit', { title: 'Customer Edit',getCustomerDetails:getUserDetails,activeClass:1,left_activeClass:5});
+        }
+    });	
 };
+
+
 
 /**
  * POST /user/userUpdate
@@ -782,3 +817,61 @@ exports.order = (req, res) => {
         }
     });
 };
+
+
+/**
+ * POST /user/shopprofileupdate
+ * Update user Information
+*/
+exports.shopPfofileUpdate = (req, res) => {
+    updateData = {
+        //'first_name' 	: req.body.first_name,
+        //'last_name'	: req.body.last_name,
+        'address'	: req.body.address, 
+        'city'          : req.body.city,
+        'state'		: req.body.state,
+        'zip'		: req.body.zip,
+        'country'	: req.body.country,
+        'bio'           : req.body.bio,
+    };
+    if(req.user.role_id == 3 || req.user.role_id == 4){
+        updateData.shop_name = req.body.shop_name;
+    }
+    User.findByIdAndUpdate(req.user._id,updateData, function(error, updateRes){
+        req.flash('success',['Profile updated successfully']);
+        res.redirect('/user/shopprofile');
+    });
+};
+
+exports.shopShippingdetail = (req,res) =>{
+    ShopShipping.findOne({ shop_id: req.user.shop_id}, function(error, shopShippingRes){
+        if(shopShippingRes == null){
+            shopShippingRes = [];
+        }
+        res.render('user/shop_shipping', { title: 'Shop Shipping',activeClass:2,availableShopShipping:shopShippingRes,left_activeClass:5});
+    });
+}
+exports.shopShippingUpdate = (req,res) =>{
+    updateData = {
+        address     : req.body.address,
+        city        :req.body.city,
+        zip_code     :req.body.zip_code,
+        state    	:req.body.state,
+        country    	:req.body.country,
+        shipping_account    : req.body.shipping_account,
+        shipping_username   : req.body.shipping_username,
+        shipping_password   : req.body.shipping_password,
+    };
+
+    ShopShipping.update({shop_id:req.user.shop_id},updateData,{upsert:true}, function(error, updateRes){
+        if (error){
+            req.flash('errors',['Some thing went wronge!']);
+        }else{
+            req.flash('success','Shipping address updated successfully.');
+            
+        }
+        res.redirect('/user/shop_shippping_detail');
+    });
+}
+
+

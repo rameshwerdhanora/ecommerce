@@ -24,31 +24,62 @@ block content
               .profile-frm-row
                 .profile-frm-cl1 Shop Name 
                 .profile-frm-cl2
-                  input(type='text', value='#{data ? data.shop_name :""}', name='shop_name', required)
+                  input(type='text', value='#{data ? data.shop_name :""}', name='shop_name', required='required')
+              .profile-frm-row
+                .profile-frm-cl1 User Name
+                .profile-frm-cl2
+                  input(type='text', value='#{data ? data.user_name :""}', name='user_name', required='required')
               .profile-frm-row
                 .profile-frm-cl1  First Name
                 .profile-frm-cl2
-                  input(type='text', value='#{data ? data.first_name :""}', name='first_name', required)
+                  input(type='text', value='#{data ? data.first_name :""}', name='first_name', required='required')
               .profile-frm-row
                 .profile-frm-cl1 Last Name
                 .profile-frm-cl2
-                  input(type='text', value='#{data ? data.last_name :""}', name='last_name', required)
+                  input(type='text', value='#{data ? data.last_name :""}', name='last_name', required='required')
               .profile-frm-row
                 .profile-frm-cl1 E-mail Address 
                 .profile-frm-cl2
-                  input(type='text', value='#{data ? data.email_id :""}', name='email_id', required)
+                  input(type='text', value='#{data ? data.email_id :""}', name='email_id', required='required')
               .profile-frm-row
                 .profile-frm-cl1 Contact Number 
                 .profile-frm-cl2
-                  input(type='text', value='#{data ? data.contact_no :""}', name='contact_no', required)
+                  input(type='text', value='#{data ? data.contact_no :""}', name='contact_no', required='required')
               .profile-frm-row
                 .profile-frm-cl1 Password
                 .profile-frm-cl2
-                  input(type='password', value='#{data ? data.password :""}', name='password', required)
+                  input(type='password', value='#{data ? data.password :""}', name='password', required='required')
               .profile-frm-row
                 .profile-frm-cl1 Confirm Password 
                 .profile-frm-cl2
-                  input(type='password', value='#{data ? data.password :""}', name='confirm_password', required)
+                  input(type='password', value='#{data ? data.password :""}', name='confirm_password', required='required')
+                  
+              .profile-frm-row
+                .profile-frm-cl1 Address
+                .profile-frm-cl2
+                  input(type='text', value='#{data ? data.address :""}', name='address', required='required')
+              .profile-frm-row
+                .profile-frm-cl1 City
+                .profile-frm-cl2
+                  input(type='text', value='#{data ? data.city :""}', name='city', required='required')
+              .profile-frm-row
+                .profile-frm-cl1 State
+                .profile-frm-cl2
+                  input(type='text', value='#{data ? data.state :""}', name='state', required='required')
+              .profile-frm-row
+                .profile-frm-cl1 Zip code
+                .profile-frm-cl2
+                  input(type='text', value='#{data ? data.zip :""}', name='zip', required='required')
+              .profile-frm-row
+                .profile-frm-cl1 Country
+                .profile-frm-cl2
+                  input(type='text', value='#{data ? data.country :""}', name='country', required='required')
+              .profile-frm-row
+                .profile-frm-cl1 Bio
+                .profile-frm-cl2
+                  textarea.large-in(name='bio') #{data ? data.bio :""}
+                  
+              -if(user.role_id == 1 || user.role_id == 2){
               .profile-frm-row.botique-spc
                 .profile-frm-cl1 Boutique 
                 .profile-frm-cl2
@@ -61,6 +92,7 @@ block content
                 .profile-frm-cl2
                   input#radio2.css-checkbox(type='radio', name='role_id', value='3')
                   label.css-label(for='radio2')
+              -}
             .add-user-cl1.col-sm-6
               h4 PERMISSIONS
               .perms-box
