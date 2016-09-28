@@ -93,7 +93,13 @@ block content
                               a(href='#')
                                 img(src='/#{productImagesArr[fetchAllProduct._id]}')
                        td #{fetchAllProduct.name}
-                       td --
+                       td 
+                        -var fetchAllAttr = fetchAllProduct.attribute;
+                         -if(fetchAllAttr){
+                                -for(var j = 0;j < fetchAllAttr.length; j++){
+                                    | #{attrOptionValuesArr[fetchAllAttr[j]]} &nbsp;&nbsp;
+                                -}  
+                         -}
                        td #{categoryAr[fetchAllProduct.category_id]}
                        td #{subcategoryAr[fetchAllProduct.sub_category_id]}
                        td $#{fetchAllProduct.price}
