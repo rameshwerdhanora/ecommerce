@@ -1,6 +1,7 @@
 extends ../layout
 block content
   .col-sm-9.midlle-bar
+    include ../partials/flash
     .large-title-row
       img(src='/images/title-icon.png', alt='icon')
       |  USERS
@@ -19,13 +20,11 @@ block content
           .profile-form-box
             .add-user-cl1.col-sm-6
               h4 NEW USER
-               if (messages.error && messages.error.length > 0)
-                .message.error
-                  span= messages.error
+               
               .profile-frm-row
                 .profile-frm-cl1 Shop Name 
                 .profile-frm-cl2
-                  input(type='text', value='', name='#{data ? data.shop_name :""}', required)
+                  input(type='text', value='#{data ? data.shop_name :""}', name='shop_name', required)
               .profile-frm-row
                 .profile-frm-cl1  First Name
                 .profile-frm-cl2
@@ -45,11 +44,11 @@ block content
               .profile-frm-row
                 .profile-frm-cl1 Password
                 .profile-frm-cl2
-                  input(type='text', value='#{data ? data.password :""}', name='password', required)
+                  input(type='password', value='#{data ? data.password :""}', name='password', required)
               .profile-frm-row
                 .profile-frm-cl1 Confirm Password 
                 .profile-frm-cl2
-                  input(type='text', value='#{data ? data.password :""}', name='', required)
+                  input(type='password', value='#{data ? data.password :""}', name='confirm_password', required)
               .profile-frm-row.botique-spc
                 .profile-frm-cl1 Boutique 
                 .profile-frm-cl2

@@ -28,13 +28,15 @@ const userAppSchema = new mongoose.Schema({
   instagram:String,
   tumblr:String,
   pinterest:String,
-  profile: {
+  shop_id:String,// This is for Shop customer
+  shop_name:String,
+  /*profile: {
     name: { type: String, default: '' },
     gender: { type: String, default: '' },
     location: { type: String, default: '' },
     website: { type: String, default: '' },
     picture: { type: String, default: '' }
-  }
+  }*/
 }, { timestamps: true });
 
 /**

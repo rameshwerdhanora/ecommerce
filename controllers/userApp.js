@@ -250,7 +250,9 @@ exports.userSave = (req, res) => {
             userIns.created        	= Date.now();
             userIns.updated        	= Date.now();
             userIns.save(function(error){
-                if(error === null){	
+                if(error === null){
+                    userIns.shop_id = userIns._id;
+                    userIns.save(function(error){});
                     //-- save user permissions
                     if(req.body.permissions){
                         for(var i=0; i<req.body.permissions.length; i++){
@@ -263,11 +265,13 @@ exports.userSave = (req, res) => {
                     }
                     // Get the get template content for 'registration' and call the helper to send the email         
                     EmailTemplate.findOne({template_type:'registration'},function(error,getTemplateDetail){
-                        var registerTemplateContent = getTemplateDetail.content;
-                        //dynamicTemplateContent= registerTemplateContent.replace(/{first_name}/gi, userIns.first_name).replace(/{last_name}/gi, userIns.last_name);
-                        dynamicTemplateContent = registerTemplateContent.replace(/{customer_name}/gi, userIns.first_name);
-                        if(dynamicTemplateContent){
-                            CommonHelper.emailTemplate(getTemplateDetail.subject, dynamicTemplateContent, userIns._id);      
+                        if(getTemplateDetail != null){
+                            var registerTemplateContent = getTemplateDetail.content;
+                            //dynamicTemplateContent= registerTemplateContent.replace(/{first_name}/gi, userIns.first_name).replace(/{last_name}/gi, userIns.last_name);
+                            dynamicTemplateContent = registerTemplateContent.replace(/{customer_name}/gi, userIns.first_name);
+                            if(dynamicTemplateContent){
+                                CommonHelper.emailTemplate(getTemplateDetail.subject, dynamicTemplateContent, userIns._id);      
+                            }
                         }
                     });
                     // Send SMS Using Twilio API to perticular user mobile number
