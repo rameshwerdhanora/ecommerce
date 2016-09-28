@@ -32,7 +32,7 @@ var uploadProductImage = Multer({ storage : storage}).any();
 /* List of all Products  */
 exports.listOfProducts = (req, res) => {
     // If Super user trying to create product then give deny him
-    if(req.user.role_id == 1 && req.params.productId == 'add'){
+    if(req.user.role_id == Constants.MASTERROLE && req.params.productId == 'add'){
         req.flash('errors', ['Super admin can not create product. This feature is only for the Shop user']);
         return res.redirect('/product/list');
     }
