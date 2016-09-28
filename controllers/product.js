@@ -408,17 +408,19 @@ exports.loadAttrValues = (req,res) => {
 };
 
 exports.getAttrib = (req,res)=>{
+    //Get Size for the Gender
     Size.find({gender:req.body.gender},function(error,sizeRes){
         var sizeAr = new Array();
-        if(sizeRes.length){
+        if(sizeRes !== undefined){
             for(var i=0;i < sizeRes.length;i++){
                 for(j=0;j < sizeRes[i].listofattrmap.length;j++){
                     sizeAr.push(sizeRes[i].listofattrmap[j]);
                 }
             }
+            // Get Attribute for the Sizes
             Attribute.find({_id:{$in:sizeAr}},function(error,attributRes){
                 var attribAr = new Array();
-                if(attributRes){
+                if(attributRes !== undefined){
                   for(var i=0;i < attributRes.length;i++){
                     attribAr.push(attributRes[i]._id);
                   }
@@ -426,35 +428,42 @@ exports.getAttrib = (req,res)=>{
                 
                 AttributeOption.find({attribute_id:{$in:attribAr}},function(error,attribOptionRes){
                     var mainResult = new Array();
-                    var result = {};
+                    
                     for(var i=0;i < sizeRes.length;i++){
+                        var result = {};
                         result.size = sizeRes[i].size_name;
                         result.attributes = new Array();
+                        // Sizes
                         for(j=0;j < sizeRes[i].listofattrmap.length;j++){
                             if(attributRes){
+                                //Attributes
                                 for(var k=0;k<attributRes.length;k++){
                                     if(attributRes[k]._id == sizeRes[i].listofattrmap[j]){
                                         var rs1 = {};
                                         rs1.attribute = attributRes[k].name;
                                         rs1.attributeId = attributRes[k]._id;
-                                        rs1.options = new Array();
-                                        if(attribOptionRes){
-                                           for(var l=0;l < attribOptionRes.length; l++){
-                                                if(attributRes[k]._id  == attribOptionRes[l].attribute_id){
-                                                    var tempOption = {};
-                                                    tempOption.id= attribOptionRes[l]._id;
-                                                    tempOption.value= attribOptionRes[l].value;
-                                                    rs1.options.push(tempOption);
-                                                }
-                                           }  
+                                        rs1.type = attributRes[k].type;
+                                        //Attributes Options
+                                        if(attributRes[k].type == 'select' || attributRes[k].type == 'multiselect'){
+                                            rs1.options = new Array();
+                                            if(attribOptionRes){
+                                               for(var l=0;l < attribOptionRes.length; l++){
+                                                    if(attributRes[k]._id  == attribOptionRes[l].attribute_id){
+                                                        var tempOption = {};
+                                                        tempOption.id= attribOptionRes[l]._id;
+                                                        tempOption.value= attribOptionRes[l].value;
+                                                        rs1.options.push(tempOption);
+                                                    }
+                                               }  
+                                            }
                                         }
-                                        console.log(rs1);
+                                        //console.log(rs1);
                                         result.attributes.push(rs1);
                                     }
                                 }
                             }
                         }
-                        console.log(result);
+                        //console.log(result);
                         mainResult.push(result);
                     }
                     res.send({status:'success',data:mainResult});

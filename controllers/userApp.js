@@ -222,81 +222,67 @@ exports.userAdd = (req, res) => {
  * Save users .
  */
 exports.userSave = (req, res) => {
-	User.findOne({ email_id: req.body.email_id }, function(err, existingEmail){
-		if(existingEmail) 
-		{
-			console.log(req.body);
-			req.flash('error', 'Email address already exists.');
-			//req.flash('data',req.body);
-      		return res.render('user/user_add',{data: req.body});
-		} 
-		else 
-		{
-			//console.log(req.body);
-                    var userIns        		= new User();
-                    userIns.role_id    		= req.body.role_id;
-                    userIns.shop_name   	= req.body.shop_name;
-                    userIns.user_name   	= '';
-                    userIns.password    	= req.body.password;
-		    userIns.email_id       	= req.body.email_id;
-                    userIns.first_name  	= req.body.first_name;
-		    userIns.last_name   	= req.body.last_name;
-		    userIns.contact_no  	= req.body.contact_no;
-		    userIns.dob   			= '';
-		    userIns.gender   		= '';
-		    userIns.bio   			= '';
-		    userIns.cover_image		= '';
-		    userIns.profile_image   = '';
-		    userIns.social_type   	= '';
-		    userIns.social_id   	= '';
-		    userIns.access_token   	= '';
-		    userIns.is_active   	= true;
-		    userIns.is_deleted   	= false;
-		    userIns.created        	= Date.now();
-		    userIns.updated        	= '';
-
-		    userIns.save(function(error){
-                    if(error === null)
-                    {	
-                        //-- save user permissions
-                        if(req.body.permissions){
-                            for(var i=0; i<req.body.permissions.length; i++){
-                                    var userPermission = new UserPermission();
-                                    userPermission.user_id = userIns._id;
-                                    userPermission.permission_id = req.body.permissions[i];
-                                    userPermission.created = Date.now();
-                                    userPermission.save();
-                            }
-                        }    
-                    
+    User.findOne({ email_id: req.body.email_id }, function(err, existingEmail){
+        if(existingEmail){
+            req.flash('errors', ['Email address already exists.']);
+            return res.render('user/user_add',{data: req.body});
+        }else{
+            //console.log(req.body);
+            var userIns        		= new User();
+            userIns.role_id    		= req.body.role_id;
+            userIns.shop_name   	= req.body.shop_name;
+            userIns.user_name   	= '';
+            userIns.password    	= req.body.password;
+            userIns.email_id       	= req.body.email_id;
+            userIns.first_name  	= req.body.first_name;
+            userIns.last_name   	= req.body.last_name;
+            userIns.contact_no  	= req.body.contact_no;
+            userIns.dob   		= '';
+            userIns.gender   		= '';
+            userIns.bio   		= '';
+            userIns.cover_image		= '';
+            userIns.profile_image       = '';
+            userIns.social_type   	= '';
+            userIns.social_id   	= '';
+            userIns.access_token   	= '';
+            userIns.is_active   	= true;
+            userIns.is_deleted   	= false;
+            userIns.created        	= Date.now();
+            userIns.updated        	= Date.now();
+            userIns.save(function(error){
+                if(error === null){	
+                    //-- save user permissions
+                    if(req.body.permissions){
+                        for(var i=0; i<req.body.permissions.length; i++){
+                            var userPermission = new UserPermission();
+                            userPermission.user_id = userIns._id;
+                            userPermission.permission_id = req.body.permissions[i];
+                            userPermission.created = Date.now();
+                            userPermission.save();
+                        }
+                    }
                     // Get the get template content for 'registration' and call the helper to send the email         
                     EmailTemplate.findOne({template_type:'registration'},function(error,getTemplateDetail){
                         var registerTemplateContent = getTemplateDetail.content;
-                        //dynamicTemplateContent = registerTemplateContent.replace(/{first_name}/gi, userIns.first_name).replace(/{last_name}/gi, userIns.last_name);
+                        //dynamicTemplateContent= registerTemplateContent.replace(/{first_name}/gi, userIns.first_name).replace(/{last_name}/gi, userIns.last_name);
                         dynamicTemplateContent = registerTemplateContent.replace(/{customer_name}/gi, userIns.first_name);
-                            if(dynamicTemplateContent)
-                            {
-                               CommonHelper.emailTemplate(getTemplateDetail.subject, dynamicTemplateContent, userIns._id);      
-                            }
+                        if(dynamicTemplateContent){
+                            CommonHelper.emailTemplate(getTemplateDetail.subject, dynamicTemplateContent, userIns._id);      
+                        }
                     });
-                    
                     // Send SMS Using Twilio API to perticular user mobile number
                     if((userIns.contact_no!='') && isNaN(userIns.contact_no)){
                         //CommonHelper.sendSms(req, res, smsContent, userId);
                     }
-
-
                     req.flash('error', 'Your details is successfully stored.');
                     return res.redirect('/user/list');
-                    }
-                    else 
-                    {
-                            req.flash('error', 'Something wrong!!');
+                }else{
+                    req.flash('error', 'Something wrong!!');
                     return res.render('user/user_add');
-                    }
-		    }); 
-		}
-	});
+                }
+            }); 
+        }
+    });
 };
 
 /*

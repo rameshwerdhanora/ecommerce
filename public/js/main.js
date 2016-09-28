@@ -15,19 +15,24 @@ function getSizeOptions(gender,appendId){
                             html+='<div class=" profile-frm-row product_size"><div class="sg-row"><span class="sz-txt">';
                             html+= res.data[i].size;
                             html+= ' ('+res.data[i].attributes[j].attribute +') ';
-                            if(res.data[i].attributes[j].options.length){
-                                for(var k = 0; k < res.data[i].attributes[j].options.length; k++){
-                                    //html+= '<a href="#">'+ res.data[i].attributes[j].options[k].value+'</a>';
-                                     if(attributeOptions.indexOf(res.data[i].attributes[j].options[k].id) == -1){
-                                         html+= '<input type="checkbox" value="'+res.data[i].attributes[j].options[k].id+'" name="size[]" />'+ res.data[i].attributes[j].options[k].value+'';//'+res.data[i].attributes[j].attributeId+'
-                                     }else{
-                                         html+= '<input checked="checked" type="checkbox" value="'+res.data[i].attributes[j].options[k].id+'" name="size[]" />'+ res.data[i].attributes[j].options[k].value+'';//'+res.data[i].attributes[j].attributeId+'
-                                     }
-                                        
+                            if(res.data[i].attributes[j].type == 'select' || res.data[i].attributes[j].type == 'multiselect'){
+                                if(res.data[i].attributes[j].options.length){
+                                    for(var k = 0; k < res.data[i].attributes[j].options.length; k++){
+                                        //html+= '<a href="#">'+ res.data[i].attributes[j].options[k].value+'</a>';
+                                         if(attributeOptions.indexOf(res.data[i].attributes[j].options[k].id) == -1){
+                                             html+= '<input type="checkbox" value="'+res.data[i].attributes[j].options[k].id+'" name="size[]" />'+ res.data[i].attributes[j].options[k].value+'';//'+res.data[i].attributes[j].attributeId+'
+                                         }else{
+                                             html+= '<input checked="checked" type="checkbox" value="'+res.data[i].attributes[j].options[k].id+'" name="size[]" />'+ res.data[i].attributes[j].options[k].value+'';//'+res.data[i].attributes[j].attributeId+'
+                                         }
+
+                                    }
+                                    html+='</span></div></div>';
+                                }else{
+                                    html+='No option found</span></div></div><div class="clearfix"></div>';
                                 }
-                                html+='</span></div></div>';
                             }else{
-                                html+='No option found</span></div></div><div class="clearfix"></div>';
+                                // textbox or textarea
+                                html+= '<input type="'+res.data[i].attributes[j].type+'"  name="size['+res.data[i].attributes[j].attributeId+']" />';//'+res.data[i].attributes[j].attributeId+'
                             }
                         }
                         //html+='</span></div></div>';
