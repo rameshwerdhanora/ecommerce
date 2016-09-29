@@ -1260,4 +1260,35 @@ exports.shop_payment_method_save = (req, res) => {
 };
 
 
-//shopuser_profile shopuser_
+
+exports.shopuser_profile = (req, res) => {
+    User.findOne({_id:req.params.userId},function(error,getCustomerDetails){
+        Address.findOne({is_default:1, add_type:Constants.SHIPPING, user_id:req.params.userId},function(error,fetchAddress){   
+            if(getCustomerDetails){
+                console.log(fetchAddress);
+                if(fetchAddress == null){
+                    fetchAddress= [];
+                }
+                console.log(getCustomerDetails);
+                res.render('user/shopuser_profile', { title: 'Customer View',getCustomerDetails:getCustomerDetails,activeClass:1,left_activeClass:4, fetchAddress:fetchAddress});
+            }
+        });	
+    });
+}
+exports.shopuser_profile_update = (req, res) => {
+    
+}
+
+exports.shopuser_notification = (req, res) => {
+    
+}
+exports.shopuser_notification_update = (req, res) => {
+    
+}
+
+exports.shopuser_account = (req, res) => {
+    
+}
+exports.shopuser_account_update = (req, res) => {
+    
+}

@@ -441,6 +441,13 @@ app.get('/user/shop_user_view/:userId', passportConfig.isAuthenticated, userAppC
 app.get('/user/shop_payment_method', passportConfig.isAuthenticated, userAppControlleraAdmin.shop_payment_method);
 app.post('/user/shop_payment_method_save', passportConfig.isAuthenticated, userAppControlleraAdmin.shop_payment_method_save);
 
+app.get('/user/shopuser_profile/:userId', passportConfig.isAuthenticated, userAppControlleraAdmin.shopuser_profile);
+app.post('/user/shopuser_profile_update', passportConfig.isAuthenticated, userAppControlleraAdmin.shopuser_profile_update);
+app.get('/user/shopuser_notification/:userId', passportConfig.isAuthenticated, userAppControlleraAdmin.shopuser_notification);
+app.post('/user/shopuser_notification_update', passportConfig.isAuthenticated, userAppControlleraAdmin.shopuser_notification_update);
+app.get('/user/shopuser_account/:userId', passportConfig.isAuthenticated, userAppControlleraAdmin.shopuser_account);
+app.post('/user/shopuser_account_update', passportConfig.isAuthenticated, userAppControlleraAdmin.shopuser_account_update);
+
 
 app.get('/user/list', passportConfig.isAuthenticated, userAppControlleraAdmin.userList);
 app.get('/user/add',  passportConfig.isAuthenticated,userAppControlleraAdmin.userAdd);

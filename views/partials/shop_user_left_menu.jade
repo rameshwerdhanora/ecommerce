@@ -1,0 +1,8 @@
+h2 CUSTOMER
+ul
+  li(class=(activeClass == 1)?'active':'')
+      a(href='/user/shopuser_profile/#{getCustomerDetails._id}') Profile
+  li(class=(activeClass == 6)?'active':'')
+    a(href='/user/shopuser_account/#{getCustomerDetails._id}') Account
+  li(class=(activeClass == 8)?'active':'')
+    a(href='/user/shopuser_notification/#{getCustomerDetails._id}') Notifications
