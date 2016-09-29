@@ -913,7 +913,7 @@ exports.shop_notification = (req, res) => {
     Notification.findOne({user_id:req.user._id},function(error,resultRes){
         console.log(resultRes);
         if(resultRes){
-            res.render('user/shop_notification', { title: 'Shop User notification',activeClass:7, result:resultRes,left_activeClass:4 });
+            res.render('user/shop_notification', { title: 'Shop User notification',activeClass:7, result:resultRes,left_activeClass:5 });
         }else{
             resultRes = {
                 new_arrival: [],
@@ -922,7 +922,7 @@ exports.shop_notification = (req, res) => {
                 shipped: [],
                 news: [] ,
             };
-            res.render('user/shop_notification', { title: 'Shop User notification',activeClass:7,result:resultRes,left_activeClass:4 });
+            res.render('user/shop_notification', { title: 'Shop User notification',activeClass:7,result:resultRes,left_activeClass:5 });
         }
     });
     
@@ -974,6 +974,6 @@ exports.shop_notification_update = (req, res) => {
 
 
 exports.shop_payment_method = (req, res) => {
-    res.render('user/shop_payment_method', { title: 'Shop User notification',activeClass:3,availablePaymentMethod:'',left_activeClass:4 });
+    res.render('user/shop_payment_method', { title: 'Shop User notification',activeClass:3,availablePaymentMethod:'',left_activeClass:5 });
 }
 
