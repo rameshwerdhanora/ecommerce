@@ -30,23 +30,23 @@ block content
               .profile-frm-row
                 .profile-frm-cl1 Address
                 .profile-frm-cl2
-                  input(name='', type='text', value='1439 S. Rimhurst ave')
+                  input(name='', type='text', value='#{fetchAddress.address_line1}')
               .profile-frm-row
                 .profile-frm-cl1 City
                 .profile-frm-cl2
-                  input(name='', type='text', value='Glendora')
+                  input(name='', type='text', value='#{fetchAddress.city}')
               .profile-frm-row
                 .profile-frm-cl1 State
                 .profile-frm-cl2
-                  input(name='', type='text', value='CA')
+                  input(name='', type='text', value='#{fetchAddress.state}')
               .profile-frm-row
                 .profile-frm-cl1 Zip Code 
                 .profile-frm-cl2
-                  input(name='', type='text', value='91740')
+                  input(name='', type='text', value='#{fetchAddress.postal_code}')
               .profile-frm-row
                 .profile-frm-cl1 Country
                 .profile-frm-cl2
-                  input(name='', type='text', value='USA')
+                  input(name='', type='text', value='#{fetchAddress.country}')
               .profile-frm-row
                 .profile-frm-cl1 Bio
                 .profile-frm-cl2

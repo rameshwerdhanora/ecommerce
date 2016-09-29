@@ -18,13 +18,55 @@ const Constants 		= require('../constants/constants');
  * Customer List user page.
  */
 exports.customerList = (req, res) => {
-	User.find({role_id:5},function(error,getCustomers){
-		if(getCustomers)
-		{
-			//console.log(getCustomers.length);
-			res.render('user/customer_list', { left_activeClass:4, title: 'Customer',getCustomers:getCustomers});
-		}
-	});	
+        var page = (req.query.page == undefined)?1:req.query.page;
+        page = (page == 0)?1:page;
+        var skipRecord = (page-1)*Constants.RECORDS_PER_PAGE;
+        var getCustomers = [];
+        User.count(function(error, totalRecord) {
+            var totalPage = Math.ceil(totalRecord/Constants.RECORDS_PER_PAGE);
+
+            User.find({role_id:5})
+                    .limit(Constants.RECORDS_PER_PAGE)
+                    .skip(skipRecord)
+                    .sort('-_id')
+                    .exec(function(error,getCustomers){
+                    Address.find({is_default:1, add_type:Constants.SHIPPING},function(error,fetchAddress){        
+                        
+                        /*var newArray = [];
+                         * var tempAddress = {};
+                        if(tempAddress){
+                            for(var i = 0;i< fetchAddress.length;i++){
+                                tempAddress[fetchAddress[i].user_id] = fetchAddress[i];
+                            }
+                        }*/
+                        
+                        var tempAddressLine1 = {};
+                        var tempCity = {};
+                        var tempPostalCode = {};
+                        var tempContactNo = {};
+                        var tempCountry = {};
+                        var tempState = {};
+                        for(var i =0; i < getCustomers.length;i++){
+                            for(var j = 0;j< fetchAddress.length;j++){
+                                if(getCustomers[i]._id == fetchAddress[j].user_id){
+                                    //getCustomers[i].push(fetchAddress[j]['address_line1']);
+                                    tempAddressLine1[getCustomers[i]._id] = fetchAddress[j].address_line1;
+                                    tempCity[getCustomers[i]._id] = fetchAddress[j].city;
+                                    tempPostalCode[getCustomers[i]._id] = fetchAddress[j].postal_code;
+                                    tempCountry[getCustomers[i]._id] = fetchAddress[j].country;
+                                    tempContactNo[getCustomers[i]._id] = fetchAddress[j].contact_no;
+                                    tempState[getCustomers[i]._id] = fetchAddress[j].state;
+                                }
+                            }
+                        }
+                        console.log(tempAddressLine1);
+                            
+                        if(getCustomers) {
+                             res.render('user/customer_list', { left_activeClass:4, currentPage:page, totalPage:totalPage, title: 'Customer',getCustomers:getCustomers, addressLine1:tempAddressLine1, city:tempCity,postalCode:tempPostalCode,country:tempCountry, contactNo:tempContactNo,state:tempState  });
+                         }     
+                });
+            });
+        });    
 };
 
 /**
@@ -33,11 +75,14 @@ exports.customerList = (req, res) => {
  */
 exports.customerView = (req, res) => {
     User.findOne({_id:req.params.id},function(error,getCustomerDetails){
+        Address.findOne({is_default:1, add_type:Constants.SHIPPING, user_id:req.params.id},function(error,fetchAddress){   
             if(getCustomerDetails)
             {
-                    //console.log(getCustomerDetails);
-                    res.render('user/customer_view', { title: 'Customer View',getCustomerDetails:getCustomerDetails,activeClass:1,left_activeClass:4});
+                console.log(fetchAddress);
+                console.log(getCustomerDetails);
+                res.render('user/customer_view', { title: 'Customer View',getCustomerDetails:getCustomerDetails,activeClass:1,left_activeClass:4, fetchAddress:fetchAddress});
             }
+        });	
     });	
 };
 

@@ -98,6 +98,8 @@ exports.listOfProducts = (req, res) => {
                                                     fetchAllProducts:fetchAllProducts,
                                                     activeClass:1,
                                                     left_activeClass:3,
+                                                    currentPage:page, 
+                                                    totalPage:totalPage,
                                                     allBrands : fetchAllBrands,
                                                     fetchCategories:fetchCategories,
                                                     fetchSubCategories:fetchSubCategories,
