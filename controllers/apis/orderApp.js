@@ -17,6 +17,7 @@ const AttributOption    = require('../../models/attributeOption');
 const Attribut          = require('../../models/attribute');
 const ProductImage      = require('../../models/productsImages');
 const Brand             = require('../../models/brand');
+const Refund            = require('../../models/refund');
 const dateFormat = require('dateformat');
 
 /**
@@ -41,7 +42,9 @@ exports.saveUserFinalOrder = (req,res) => {
 		orderIns.shipping_charges 	= req.body.shipping_charges;
 		orderIns.totalprice 		= req.body.totalprice;
 		orderIns.shipping_array 	= req.body.shipping_array;
+		orderIns.status 			= 'Unfullfilled';
 		orderIns.itemquantity 		= req.body.itemquantity;
+		orderIns.finaldiscount 		= req.body.finalDiscount;
 		orderIns.order_date 		= Date.now();
 
 		orderIns.save(function(error,saveOrder)
@@ -169,7 +172,15 @@ exports.saveUserFinalOrder = (req,res) => {
 		                        )
 		                },
 		                function(err){
-		                	return res.json({"status":'success',"msg":'Order placed successfully.',order_id:orderIns._id})
+		                	Cart.remove({user_id:req.body.user_id},function(error,removedDataFromMyCart){
+		                		if(error)
+		                		{
+		                			return res.json({"status":'error',"msg":'Unable to found remove your data from my cart.'})
+		                		}
+		                		else{
+		                			return res.json({"status":'success',"msg":'Order placed successfully.',order_id:orderIns._id})
+		                		}
+		                	})
 		                });
 					}
 					else 
@@ -265,6 +276,8 @@ exports.detailsOfSelectedOrder = (req,res) => {
         	orderData.subtotal			= fetchOrdersDetails.subtotal;
         	orderData.itemquantity		= fetchOrdersDetails.itemquantity;
         	orderData.shipping_address	= fetchOrdersDetails.shipping_address;
+        	orderData.shipping_array	= fetchOrdersDetails.shipping_array;
+        	orderData.status			= 'Unfullfilled';
         	orderData.billing_address	= fetchOrdersDetails.billing_address;
         	orderData.payment_details	= fetchOrdersDetails.payment_details;
         	orderData.order_date		= finalDate;
@@ -309,6 +322,49 @@ exports.detailsOfSelectedOrder = (req,res) => {
 			return res.json({"status":'error',"msg":'Something Wrong.'})
 		}
 	});
+}
+
+/**
+ * POST /api/order/refund
+ * Process for order details
+ */
+
+exports.refundRequest = (req,res) => {
+
+	if(req.body.device_token != '')
+    { 
+		var refundIns 		= new Refund;
+		refundIns.user_id 	= req.body.user_id;
+		refundIns.order_id 	= req.body.order_id;
+		refundIns.email_address = req.body.email_address;
+		refundIns.message 	= req.body.message;
+		refundIns.created 	= Date.now();
+		refundIns.save(function(error,saveRefundData){
+			if(error)
+			{
+				return res.json({"status":'error',"msg":'Something Wrong.'})
+			}
+			else 
+			{
+				Order.findByIdAndUpdate(req.body.order_id,{status:'refund'},function(error,changeStatus){
+					if(error)
+					{
+						return res.json({"status":'error',"msg":'Your Order status is not change.'})
+					}
+					else 
+					{
+						return res.json({"status":'success',"msg":'Your request is added.'})
+					}
+				});
+			}
+		});
+	}
+	else
+	{
+		return res.json({"status":'error',"msg":'Device token is not avaible.'})
+	}	
+
+
 }
 
 

@@ -36,7 +36,7 @@ exports.privacySettingofUser = (req, res) => {
 					'language'			: req.body.language,
 				    'currency'			: req.body.currency,
 				    'privacytype'		: req.body.privacytype,
-				    'useageanalytics' 	: req.body.privacytype,
+				    'useageanalytics' 	: req.body.useageanalytics,
 				    'celldata'			: req.body.celldata
 				};
 				Privacy.findByIdAndUpdate(fetchUserPrivacy._id,updatePrivacyData, function(error, updateExistingPrivacyVals)
