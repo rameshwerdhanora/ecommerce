@@ -204,12 +204,76 @@ exports.userList = (req, res) => {
  * Signup user page.
  */
 exports.userAdd = (req, res) => {
-	Permission.find({},function(error,getPermissions){
-		if(getPermissions)
-		{
-			//console.log(getPermissions);
-			res.render('user/user_add', { title: 'New User',getPermissions:getPermissions,left_activeClass:5});
-		}
+        if(req.user.role_id == Constants.MASTERROLE || req.user.role_id == Constants.ADMINROLE){
+            var permissionType = 'SHOPADMIN';
+        }else{
+            var permissionType = 'SHOPUSER';
+        }
+	Permission.find({type:permissionType},function(error,getPermissions){
+            if(getPermissions){
+                var flag=true;
+                var finalPermission = new Array();
+                var takenElement = new Array();
+                var taa= 0;
+                while(flag){
+                    flag = false;
+                    console.log(getPermissions);
+                    for(i=0;i<getPermissions.length;i++){
+                        console.log(getPermissions[i].parent_id + '---'+ getPermissions[i]._id + '----'+getPermissions[i].name);
+                        var takenFlag = false;
+                        // To check element is already added into final result or not
+                        for(var tke = 0; tke < takenElement.length; tke++){
+                            if(getPermissions[i]._id == takenElement[tke]){
+                                takenFlag = true;
+                            }
+                        }
+                        if(!takenFlag){
+                            // If parent id is null then added them on root
+                            if(getPermissions[i].parent_id == 0){
+                                takenElement.push(getPermissions[i]._id);// Array is used to check the element is added or not
+                                var tmp = {};
+                                tmp.id = getPermissions[i]._id;
+                                tmp.name = getPermissions[i].name;
+                                //tmp.parent_id = getPermissions[i].parent_id;
+                                tmp.options = new Array();
+                                flag = true;
+                                finalPermission.push(tmp);
+                            }else{
+                                console.log('nice');
+                                for(j=0;j<finalPermission.length;j++){
+                                    if(finalPermission[j].id == getPermissions[i].parent_id){
+                                        takenElement.push(getPermissions[i]._id);// Array is used to check the element is added or not
+                                        var tmp = {};
+                                        tmp.id = getPermissions[i]._id;
+                                        tmp.name = getPermissions[i].name;
+                                        //tmp.parent_id = getPermissions[i].parent_id;
+                                        tmp.options = new Array();
+                                        flag = true;
+                                        finalPermission[j].options.push(tmp);
+                                    }
+                                    if(finalPermission[j].options.length > 0){
+                                        for(m = 0;m < finalPermission[j].options.length; m++){
+                                            if(finalPermission[j].options.id == getPermissions[i].parent_id){
+                                                takenElement.push(getPermissions[i]._id);// Array is used to check the element is added or not
+                                                var tmp = {};
+                                                tmp.id = getPermissions[i]._id;
+                                                tmp.name = getPermissions[i].name;
+                                                //tmp.parent_id = getPermissions[i].parent_id;
+                                                tmp.options = new Array();
+                                                flag = true;
+                                                finalPermission[j].options.push(tmp);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                //console.log(getPermissions);
+                res.render('user/user_add', { title: 'New User',getPermissions:finalPermission,left_activeClass:5});
+            }
 	});
 };
 
@@ -226,8 +290,12 @@ exports.userSave = (req, res) => {
             }else{
                 req.flash('errors', ['Username already exists.']);
             }
-            
-            Permission.find({},function(error,getPermissions){
+            if(req.user.role_id == Constants.MASTERROLE || req.user.role_id == Constants.ADMINROLE){
+                var permissionType = 'SHOPADMIN';
+            }else{
+                var permissionType = 'SHOPUSER';
+            }
+            Permission.find({type:permissionType},function(error,getPermissions){
 		if(getPermissions){
                     return res.render('user/user_add',{title: 'New User', data: req.body,getPermissions:getPermissions,left_activeClass:5});
 		}else{
@@ -266,6 +334,9 @@ exports.userSave = (req, res) => {
             userIns.country        	= req.body.country;
             userIns.zip                 = req.body.zip;
             userIns.bio                 = req.body.bio;
+            
+            userIns.shop_id = '';
+            userIns.role_id = '';
             
             
             userIns.save(function(error){
@@ -1000,3 +1071,85 @@ exports.shop_user_list = (req, res) => {
     });
 }
 
+
+exports.shop_user_view = (req, res) => {
+    User.findOne({_id:req.params.userId},function(error,userRes){
+        if(req.user.role_id == Constants.MASTERROLE || req.user.role_id == Constants.ADMINROLE){
+            var permissionType = 'SHOPADMIN';
+        }else{
+            var permissionType = 'SHOPUSER';
+        }
+	Permission.find({type:permissionType})
+            .sort('parent_id')
+            .exec(function(error,getPermissions){
+            if(getPermissions){
+                var flag=true;
+                var finalPermission = new Array();
+                var takenElement = new Array();
+                var taa= 0;
+                while(flag){
+                    flag = false;
+                    for(i=0;i<getPermissions.length;i++){
+                        var takenFlag = false;
+                        // To check element is already added into final result or not
+                        for(var tke = 0; tke < takenElement.length; tke++){
+                            if(getPermissions[i]._id == takenElement[tke]){
+                                takenFlag = true;
+                            }
+                        }
+                        if(!takenFlag){
+                            // If parent id is null then added them on root
+                            if(getPermissions[i].parent_id == 0){
+                                takenElement.push(getPermissions[i]._id);// Array is used to check the element is added or not
+                                var tmp = {};
+                                tmp.id = getPermissions[i]._id;
+                                tmp.name = getPermissions[i].name;
+                                //tmp.parent_id = getPermissions[i].parent_id;
+                                tmp.options = new Array();
+                                flag = true;
+                                finalPermission.push(tmp);
+                            }else{
+                                for(j=0;j<finalPermission.length;j++){
+                                    if(finalPermission[j].id == getPermissions[i].parent_id){
+                                        takenElement.push(getPermissions[i]._id);// Array is used to check the element is added or not
+                                        var tmp = {};
+                                        tmp.id = getPermissions[i]._id;
+                                        tmp.name = getPermissions[i].name;
+                                        //tmp.parent_id = getPermissions[i].parent_id;
+                                        tmp.options = new Array();
+                                        flag = true;
+                                        finalPermission[j].options.push(tmp);
+                                    }
+                                    if(finalPermission[j].options.length > 0){
+                                        for(m = 0;m < finalPermission[j].options.length; m++){
+                                            if(finalPermission[j].options.id == getPermissions[i].parent_id){
+                                                takenElement.push(getPermissions[i]._id);// Array is used to check the element is added or not
+                                                var tmp = {};
+                                                tmp.id = getPermissions[i]._id;
+                                                tmp.name = getPermissions[i].name;
+                                                //tmp.parent_id = getPermissions[i].parent_id;
+                                                tmp.options = new Array();
+                                                flag = true;
+                                                finalPermission[j].options.push(tmp);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                UserPermission.find({user_id:req.params.userId},function(error,userPerRes){
+                    var finalUserPremission = [];
+                    if(userPerRes){
+                        for(var i=0;i < userPerRes.length;i++){
+                            finalUserPremission.push(userPerRes[i].permission_id);
+                        }
+                    }
+                    console.log(finalUserPremission);
+                    res.render('user/shop_user_view', { title: 'Shop User View',activeClass:'',result:userRes,left_activeClass:5,getPermissions:finalPermission,userPermission:finalUserPremission});
+                });
+            }
+        });
+    });
+}

@@ -17,73 +17,73 @@ block content
               a(href='/user/shop_user_list') Manage Users
               -}
               
-            li.active
+            li
               a(href='/user/add') Add User
         .profile-cl
           .profile-top-row
-            h2 ADD USERS
+            h2 VIEW USER
           .profile-form-box
             .add-user-cl1.col-sm-6
-              h4 NEW USER
+              h4 VIEW USER
               -if(user.role_id == 1 || user.role_id == 2){
                 .profile-frm-row
                   .profile-frm-cl1 Shop Name 
                   .profile-frm-cl2
-                    input(type='text', value='#{data ? data.shop_name :""}', name='shop_name', required='required')
+                    input(type='text', value='#{result ? result.shop_name :""}', name='shop_name', required='required')
               -}
               .profile-frm-row
                 .profile-frm-cl1 User Name
                 .profile-frm-cl2
-                  input(type='text', value='#{data ? data.user_name :""}', name='user_name', required='required')
+                  input(type='text', value='#{result ? result.user_name :""}', name='user_name', required='required')
               .profile-frm-row
                 .profile-frm-cl1  First Name
                 .profile-frm-cl2
-                  input(type='text', value='#{data ? data.first_name :""}', name='first_name', required='required')
+                  input(type='text', value='#{result ? result.first_name :""}', name='first_name', required='required')
               .profile-frm-row
                 .profile-frm-cl1 Last Name
                 .profile-frm-cl2
-                  input(type='text', value='#{data ? data.last_name :""}', name='last_name', required='required')
+                  input(type='text', value='#{result ? result.last_name :""}', name='last_name', required='required')
               .profile-frm-row
                 .profile-frm-cl1 E-mail Address 
                 .profile-frm-cl2
-                  input(type='text', value='#{data ? data.email_id :""}', name='email_id', required='required')
+                  input(type='text', value='#{result ? result.email_id :""}', name='email_id', required='required')
               .profile-frm-row
                 .profile-frm-cl1 Contact Number 
                 .profile-frm-cl2
-                  input(type='text', value='#{data ? data.contact_no :""}', name='contact_no', required='required')
+                  input(type='text', value='#{result ? result.contact_no :""}', name='contact_no', required='required')
               .profile-frm-row
                 .profile-frm-cl1 Password
                 .profile-frm-cl2
-                  input(type='password', value='#{data ? data.password :""}', name='password', required='required')
+                  input(type='password', value='', name='password', required='required', placeholder='******')
               .profile-frm-row
                 .profile-frm-cl1 Confirm Password 
                 .profile-frm-cl2
-                  input(type='password', value='#{data ? data.password :""}', name='confirm_password', required='required')
+                  input(type='password', value='', name='confirm_password', required='required', placeholder='******')
                   
               .profile-frm-row
                 .profile-frm-cl1 Address
                 .profile-frm-cl2
-                  input(type='text', value='#{data ? data.address :""}', name='address', required='required')
+                  input(type='text', value='#{result ? result.address :""}', name='address', required='required')
               .profile-frm-row
                 .profile-frm-cl1 City
                 .profile-frm-cl2
-                  input(type='text', value='#{data ? data.city :""}', name='city', required='required')
+                  input(type='text', value='#{result ? result.city :""}', name='city', required='required')
               .profile-frm-row
                 .profile-frm-cl1 State
                 .profile-frm-cl2
-                  input(type='text', value='#{data ? data.state :""}', name='state', required='required')
+                  input(type='text', value='#{result ? result.state :""}', name='state', required='required')
               .profile-frm-row
                 .profile-frm-cl1 Zip code
                 .profile-frm-cl2
-                  input(type='text', value='#{data ? data.zip :""}', name='zip', required='required')
+                  input(type='text', value='#{result ? result.zip :""}', name='zip', required='required')
               .profile-frm-row
                 .profile-frm-cl1 Country
                 .profile-frm-cl2
-                  input(type='text', value='#{data ? data.country :""}', name='country', required='required')
+                  input(type='text', value='#{result ? result.country :""}', name='country', required='required')
               .profile-frm-row
                 .profile-frm-cl1 Bio
                 .profile-frm-cl2
-                  textarea.large-in(name='bio') #{data ? data.bio :""}
+                  textarea.large-in(name='bio') #{result ? result.bio :""}
                   
               -if(user.role_id == 1 || user.role_id == 2){
               .profile-frm-row.botique-spc
@@ -105,22 +105,41 @@ block content
                 ul.perms-list
                   if getPermissions
                     each getPermission in getPermissions
-                        li
-                            input(type='checkbox', name='permissions[]', value='#{getPermission.id}')
+                        - var ps = false;
+                        - if(userPermission){
+                            each getp in userPermission
+                                - if(getp == getPermission.id){
+                                    - ps = true;
+                                - }
+                        - }
+                        li(class='#{ps}')
+                            input(type='checkbox', name='permissions[]', value='#{getPermission.id}',checked=(ps == true))
                             | #{getPermission.name}
                             -if(getPermission.options){
                             ul.perms-sub-list
                                 each level1 in getPermission.options
+                                    - var ps = false;
+                                    - if(userPermission){
+                                        each getp in userPermission
+                                            -if(getp == level1.id){
+                                                - ps = true;
+                                            -}
+                                    - }
                                     li
-                                        input(type='checkbox', name='permissions[]', value='#{level1.id}')
+                                        input(type='checkbox', name='permissions[]', value='#{level1.id}',checked=(ps == true))
                                         | #{level1.name}
                                         -if(level1.options){
                                         ul.perms-sub-list
                                             each level2 in level1.options
+                                                - var ps = false;
+                                                -if(userPermission){
+                                                    each getp in userPermission
+                                                        -if(getp == level2.id){
+                                                            - ps = true;
+                                                        -}
+                                                -}
                                                 li
-                                                    input(type='checkbox', name='permissions[]', value='#{level2.id}')
+                                                    input(type='checkbox', name='permissions[]', value='#{level2.id}',checked=(ps == true))
                                                     | #{level2.name}
                                         -}
-                            -}    
-          .btn-btm
-            button(type='submit') ADD USER
+                            -}

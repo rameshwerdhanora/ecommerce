@@ -1,6 +1,12 @@
 .col-sm-3.left-sidebar
   .img-1-wrp
+    -if(user.role_id == 3 || user.role_id == 4 || user.role_id == 6){
+      .logo-left
+        a(href='#')
+          img(src='/images/logo-left.png', alt='logo')
+    -}
     img(src='/images/img-1.jpg', alt='img')
+    
   .nav-left
     .nav-in
       ul
