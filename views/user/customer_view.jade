@@ -30,23 +30,23 @@ block content
               .profile-frm-row
                 .profile-frm-cl1 Address
                 .profile-frm-cl2
-                  input(name='', type='text', value='#{fetchAddress.address_line1? fetchAddress.address_line1 : ""}')
+                  input(name='', type='text', value='#{fetchAddress.address_line1 ? fetchAddress.address_line1: ""}')
               .profile-frm-row
                 .profile-frm-cl1 City
                 .profile-frm-cl2
-                  input(name='', type='text', value='#{fetchAddress.city}')
+                  input(name='', type='text', value='#{fetchAddress.city ? fetchAddress.city: ""}')
               .profile-frm-row
                 .profile-frm-cl1 State
                 .profile-frm-cl2
-                  input(name='', type='text', value='#{fetchAddress.state}')
+                  input(name='', type='text', value='#{fetchAddress.state ? fetchAddress.state: ""}')
               .profile-frm-row
                 .profile-frm-cl1 Zip Code 
                 .profile-frm-cl2
-                  input(name='', type='text', value='#{fetchAddress.postal_code}')
+                  input(name='', type='text', value='#{fetchAddress.postal_code ? fetchAddress.postal_code: ""}')
               .profile-frm-row
                 .profile-frm-cl1 Country
                 .profile-frm-cl2
-                  input(name='', type='text', value='#{fetchAddress.country}')
+                  input(name='', type='text', value='#{fetchAddress.country ? fetchAddress.country: ""}')
               .profile-frm-row
                 .profile-frm-cl1 Bio
                 .profile-frm-cl2

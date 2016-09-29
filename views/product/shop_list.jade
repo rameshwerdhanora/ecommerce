@@ -26,14 +26,14 @@ block content
                        .modal-content.view_product
                          .modal-body
                            .cam_upload
-                             img(src='/#{productImagesArr[fetchAllProducts[i]._id]}')
+                             img(src='/#{productImagesArr1[fetchAllProducts[i]._id]}')
                            ul
                              li
-                               img(src='/#{productImagesArr[fetchAllProducts[i]._id]}')
+                               img(src='/#{productImagesArr2[fetchAllProducts[i]._id]}')
                              li
-                               img(src='/#{productImagesArr[fetchAllProducts[i]._id]}')
+                               img(src='/#{productImagesArr3[fetchAllProducts[i]._id]}')
                              li
-                               img(src='/#{productImagesArr[fetchAllProducts[i]._id]}')
+                               img(src='/#{productImagesArr4[fetchAllProducts[i]._id]}')
                            .product_info_details
                              .product_logo
                                img(src='/#{brandLogoArr[fetchAllProducts[i].brand_id]}')
@@ -45,7 +45,7 @@ block content
                              .clearfix
                      .product_boxes
                       .product_boxes_img
-                        img(src='/#{productImagesArr[fetchAllProducts[i]._id]}')
+                        img(src='/#{productImagesArr1[fetchAllProducts[i]._id]}')
                       .product_view
                         p #{fetchAllProducts[i].name}
                         span #{brandAr[fetchAllProducts[i].brand_id]}
@@ -59,14 +59,14 @@ block content
                            .modal-content.view_product
                              .modal-body
                                .cam_upload
-                                 img(src='/#{productImagesArr[fetchAllProducts[i]._id]}')
+                                 img(src='/#{productImagesArr1[fetchAllProducts[i]._id]}')
                                ul
                                  li
-                                   img(src='/#{productImagesArr[fetchAllProducts[i]._id]}')
+                                   img(src='/#{productImagesArr2[fetchAllProducts[i]._id]}')
                                  li
-                                   img(src='/#{productImagesArr[fetchAllProducts[i]._id]}')
+                                   img(src='/#{productImagesArr3[fetchAllProducts[i]._id]}')
                                  li
-                                   img(src='/#{productImagesArr[fetchAllProducts[i]._id]}')
+                                   img(src='/#{productImagesArr4[fetchAllProducts[i]._id]}')
                                .product_info_details
                                  .product_logo
                                    img(src='/#{brandLogoArr[fetchAllProducts[i].brand_id]}')
@@ -78,7 +78,7 @@ block content
                                  .clearfix
                      .product_boxes.product_boxes_right
                       .product_boxes_img
-                        img(src='/#{productImagesArr[fetchAllProducts[i]._id]}')
+                        img(src='/#{productImagesArr1[fetchAllProducts[i]._id]}')
                       .product_view
                         p #{fetchAllProducts[i].name}
                         span #{brandAr[fetchAllProducts[i].brand_id]}
@@ -115,17 +115,17 @@ block content
                     input(type='checkbox')
                   td(rowspan='2')
                     .product_table_img
-                      img(src='/#{productImagesArr[fetchAllProduct._id]}')
+                      img(src='/#{productImagesArr1[fetchAllProduct._id]}')
                       ul.small_thumb
                         li
                           a(href='#')
-                            img(src='/#{productImagesArr[fetchAllProduct._id]}')
+                            img(src='/#{productImagesArr2[fetchAllProduct._id]}')
                         li
                           a(href='#')
-                            img(src='/#{productImagesArr[fetchAllProduct._id]}')
+                            img(src='/#{productImagesArr3[fetchAllProduct._id]}')
                         li
                           a(href='#')
-                            img(src='/#{productImagesArr[fetchAllProduct._id]}')
+                            img(src='/#{productImagesArr4[fetchAllProduct._id]}')
                   td #{fetchAllProduct.name}
                   td 
                     -var fetchAllAttr = fetchAllProduct.attribute;

@@ -79,10 +79,16 @@ exports.listOfProducts = (req, res) => {
                                                     }
                                                 }
                                                 
-                                                var tempProductImages = {};
+                                                var tempProductImages1 = {};
+                                                var tempProductImages2 = {};
+                                                var tempProductImages3 = {};
+                                                var tempProductImages4 = {};
                                                 if(fetchImagesOfProducts){
                                                     for(var i = 0;i< fetchImagesOfProducts.length;i++){
-                                                        tempProductImages[fetchImagesOfProducts[i].product_id] = fetchImagesOfProducts[i].thumb_image_4;
+                                                        tempProductImages1[fetchImagesOfProducts[i].product_id] = fetchImagesOfProducts[i].thumb_image_1;
+                                                        tempProductImages2[fetchImagesOfProducts[i].product_id] = fetchImagesOfProducts[i].thumb_image_2;
+                                                        tempProductImages3[fetchImagesOfProducts[i].product_id] = fetchImagesOfProducts[i].thumb_image_3;
+                                                        tempProductImages4[fetchImagesOfProducts[i].product_id] = fetchImagesOfProducts[i].thumb_image_4;
                                                     }
                                                 }
                                                 
@@ -110,7 +116,10 @@ exports.listOfProducts = (req, res) => {
                                                     categoryAr:tempCategory,
                                                     subcategoryAr:tempSubCategory,
                                                     fetchAllTags:fetchAllTags,
-                                                    productImagesArr :tempProductImages,
+                                                    productImagesArr1 :tempProductImages1,
+                                                    productImagesArr2 :tempProductImages2,
+                                                    productImagesArr3 :tempProductImages3,
+                                                    productImagesArr4 :tempProductImages4,
                                                     attrOptionValuesArr :tempAttrOptionValues
                                                 });
                                             });
@@ -163,10 +172,16 @@ exports.listOfProducts = (req, res) => {
                                                         }
                                                     }
 
-                                                    var tempProductImages = {};
+                                                    var tempProductImages1 = {};
+                                                    var tempProductImages2 = {};
+                                                    var tempProductImages3 = {};
+                                                    var tempProductImages4 = {};
                                                     if(fetchImagesOfProducts){
                                                         for(var i = 0;i< fetchImagesOfProducts.length;i++){
-                                                            tempProductImages[fetchImagesOfProducts[i].product_id] = fetchImagesOfProducts[i].thumb_image_4;
+                                                            tempProductImages1[fetchImagesOfProducts[i].product_id] = fetchImagesOfProducts[i].thumb_image_1;
+                                                            tempProductImages2[fetchImagesOfProducts[i].product_id] = fetchImagesOfProducts[i].thumb_image_2;
+                                                            tempProductImages3[fetchImagesOfProducts[i].product_id] = fetchImagesOfProducts[i].thumb_image_3;
+                                                            tempProductImages4[fetchImagesOfProducts[i].product_id] = fetchImagesOfProducts[i].thumb_image_4;
                                                         }
                                                     }
 
@@ -207,7 +222,10 @@ exports.listOfProducts = (req, res) => {
                                                                     fetchAllTags:fetchAllTags,
                                                                     selectedHashtag:selectedHashtag,
                                                                     addFlag :false,
-                                                                    productImagesArr :tempProductImages,
+                                                                    productImagesArr1 :tempProductImages1,
+                                                                    productImagesArr2 :tempProductImages2,
+                                                                    productImagesArr3 :tempProductImages3,
+                                                                    productImagesArr4 :tempProductImages4,
                                                                     attrOptionValuesArr :tempAttrOptionValues,
                                                                     colorsArr:tempColors,
                                                                     fetchAllProductsHashtags:fetchAllProductsHashtags,
@@ -235,7 +253,10 @@ exports.listOfProducts = (req, res) => {
                                                             subcategoryAr:tempSubCategory,
                                                             fetchAllTags:fetchAllTags,
                                                             addFlag :addFlag,
-                                                            productImagesArr :tempProductImages,
+                                                            productImagesArr1 :tempProductImages1,
+                                                            productImagesArr2 :tempProductImages2,
+                                                            productImagesArr3 :tempProductImages3,
+                                                            productImagesArr4 :tempProductImages4,
                                                             attrOptionValuesArr :tempAttrOptionValues,
                                                             colorsArr:tempColors,
                                                             fetchAllProductsHashtags:fetchAllProductsHashtags,
