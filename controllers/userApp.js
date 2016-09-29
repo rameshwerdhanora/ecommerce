@@ -235,8 +235,9 @@ exports.customerAddressSave = (req, res) => {
  * User List - here we need to get both users and customers in seprate columns
  */
 exports.userList = (req, res) => {
-        User.find({role_id:5},function(error,getCustomers){
-            User.find({role_id:{$ne : 5}},function(error,getUsers){
+        User.find({role_id:6},function(error,getCustomers){
+            User.find({role_id:{$in : [3,4]}},function(error,getUsers){
+                console.log(getUsers);
                 res.render('user/user_list', { title: 'User List',getCustomers:getCustomers,getUsers:getUsers,left_activeClass:5});
             });
         });	
@@ -660,14 +661,36 @@ exports.userLinkedAccount = (req, res) => {
 };
 
 /* User Notifications */
+/*
 exports.userNotifications = (req, res) => {
     User.findOne({_id:req.params.userId},function(error,getUserDetails){
-		if(getUserDetails)
-		{
-			console.log(getUserDetails);
-			res.render('user/user_notifications', { title: 'User Notifications',getUserDetails:getUserDetails,activeClass:8,left_activeClass:5});
-		}
-	});
+        if(getUserDetails){
+            res.render('user/user_notifications', { title: 'User Notifications',getUserDetails:getUserDetails,activeClass:8,left_activeClass:5});
+        }
+    });
+};*/
+
+exports.userNotifications = (req, res) => {
+    User.findOne({_id:req.params.userId},function(error,getUserDetails){
+        Notification.findOne({user_id:req.params.userId},function(error,resultRes){
+            if(getUserDetails){
+                if(resultRes){
+                    res.render('user/user_notifications', { title: 'User Notifications',getUserDetails:getUserDetails,activeClass:8,left_activeClass:5,result:resultRes});
+                }else{
+                    resultRes = { _id: req.params.userId,
+                        user_id: req.params.customerId,
+                        new_arrival: [],
+                        promocode: [],
+                        delivery: [],
+                        shipped: [],
+                        news: [] ,
+                        user_id:req.params.customerId
+                    };
+                    res.render('user/user_notifications', { title: 'User Notifications',getUserDetails:getUserDetails,activeClass:8,left_activeClass:5,result:resultRes});
+                }
+            }
+        });
+    });
 };
 
 /**
@@ -1198,3 +1221,38 @@ exports.shop_user_view = (req, res) => {
         });
     });
 }
+
+
+
+exports.shop_payment_method = (req, res) => {
+    PaymentMethod.findOne({ user_id: req.user.shop_id}, function(error, resRes){
+        if(resRes == null){
+            resRes = [];
+        }
+        console.log(resRes);
+        res.render('user/shop_payment_method', { title: 'Shop Payment',activeClass:3,availablePaymentMethod:resRes,left_activeClass:5});
+    });
+};
+/**
+ * POST /user/paymentMethod/save/
+ * User payment Method save
+ */
+exports.shop_payment_method_save = (req, res) => {
+    updateData = {
+        user_id  : req.user.shop_id,// Shop id of the Shop
+        payment_type : req.body.payment_type,
+        paypal_email : req.body.paypal_email,
+        venmo_email   : req.body.venmo_email,
+        direct_deposit_bank_name : req.body.direct_deposit_bank_name,
+        direct_deposit_account_no : req.body.direct_deposit_account_no,
+        direct_deposit_routing_no : req.body.direct_deposit_routing_no
+    }
+    PaymentMethod.update({user_id:req.user.shop_id},updateData,{upsert: true },function(error,paymentMethodObject){
+        if (error){
+            req.flash('errors',['Something went wronge!']);
+        }else{
+            req.flash('success',['Payment information saved successfully!']);
+            res.redirect('/user/shop_payment_method');
+        }
+    });
+};

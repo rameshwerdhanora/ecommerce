@@ -31,18 +31,18 @@ block content
                   p Etiqett News
                 .omer_notification_right
                   span
-                    -if(getUserDetails.news.email == 1)
-                        input#radio.css-checkbox(type='checkbox', name='news[email]', value='1',checked='checked')
+                    -if((result.news.length > 0) && (result.news[0] == 'mail' || result.news[1] == 'mail'))
+                        input#radio.css-checkbox(type='checkbox', name='news[]', value='mail',checked='checked')
                     -else
-                        input#radio.css-checkbox(type='checkbox', name='news[email]', value='1')
-                    label.css-label(for='news[email]') 
+                        input#radio.css-checkbox(type='checkbox', name='news[]', value='mail')
+                    label.css-label(for='news[]') 
                   span
-                    -if(getUserDetails.news.mobile == 1)
-                        input#radio1.css-checkbox(type='checkbox', name='news[mob]', value='1',checked='checked')
+                    -if((result.news.length > 0) && (result.news[0] == 'mobile' || result.news[1] == 'mobile'))
+                        input#radio1.css-checkbox(type='checkbox', name='news[]', value='mobile',checked='checked')
                     -else
-                        input#radio1.css-checkbox(type='checkbox', name='news[mob]', value='1')
+                        input#radio1.css-checkbox(type='checkbox', name='news[]', value='mobile')
                         
-                    label.css-label(for='news[mob]')
+                    label.css-label(for='news[]')
                   .clearfix
                 .clearfix
               .omer_notification_box
@@ -50,17 +50,17 @@ block content
                   p Items Shipped
                 .omer_notification_right
                   span
-                    -if(getUserDetails.shipped.email == 1)
-                        input#radio2.css-checkbox(type='checkbox', name='shipped[email]', value='1',checked="checked")
+                    -if((result.shipped.length > 0 ) && (result.shipped[0] == 'mail' || result.shipped[1] == 'mail'))
+                        input#radio2.css-checkbox(type='checkbox', name='shipped[]', value='mail',checked="checked")
                     -else
-                        input#radio2.css-checkbox(type='checkbox', name='shipped[email]', value='1')
-                    label.css-label(for='shipped[email]')
+                        input#radio2.css-checkbox(type='checkbox', name='shipped[]', value='mail')
+                    label.css-label(for='shipped[]')
                   span
-                    -if(getUserDetails.shipped.mobile == 1)
-                        input#radio3.css-checkbox(type='checkbox', name='shipped[mob]', value='1',checked="checked")
+                    -if((result.shipped.length > 0 ) && (result.shipped[0] == 'mobile' || result.shipped[1] == 'mobile'))
+                        input#radio3.css-checkbox(type='checkbox', name='shipped[]', value='mobile',checked="checked")
                     -else
-                        input#radio3.css-checkbox(type='checkbox', name='shipped[mob]', value='1')
-                    label.css-label(for='shipped[mob]')
+                        input#radio3.css-checkbox(type='checkbox', name='shipped[]', value='mobile')
+                    label.css-label(for='shipped[]')
                   .clearfix
                 .clearfix
               .omer_notification_box
@@ -68,17 +68,17 @@ block content
                   p Items Delivered
                 .omer_notification_right
                   span
-                    -if(getUserDetails.delivery.email == 1)
-                        input#radio4.css-checkbox(type='checkbox', name='deliver[email]', value='1',checked="checked")
+                    -if(result.delivery.length > 0 && (result.delivery[0] == 'mail' || result.delivery[1] == 'mail'))
+                        input#radio4.css-checkbox(type='checkbox', name='deliver[]', value='mail',checked="checked")
                     -else
-                        input#radio4.css-checkbox(type='checkbox', name='deliver[email]', value='1')
-                    label.css-label(for='deliver[email]')
+                        input#radio4.css-checkbox(type='checkbox', name='deliver[]', value='mail')
+                    label.css-label(for='deliver[]')
                   span
-                    -if(getUserDetails.delivery.mobile == 1)
-                        input#radio5.css-checkbox(type='checkbox', name='deliver[mob]', value='1',checked="checked")
+                    -if(result.delivery.length > 0 && (result.delivery[0] == 'mobile' || result.delivery[1] == 'mobile'))
+                        input#radio5.css-checkbox(type='checkbox', name='deliver[]', value='mobile',checked="checked")
                     -else
-                        input#radio5.css-checkbox(type='checkbox', name='deliver[mob]', value='1')
-                    label.css-label(for='deliver[mob]')
+                        input#radio5.css-checkbox(type='checkbox', name='deliver[]', value='mobile')
+                    label.css-label(for='deliver[]')
                   .clearfix
                 .clearfix
               .omer_notification_box
@@ -86,17 +86,17 @@ block content
                   p Promo Codes
                 .omer_notification_right
                   span
-                    -if(getUserDetails.promocode.email == 1)
-                        input#radio6.css-checkbox(type='checkbox', name='promo[email]', value='1',checked="checked")
+                    -if(result.promocode.length > 0 && (result.promocode[0] == 'mail' || result.promocode[1] == 'mail'))
+                        input#radio6.css-checkbox(type='checkbox', name='promo[]', value='mail',checked="checked")
                     -else
-                        input#radio6.css-checkbox(type='checkbox', name='promo[email]', value='1')
-                    label.css-label(for='promo[email]')
+                        input#radio6.css-checkbox(type='checkbox', name='promo[]', value='mail')
+                    label.css-label(for='promo[]')
                   span
-                    -if(getUserDetails.promocode.mobile == 1)
-                        input#radio7.css-checkbox(type='checkbox', name='promo[mob]', value='1',checked="checked")
+                    -if(result.promocode.length > 0 && (result.promocode[0] == 'mobile' || result.promocode[1] == 'mobile'))
+                        input#radio7.css-checkbox(type='checkbox', name='promo[]', value='mobile',checked="checked")
                     -else
-                        input#radio7.css-checkbox(type='checkbox', name='promo[mob]', value='1')
-                    label.css-label(for='promo[mob]')
+                        input#radio7.css-checkbox(type='checkbox', name='promo[]', value='mobile')
+                    label.css-label(for='promo[]')
                   .clearfix
                 .clearfix
               .omer_notification_box
@@ -104,16 +104,16 @@ block content
                   p New Arrivals
                 .omer_notification_right
                   span
-                    -if(getUserDetails.new_arrival.email == 1)
-                        input#radio8.css-checkbox(type='checkbox', name='arrival[email]', value='1',checked="checked")
+                    -if(result.new_arrival.length > 0 && (result.new_arrival[0] == 'mail' || result.new_arrival[1] == 'mail'))
+                        input#radio8.css-checkbox(type='checkbox', name='arrival[]', value='mail',checked="checked")
                     -else
-                        input#radio8.css-checkbox(type='checkbox', name='arrival[email]', value='1')
-                    label.css-label(for='arrival[email]')
+                        input#radio8.css-checkbox(type='checkbox', name='arrival[]', value='mail')
+                    label.css-label(for='arrival[]')
                   span
-                    -if(getUserDetails.new_arrival.mobile == 1)
-                        input#radio9.css-checkbox(type='checkbox', name='arrival[mob]', value='1',checked="checked")
+                    -if(result.new_arrival.length > 0 && (result.new_arrival[0] == 'mobile' || result.new_arrival[1] == 'mobile'))
+                        input#radio9.css-checkbox(type='checkbox', name='arrival[]', value='mobile',checked="checked")
                     -else
-                        input#radio9.css-checkbox(type='checkbox', name='arrival[mob]', value='1')
-                    label.css-label(for='arrival[mob]')
+                        input#radio9.css-checkbox(type='checkbox', name='arrival[]', value='mobile')
+                    label.css-label(for='arrival[]')
                   .clearfix
                 .clearfix

@@ -438,6 +438,8 @@ app.post('/user/shop_notification_update', passportConfig.isAuthenticated, userA
 app.get('/user/shop_payment_method', passportConfig.isAuthenticated, userAppControlleraAdmin.shop_payment_method);
 app.get('/user/shop_user_list', passportConfig.isAuthenticated, userAppControlleraAdmin.shop_user_list);
 app.get('/user/shop_user_view/:userId', passportConfig.isAuthenticated, userAppControlleraAdmin.shop_user_view);
+app.get('/user/shop_payment_method', passportConfig.isAuthenticated, userAppControlleraAdmin.shop_payment_method);
+app.post('/user/shop_payment_method_save', passportConfig.isAuthenticated, userAppControlleraAdmin.shop_payment_method_save);
 
 
 app.get('/user/list', passportConfig.isAuthenticated, userAppControlleraAdmin.userList);
