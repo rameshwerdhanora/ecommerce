@@ -23,7 +23,7 @@ exports.followUnFollowBrand = (req, res) => {
 		{
 			Follow.remove({user_id:req.params.userId,brand_id:req.params.brandId},function(error,unfollowBrand)
 			{
-				return res.json({"status":'success',"msg":'This brand successfully in unfollow your list.'});
+				return res.json({"status":'success',"msg":'This brand successfully in unfollow your list.',follow:'no'});
 			});
 		}
 		else 
@@ -35,11 +35,11 @@ exports.followUnFollowBrand = (req, res) => {
 	  		{
 	  			if(error)
 	  			{
-	  				return res.json({"status":'error',"msg":'This brand is not added in your list.'});
+	  				return res.json({"status":'error',"msg":'This brand is not added in your list.',follow:'nothing'});
 	  			}
 	  			else 
 	  			{
-	  				return res.json({"status":'success',"msg":'This brand successfully in added your follow list.'});
+	  				return res.json({"status":'success',"msg":'This brand successfully in added your follow list.',follow:'no'});
 	  			}
 	  		});
 
