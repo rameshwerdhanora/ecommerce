@@ -39,7 +39,7 @@ exports.followUnFollowBrand = (req, res) => {
 	  			}
 	  			else 
 	  			{
-	  				return res.json({"status":'success',"msg":'This brand successfully in added your follow list.',follow:'no'});
+	  				return res.json({"status":'success',"msg":'This brand successfully in added your follow list.',follow:'yes'});
 	  			}
 	  		});
 
