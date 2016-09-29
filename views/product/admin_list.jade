@@ -96,9 +96,9 @@ block content
                        td 
                         -var fetchAllAttr = fetchAllProduct.attribute;
                          -if(fetchAllAttr){
-                                -for(var j = 0;j < fetchAllAttr.length; j++){
-                                    | #{attrOptionValuesArr[fetchAllAttr[j]]} &nbsp;&nbsp;
-                                -}  
+                            -for(var j = 0;j < fetchAllAttr.length; j++){
+                                | #{attrOptionValuesArr[fetchAllAttr[j]]} &nbsp;&nbsp;
+                            -}  
                          -}
                        td #{categoryAr[fetchAllProduct.category_id]}
                        td #{subcategoryAr[fetchAllProduct.sub_category_id]}

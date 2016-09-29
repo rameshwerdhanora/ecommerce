@@ -48,6 +48,29 @@
     padding: 0 10px 0 10px;
     width: 100%;
 }
+
 .midlle-bar{
 min-height:900px;
+}
+
+.product_table .product_table_img ul.small_thumb img{
+   max-width: 28px;  
+}
+
+.vert .simply-scroll-list .view_product ul li{
+    height: auto;
+    float: left;
+    width: 32.3%;
+    border: 1px solid #aaaaaa;
+}
+ 
+.vert .simply-scroll-list .view_product .modal-body .product_info_details{
+   padding: 12px 10px 0;
+}
+
+.modal-body .product_info_details .product_price_rate{
+    float: right;
+}
+.vert .simply-scroll-list ul#scroller li{
+    
 }
