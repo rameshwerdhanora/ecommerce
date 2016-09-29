@@ -76,9 +76,11 @@ exports.customerList = (req, res) => {
 exports.customerView = (req, res) => {
     User.findOne({_id:req.params.id},function(error,getCustomerDetails){
         Address.findOne({is_default:1, add_type:Constants.SHIPPING, user_id:req.params.id},function(error,fetchAddress){   
-            if(getCustomerDetails)
-            {
+            if(getCustomerDetails){
                 console.log(fetchAddress);
+                if(fetchAddress == null){
+                    fetchAddress= [];
+                }
                 console.log(getCustomerDetails);
                 res.render('user/customer_view', { title: 'Customer View',getCustomerDetails:getCustomerDetails,activeClass:1,left_activeClass:4, fetchAddress:fetchAddress});
             }
@@ -1256,3 +1258,6 @@ exports.shop_payment_method_save = (req, res) => {
         }
     });
 };
+
+
+//shopuser_profile shopuser_

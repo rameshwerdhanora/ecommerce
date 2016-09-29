@@ -30,7 +30,7 @@ block content
               .profile-frm-row
                 .profile-frm-cl1 Address
                 .profile-frm-cl2
-                  input(name='', type='text', value='#{fetchAddress.address_line1}')
+                  input(name='', type='text', value='#{fetchAddress.address_line1? fetchAddress.address_line1 : ""}')
               .profile-frm-row
                 .profile-frm-cl1 City
                 .profile-frm-cl2
