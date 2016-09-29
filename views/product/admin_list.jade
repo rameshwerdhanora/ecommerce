@@ -1,0 +1,117 @@
+extends ../layout
+
+block content
+  .col-sm-9.midlle-bar
+    include ../partials/flash
+    .large-title-row
+      img(src='/images/title-icon.png', alt='icon')
+      |  PRODUCTS
+    //.top-btns.clearfix
+      .btn-s-right
+        a#addPrductBtn.default-btn(href='#modal-container', title='Add Product', role='button', data-toggle='modal') ADD PRODUCT  
+        //a.default-btn(href='/product/add', title='Add Size', role='button', data-toggle='modal') ADD PRODUCT  
+    .customer-box.clearfix
+      include ../partials/product_left_menu
+      .profile-cl
+        .profile-top-row
+          h2 MANAGE PRODUCTS
+        .profile-form-box.users-in
+          .low-tbl-box.large-table.order-txt
+            
+              table(width='100%', cellspacing='0', cellpadding='0', border='0')
+                tbody
+                  tr
+                    th(align='center')
+                      input#checkbox2(type='checkbox', name='checkbox2')
+                    th
+                      | USERNAME  
+                      span.paginng-icon
+                        img(src='/images/list-arrow.png', alt='arrow')
+                    th
+                      | BRAND  
+                      span.paginng-icon
+                        img(src='/images/list-arrow.png', alt='arrow')    
+                    th
+                      | IMAGES  
+                      span.paginng-icon
+                        img(src='/images/list-arrow.png', alt='arrow')    
+                    th
+                      | PRODUCT NAME 
+                      span.paginng-icon
+                        img(src='/images/list-arrow.png', alt='arrow')    
+                    th
+                      | SIZE 
+                      span.paginng-icon
+                        img(src='/images/list-arrow.png', alt='arrow')
+                        
+                    th
+                      | CATEGORY 
+                      span.paginng-icon
+                        img(src='/images/list-arrow.png', alt='arrow')
+                        
+                    th
+                      | SUBCATEGORY 
+                      span.paginng-icon
+                        img(src='/images/list-arrow.png', alt='arrow')
+                    th
+                      | PRICE 
+                      span.paginng-icon
+                        img(src='/images/list-arrow.png', alt='arrow')
+                        
+                    th
+                      | SOLD 
+                      span.paginng-icon
+                        img(src='/images/list-arrow.png', alt='arrow')
+                    th
+                      | SALES 
+                      span.paginng-icon
+                        img(src='/images/list-arrow.png', alt='arrow')
+                    //th
+                      a(href='#')
+                        img(src='/images/delete-icon.png', alt='icon')
+
+                  if fetchAllProducts.length > 0
+                    -var i = 0;
+                    each fetchAllProduct in fetchAllProducts
+                      - i++;
+                      tr(class='productTr_#{fetchAllProduct._id}')
+                       td  
+                        input#checkbox2(type='checkbox', name='checkbox2')
+                       td --
+                       td #{brandAr[fetchAllProduct.brand_id]}
+                       td
+                        .product_table_img
+                          img(src='/#{productImagesArr[fetchAllProduct._id]}')
+                          ul.small_thumb
+                            li
+                              a(href='#')
+                                img(src='/#{productImagesArr[fetchAllProduct._id]}')
+                            li
+                              a(href='#')
+                                img(src='/#{productImagesArr[fetchAllProduct._id]}')
+                            li
+                              a(href='#')
+                                img(src='/#{productImagesArr[fetchAllProduct._id]}')
+                       td #{fetchAllProduct.name}
+                       td 
+                        -var fetchAllAttr = fetchAllProduct.attribute;
+                         -if(fetchAllAttr){
+                            -for(var j = 0;j < fetchAllAttr.length; j++){
+                                | #{attrOptionValuesArr[fetchAllAttr[j]]} &nbsp;&nbsp;
+                            -}  
+                         -}
+                       td #{categoryAr[fetchAllProduct.category_id]}
+                       td #{subcategoryAr[fetchAllProduct.sub_category_id]}
+                       td $#{fetchAllProduct.price}
+                       td --
+                       td --
+                       //td #{fetchAllProduct.is_featured}
+                       //td 
+                          a.edit_product(href='/product/list/#{fetchAllProduct._id}') Edit | &nbsp;
+                          a.edit_product(href='#' onclick='make_sure_for_product("#{fetchAllProduct._id}")') Remove             
+                  else
+                    tr
+                      td(colspan=7) No Products    
+                      
+            include ../partials/pagination      
+ 

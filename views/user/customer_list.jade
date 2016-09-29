@@ -9,44 +9,46 @@ block content
           select#select(name='select')
             option ACTIONS
     .customer-box.cmn-in.clearfix
-      .low-tbl-box.order-txt.large-table
-        form(name='form2', method='post', action='')
-          table(width='100%', cellspacing='0', cellpadding='0', border='0')
-            tbody
-              tr
-                th(align='center')
-                  input#checkbox2(type='checkbox', name='checkbox2')
-                th CUSTOMER NAME 
-                th ADDRESS 
-                th CITY
-                th STATE
-                th ZIP CODE 
-                th COUNTRY
-                th PHONE
-                th E-Mail 
-                th GENDER
-                th B-day
-                th
-                  a(href='#')
-                    img(src='/images/delete-icon.png', alt='Delete')
-              if getCustomers.length > 0
-                each getCustomer in getCustomers       
-                  tr
-                    td(align='center')
-                      input#checkbox4(type='checkbox', name='checkbox4')
-                    td 
-                      a.ord-title(href='/customer/view/#{getCustomer._id}') #{getCustomer.first_name} #{getCustomer.last_name}
-                    td 1439 S. Rimhurst AVe.
-                    td GLENDORA
-                    td CA
-                    td 91740 
-                    td USA
-                    td.clr-s1 #{getCustomer.contact_no}
-                    td #{getCustomer.email_id}
-                    td #{getCustomer.gender}
-                    td #{getCustomer.dob}
-                    td               
-              else
+        .low-tbl-box.order-txt.large-table
+          form(name='form2', method='post', action='')
+            table(width='100%', cellspacing='0', cellpadding='0', border='0')
+              tbody
                 tr
-                  td(colspan=12)
-                    | No Customers   
+                  th(align='center')
+                    input#checkbox2(type='checkbox', name='checkbox2')
+                  th CUSTOMER NAME 
+                  th ADDRESS 
+                  th CITY
+                  th STATE
+                  th ZIP CODE 
+                  th COUNTRY
+                  th PHONE
+                  th E-Mail 
+                  th GENDER
+                  th B-day
+                  th
+                    a(href='#')
+                      img(src='/images/delete-icon.png', alt='Delete')
+                if getCustomers.length > 0
+                  each getCustomer in getCustomers       
+                    tr
+                      td(align='center')
+                        input#checkbox4(type='checkbox', name='checkbox4')
+                      td 
+                        a.ord-title(href='/customer/view/#{getCustomer._id}') #{getCustomer.first_name} #{getCustomer.last_name}
+                      td #{addressLine1[getCustomer._id]}
+                      td #{city[getCustomer._id]}
+                      td #{state[getCustomer._id]} 
+                      td #{postalCode[getCustomer._id]} 
+                      td #{city[getCustomer._id]}
+                      td.clr-s1 #{contactNo[getCustomer._id]}
+                      td #{getCustomer.email_id}
+                      td #{getCustomer.gender}
+                      td #{getCustomer.dob}
+                      td               
+                else
+                  tr
+                    td(colspan=12)
+                      | No Customers   
+            
+        include ../partials/pagination            

@@ -1,0 +1,53 @@
+.dnone{
+    display: none;
+}
+.chosen-container{
+    display: block;
+    width: 100% !important;
+}
+.chosen-container-multi .chosen-choices li.search-field {
+   
+    width: auto;
+    height: auto;
+}
+.chosen-container-multi .chosen-choices li.search-field {
+
+    border: none;
+}
+.chosen-container .chosen-results li{
+    text-align: left;
+}
+
+.chosen-container-multi .chosen-choices li.search-field input[type="text"]{
+    width: 144px !important;
+}
+
+.dropdown-backdrop{
+ display:none !important;
+}
+.nav-left .dropdown-menu li a {
+  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+}
+.order-txt .product_table_img .small_thumb img{
+  max-width: 28px;  
+}
+ 
+
+.add-user-cl1 .profile-frm-cl2 input[type="password"] {
+    height: 26px;
+    padding: 5px;
+}
+
+.profile-frm-cl2 input[type="password"] {
+    border: 1px solid #333333;
+    color: #000;
+    font-size: 15px;
+    font-weight: 600;
+    height: 34px;
+    line-height: 34px;
+    padding: 0 10px 0 10px;
+    width: 100%;
+}
+..midlle-bar{
+min-height:900px;
+}

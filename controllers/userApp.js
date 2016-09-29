@@ -10,19 +10,63 @@ const EmailTemplate = require('../models/emailTemplate');
 const CommonHelper = require('../helpers/commonHelper');
 const Order           = require('../models/orders');
 const OrderDetails    = require('../models/orderDetails');
+const Constants 		= require('../constants/constants');
+
 
 /**
  * GET /customer/list
  * Customer List user page.
  */
 exports.customerList = (req, res) => {
-	User.find({role_id:5},function(error,getCustomers){
-		if(getCustomers)
-		{
-			//console.log(getCustomers.length);
-			res.render('user/customer_list', { left_activeClass:4, title: 'Customer',getCustomers:getCustomers});
-		}
-	});	
+        var page = (req.query.page == undefined)?1:req.query.page;
+        page = (page == 0)?1:page;
+        var skipRecord = (page-1)*Constants.RECORDS_PER_PAGE;
+        var getCustomers = [];
+        User.count(function(error, totalRecord) {
+            var totalPage = Math.ceil(totalRecord/Constants.RECORDS_PER_PAGE);
+
+            User.find({role_id:5})
+                    .limit(Constants.RECORDS_PER_PAGE)
+                    .skip(skipRecord)
+                    .sort('-_id')
+                    .exec(function(error,getCustomers){
+                    Address.find({is_default:1, add_type:Constants.SHIPPING},function(error,fetchAddress){        
+                        
+                        /*var newArray = [];
+                         * var tempAddress = {};
+                        if(tempAddress){
+                            for(var i = 0;i< fetchAddress.length;i++){
+                                tempAddress[fetchAddress[i].user_id] = fetchAddress[i];
+                            }
+                        }*/
+                        
+                        var tempAddressLine1 = {};
+                        var tempCity = {};
+                        var tempPostalCode = {};
+                        var tempContactNo = {};
+                        var tempCountry = {};
+                        var tempState = {};
+                        for(var i =0; i < getCustomers.length;i++){
+                            for(var j = 0;j< fetchAddress.length;j++){
+                                if(getCustomers[i]._id == fetchAddress[j].user_id){
+                                    //getCustomers[i].push(fetchAddress[j]['address_line1']);
+                                    tempAddressLine1[getCustomers[i]._id] = fetchAddress[j].address_line1;
+                                    tempCity[getCustomers[i]._id] = fetchAddress[j].city;
+                                    tempPostalCode[getCustomers[i]._id] = fetchAddress[j].postal_code;
+                                    tempCountry[getCustomers[i]._id] = fetchAddress[j].country;
+                                    tempContactNo[getCustomers[i]._id] = fetchAddress[j].contact_no;
+                                    tempState[getCustomers[i]._id] = fetchAddress[j].state;
+                                }
+                            }
+                        }
+                        console.log(tempAddressLine1);
+                            
+                        if(getCustomers) {
+                             res.render('user/customer_list', { left_activeClass:4, currentPage:page, totalPage:totalPage, title: 'Customer',getCustomers:getCustomers, addressLine1:tempAddressLine1, city:tempCity,postalCode:tempPostalCode,country:tempCountry, contactNo:tempContactNo,state:tempState  });
+                         }     
+                });
+            });
+        });    
 };
 
 /**
@@ -31,11 +75,14 @@ exports.customerList = (req, res) => {
  */
 exports.customerView = (req, res) => {
     User.findOne({_id:req.params.id},function(error,getCustomerDetails){
+        Address.findOne({is_default:1, add_type:Constants.SHIPPING, user_id:req.params.id},function(error,fetchAddress){   
             if(getCustomerDetails)
             {
-                    //console.log(getCustomerDetails);
-                    res.render('user/customer_view', { title: 'Customer View',getCustomerDetails:getCustomerDetails,activeClass:1,left_activeClass:4});
+                console.log(fetchAddress);
+                console.log(getCustomerDetails);
+                res.render('user/customer_view', { title: 'Customer View',getCustomerDetails:getCustomerDetails,activeClass:1,left_activeClass:4, fetchAddress:fetchAddress});
             }
+        });	
     });	
 };
 
@@ -188,19 +235,13 @@ exports.customerAddressSave = (req, res) => {
  * User List - here we need to get both users and customers in seprate columns
  */
 exports.userList = (req, res) => {
-    
-	//-- get customers
-	User.find({role_id:5},function(error,getCustomers){
-		User.find({role_id:{$ne : 5}},function(error,getUsers){
-
-		// if(getCustomers)
-		// {
-			//console.log(getUsers);
-			res.render('user/user_list', { title: 'User List',getCustomers:getCustomers,getUsers:getUsers,left_activeClass:5});
-		//}
-		});
-	});	
+        User.find({role_id:5},function(error,getCustomers){
+            User.find({role_id:{$ne : 5}},function(error,getUsers){
+                res.render('user/user_list', { title: 'User List',getCustomers:getCustomers,getUsers:getUsers,left_activeClass:5});
+            });
+        });	
 };
+
 
 
 /**
@@ -208,12 +249,76 @@ exports.userList = (req, res) => {
  * Signup user page.
  */
 exports.userAdd = (req, res) => {
-	Permission.find({},function(error,getPermissions){
-		if(getPermissions)
-		{
-			//console.log(getPermissions);
-			res.render('user/user_add', { title: 'New User',getPermissions:getPermissions,left_activeClass:5});
-		}
+        if(req.user.role_id == Constants.MASTERROLE || req.user.role_id == Constants.ADMINROLE){
+            var permissionType = 'SHOPADMIN';
+        }else{
+            var permissionType = 'SHOPUSER';
+        }
+	Permission.find({type:permissionType},function(error,getPermissions){
+            if(getPermissions){
+                var flag=true;
+                var finalPermission = new Array();
+                var takenElement = new Array();
+                var taa= 0;
+                while(flag){
+                    flag = false;
+                    console.log(getPermissions);
+                    for(i=0;i<getPermissions.length;i++){
+                        console.log(getPermissions[i].parent_id + '---'+ getPermissions[i]._id + '----'+getPermissions[i].name);
+                        var takenFlag = false;
+                        // To check element is already added into final result or not
+                        for(var tke = 0; tke < takenElement.length; tke++){
+                            if(getPermissions[i]._id == takenElement[tke]){
+                                takenFlag = true;
+                            }
+                        }
+                        if(!takenFlag){
+                            // If parent id is null then added them on root
+                            if(getPermissions[i].parent_id == 0){
+                                takenElement.push(getPermissions[i]._id);// Array is used to check the element is added or not
+                                var tmp = {};
+                                tmp.id = getPermissions[i]._id;
+                                tmp.name = getPermissions[i].name;
+                                //tmp.parent_id = getPermissions[i].parent_id;
+                                tmp.options = new Array();
+                                flag = true;
+                                finalPermission.push(tmp);
+                            }else{
+                                console.log('nice');
+                                for(j=0;j<finalPermission.length;j++){
+                                    if(finalPermission[j].id == getPermissions[i].parent_id){
+                                        takenElement.push(getPermissions[i]._id);// Array is used to check the element is added or not
+                                        var tmp = {};
+                                        tmp.id = getPermissions[i]._id;
+                                        tmp.name = getPermissions[i].name;
+                                        //tmp.parent_id = getPermissions[i].parent_id;
+                                        tmp.options = new Array();
+                                        flag = true;
+                                        finalPermission[j].options.push(tmp);
+                                    }
+                                    if(finalPermission[j].options.length > 0){
+                                        for(m = 0;m < finalPermission[j].options.length; m++){
+                                            if(finalPermission[j].options.id == getPermissions[i].parent_id){
+                                                takenElement.push(getPermissions[i]._id);// Array is used to check the element is added or not
+                                                var tmp = {};
+                                                tmp.id = getPermissions[i]._id;
+                                                tmp.name = getPermissions[i].name;
+                                                //tmp.parent_id = getPermissions[i].parent_id;
+                                                tmp.options = new Array();
+                                                flag = true;
+                                                finalPermission[j].options.push(tmp);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                //console.log(getPermissions);
+                res.render('user/user_add', { title: 'New User',getPermissions:finalPermission,left_activeClass:5});
+            }
 	});
 };
 
@@ -221,81 +326,117 @@ exports.userAdd = (req, res) => {
  * POST /signup/saveuser
  * Save users .
  */
-exports.userSave = (req, res) => {
-	User.findOne({ email_id: req.body.email_id }, function(err, existingEmail){
-		if(existingEmail) 
-		{
-			console.log(req.body);
-			req.flash('error', 'Email address already exists.');
-			//req.flash('data',req.body);
-      		return res.render('user/user_add',{data: req.body});
-		} 
-		else 
-		{
-			//console.log(req.body);
-                    var userIns        		= new User();
-                    userIns.role_id    		= req.body.role_id;
-                    userIns.shop_name   	= req.body.shop_name;
-                    userIns.user_name   	= '';
-                    userIns.password    	= req.body.password;
-		    userIns.email_id       	= req.body.email_id;
-                    userIns.first_name  	= req.body.first_name;
-		    userIns.last_name   	= req.body.last_name;
-		    userIns.contact_no  	= req.body.contact_no;
-		    userIns.dob   			= '';
-		    userIns.gender   		= '';
-		    userIns.bio   			= '';
-		    userIns.cover_image		= '';
-		    userIns.profile_image   = '';
-		    userIns.social_type   	= '';
-		    userIns.social_id   	= '';
-		    userIns.access_token   	= '';
-		    userIns.is_active   	= true;
-		    userIns.is_deleted   	= false;
-		    userIns.created        	= Date.now();
-		    userIns.updated        	= '';
 
-		    userIns.save(function(error){
-                    if(error === null)
-                    {	
-                        //-- save user permissions
-                        if(req.body.permissions){
-                            for(var i=0; i<req.body.permissions.length; i++){
-                                    var userPermission = new UserPermission();
-                                    userPermission.user_id = userIns._id;
-                                    userPermission.permission_id = req.body.permissions[i];
-                                    userPermission.created = Date.now();
-                                    userPermission.save();
-                            }
-                        }    
+exports.userSave = (req, res) => {
+    User.findOne({$or: [ { email_id: req.body.email_id }, { user_name: req.body.user_name}] }, function(err, existingEmail){
+        if(existingEmail){
+            if(existingEmail.email_id == req.body.email_id){
+                req.flash('errors', ['Email address already exists.']);
+            }else{
+                req.flash('errors', ['Username already exists.']);
+            }
+            if(req.user.role_id == Constants.MASTERROLE || req.user.role_id == Constants.ADMINROLE){
+                var permissionType = 'SHOPADMIN';
+            }else{
+                var permissionType = 'SHOPUSER';
+            }
+            Permission.find({type:permissionType},function(error,getPermissions){
+		if(getPermissions){
+                    return res.render('user/user_add',{title: 'New User', data: req.body,getPermissions:getPermissions,left_activeClass:5});
+		}else{
+                    var tmp = new Array();
+                    return res.render('user/user_add',{title: 'New User', data: req.body,getPermissions:tmp,left_activeClass:5});
+                }
+            });
+        }else{
+            //console.log(req.body);
+            var userIns        		= new User();
+            
+            
+            userIns.shop_name   	= req.body.shop_name;
+            userIns.user_name   	= req.body.user_name;
+            userIns.password    	= req.body.password;
+            userIns.email_id       	= req.body.email_id;
+            userIns.first_name  	= req.body.first_name;
+            userIns.last_name   	= req.body.last_name;
+            userIns.contact_no  	= req.body.contact_no;
+            userIns.dob   		= '';
+            userIns.gender   		= '';
+            userIns.bio   		= '';
+            userIns.cover_image		= '';
+            userIns.profile_image       = '';
+            userIns.social_type   	= '';
+            userIns.social_id   	= '';
+            userIns.access_token   	= '';
+            userIns.is_active   	= true;
+            userIns.is_deleted   	= false;
+            userIns.created        	= Date.now();
+            userIns.updated        	= Date.now();
+            
+            userIns.address        	= req.body.address;
+            userIns.city        	= req.body.city;
+            userIns.state        	= req.body.state;
+            userIns.country        	= req.body.country;
+            userIns.zip                 = req.body.zip;
+            userIns.bio                 = req.body.bio;
+            
+            userIns.shop_id = '';
+            userIns.role_id = '';
+            
+            
+            userIns.save(function(error){
+                if(error === null){
+                    if(req.user.role_id == Constants.MASTERROLE || req.user.role_id == Constants.ADMINROLE){
+                        userIns.shop_id = userIns._id;
+                        userIns.role_id = req.body.role_id;
+                    }else{
+                        userIns.shop_id = req.user.shop_id;
+                        userIns.role_id = Constants.SHOP_EMPLOYEE;
+                    }
                     
+                    userIns.save(function(error){});
+                    //-- save user permissions 
+                    if(req.body.permissions){
+                        for(var i=0; i<req.body.permissions.length; i++){
+                            var userPermission = new UserPermission();
+                            userPermission.user_id = userIns._id;
+                            userPermission.permission_id = req.body.permissions[i];
+                            userPermission.created = Date.now();
+                            userPermission.save();
+                        }
+                    }
                     // Get the get template content for 'registration' and call the helper to send the email         
                     EmailTemplate.findOne({template_type:'registration'},function(error,getTemplateDetail){
-                        var registerTemplateContent = getTemplateDetail.content;
-                        dynamicTemplateContent = registerTemplateContent.replace(/{first_name}/gi, userIns.first_name).replace(/{last_name}/gi, userIns.last_name);  
-                            if(dynamicTemplateContent)
-                            {
-                               CommonHelper.emailTemplate(getTemplateDetail.subject, dynamicTemplateContent, userIns._id);      
+                        if(getTemplateDetail != null){
+                            var registerTemplateContent = getTemplateDetail.content;
+                            //dynamicTemplateContent= registerTemplateContent.replace(/{first_name}/gi, userIns.first_name).replace(/{last_name}/gi, userIns.last_name);
+                            dynamicTemplateContent = registerTemplateContent.replace(/{customer_name}/gi, userIns.first_name);
+                            if(dynamicTemplateContent){
+                                CommonHelper.emailTemplate(getTemplateDetail.subject, dynamicTemplateContent, userIns._id);      
                             }
+                        }
                     });
-                    
                     // Send SMS Using Twilio API to perticular user mobile number
                     if((userIns.contact_no!='') && isNaN(userIns.contact_no)){
                         //CommonHelper.sendSms(req, res, smsContent, userId);
                     }
-
-
-                    req.flash('error', 'Your details is successfully stored.');
-                    return res.redirect('/user/list');
+                    req.flash('success', 'User information saved successfully.');
+                    if(req.user.role_id == Constants.MASTERROLE || req.user.role_id == Constants.ADMINROLE){
+                        return res.redirect('/user/list');
+                    }else if(req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6){
+                        return res.redirect('/user/shop_user_list');
                     }
-                    else 
-                    {
-                            req.flash('error', 'Something wrong!!');
-                    return res.render('user/user_add');
+                }else{
+                    req.flash('error', 'Something wrong!!');
+                    if(req.user.role_id == Constants.MASTERROLE || req.user.role_id == Constants.ADMINROLE){
+                        return res.redirect('/user/list');
+                    }else if(req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6){
+                        return res.redirect('/user/shop_user_list');
                     }
-		    }); 
-		}
-	});
+                }
+            }); 
+        }
+    });
 };
 
 /*
@@ -306,29 +447,39 @@ exports.userView = (req, res) => {
 	User.findOne({_id:req.params.id},function(error,getUserDetails){
 		if(getUserDetails)
 		{
-			//console.log(getUserDetails);
+			console.log(getUserDetails);
 			res.render('user/user_view', { title: 'User View',getUserDetails:getUserDetails,activeClass:1,left_activeClass:5});
 
 		}
 	});	
 };
 
+/*
+ * GET /user/Shopview
+ * user view page.
+*/
+exports.shopProfile = (req, res) => {
+    User.findOne({shop_id:req.user.shop_id},function(error,getUserDetails){
+        if(getUserDetails){
+            res.render('user/shopProfile', { title: 'Shop view',getUserDetails:getUserDetails,activeClass:1,left_activeClass:5});
+        }
+    });	
+};
+
 
 /**
  * GET /user/edit
  * user view page in edit mode.
- */
+ */ 
 exports.userEdit = (req, res) => {
-	User.findOne({_id:req.params.id},function(error,getUserDetails){
-		if(getUserDetails)
-		{
-			res.render('user/customer_edit', { title: 'Customer Edit',getCustomerDetails:getCustomerDetails,activeClass:1,left_activeClass:5});
-
-			//res.render('user/user_edit', { title: 'User Edit',getUserDetails:getUserDetails,activeClass:req.params.activeClass});
-
-		}
-	});	
+    User.findOne({_id:req.params.id},function(error,getUserDetails){
+        if(getUserDetails){
+            res.render('user/customer_edit', { title: 'Customer Edit',getCustomerDetails:getUserDetails,activeClass:1,left_activeClass:5});
+        }
+    });	
 };
+
+
 
 /**
  * POST /user/userUpdate
@@ -580,11 +731,11 @@ exports.notification = (req, res) => {
                 }else{
                     resultRes = { _id: '',
                         user_id: req.params.customerId,
-                        new_arrival: [ { mobile: 0, email: 0 } ],
-                        promocode: [ { mobile: 0, email: 0 } ],
-                        delivery: [ { mobile: 0, email: 0 } ],
-                        shipped: [ { mobile: 0, email: 0} ],
-                        news: [ { mobile: 0, email: 0 } ] ,
+                        new_arrival: [],
+                        promocode: [],
+                        delivery: [],
+                        shipped: [],
+                        news: [] ,
                         user_id:req.params.customerId
                     };
                     res.render('user/notification', { title: 'Customer notification',activeClass:8, getCustomerDetails:getCustomerDetails,result:resultRes,left_activeClass:4 });
@@ -791,3 +942,259 @@ exports.order = (req, res) => {
         }
     });
 };
+
+
+/**
+ * POST /user/shopprofileupdate
+ * Update user Information
+*/
+exports.shopPfofileUpdate = (req, res) => {
+    updateData = {
+        //'first_name' 	: req.body.first_name,
+        //'last_name'	: req.body.last_name,
+        'address'	: req.body.address, 
+        'city'          : req.body.city,
+        'state'		: req.body.state,
+        'zip'		: req.body.zip,
+        'country'	: req.body.country,
+        'bio'           : req.body.bio,
+    };
+    if(req.user.role_id == 3 || req.user.role_id == 4){
+        updateData.shop_name = req.body.shop_name;
+    }
+    User.findByIdAndUpdate(req.user._id,updateData, function(error, updateRes){
+        req.flash('success',['Profile updated successfully']);
+        res.redirect('/user/shopprofile');
+    });
+};
+
+exports.shopShippingdetail = (req,res) =>{
+    ShopShipping.findOne({ shop_id: req.user.shop_id}, function(error, shopShippingRes){
+        if(shopShippingRes == null){
+            shopShippingRes = [];
+        }
+        res.render('user/shop_shipping', { title: 'Shop Shipping',activeClass:2,availableShopShipping:shopShippingRes,left_activeClass:5});
+    });
+}
+exports.shopShippingUpdate = (req,res) =>{
+    updateData = {
+        address     : req.body.address,
+        city        :req.body.city,
+        zip_code     :req.body.zip_code,
+        state    	:req.body.state,
+        country    	:req.body.country,
+        shipping_account    : req.body.shipping_account,
+        shipping_username   : req.body.shipping_username,
+        shipping_password   : req.body.shipping_password,
+    };
+
+    ShopShipping.update({shop_id:req.user.shop_id},updateData,{upsert:true}, function(error, updateRes){
+        if (error){
+            req.flash('errors',['Some thing went wronge!']);
+        }else{
+            req.flash('success','Shipping address updated successfully.');
+            
+        }
+        res.redirect('/user/shop_shippping_detail');
+    });
+}
+exports.shop_product_review = (req,res) =>{
+    res.render('user/shop_product_review', { title: 'Product review',activeClass:4,left_activeClass:5});
+}
+exports.shop_linked_account = (req,res) =>{
+    res.render('user/shop_linked_account', { title: 'Linked Account',activeClass:6,left_activeClass:5});
+}
+
+
+/* User Account */
+exports.shop_account = (req, res) => {
+    User.findOne({_id:req.user._id},function(error,getUserDetails){
+        if(getUserDetails){
+            res.render('user/shop_account', { title: 'User Account',getCustomerDetails:getUserDetails,activeClass:5,left_activeClass:5});
+        }
+    });
+};
+/* User Account */
+exports.shop_account_update = (req, res) => {
+    const bcrypt = require('bcrypt-nodejs');
+    bcrypt.hash(req.body.password, null, null, function(err, hash) {
+        updateData = {
+            password  : hash 
+        };
+        User.update({_id:req.user._id},updateData, function(error, updateRes){
+            if (error){
+                req.flash('errors',['Something went wronge!']);
+                res.redirect('/user/shop_account');
+            }else{
+                req.flash('success','Password updated successfully.');
+                res.redirect('/user/shop_account');
+            }
+        });
+    });
+};
+exports.shop_notification = (req, res) => {
+    //res.render('user/shop_linked_account', { title: 'Linked Account',activeClass:7,left_activeClass:5});
+    Notification.findOne({user_id:req.user._id},function(error,resultRes){
+        console.log(resultRes);
+        if(resultRes){
+            res.render('user/shop_notification', { title: 'Shop User notification',activeClass:7, result:resultRes,left_activeClass:5 });
+        }else{
+            resultRes = {
+                new_arrival: [],
+                promocode: [],
+                delivery: [],
+                shipped: [],
+                news: [] ,
+            };
+            res.render('user/shop_notification', { title: 'Shop User notification',activeClass:7,result:resultRes,left_activeClass:5 });
+        }
+    });
+    
+};
+
+exports.shop_notification_update = (req, res) => {
+   var updateData = {};
+   updateData.delivery = new Array();
+   updateData.shipped = new Array();
+   updateData.new_arrival = new Array();
+   updateData.promocode = new Array();
+   updateData.news = new Array();
+    if(req.body.arrival != undefined && req.body.arrival.length > 0){
+        if(req.body.arrival[0] == 'mail' ||  req.body.arrival[1] == 'mail'){
+            updateData.new_arrival.push('mail');
+        }
+    }
+    
+    if(req.body.shipped != undefined && req.body.shipped.length > 0){
+        if(req.body.shipped[0] == 'mail' || req.body.shipped[1] == 'mail'){
+            updateData.shipped.push('mail');
+        }
+    }
+    
+    if(req.body.deliver != undefined && req.body.deliver.length > 0){
+        if(req.body.deliver[0] == 'mail' || req.body.deliver[1] == 'mail'){
+            updateData.delivery.push('mail');
+        }
+    }
+    
+    if(req.body.promo != undefined && req.body.promo.length > 0){
+        if(req.body.promo[0] == 'mail' || req.body.promo[1] == 'mail'){
+            updateData.promocode.push('mail');
+        }
+        
+    }
+    if(req.body.news != undefined  && req.body.news.length > 0){
+        if(req.body.news[0] == 'mail' || req.body.news[1] == 'mail'){
+            updateData.news.push('mail');
+        }
+    }
+    Notification.update({user_id:req.user._id},updateData,{upsert:true},function(error,updateRes){
+        if(updateRes){
+            req.flash('success',['Shop user notification updated successfully!']);
+            res.redirect('/user/shop_notification'); 
+        }
+    });
+};
+
+
+exports.shop_payment_method = (req, res) => {
+    res.render('user/shop_payment_method', { title: 'Shop User notification',activeClass:3,availablePaymentMethod:'',left_activeClass:5 });
+}
+exports.shop_user_list = (req, res) => {
+    var page = (req.query.page == undefined)?1:req.query.page;
+    page = (page == 0)?1:page;
+    var skipRecord = (page-1)*Constants.RECORDS_PER_PAGE;
+    User.count({shop_id:req.user.shop_id},function(err, totalRecord) {
+        var totalPage = Math.ceil(totalRecord/Constants.RECORDS_PER_PAGE);
+        User.find({shop_id:req.user.shop_id})
+            .limit(Constants.RECORDS_PER_PAGE)
+            .skip(skipRecord)
+            .sort('-_id')
+            .exec(function(error,userRes){
+                res.render('user/shop_user_list', { title: 'Shop User list',activeClass:1,result:userRes, left_activeClass:5,currentPage:page,  totalPage:totalPage});
+        });
+    });
+}
+
+
+exports.shop_user_view = (req, res) => {
+    User.findOne({_id:req.params.userId},function(error,userRes){
+        if(req.user.role_id == Constants.MASTERROLE || req.user.role_id == Constants.ADMINROLE){
+            var permissionType = 'SHOPADMIN';
+        }else{
+            var permissionType = 'SHOPUSER';
+        }
+	Permission.find({type:permissionType})
+            .sort('parent_id')
+            .exec(function(error,getPermissions){
+            if(getPermissions){
+                var flag=true;
+                var finalPermission = new Array();
+                var takenElement = new Array();
+                var taa= 0;
+                while(flag){
+                    flag = false;
+                    for(i=0;i<getPermissions.length;i++){
+                        var takenFlag = false;
+                        // To check element is already added into final result or not
+                        for(var tke = 0; tke < takenElement.length; tke++){
+                            if(getPermissions[i]._id == takenElement[tke]){
+                                takenFlag = true;
+                            }
+                        }
+                        if(!takenFlag){
+                            // If parent id is null then added them on root
+                            if(getPermissions[i].parent_id == 0){
+                                takenElement.push(getPermissions[i]._id);// Array is used to check the element is added or not
+                                var tmp = {};
+                                tmp.id = getPermissions[i]._id;
+                                tmp.name = getPermissions[i].name;
+                                //tmp.parent_id = getPermissions[i].parent_id;
+                                tmp.options = new Array();
+                                flag = true;
+                                finalPermission.push(tmp);
+                            }else{
+                                for(j=0;j<finalPermission.length;j++){
+                                    if(finalPermission[j].id == getPermissions[i].parent_id){
+                                        takenElement.push(getPermissions[i]._id);// Array is used to check the element is added or not
+                                        var tmp = {};
+                                        tmp.id = getPermissions[i]._id;
+                                        tmp.name = getPermissions[i].name;
+                                        //tmp.parent_id = getPermissions[i].parent_id;
+                                        tmp.options = new Array();
+                                        flag = true;
+                                        finalPermission[j].options.push(tmp);
+                                    }
+                                    if(finalPermission[j].options.length > 0){
+                                        for(m = 0;m < finalPermission[j].options.length; m++){
+                                            if(finalPermission[j].options.id == getPermissions[i].parent_id){
+                                                takenElement.push(getPermissions[i]._id);// Array is used to check the element is added or not
+                                                var tmp = {};
+                                                tmp.id = getPermissions[i]._id;
+                                                tmp.name = getPermissions[i].name;
+                                                //tmp.parent_id = getPermissions[i].parent_id;
+                                                tmp.options = new Array();
+                                                flag = true;
+                                                finalPermission[j].options.push(tmp);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                UserPermission.find({user_id:req.params.userId},function(error,userPerRes){
+                    var finalUserPremission = [];
+                    if(userPerRes){
+                        for(var i=0;i < userPerRes.length;i++){
+                            finalUserPremission.push(userPerRes[i].permission_id);
+                        }
+                    }
+                    console.log(finalUserPremission);
+                    res.render('user/shop_user_view', { title: 'Shop User View',activeClass:'',result:userRes,left_activeClass:5,getPermissions:finalPermission,userPermission:finalUserPremission});
+                });
+            }
+        });
+    });
+}

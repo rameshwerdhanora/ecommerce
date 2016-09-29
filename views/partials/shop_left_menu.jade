@@ -1,0 +1,21 @@
+h2 PROFILE
+ul
+  li(class=(activeClass == 1)?'active':'')
+    a(href='/user/shopProfile')
+        -if(user.role_id == 3 || user.role_id == 4){
+            | My profile
+        -}else{
+            | My profile
+        -}
+  li(class=(activeClass == 2)?'active':'')
+    a(href='/user/shop_shippping_detail') Shipping
+  li(class=(activeClass == 3)?'active':'')
+    a(href='/user/shop_payment_method') Payment Methods
+  li(class=(activeClass == 4)?'active':'')
+    a(href='/user/shop_product_review') Product Reviews
+  li(class=(activeClass == 5)?'active':'')
+    a(href='/user/shop_account') Account
+  li(class=(activeClass == 6)?'active':'')
+    a(href='/user/shop_linked_account') Linked Accounts
+  li(class=(activeClass == 7)?'active':'')
+    a(href='/user/shop_notification') Notifications

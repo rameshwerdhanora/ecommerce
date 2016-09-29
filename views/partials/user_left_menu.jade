@@ -1,7 +1,12 @@
 h2 SHOP
 ul
   li(class=(activeClass == 1)?'active':'')
-    a(href='/user/view/#{getUserDetails._id}') Shop Profile
+    a(href='/user/view/#{getUserDetails._id}')
+        -if(user.role_id == 3 || user.role_id == 4){
+            | Shop Profile
+        -}else{
+            | My profile
+        -}
   li(class=(activeClass == 2)?'active':'')
     a(href='/user/shipping/#{getUserDetails._id}') Shipping
   li(class=(activeClass == 3)?'active':'')

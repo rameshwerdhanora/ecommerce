@@ -13,7 +13,9 @@ const customerAddressSchema = new mongoose.Schema({
 	city : String,
 	country : String,
 	billmode:Boolean,
-	add_type : String
+	add_type : String,
+        is_default: String,
+        state: String
 });
 
 const CustomerAddress = mongoose.model('CustomerAddress', customerAddressSchema);

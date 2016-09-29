@@ -45,13 +45,13 @@ block content
                                   option(value="#{emailTemplateType[i].value}", selected=(emailTemplateType[i].value == result.template_type))  #{emailTemplateType[i].lable}
                               -}                               
                       .profile-frm-row
-                        .editer-box Editer
-                        .profile-frm-cl2.w610
-                            textarea(name='content',id='editor') #{result.content}
-                      .profile-frm-row
                         .profile-frm-cl1  Mobile Content
                         .profile-frm-cl2
-                          textarea(name='mobile_content',id='mobile_content') #{result.mobile_content}
+                          textarea(name='mobile_content',id='mobile_content') #{result.mobile_content}       
+                      .profile-frm-row
+                        .profile-frm-cl1 Email Content
+                        .profile-frm-cl2.w610
+                            textarea(name='content',id='editor') #{result.content}
                           
             script(type='text/javascript').
                 $(document).ready(function(n){

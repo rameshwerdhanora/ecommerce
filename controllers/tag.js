@@ -133,11 +133,44 @@ exports.test = (req, res) => {
     var paypal = require('paypal-rest-sdk');
     paypal.configure({
         'mode': 'sandbox', //sandbox or live
-        'client_id': 'AZQKMZDbPg-LJg1oc5yrzBvqqT5pl5H-6s3ihXaqhBtTjuhF0KDMLsH0rS1FPlhoO_EvU9PFOSjtevfr',
-        'client_secret': 'EPCj5dRWe7OBG8Da0_H3Fk9pf275jJl88nyGvtfo9resg0NnBCOU5feCg4Efhyw0pwrz66ZlVPFNqzN1'
+        'client_id': 'AUQMq6AmlUtFQcoefUeYXWoDzRlUJ76XCEGJAX-0kF9yd9vtXZ__cltHnTnAN9I79C4eM9do-xTmxCZO',
+        'client_secret': 'EF_YGSwJZGkIeBM3HytaN5tWc7qeyjwh7poaRN9Y-pwCnYJrTkYqf8eujuJPQ_7RI7rgqH-KR8xUpi0j'
     });
     
-    var creditCardId = "CARD-7HB0913066314063MK7SQMTI";
+    var card_data = {
+        "type": "visa",
+        //"number": "4111111111111111",
+        "number": "4311198990428292",
+        
+        "expire_month": "03",
+        "expire_year": "2021",
+        "cvv2": "123",
+        "first_name": "Joe",
+        "last_name": "Shopper"
+      };
+
+      paypal.creditCard.create(card_data, function(error, credit_card){
+        if (error) {
+          console.log(error);
+          throw error;
+        } else {
+          console.log("Create Credit-Card Response");
+          console.log(credit_card);
+          res.send(JSON.stringify(credit_card));
+        }
+      });
+};
+exports.test1 = (req, res) => {
+    var paypal = require('paypal-rest-sdk');
+    paypal.configure({
+        'mode': 'sandbox', //sandbox or live
+        'client_id': 'AUQMq6AmlUtFQcoefUeYXWoDzRlUJ76XCEGJAX-0kF9yd9vtXZ__cltHnTnAN9I79C4eM9do-xTmxCZO',
+        'client_secret': 'EF_YGSwJZGkIeBM3HytaN5tWc7qeyjwh7poaRN9Y-pwCnYJrTkYqf8eujuJPQ_7RI7rgqH-KR8xUpi0j'
+    });
+    
+    
+
+    var creditCardId = "CARD-9SW15281683792236K7VGU3Q";
     //CARD-7HB0913066314063MK7SQMTI
 
     paypal.creditCard.get(creditCardId, function (error, credit_card) {
@@ -147,10 +180,82 @@ exports.test = (req, res) => {
         } else {
             console.log("Retrieve Credit Card Response");
             console.log(JSON.stringify(credit_card));
+            res.send(JSON.stringify(credit_card));
             //res.redirect('/tag/list');
         }
     });
       
-    console.log('ok');
-    //res.redirect('/tag/list');
+};
+
+exports.test2 = (req, res) => {
+    var paypal = require('paypal-rest-sdk');
+    paypal.configure({
+        'mode': 'sandbox', //sandbox or live
+        'client_id': 'AUQMq6AmlUtFQcoefUeYXWoDzRlUJ76XCEGJAX-0kF9yd9vtXZ__cltHnTnAN9I79C4eM9do-xTmxCZO',
+        'client_secret': 'EF_YGSwJZGkIeBM3HytaN5tWc7qeyjwh7poaRN9Y-pwCnYJrTkYqf8eujuJPQ_7RI7rgqH-KR8xUpi0j'
+    });
+    
+    
+    var savedCard = {
+        "intent": "sale",
+        "payer": {
+            "payment_method": "credit_card",
+            "funding_instruments": [{
+                "credit_card_token": {
+                    "credit_card_id": "CARD-9SW15281683792236K7VGU3Q"
+                }
+            }],
+            "payer_info": {
+                "email": "lokesh@mailinator.com"
+            }
+        },
+       
+    
+        "transactions": [{
+            "amount": {
+                "currency": "USD",
+                "total": '23',
+                /*"details": {
+                    "subtotal": "19.94",
+                     "shipping": "3.99",
+                     "tax": "0"
+                }*/
+            },
+            "description": "KapdeCheckout",
+            "invoice_number": '343434se5212ererer',
+            "item_list": {
+                "items": [{
+                   "quantity": "1",
+                   "name": "item name 1",
+                   "description": "description 1",
+                   "price": '23',
+                   "currency": "USD",
+                   "sku": "sku 1"
+               }],
+            "shipping_address": {
+                "recipient_name": "The Recipient",
+                "line1": "123 Ship City",
+                "city": "Ship City",
+                "country_code": "US",
+                "postal_code": "30303",
+                "state": "GA"
+            }
+        }
+     }]
+ 
+ 
+    };
+    console.log(savedCard);
+    paypal.payment.create(savedCard, function (error, payment) {
+        if (error) {
+            console.log(error);
+            res.send(JSON.stringify(error));
+            //throw error;
+        } else {
+            console.log("Pay with stored card Response");
+            console.log(JSON.stringify(payment));
+            res.send(JSON.stringify(payment));
+        }
+    });
+      
 };

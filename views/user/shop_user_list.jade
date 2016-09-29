@@ -1,0 +1,56 @@
+extends ../layout
+block content
+  .col-sm-9.midlle-bar
+    include ../partials/flash
+    .large-title-row
+      img(src='/images/title-icon5.png', alt='icon')
+      |  MY SHOP
+      .edit-btn-cl.select-item
+        //form(action='', method='post', name='form3')
+          
+    .customer-box.clearfix
+        .customer-cl
+          h2 Users
+          ul
+            li(class=(activeClass == 1)?'active':'')
+              a(href='/user/shop_user_list')
+                | Manage Users
+            li(class=(activeClass == 2)?'active':'')
+              a(href='/user/add') 
+                | Add User
+        .profile-cl
+          .profile-top-row
+            h2 Users
+          .low-tbl-box.order-txt
+            form(name='form2', method='post', action='')
+              table.user-tbl(width='100%', cellspacing='0', cellpadding='0', border='0')
+                tbody
+                    tr
+                      th(align='center')
+                        input#checkbox2(type='checkbox', name='checkbox2')
+                      th First Name
+                      th LAst Name 
+                      th E-Mail Address
+                      th Action
+                        //img(src='/images/delete-icon.png', alt='delete')
+                    - if(result.length > 0){
+                    each record in result
+                        tr
+                          td(align='center')
+                            input#checkbox4(type='checkbox', name='checkbox4')
+                          td #{record.first_name}
+                          td #{record.last_name}
+                          td #{record.email_id}
+                          td
+                            a.bule-link(href='/user/shop_user_view/#{record._id}')
+                              | VIEW 
+                              br
+                              | PERMISSIONS
+                    - }else{
+                        tr
+                          td(colspan='5')
+                            | No record found
+                    
+                    -}
+                    
+          include ../partials/pagination

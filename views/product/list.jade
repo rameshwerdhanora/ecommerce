@@ -187,7 +187,7 @@ block content
                     .profile-frm-cl1 CATEGORY
                     .profile-frm-cl2
                       select.product_category(name='category_id' onchange='loadSelectedsubCategory(this.value)')
-                        option(value='0') Select Category
+                        option(value='') Select Category
                         each fetchCategory in fetchCategories
                           option(value='#{fetchCategory._id}') #{fetchCategory.name}
 
@@ -243,7 +243,7 @@ block content
                   .profile-frm-row.product_select
                     .profile-frm-cl1 Hash Tag
                     .profile-frm-cl2
-                       select.chosen-select(name='hash_tag[]', required='required', data-placeholder='Select hash tag', style='width:250px;', multiple='') 
+                       select.chosen-select(name='hash_tag[]', data-placeholder='Select hash tag', multiple='') 
                         each fetchAllTag in fetchAllTags
                           option(value='#{fetchAllTag._id}') #{fetchAllTag.name}
 
@@ -357,7 +357,7 @@ block content
                     .profile-frm-cl1 CATEGORY
                     .profile-frm-cl2
                       select.product_category(name='category_id' onchange='loadSelectedsubCategory(this.value)')
-                        option(value='0') Select Category
+                        option(value='') Select Category
                         each fetchCategory in fetchCategories
                           option(value='#{fetchCategory._id}',selected=(fetchCategory._id == productRes.category_id)) #{fetchCategory.name}
 

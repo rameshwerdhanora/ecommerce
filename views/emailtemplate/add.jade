@@ -44,13 +44,13 @@ block content
                                  option(value='#{emailTemplateType[i].value}') #{emailTemplateType[i].lable}
                               -}
                       .profile-frm-row
-                        .editer-box Email Content
-                        .profile-frm-cl2.w610
-                            textarea(name='content',id='editor')
-                      .profile-frm-row
                         .profile-frm-cl1  Mobile Content
                         .profile-frm-cl2
-                          textarea(name='mobile_content',id='mobile_content')
+                          textarea(name='mobile_content',id='mobile_content')        
+                      .profile-frm-row
+                        .profile-frm-cl1 Email Content
+                        .profile-frm-cl2.w610
+                            textarea(name='content',id='editor')
         script(type='text/javascript').
             $(document).ready(function(n){
                 CKEDITOR.editorConfig = function( config ) {
