@@ -73,7 +73,8 @@ exports.saveUserFinalOrder = (req,res) => {
 		                            				finalCartObj.real_price 	= parseInt(fetchProductDataForCart.price);
 		                            				finalCartObj.price_quan		= parseInt(fetchProductDataForCart.price) * CartRes.quantity;
 		                            				finalCartObj.quantity		= CartRes.quantity;
-		                            				totalPrice				   += parseInt(fetchProductDataForCart.price) * CartRes.quantity;
+		                            				finalCartObj.shop_id		= fetchProductDataForCart.shop_id
+									totalPrice				   += parseInt(fetchProductDataForCart.price) * CartRes.quantity;
 		                            				callback();
 			                           			}
 		                            		});
@@ -163,6 +164,8 @@ exports.saveUserFinalOrder = (req,res) => {
 		                            	var orderDetailsIns = new OrderDetails;
 		                            	orderDetailsIns.order_id 	= orderIns._id;
 		                            	orderDetailsIns.brand_id 	= finalCartObj.brand_id;
+						orderDetailsIns.user_id 	= req.body.user_id;
+		                            	orderDetailsIns.shop_id 	= finalCartObj.shop_id;
 		                            	orderDetailsIns.index 		= 'product';
 		                            	orderDetailsIns.data 		= finalCartObj;
 		                            	orderDetailsIns.save(function(error,saveOrderDetails){})
