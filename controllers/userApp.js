@@ -274,8 +274,8 @@ exports.userSave = (req, res) => {
                         userIns.shop_id = userIns._id;
                         userIns.role_id = req.body.role_id;
                     }else{
-                        userIns.role_id = Constants.SHOP_EMPLOYEE;
                         userIns.shop_id = req.user.shop_id;
+                        userIns.role_id = Constants.SHOP_EMPLOYEE;
                     }
                     
                     userIns.save(function(error){});
@@ -304,11 +304,19 @@ exports.userSave = (req, res) => {
                     if((userIns.contact_no!='') && isNaN(userIns.contact_no)){
                         //CommonHelper.sendSms(req, res, smsContent, userId);
                     }
-                    req.flash('success', 'Your details is successfully stored.');
-                    return res.redirect('/user/list');
+                    req.flash('success', 'User information saved successfully.');
+                    if(req.user.role_id == Constants.MASTERROLE || req.user.role_id == Constants.ADMINROLE){
+                        return res.redirect('/user/list');
+                    }else if(req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6){
+                        return res.redirect('/user/shop_user_list');
+                    }
                 }else{
                     req.flash('error', 'Something wrong!!');
-                    return res.render('user/user_add');
+                    if(req.user.role_id == Constants.MASTERROLE || req.user.role_id == Constants.ADMINROLE){
+                        return res.redirect('/user/list');
+                    }else if(req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6){
+                        return res.redirect('/user/shop_user_list');
+                    }
                 }
             }); 
         }
@@ -975,5 +983,20 @@ exports.shop_notification_update = (req, res) => {
 
 exports.shop_payment_method = (req, res) => {
     res.render('user/shop_payment_method', { title: 'Shop User notification',activeClass:3,availablePaymentMethod:'',left_activeClass:5 });
+}
+exports.shop_user_list = (req, res) => {
+    var page = (req.query.page == undefined)?1:req.query.page;
+    page = (page == 0)?1:page;
+    var skipRecord = (page-1)*Constants.RECORDS_PER_PAGE;
+    User.count({shop_id:req.user.shop_id},function(err, totalRecord) {
+        var totalPage = Math.ceil(totalRecord/Constants.RECORDS_PER_PAGE);
+        User.find({shop_id:req.user.shop_id})
+            .limit(Constants.RECORDS_PER_PAGE)
+            .skip(skipRecord)
+            .sort('-_id')
+            .exec(function(error,userRes){
+                res.render('user/shop_user_list', { title: 'Shop User list',activeClass:1,result:userRes, left_activeClass:5,currentPage:page,  totalPage:totalPage});
+        });
+    });
 }
 

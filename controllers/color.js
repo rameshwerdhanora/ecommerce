@@ -20,8 +20,7 @@ var uploadColor = Multer({ storage : storage}).single('color_logo');
 exports.listOfColor = (req, res) => {
     var page = (req.query.page == undefined)?1:req.query.page;
     page = (page == 0)?1:page;
-    var skipRecord = (page-1)*Constants.RECORDS_PER_PAGE;    
-    console.log(req.params.colorId);
+    var skipRecord = (page-1)*Constants.RECORDS_PER_PAGE;
     Color.count(function(err, totalRecord) {
         var totalPage = Math.ceil(totalRecord/Constants.RECORDS_PER_PAGE);
         Color.find()

@@ -39,14 +39,16 @@
             -if(user.role_id != 1 && user.role_id !=2){
                 li
                   a(href='/product/list/add') Add Product
-            -}    
-              
+            -}
+            
+            -if(user.role_id ==1  && user.role_id ==2){
             li
               span.sub-title Hash Tag
             li
               a(href='/tag/list') Hash Tag list
             li
               a(href='/tag/add') Add Hash Tag    
+            -}
         li(class=(left_activeClass == 4)?'active':'')
           a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
             img(src='/images/left-icon4.png', alt='icon')
@@ -115,7 +117,7 @@
               li
                 span.sub-title USERS
               li
-                a(href='/user/list') Manage Users
+                a(href='/user/shop_user_list') Manage Users
               li
                 a(href='/user/add') Add User     
         -if(user.role_id == 1 || user.role_id == 2){

@@ -11,7 +11,12 @@ block content
           h2 USERS
           ul
             li
+              -if(user.role_id == 1 || user.role_id == 2){
               a(href='/user/list') Manage Users
+              -}else if(user.role_id == 3 || user.role_id == 4 || user.role_id == 6){
+              a(href='/user/shop_user_list') Manage Users
+              -}
+              
             li.active
               a(href='/user/add') Add User
         .profile-cl
@@ -20,11 +25,12 @@ block content
           .profile-form-box
             .add-user-cl1.col-sm-6
               h4 NEW USER
-               
-              .profile-frm-row
-                .profile-frm-cl1 Shop Name 
-                .profile-frm-cl2
-                  input(type='text', value='#{data ? data.shop_name :""}', name='shop_name', required='required')
+              -if(user.role_id == 1 || user.role_id == 2){
+                .profile-frm-row
+                  .profile-frm-cl1 Shop Name 
+                  .profile-frm-cl2
+                    input(type='text', value='#{data ? data.shop_name :""}', name='shop_name', required='required')
+              -}
               .profile-frm-row
                 .profile-frm-cl1 User Name
                 .profile-frm-cl2

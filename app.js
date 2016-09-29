@@ -436,6 +436,7 @@ app.post('/user/shop_account_update', passportConfig.isAuthenticated, userAppCon
 app.get('/user/shop_notification', passportConfig.isAuthenticated, userAppControlleraAdmin.shop_notification);
 app.post('/user/shop_notification_update', passportConfig.isAuthenticated, userAppControlleraAdmin.shop_notification_update);
 app.get('/user/shop_payment_method', passportConfig.isAuthenticated, userAppControlleraAdmin.shop_payment_method);
+app.get('/user/shop_user_list', passportConfig.isAuthenticated, userAppControlleraAdmin.shop_user_list);
 
 
 app.get('/user/list', passportConfig.isAuthenticated, userAppControlleraAdmin.userList);
