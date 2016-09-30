@@ -75,7 +75,7 @@ exports.customerList = (req, res) => {
                 });    
             });
        });
-    } else if(req.user.role_id == 1 || req.user.role_id == 2){
+    } else if(req.user.role_id == 1 || req.user.role_id == 2){ 
         var page = (req.query.page == undefined)?1:req.query.page;
         page = (page == 0)?1:page;
         var skipRecord = (page-1)*Constants.RECORDS_PER_PAGE;
