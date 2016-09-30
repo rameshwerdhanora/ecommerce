@@ -469,6 +469,8 @@ app.get('/user/notifications/:userId', passportConfig.isAuthenticated,  userAppC
 app.get('/user/changePassword/:userId', passportConfig.isAuthenticated,  userAppControlleraAdmin.userChangePassword);
 app.post('/user/changePasswordSave/:userId', passportConfig.isAuthenticated,  userAppControlleraAdmin.userChangePasswordSave);
 
+app.post('/user/updateHopLogo', passportConfig.isAuthenticated,  userAppControlleraAdmin.updateShopLogo);
+
 
 /**
  * API examples routes.

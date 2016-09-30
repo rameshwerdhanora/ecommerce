@@ -16,7 +16,7 @@ const Multer 	= require('multer');
 /* Define Folder name where our Shop image store */
 var storage =   Multer.diskStorage({
   destination: function (req, file, callback) {
-    if(file.fieldname=='cover_image'){
+    if(file.fieldname=='cover_image' || file.fieldname=='shop_logo'){
        callback(null, 'public/uploads/shop_logo'); 
     }else if(file.fieldname=='profile_image'){
        callback(null, 'public/uploads/profile_images');
@@ -1513,3 +1513,28 @@ exports.shopuser_account_update = (req, res) => {
         });
     });
 };
+
+
+/* Update Shop Log */
+exports.updateShopLogo = (req, res) => {
+    uploadShopImages(req,res,function(err) {
+        if(err) {
+           return res.end("Error uploading file.");
+        }
+        if(req.files.length > 0){
+            var fileName = req.file.path.replace('public/','');
+            updateData.shop_logo = fileName;
+        }
+        
+        User.update({_id:req.user.shop_id},updateData, function(error, updateRes){
+            if (error){
+                req.flash('errors',['Something went wronge!']);
+                
+            }else{
+                req.flash('success',['Shop Logo updated successfully.']);
+            }
+            return res.redirect('/dashboard');
+        });
+    });
+};
+
