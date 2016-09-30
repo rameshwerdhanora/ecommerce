@@ -209,11 +209,11 @@ exports.customerDelete = (req,res) => {
 	{
 		if(error)
 		{
-			res.send({status:'error',msg:error});
+			res.send({status:'errors',[msg:error]});
 		}
 		else
 		{
-			res.flash('success','Remove Successfully.');
+			res.flash('success',['Remove Successfully.']);
 			res.redirect('/customer/list');
 		}
 	});
@@ -301,7 +301,7 @@ exports.customerAddressSave = (req, res) => {
         }
         else
         {
-            req.flash('success','Added Successfully.');
+            req.flash('success',['Added Successfully.']);
 			res.redirect('/customer/address/'+req.params.customerId);
         }
     });
@@ -506,7 +506,7 @@ exports.userSave = (req, res) => {
                         if((userIns.contact_no!='') && isNaN(userIns.contact_no)){
                             //CommonHelper.sendSms(req, res, smsContent, userId);
                         }
-                        req.flash('success', 'User information saved successfully.');
+                        req.flash('success', ['User information saved successfully.']);
                         if(req.user.role_id == Constants.MASTERROLE || req.user.role_id == Constants.ADMINROLE){
                             return res.redirect('/user/list');
                         }else if(req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6){
@@ -601,7 +601,7 @@ exports.userDelete = (req,res) => {
 		}
 		else
 		{
-			res.flash('success','Remove Successfully.');
+			res.flash('success',['Remove Successfully.']);
 
 			res.redirect('/customer/list');
 
@@ -652,7 +652,7 @@ exports.userShippingSave = (req, res) => {
         }
         else
         {
-            req.flash('success','Shipping Saved Successfully.');
+            req.flash('success',['Shipping Saved Successfully.']);
 			res.redirect('/user/shipping/'+req.params.userId);
         }
     });
@@ -698,7 +698,7 @@ exports.userPaymentMethodSave = (req, res) => {
         }
         else
         {
-            req.flash('success','Payment Method Saved Successfully.');
+            req.flash('success',['Payment Method Saved Successfully.']);
 			res.redirect('/user/paymentMethod/'+req.params.userId);
         }
     });
@@ -1127,7 +1127,7 @@ exports.shopShippingUpdate = (req,res) =>{
         if (error){
             req.flash('errors',['Some thing went wronge!']);
         }else{
-            req.flash('success','Shipping address updated successfully.');
+            req.flash('success',['Shipping address updated successfully.']);
             
         }
         res.redirect('/user/shop_shippping_detail');
