@@ -345,15 +345,15 @@ exports.updateIntoCart = (req,res) => {
                                                     }
                                                     else
                                                     {
-                                                        discount = '';
+                                                        discount = parseInt(0);
                                                     }
                                                 }
                                                 else 
                                                 {
-                                                    discount = '';
+                                                    discount = parseInt(0);
                                                 }
 
-                                                finaldiscount += discount;
+                                                finaldiscount += parseFloat(discount);
                                                 sumPrice += parseInt(fetchProductPrice.price) * parseInt(ProductId.quantity);
                                                 callback(err);
                                             });
