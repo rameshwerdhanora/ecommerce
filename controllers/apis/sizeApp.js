@@ -169,7 +169,7 @@ exports.fetchCofiguration = function(req,res){
 			Size.find({is_published:'true'},function(error,getAllSizes){
 				if(getAllSizes)
 				{
-					res.send({status:'success',msg:'Successfully fetch all sizes.',getAllSizes:getAllSizes});
+					res.send({status:'success',msg:'Successfully fetch all sizes.',sizeAttribute:getAllSizes});
 				}
 				else 
 				{
