@@ -119,13 +119,15 @@
                 a(href='/user/shop_linked_account') Linked Accounts
               li
                 a(href='/user/shop_notification') Notifications     
-
-              li
-                span.sub-title USERS
-              li
-                a(href='/user/shop_user_list') Manage Users
-              li
-                a(href='/user/add') Add User     
+              
+              - if(user.role_id == 3 || user.role_id == 4){
+                li
+                  span.sub-title USERS
+                li
+                  a(href='/user/shop_user_list') Manage Users
+                li
+                  a(href='/user/add') Add User     
+              - }
         -if(user.role_id == 1 || user.role_id == 2){
         li(class=(left_activeClass == 6)?'active':'')
           a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')

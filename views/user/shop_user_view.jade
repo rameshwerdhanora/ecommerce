@@ -29,28 +29,28 @@ block content
                 .profile-frm-row
                   .profile-frm-cl1 Shop Name 
                   .profile-frm-cl2
-                    input(type='text', value='#{result ? result.shop_name :""}', name='shop_name', required='required')
+                    input(type='text', value='#{result.shop_name ? result.shop_name :""}', name='shop_name', required='required')
               -}
               .profile-frm-row
                 .profile-frm-cl1 User Name
                 .profile-frm-cl2
-                  input(type='text', value='#{result ? result.user_name :""}', name='user_name', required='required')
+                  input(type='text', value='#{result.user_name ? result.user_name :""}', name='user_name', required='required')
               .profile-frm-row
                 .profile-frm-cl1  First Name
                 .profile-frm-cl2
-                  input(type='text', value='#{result ? result.first_name :""}', name='first_name', required='required')
+                  input(type='text', value='#{result.first_name ? result.first_name :""}', name='first_name', required='required')
               .profile-frm-row
                 .profile-frm-cl1 Last Name
                 .profile-frm-cl2
-                  input(type='text', value='#{result ? result.last_name :""}', name='last_name', required='required')
+                  input(type='text', value='#{result.last_name ? result.last_name :""}', name='last_name', required='required')
               .profile-frm-row
                 .profile-frm-cl1 E-mail Address 
                 .profile-frm-cl2
-                  input(type='text', value='#{result ? result.email_id :""}', name='email_id', required='required')
+                  input(type='text', value='#{result.email_id ? result.email_id :""}', name='email_id', required='required')
               .profile-frm-row
                 .profile-frm-cl1 Contact Number 
                 .profile-frm-cl2
-                  input(type='text', value='#{result ? result.contact_no :""}', name='contact_no', required='required')
+                  input(type='text', value='#{result.contact_no ? result.contact_no :""}', name='contact_no', required='required')
               .profile-frm-row
                 .profile-frm-cl1 Password
                 .profile-frm-cl2
@@ -63,27 +63,27 @@ block content
               .profile-frm-row
                 .profile-frm-cl1 Address
                 .profile-frm-cl2
-                  input(type='text', value='#{result ? result.address :""}', name='address', required='required')
+                  input(type='text', value='#{result.address ? result.address :""}', name='address', required='required')
               .profile-frm-row
                 .profile-frm-cl1 City
                 .profile-frm-cl2
-                  input(type='text', value='#{result ? result.city :""}', name='city', required='required')
+                  input(type='text', value='#{result.city ? result.city :""}', name='city', required='required')
               .profile-frm-row
                 .profile-frm-cl1 State
                 .profile-frm-cl2
-                  input(type='text', value='#{result ? result.state :""}', name='state', required='required')
+                  input(type='text', value='#{result.state ? result.state :""}', name='state', required='required')
               .profile-frm-row
                 .profile-frm-cl1 Zip code
                 .profile-frm-cl2
-                  input(type='text', value='#{result ? result.zip :""}', name='zip', required='required')
+                  input(type='text', value='#{result.zip ? result.zip :""}', name='zip', required='required')
               .profile-frm-row
                 .profile-frm-cl1 Country
                 .profile-frm-cl2
-                  input(type='text', value='#{result ? result.country :""}', name='country', required='required')
+                  input(type='text', value='#{result.country ? result.country :""}', name='country', required='required')
               .profile-frm-row
                 .profile-frm-cl1 Bio
                 .profile-frm-cl2
-                  textarea.large-in(name='bio') #{result ? result.bio :""}
+                  textarea.large-in(name='bio') #{result.bio ? result.bio :""}
                   
               -if(user.role_id == 1 || user.role_id == 2){
               .profile-frm-row.botique-spc
