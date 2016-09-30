@@ -170,11 +170,11 @@ exports.customerEdit = (req, res) => {
  */
 exports.customerUpdate = (req, res) => {
 	updateData = {
-		'first_name' 	: req.body.first_name,
-		'last_name'		: req.body.last_name,
+            'first_name' 	: req.body.first_name,
+            'last_name'		: req.body.last_name,
 	    'address'		: req.body.address, 
-	    'city'			: req.body.city,
-	    'state'			: req.body.state,
+	    'city'		: req.body.city,
+	    'state'		: req.body.state,
 	    'zip_code'		: req.body.zip_code,
 	    'country'		: req.body.country,
 	};
@@ -1324,21 +1324,31 @@ exports.shop_payment_method_save = (req, res) => {
 
 
 exports.shopuser_profile = (req, res) => {
-    User.findOne({_id:req.params.userId},function(error,getCustomerDetails){
-        Address.findOne({is_default:1, add_type:Constants.SHIPPING, user_id:req.params.userId},function(error,fetchAddress){   
-            if(getCustomerDetails){
-                console.log(fetchAddress);
-                if(fetchAddress == null){
-                    fetchAddress= [];
-                }
-                console.log(getCustomerDetails);
-                res.render('user/shopuser_profile', { title: 'Customer View',getCustomerDetails:getCustomerDetails,activeClass:1,left_activeClass:4, fetchAddress:fetchAddress});
-            }
-        });	
+    User.findOne({_id:req.params.userId},function(error,userRes){
+        res.render('user/shopuser_profile', { title: 'Shop User Profile',activeClass:'',result:userRes,left_activeClass:5});
     });
 }
+
+
 exports.shopuser_profile_update = (req, res) => {
-    
+    updateData = {
+        'first_name' 	: req.body.first_name,
+        'last_name'	: req.body.last_name,
+        'address'	: req.body.address,
+        'city'		: req.body.city,
+        'state'		: req.body.state,
+        'zip'           : req.body.zip,
+        'country'	: req.body.country,
+        'bio'           : req.body.bio
+    };
+    User.findByIdAndUpdate(req.body.userId,updateData, function(error, updateRes){
+        if(error == null){
+            req.flash('errors',['Something went wronge!']);
+        }else{
+            req.flash('success',['User profile saved successfully!']);
+        }
+        res.redirect('/user/shopuser_profile/'+req.body.userId);
+    });
 }
 
 exports.shopuser_notification = (req, res) => {
