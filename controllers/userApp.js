@@ -18,6 +18,7 @@ const Constants 		= require('../constants/constants');
  * Customer List user page.
  */
 exports.customerList = (req, res) => {
+    if(req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6){
         var page = (req.query.page == undefined)?1:req.query.page;
         page = (page == 0)?1:page;
         var skipRecord = (page-1)*Constants.RECORDS_PER_PAGE;
@@ -73,7 +74,62 @@ exports.customerList = (req, res) => {
                     });  
                 });    
             });
-       }); 
+       });
+    } else if(req.user.role_id == 1 || req.user.role_id == 2){
+        var page = (req.query.page == undefined)?1:req.query.page;
+        page = (page == 0)?1:page;
+        var skipRecord = (page-1)*Constants.RECORDS_PER_PAGE;
+        var getCustomers = [];
+        User.count(function(error, totalRecord) {
+            var totalPage = Math.ceil(totalRecord/Constants.RECORDS_PER_PAGE);
+
+            User.find({role_id:5})
+                    .limit(Constants.RECORDS_PER_PAGE)
+                    .skip(skipRecord)
+                    .sort('-_id')
+                    .exec(function(error,getCustomers){
+                    Address.find({is_default:1, add_type:Constants.SHIPPING},function(error,fetchAddress){        
+                        
+                        /*var newArray = [];
+                         * var tempAddress = {};
+                        if(tempAddress){
+                            for(var i = 0;i< fetchAddress.length;i++){
+                                tempAddress[fetchAddress[i].user_id] = fetchAddress[i];
+                            }
+                        }*/
+                        
+                        var tempAddressLine1 = {};
+                        var tempCity = {};
+                        var tempPostalCode = {};
+                        var tempContactNo = {};
+                        var tempCountry = {};
+                        var tempState = {};
+                        for(var i =0; i < getCustomers.length;i++){
+                            for(var j = 0;j< fetchAddress.length;j++){
+                                if(getCustomers[i]._id == fetchAddress[j].user_id){
+                                    //getCustomers[i].push(fetchAddress[j]['address_line1']);
+                                    tempAddressLine1[getCustomers[i]._id] = fetchAddress[j].address_line1;
+                                    tempCity[getCustomers[i]._id] = fetchAddress[j].city;
+                                    tempPostalCode[getCustomers[i]._id] = fetchAddress[j].postal_code;
+                                    tempCountry[getCustomers[i]._id] = fetchAddress[j].country;
+                                    tempContactNo[getCustomers[i]._id] = fetchAddress[j].contact_no;
+                                    tempState[getCustomers[i]._id] = fetchAddress[j].state;
+                                }
+                            }
+                        }
+                        console.log(tempAddressLine1);
+                            
+                        if(getCustomers) {
+                             res.render('user/customer_list', { left_activeClass:4, currentPage:page, totalPage:totalPage, title: 'Customer',getCustomers:getCustomers, addressLine1:tempAddressLine1, city:tempCity,postalCode:tempPostalCode,country:tempCountry, contactNo:tempContactNo,state:tempState  });
+                         }     
+                });
+            });
+        });
+    }else{
+        req.flash('errors', ['Unauthorised user role']);
+        return res.redirect('/dashboard');
+    }
+         
 };
 
 /**
