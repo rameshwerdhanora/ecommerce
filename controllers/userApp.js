@@ -817,16 +817,11 @@ exports.userChangePasswordSave = (req, res) => {
  * My Profile view page in edit mode.
  */
 exports.myProfile = (req, res) => {
-	User.findOne(req.body._id,function(error,getProfileDetails){
-		if(getProfileDetails)
-		{
-			console.log(getProfileDetails);
-			res.render('user/myprofile_view', { title: 'My Profile',getProfileDetails:getProfileDetails});
-
-			//res.render('user/user_edit', { title: 'User Edit',getUserDetails:getUserDetails,activeClass:req.params.activeClass});
-
-		}
-	});	
+    User.findOne(req.body._id,function(error,getProfileDetails){
+        if(getProfileDetails){
+            res.render('user/myprofile_view', { title: 'My Profile',getProfileDetails:getProfileDetails});
+        }
+    });	
 };
 
 

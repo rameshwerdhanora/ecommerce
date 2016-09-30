@@ -60,7 +60,9 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, don
         });*/
         bcrypt.compare(password, user.password, (err, isMatch) => {
             if (isMatch) {
+                
                 if(user.role_id == 6){
+                    // Updated cover photo & Logo for the shop employee to the latest one when they are login
                     UserApp.findOne({ _id: user.shop_id }, (err, shopRes) => {
                         if(shopRes == null){
                             return done(null, user);
@@ -81,7 +83,7 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, don
                     return done(null, user);
                 }
             }else{
-                return done(null, false, { msg: `password not correct.` });
+                return done(null, false, { msg: 'password not correct.' });
             }
         });
     });

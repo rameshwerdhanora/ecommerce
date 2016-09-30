@@ -29,9 +29,16 @@ header
                 i.fa.fa-check-square-o
                 |  My Task
             li
-              a(href='/myprofile/57974e587c45cde432ded557')
-                i.fa.fa-edit
-                |  My Profile
+              -if(user.role_id == 3 || user.role_id == 4 || user.role_id == 6 ){
+                a(href='/user/shopprofile')
+                    i.fa.fa-edit
+                    |  My Profile
+              -}else{
+                a(href='/myprofile/57974e587c45cde432ded557')
+                    i.fa.fa-edit
+                    |  My Profile
+              -}
+                    
             //li
               a(href='#')
                 i.fa.fa-pencil
