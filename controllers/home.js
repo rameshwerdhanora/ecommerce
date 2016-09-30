@@ -156,6 +156,7 @@ exports.index = (req, res) => {
                 }
               });
 
+
               // Order.find({status:Constants.ORDERSTATUSPAID},function(error,fetchAllCustomerData){
               //   [
               //    { "$group": { "user_id": "$user_id"} }
