@@ -12,6 +12,6 @@ module.exports = Object.freeze({
     EMAILTEMPLATETYPE: [{value:'change_password',lable:'Change Password'},{value:'forget_password',lable:'Forget Password'},{value:'new_order',lable:'New Order'},{value:'new_shipment',lable:'New Shipment'},{value:'registration',lable:'Registration'},{value:'new_account_confirmation_key',lable:'New Account Confirmation Key'}],
     ORDERSTATUSPENDING:'Unfullfilled',
     ORDERSTATUSPAID:'Paid',
-    ORDERSTATUSREFUND:'Refund'
-    SHIPPING: "Shipping",
+    ORDERSTATUSREFUND:'Refund',
+    SHIPPING: "Shipping"
 });
