@@ -44,6 +44,7 @@ const userAppSchema = new mongoose.Schema({
     shop_logo:String,
     shop_cover:String
     
+    
   /*profile: {
     name: { type: String, default: '' },
     gender: { type: String, default: '' },
