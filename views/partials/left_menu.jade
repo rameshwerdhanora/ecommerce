@@ -2,10 +2,15 @@
   .img-1-wrp
     -if(user.role_id == 3 || user.role_id == 4 || user.role_id == 6){
       .logo-left
-        a(href='#')
-          img(src='/images/logo-left.png', alt='logo')
+        a(href='/dashboard')
+          //img(src='/images/logo-left.png', alt='logo')
+          img(src='#{user.shop_logo}', alt='#{user.shop_name}',width='71')
     -}
-    img(src='/images/img-1.jpg', alt='img')
+    -if(user.role_id == 3 || user.role_id == 4 || user.role_id == 6){
+        img(src='#{user.cover_image}', alt='img',width='300',height='123')
+    -}else{
+        img(src='/images/img-1.jpg', alt='img')
+    -}
     
   .nav-left
     .nav-in
@@ -21,22 +26,22 @@
           ul.easy-sidebar.dropdown-menu
             li
               span.nav-close
-                a(href='#')
+                a(href='javascript:void(0);')
                   img(src='/images/close-white.png', alt='close')
             li
               span.sub-title USERS
             li
-              a(href='#') Mange Users
+              a(href='javascript:void(0);') Mange Users
             li
-              a(href='#') Add User
+              a(href='javascript:void(0);') Add User
         li(class=(left_activeClass == 3)? 'active':'')
-          a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
+          a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='javascript:void(0);')
             img(src='/images/left-icon3.png', alt='icon')
             | Products
           ul.easy-sidebar.dropdown-menu
             li
               span.nav-close
-                a(href='#')
+                a(href='javascript:void(0);')
                   img(src='/images/close-white.png', alt='close')
             li
               span.sub-title PRODUCTS
@@ -56,13 +61,13 @@
               a(href='/tag/add') Add Hash Tag    
             -}
         li(class=(left_activeClass == 4)?'active':'')
-          a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
+          a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='javascript:void(0);')
             img(src='/images/left-icon4.png', alt='icon')
             | Customers
           ul.easy-sidebar.dropdown-menu
             li
               span.nav-close
-                a(href='#')
+                a(href='javascript:void(0);')
                   img(src='/images/close-white.png', alt='close')
             li
               span.sub-title CUSTOMERS
@@ -72,14 +77,14 @@
               //a(href='/user/add') Add Customer
         - if(user.role_id == 1 || user.role_id == 2)              
           li(class=(left_activeClass == 5)?'active':'')
-            a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
+            a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='javascript:void(0);')
               img(src='/images/left-icon5.png', alt='icon')
               | USERS
             
             ul.easy-sidebar.dropdown-menu
               li
                 span.nav-close
-                  a(href='#')
+                  a(href='javascript:void(0);')
                     img(src='/images/close-white.png', alt='close')
               li
                 span.sub-title USERS
@@ -89,14 +94,14 @@
                 a(href='/user/add') ADD USERS
         - else if(user.role_id == 3 || user.role_id == 4 || user.role_id == 6)
           li(class=(left_activeClass == 5)?'active':'')
-            a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
+            a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='javascript:void(0);')
               img(src='/images/left-icon5.png', alt='icon')
               | MY SHOP
             
             ul.easy-sidebar.dropdown-menu
               li
                 span.nav-close
-                  a(href='#')
+                  a(href='javascript:void(0);')
                     img(src='/images/close-white.png', alt='close')
               li
                 span.sub-title MY SHOP
@@ -130,7 +135,7 @@
               - }
         -if(user.role_id == 1 || user.role_id == 2){
         li(class=(left_activeClass == 6)?'active':'')
-          a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
+          a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='javascript:void(0);')
             img(src='/images/left-icon6.png', alt='icon')
             | System
           
@@ -151,15 +156,15 @@
       h4  Follow us
       ul
         li
-          a(href='#')
+          a(href='javascript:void(0);')
             i.fa-facebook.fa
         li
-          a(href='#')
+          a(href='javascript:void(0);')
             i.fa-google-plus.fa
         li
-          a(href='#')
+          a(href='javascript:void(0);')
             i.fa-twitter.fa
         li
-          a(href='#')
+          a(href='javascript:void(0);')
             i.fa-envelope.fa
 

@@ -60,8 +60,26 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, don
         });*/
         bcrypt.compare(password, user.password, (err, isMatch) => {
             if (isMatch) {
-                
-                return done(null, user);
+                if(user.role_id == 6){
+                    UserApp.findOne({ _id: user.shop_id }, (err, shopRes) => {
+                        if(shopRes == null){
+                            return done(null, user);
+                        }else{
+                            upData = {
+                                'cover_image' : shopRes.cover_image,
+                                'shop_logo' : shopRes.shop_logo,
+                                'shop_name' : shopRes.shop_name
+                            }
+                            console.log(upData);
+                            UserApp.update({_id:user._id},upData,function(error,upRes){
+                                return done(null, user);
+                            });
+                        }
+                        
+                    });
+                }else{                
+                    return done(null, user);
+                }
             }else{
                 return done(null, false, { msg: `password not correct.` });
             }
