@@ -87,7 +87,7 @@
                 a(href='/user/list') User list
               li
                 a(href='/user/add') ADD USERS
-        - else if(user.role_id == 3 || user.role_id == 4)              
+        - else if(user.role_id == 3 || user.role_id == 4 || user.role_id == 6)
           li(class=(left_activeClass == 5)?'active':'')
             a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
               img(src='/images/left-icon5.png', alt='icon')

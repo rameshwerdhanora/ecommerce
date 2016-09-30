@@ -1113,7 +1113,7 @@ exports.shop_account_update = (req, res) => {
                 req.flash('errors',['Something went wronge!']);
                 res.redirect('/user/shop_account');
             }else{
-                req.flash('success','Password updated successfully.');
+                req.flash('success',['Password updated successfully.']);
                 res.redirect('/user/shop_account');
             }
         });
@@ -1177,7 +1177,7 @@ exports.shop_notification_update = (req, res) => {
     }
     Notification.update({user_id:req.user._id},updateData,{upsert:true},function(error,updateRes){
         if(updateRes){
-            req.flash('success',['Shop user notification updated successfully!']);
+            req.flash('success',['Notification updated successfully!']);
             res.redirect('/user/shop_notification'); 
         }
     });
@@ -1325,7 +1325,7 @@ exports.shop_payment_method_save = (req, res) => {
 
 exports.shopuser_profile = (req, res) => {
     User.findOne({_id:req.params.userId},function(error,userRes){
-        res.render('user/shopuser_profile', { title: 'Shop User Profile',activeClass:'',result:userRes,left_activeClass:5});
+        res.render('user/shopuser_profile', { title: 'Shop User Profile',activeClass:1,result:userRes,left_activeClass:5});
     });
 }
 
@@ -1351,16 +1351,102 @@ exports.shopuser_profile_update = (req, res) => {
     });
 }
 
-exports.shopuser_notification = (req, res) => {
-    
-}
+
 exports.shopuser_notification_update = (req, res) => {
+   var updateData = {};
+   updateData.delivery = new Array();
+   updateData.shipped = new Array();
+   updateData.new_arrival = new Array();
+   updateData.promocode = new Array();
+   updateData.news = new Array();
+    if(req.body.arrival != undefined && req.body.arrival.length > 0){
+        if(req.body.arrival[0] == 'mail' ||  req.body.arrival[1] == 'mail'){
+            updateData.new_arrival.push('mail');
+        }
+    }
     
+    if(req.body.shipped != undefined && req.body.shipped.length > 0){
+        if(req.body.shipped[0] == 'mail' || req.body.shipped[1] == 'mail'){
+            updateData.shipped.push('mail');
+        }
+    }
+    
+    if(req.body.deliver != undefined && req.body.deliver.length > 0){
+        if(req.body.deliver[0] == 'mail' || req.body.deliver[1] == 'mail'){
+            updateData.delivery.push('mail');
+        }
+    }
+    
+    if(req.body.promo != undefined && req.body.promo.length > 0){
+        if(req.body.promo[0] == 'mail' || req.body.promo[1] == 'mail'){
+            updateData.promocode.push('mail');
+        }
+        
+    }
+    if(req.body.news != undefined  && req.body.news.length > 0){
+        if(req.body.news[0] == 'mail' || req.body.news[1] == 'mail'){
+            updateData.news.push('mail');
+        }
+    }
+    Notification.update({user_id:req.body.userId},updateData,{upsert:true},function(error,updateRes){
+        if(updateRes){
+            req.flash('success',['Shopuser notification updated successfully!']);
+            res.redirect('/user/shopuser_notification/'+req.body.userId); 
+        }
+    });
 }
 
+
+
+exports.shopuser_notification = (req, res) => {
+    User.findOne({_id:req.params.userId},function(error,getUserDetails){
+        Notification.findOne({user_id:req.params.userId},function(error,resultRes){
+            console.log(getUserDetails);
+            if(getUserDetails){
+                if(resultRes){
+                    res.render('user/shopuser_notification', { title: 'User Notifications',result:getUserDetails,activeClass:3,left_activeClass:5,notificationRes:resultRes});
+                }else{
+                    resultRes = { _id: req.params.userId,
+                        user_id: req.params.customerId,
+                        new_arrival: [],
+                        promocode: [],
+                        delivery: [],
+                        shipped: [],
+                        news: [] ,
+                        user_id:req.params.customerId
+                    };
+                    res.render('user/shopuser_notification', { title: 'User Notifications',result:getUserDetails,activeClass:3,left_activeClass:5,notificationRes:resultRes});
+                }
+            }
+        });
+    });
+};
+
+
+
+/* User Account */
 exports.shopuser_account = (req, res) => {
-    
-}
+    User.findOne({_id:req.params.userId},function(error,getUserDetails){
+        if(getUserDetails){
+            res.render('user/shopuser_account', { title: 'User Account',result:getUserDetails,activeClass:2,left_activeClass:5});
+        }
+    });
+};
+/* User Account */
 exports.shopuser_account_update = (req, res) => {
-    
-}
+    const bcrypt = require('bcrypt-nodejs');
+    bcrypt.hash(req.body.password, null, null, function(err, hash) {
+        updateData = {
+            password  : hash 
+        };
+        User.update({_id:req.body.userId},updateData, function(error, updateRes){
+            if (error){
+                req.flash('errors',['Something went wronge!']);
+                
+            }else{
+                req.flash('success',['Password updated successfully.']);
+            }
+            res.redirect('/user/shopuser_account/'+req.body.userId);
+        });
+    });
+};

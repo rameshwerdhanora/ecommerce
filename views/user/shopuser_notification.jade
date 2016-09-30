@@ -1,0 +1,95 @@
+extends ../layout
+block content
+  .col-sm-9.midlle-bar
+    include ../partials/flash
+    .large-title-row
+      img(src='/images/title-icon.png', alt='icon')
+      |  #{result.first_name} #{result.last_name}
+    .customer-box.clearfix
+        .customer-cl
+            include ../partials/shop_user_left_menu
+        .profile-cl
+          .profile-top-row
+            h2 NOTIFICATIONS
+          .profile-form-box
+            .omer_notification
+              .omer_notification
+                form(action='/user/shopuser_notification_update', method='post')
+                    input(type='hidden',name='userId',value='#{result._id}')
+                    .omer_notification_box
+                      .omer_notification_left
+                        p  EMAIL NOTIFICATIONS
+                      .omer_notification_right
+                        span
+                          img(src='/images/envolap.png')
+
+                        .clearfix
+                      .clearfix
+                    .omer_notification_box
+                      .omer_notification_left
+                        p Etiqett News
+                      .omer_notification_right
+                        span
+                          -if((notificationRes.news.length > 0) && (notificationRes.news[0] == 'mail' || notificationRes.news[1] == 'mail'))
+                              input#radio.css-checkbox(type='checkbox', name='news[]', value='mail',checked='checked')
+                          -else
+                              input#radio.css-checkbox(type='checkbox', name='news[]', value='mail')
+                          label.css-label(for='news[email]') 
+
+
+                        .clearfix
+                      .clearfix
+                    .omer_notification_box
+                      .omer_notification_left
+                        p Items Shipped
+                      .omer_notification_right
+                        span
+                          -if((notificationRes.shipped.length > 0 ) && (notificationRes.shipped[0] == 'mail' || notificationRes.shipped[1] == 'mail'))
+                              input#radio2.css-checkbox(type='checkbox', name='shipped[]', value='mail',checked="checked")
+                          -else
+                              input#radio2.css-checkbox(type='checkbox', name='shipped[]', value='mail')
+                          label.css-label(for='shipped[email]')
+
+                        .clearfix
+                      .clearfix
+                    .omer_notification_box
+                      .omer_notification_left
+                        p Items Delivered
+                      .omer_notification_right
+                        span
+                          -if(notificationRes.delivery.length > 0 && (notificationRes.delivery[0] == 'mail' || notificationRes.delivery[1] == 'mail'))
+                              input#radio4.css-checkbox(type='checkbox', name='deliver[]', value='mail',checked="checked")
+                          -else
+                              input#radio4.css-checkbox(type='checkbox', name='deliver[]', value='mail')
+                          label.css-label(for='deliver[email]')
+
+                        .clearfix
+                      .clearfix
+                    .omer_notification_box
+                      .omer_notification_left
+                        p Promo Codes
+                      .omer_notification_right
+                        span
+                          -if(notificationRes.promocode.length > 0 && (notificationRes.promocode[0] == 'mail' || notificationRes.promocode[1] == 'mail'))
+                              input#radio6.css-checkbox(type='checkbox', name='promo[]', value='mail',checked="checked")
+                          -else
+                              input#radio6.css-checkbox(type='checkbox', name='promo[]', value='mail')
+                          label.css-label(for='promo[email]')
+
+                        .clearfix
+                      .clearfix
+                    .omer_notification_box
+                      .omer_notification_left
+                        p New Arrivals
+                      .omer_notification_right
+                        span
+                          -if(notificationRes.new_arrival.length > 0 && (notificationRes.new_arrival[0] == 'mail' || notificationRes.new_arrival[1] == 'mail'))
+                              input#radio8.css-checkbox(type='checkbox', name='arrival[]', value='mail',checked="checked")
+                          -else
+                              input#radio8.css-checkbox(type='checkbox', name='arrival[]', value='mail')
+                          label.css-label(for='arrival[email]')
+
+                        .clearfix
+                      .clearfix
+                    .btn-btm
+                        button#profile_up_Btn(type='submit') UPDATE
