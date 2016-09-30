@@ -1,0 +1,32 @@
+extends ../layout
+block content
+  .col-sm-9.midlle-bar
+    include ../partials/flash
+    .large-title-row
+      img(src='/images/title-icon.png', alt='icon')
+      |  #{result.first_name} #{result.last_name}
+      //include customer_top_bar
+    .customer-box.clearfix
+      .customer-cl
+        include ../partials/shop_user_left_menu
+      .profile-cl
+        .profile-top-row
+          h2 Account
+        .profile-form-box
+          .shop-acc-box
+            form(action='/user/shopuser_account_update', method='post')
+              input(type='hidden',name='userId',value='#{result._id}')
+              .profile-frm-row
+                .profile-frm-cl1  USERNAME
+                .profile-frm-cl2
+                  input(name='user_name', type='text', value='#{result.user_name}',readonly='true')
+              .profile-frm-row
+                .profile-frm-cl1  E-MAIL ADDRESS
+                .profile-frm-cl2
+                  input(name='email', type='text', value='#{result.email_id}',readonly='true')
+              .profile-frm-row
+                .profile-frm-cl1 PASSWORD
+                .profile-frm-cl2
+                  input(name='password', type='password', value='',placeholder='*************')
+              .btn-btm
+                button#profile_up_Btn(type='submit') CHANGE PASSWORD

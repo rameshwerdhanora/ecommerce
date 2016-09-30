@@ -44,6 +44,7 @@ exports.saveUserFinalOrder = (req,res) => {
 		orderIns.shipping_array 	= req.body.shipping_array;
 		orderIns.status 			= 'Unfullfilled';
 		orderIns.itemquantity 		= req.body.itemquantity;
+		orderIns.finaldiscount 		= req.body.finalDiscount;
 		orderIns.order_date 		= Date.now();
 
 		orderIns.save(function(error,saveOrder)
@@ -72,7 +73,8 @@ exports.saveUserFinalOrder = (req,res) => {
 		                            				finalCartObj.real_price 	= parseInt(fetchProductDataForCart.price);
 		                            				finalCartObj.price_quan		= parseInt(fetchProductDataForCart.price) * CartRes.quantity;
 		                            				finalCartObj.quantity		= CartRes.quantity;
-		                            				totalPrice				   += parseInt(fetchProductDataForCart.price) * CartRes.quantity;
+		                            				finalCartObj.shop_id		= fetchProductDataForCart.shop_id
+									totalPrice				   += parseInt(fetchProductDataForCart.price) * CartRes.quantity;
 		                            				callback();
 			                           			}
 		                            		});
@@ -162,6 +164,8 @@ exports.saveUserFinalOrder = (req,res) => {
 		                            	var orderDetailsIns = new OrderDetails;
 		                            	orderDetailsIns.order_id 	= orderIns._id;
 		                            	orderDetailsIns.brand_id 	= finalCartObj.brand_id;
+						orderDetailsIns.user_id 	= req.body.user_id;
+		                            	orderDetailsIns.shop_id 	= finalCartObj.shop_id;
 		                            	orderDetailsIns.index 		= 'product';
 		                            	orderDetailsIns.data 		= finalCartObj;
 		                            	orderDetailsIns.save(function(error,saveOrderDetails){})
@@ -275,6 +279,8 @@ exports.detailsOfSelectedOrder = (req,res) => {
         	orderData.subtotal			= fetchOrdersDetails.subtotal;
         	orderData.itemquantity		= fetchOrdersDetails.itemquantity;
         	orderData.shipping_address	= fetchOrdersDetails.shipping_address;
+        	orderData.shipping_array	= fetchOrdersDetails.shipping_array;
+        	orderData.status			= 'Unfullfilled';
         	orderData.billing_address	= fetchOrdersDetails.billing_address;
         	orderData.payment_details	= fetchOrdersDetails.payment_details;
         	orderData.order_date		= finalDate;

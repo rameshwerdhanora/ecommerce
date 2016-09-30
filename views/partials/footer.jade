@@ -15,4 +15,18 @@
       for (var selector in config) {
           $(selector).chosen(config[selector]);
       }
-  
+  script(type='text/javascript', src='/js/jquery.simplyscroll.js')
+  script(type='text/javascript').
+    (function($) {
+        $(function() { 
+            $("#scroller").simplyScroll({
+                customClass: 'vert',
+                orientation: 'vertical',
+                auto: false,
+                manualMode: 'loop',
+                frameRate: 30,
+                speed: 10
+            });
+        });
+    })(jQuery);
+    

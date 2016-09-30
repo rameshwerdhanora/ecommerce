@@ -221,7 +221,7 @@ app.get('/api/product/fetchfilter/:brandId/:userId',productAppController.fetchFi
 app.get('/api/follow/:userId/:brandId',followAppController.followUnFollowBrand);
 app.get('/api/listoffollow/:userId',followAppController.listOfFollowUser);
 
-app.get('/api/brand/details/:brandId',productAppController.BrandDetailView);
+app.get('/api/brand/details/:brandId/:userId',productAppController.BrandDetailView);
 app.get('/api/brand/itfits/:brandId/:userId',productAppController.BrandItFitsProducts);
 
 /* Filter Controller */
@@ -437,6 +437,16 @@ app.get('/user/shop_notification', passportConfig.isAuthenticated, userAppContro
 app.post('/user/shop_notification_update', passportConfig.isAuthenticated, userAppControlleraAdmin.shop_notification_update);
 app.get('/user/shop_payment_method', passportConfig.isAuthenticated, userAppControlleraAdmin.shop_payment_method);
 app.get('/user/shop_user_list', passportConfig.isAuthenticated, userAppControlleraAdmin.shop_user_list);
+app.get('/user/shop_user_view/:userId', passportConfig.isAuthenticated, userAppControlleraAdmin.shop_user_view);
+app.get('/user/shop_payment_method', passportConfig.isAuthenticated, userAppControlleraAdmin.shop_payment_method);
+app.post('/user/shop_payment_method_save', passportConfig.isAuthenticated, userAppControlleraAdmin.shop_payment_method_save);
+
+app.get('/user/shopuser_profile/:userId', passportConfig.isAuthenticated, userAppControlleraAdmin.shopuser_profile);
+app.post('/user/shopuser_profile_update', passportConfig.isAuthenticated, userAppControlleraAdmin.shopuser_profile_update);
+app.get('/user/shopuser_notification/:userId', passportConfig.isAuthenticated, userAppControlleraAdmin.shopuser_notification);
+app.post('/user/shopuser_notification_update', passportConfig.isAuthenticated, userAppControlleraAdmin.shopuser_notification_update);
+app.get('/user/shopuser_account/:userId', passportConfig.isAuthenticated, userAppControlleraAdmin.shopuser_account);
+app.post('/user/shopuser_account_update', passportConfig.isAuthenticated, userAppControlleraAdmin.shopuser_account_update);
 
 
 app.get('/user/list', passportConfig.isAuthenticated, userAppControlleraAdmin.userList);
@@ -458,6 +468,8 @@ app.get('/user/linkedAccount/:userId', passportConfig.isAuthenticated,  userAppC
 app.get('/user/notifications/:userId', passportConfig.isAuthenticated,  userAppControlleraAdmin.userNotifications);
 app.get('/user/changePassword/:userId', passportConfig.isAuthenticated,  userAppControlleraAdmin.userChangePassword);
 app.post('/user/changePasswordSave/:userId', passportConfig.isAuthenticated,  userAppControlleraAdmin.userChangePasswordSave);
+
+app.post('/user/updateShopLogo', passportConfig.isAuthenticated,  userAppControlleraAdmin.updateShopLogo);
 
 
 /**

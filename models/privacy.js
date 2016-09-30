@@ -6,7 +6,7 @@ const privacySchema = new mongoose.Schema({
   currency : String,
   privacytype : String,
   useageanalytics:String,
-  celldata:Boolean
+  celldata:String
 });
 
 const Privacy = mongoose.model('Privacy', privacySchema);

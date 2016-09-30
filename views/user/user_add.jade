@@ -6,7 +6,7 @@ block content
       img(src='/images/title-icon.png', alt='icon')
       |  USERS
     .customer-box.clearfix
-      form(method='post', action='/user/save')
+      form(method='post', action='/user/save', enctype='multipart/form-data')
         .customer-cl
           h2 USERS
           ul
@@ -84,6 +84,15 @@ block content
                 .profile-frm-cl1 Bio
                 .profile-frm-cl2
                   textarea.large-in(name='bio') #{data ? data.bio :""}
+              .profile-frm-row
+                .profile-frm-cl1 Profile Image
+                .profile-frm-cl2
+                  input(type='file', name='profile_image', required='required')
+              .profile-frm-row
+                .profile-frm-cl1 Cover Photo
+                .profile-frm-cl2
+                  input(type='file', name='cover_image', required='required')
+                  
                   
               -if(user.role_id == 1 || user.role_id == 2){
               .profile-frm-row.botique-spc
@@ -105,15 +114,22 @@ block content
                 ul.perms-list
                   if getPermissions
                     each getPermission in getPermissions
-                      if getPermission.parent_id == 0
                         li
-                          input#checkbox(type='checkbox', name='permissions[]', value='#{getPermission._id}')
-                          |                     #{getPermission.name}
-                      else
-                        li
-                          ul.perms-sub-list
-                            li
-                              input#checkbox3(type='checkbox', name='permissions[]', value='#{getPermission._id}')
-                              |                         #{getPermission.name}        
+                            input(type='checkbox', name='permissions[]', value='#{getPermission.id}')
+                            | #{getPermission.name}
+                            -if(getPermission.options){
+                            ul.perms-sub-list
+                                each level1 in getPermission.options
+                                    li
+                                        input(type='checkbox', name='permissions[]', value='#{level1.id}')
+                                        | #{level1.name}
+                                        -if(level1.options){
+                                        ul.perms-sub-list
+                                            each level2 in level1.options
+                                                li
+                                                    input(type='checkbox', name='permissions[]', value='#{level2.id}')
+                                                    | #{level2.name}
+                                        -}
+                            -}    
           .btn-btm
             button(type='submit') ADD USER

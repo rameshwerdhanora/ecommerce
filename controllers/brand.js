@@ -79,10 +79,10 @@ exports.saveBrand = (req,res) => {
                         for(var i = 0;i < req.files.length;i++){
                             switch(req.files[i].fieldname){
                                 case 'brand_logo':
-                                    brandIns.brand_logo = req.files[i].path.replace('public/','');
+                                    brandIns.brand_logo = req.files[i].path.replace('public','');
                                     break;
                                 case 'brand_cover':
-                                    brandIns.brand_cover = req.files[i].path.replace('public/','');
+                                    brandIns.brand_cover = req.files[i].path.replace('public','');
                                     break;
                             }
                         }
@@ -137,10 +137,10 @@ exports.updateBrand = (req,res) => {
                 for(var i = 0;i < req.files.length;i++){
                     switch(req.files[i].fieldname){
                         case 'brand_logo':
-                            updateData.brand_logo = req.files[i].path.replace('public/','');
+                            updateData.brand_logo = req.files[i].path.replace('public','');
                             break;
                         case 'brand_cover':
-                            updateData.brand_cover = req.files[i].path.replace('public/','');
+                            updateData.brand_cover = req.files[i].path.replace('public','');
                             break;
                     }
                 }

@@ -934,7 +934,16 @@ exports.BrandDetailView = (req, res) => {
             });
 
           });
-        }
+        },
+        function(callback)
+          {
+            Follow.findOne({user_id:req.params.userId,brand_id:req.params.brandId},function(error,fetchFollowUnFollowBrand)
+            {
+              var brandFollow = (fetchFollowUnFollowBrand) ? 'true' : 'false';
+              filterObj.brand_follow         = brandFollow;
+              callback(error); 
+            })
+          }
       ],
       function(err)
       {
@@ -1084,6 +1093,7 @@ exports.addCartOptions = (req, res) => {
                           tmpOoptionFinalAr[firstIndex] = new Array();
                           tmpOoptionFinalAr[firstIndex] = {};
                           tmpOoptionFinalAr[firstIndex]['label'] = attribRes[j].name;
+                          tmpOoptionFinalAr[firstIndex]['type'] = attribRes[j].display_type;
                           tmpOoptionFinalAr[firstIndex]['options'] = new Array();
                            
                           tmpOoptionFinalAr[firstIndex]['options'][0] = {};

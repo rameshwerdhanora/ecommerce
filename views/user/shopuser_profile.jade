@@ -1,0 +1,66 @@
+extends ../layout
+block content
+  .col-sm-9.midlle-bar
+    include ../partials/flash
+    .large-title-row
+      img(src='/images/title-icon.png', alt='icon')
+      |  #{result.first_name} #{result.last_name}
+      //include customer_top_bar
+    .customer-box.clearfix
+      .customer-cl
+        include ../partials/shop_user_left_menu
+      .profile-cl
+        .profile-top-row
+          h2 PROFILE
+          .edit-btn-cl
+            a.edit-btn(href='javascript:void(0);', onClick='javascript:$("#profile_up_Btn").show();') EDIT
+        .profile-form-box
+          .profile-left-cl
+            img.profile-icons(src='/images/admin.png', alt='img')
+          .profile-right-cl
+            form(action='/user/shopuser_profile_update', method='post')
+              input(type='hidden',name='userId',value='#{result._id}')
+              .profile-frm-row
+                .profile-frm-cl1 First Name
+                .profile-frm-cl2
+                  input(name='first_name', type='text', value='#{result.first_name}')
+              .profile-frm-row
+                .profile-frm-cl1 Last Name
+                .profile-frm-cl2
+                  input(name='last_name', type='text', value='#{result.last_name}')
+              .profile-frm-row
+                .profile-frm-cl1 Address
+                .profile-frm-cl2
+                  input(name='address', type='text', value='#{result.address? result.address : ""}')
+              .profile-frm-row
+                .profile-frm-cl1 City
+                .profile-frm-cl2
+                  input(name='city', type='text', value='#{result.city ? result.city : ""}')
+              .profile-frm-row
+                .profile-frm-cl1 State
+                .profile-frm-cl2
+                  input(name='state', type='text', value='#{result.state ? result.state : ""}')
+              .profile-frm-row
+                .profile-frm-cl1 Zip Code 
+                .profile-frm-cl2
+                  input(name='zip', type='text', value='#{result.zip ? result.zip : ""}')
+              .profile-frm-row
+                .profile-frm-cl1 Country
+                .profile-frm-cl2
+                  input(name='country', type='text', value='#{result.country ? result.country : ""}')
+              .profile-frm-row
+                .profile-frm-cl1 Bio
+                .profile-frm-cl2
+                  textarea.large-in(name='bio')
+                    | #{result.bio ? result.bio : ""}
+              .btn-btm
+               button#profile_up_Btn.dnone(type='submit') Save
+            script.
+                $(document).ready(function() {
+                    $(window).keydown(function(event){
+                        if(event.keyCode == 13) {
+                          event.preventDefault();
+                          return false;
+                        }
+                    });
+                });

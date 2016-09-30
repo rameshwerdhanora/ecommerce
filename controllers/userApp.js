@@ -11,20 +11,141 @@ const CommonHelper = require('../helpers/commonHelper');
 const Order           = require('../models/orders');
 const OrderDetails    = require('../models/orderDetails');
 const Constants 		= require('../constants/constants');
+const Multer 	= require('multer');
 
+/* Define Folder name where our Shop image store */
+var storage =   Multer.diskStorage({
+  destination: function (req, file, callback) {
+    if(file.fieldname == 'cover_image' || file.fieldname == 'shop_logo'){
+       callback(null, 'public/uploads/shop_logo'); 
+    }else if(file.fieldname == 'profile_image'){
+       callback(null, 'public/uploads/profile_images');
+    }
+  },
+  filename: function (req, file, callback) {
+  	var realname = file.originalname.replace(/ /g,"_");
+    callback(null, Date.now() + '_' + realname);
+  }
+});
+/* Create Instance for upload folder */
+var uploadShopImages = Multer({ storage : storage}).any();
 
 /**
  * GET /customer/list
  * Customer List user page.
  */
 exports.customerList = (req, res) => {
-	User.find({role_id:5},function(error,getCustomers){
-		if(getCustomers)
-		{
-			//console.log(getCustomers.length);
-			res.render('user/customer_list', { left_activeClass:4, title: 'Customer',getCustomers:getCustomers});
-		}
-	});	
+    if(req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6){
+        var page = (req.query.page == undefined)?1:req.query.page;
+        page = (page == 0)?1:page;
+        var skipRecord = (page-1)*Constants.RECORDS_PER_PAGE;
+        Address.find({is_default:1, add_type:Constants.SHIPPING},function(error,fetchAddress){  
+            User.find({role_id:5},function(error,fetchAllCustomers){  
+                OrderDetails.find({shop_id:req.user._id},function(error,fetchOrderDetails){   
+                    var tempShopUsers = {};
+                    var tempShopUsersArr = [];
+                    if(tempShopUsers){
+                        for(var j = 0; j< fetchAllCustomers.length;j++){
+                          for(var i = 0;i< fetchOrderDetails.length;i++){
+                            if(fetchAllCustomers[j]._id == fetchOrderDetails[i].user_id){
+                                tempShopUsersArr.push(fetchOrderDetails[i].user_id);
+                            }
+                          }
+                        }
+                    }
+                    
+                    User.find({role_id:5,_id:{$in:tempShopUsersArr}},function(error,countAllCustomers){  
+                         var totalRecord = countAllCustomers.length;
+                         var totalPage = Math.ceil(totalRecord/Constants.RECORDS_PER_PAGE);
+
+                        User.find({role_id:5,_id:{$in:tempShopUsersArr}})
+                            .limit(Constants.RECORDS_PER_PAGE)
+                            .skip(skipRecord)
+                            .sort('-_id')
+                            .exec(function(error,getCustomers){
+                               var tempAddressLine1 = {};
+                               var tempCity = {};
+                               var tempPostalCode = {};
+                               var tempContactNo = {};
+                               var tempCountry = {};
+                               var tempState = {};
+                               for(var i =0; i < getCustomers.length;i++){
+                                   for(var j = 0;j< fetchAddress.length;j++){
+                                       if(getCustomers[i]._id == fetchAddress[j].user_id){
+                                           //getCustomers[i].push(fetchAddress[j]['address_line1']);
+                                           tempAddressLine1[getCustomers[i]._id] = fetchAddress[j].address_line1;
+                                           tempCity[getCustomers[i]._id] = fetchAddress[j].city;
+                                           tempPostalCode[getCustomers[i]._id] = fetchAddress[j].postal_code;
+                                           tempCountry[getCustomers[i]._id] = fetchAddress[j].country;
+                                           tempContactNo[getCustomers[i]._id] = fetchAddress[j].contact_no;
+                                           tempState[getCustomers[i]._id] = fetchAddress[j].state;
+                                       }
+                                   }
+                               }
+
+                            if(getCustomers) {
+                                res.render('user/customer_list', { left_activeClass:4, title: 'Customer', currentPage:page, totalPage:totalPage, getCustomers:getCustomers, addressLine1:tempAddressLine1, city:tempCity,postalCode:tempPostalCode,country:tempCountry, contactNo:tempContactNo,state:tempState  });
+                            }   
+                        });    
+                        
+                    });  
+                });    
+            });
+       });
+    } else if(req.user.role_id == 1 || req.user.role_id == 2){ 
+        var page = (req.query.page == undefined)?1:req.query.page;
+        page = (page == 0)?1:page;
+        var skipRecord = (page-1)*Constants.RECORDS_PER_PAGE;
+        var getCustomers = [];
+        User.count(function(error, totalRecord) {
+            var totalPage = Math.ceil(totalRecord/Constants.RECORDS_PER_PAGE);
+
+            User.find({role_id:5})
+                    .limit(Constants.RECORDS_PER_PAGE)
+                    .skip(skipRecord)
+                    .sort('-_id')
+                    .exec(function(error,getCustomers){
+                    Address.find({is_default:1, add_type:Constants.SHIPPING},function(error,fetchAddress){        
+                        
+                        /*var newArray = [];
+                         * var tempAddress = {};
+                        if(tempAddress){
+                            for(var i = 0;i< fetchAddress.length;i++){
+                                tempAddress[fetchAddress[i].user_id] = fetchAddress[i];
+                            }
+                        }*/
+                        
+                        var tempAddressLine1 = {};
+                        var tempCity = {};
+                        var tempPostalCode = {};
+                        var tempContactNo = {};
+                        var tempCountry = {};
+                        var tempState = {};
+                        for(var i =0; i < getCustomers.length;i++){
+                            for(var j = 0;j< fetchAddress.length;j++){
+                                if(getCustomers[i]._id == fetchAddress[j].user_id){
+                                    //getCustomers[i].push(fetchAddress[j]['address_line1']);
+                                    tempAddressLine1[getCustomers[i]._id] = fetchAddress[j].address_line1;
+                                    tempCity[getCustomers[i]._id] = fetchAddress[j].city;
+                                    tempPostalCode[getCustomers[i]._id] = fetchAddress[j].postal_code;
+                                    tempCountry[getCustomers[i]._id] = fetchAddress[j].country;
+                                    tempContactNo[getCustomers[i]._id] = fetchAddress[j].contact_no;
+                                    tempState[getCustomers[i]._id] = fetchAddress[j].state;
+                                }
+                            }
+                        }
+                            
+                        if(getCustomers) {
+                             res.render('user/customer_list', { left_activeClass:4, currentPage:page, totalPage:totalPage, title: 'Customer',getCustomers:getCustomers, addressLine1:tempAddressLine1, city:tempCity,postalCode:tempPostalCode,country:tempCountry, contactNo:tempContactNo,state:tempState  });
+                         }     
+                });
+            });
+        });
+    }else{
+        req.flash('errors', ['Unauthorised user role']);
+        return res.redirect('/dashboard');
+    }
+         
 };
 
 /**
@@ -33,11 +154,15 @@ exports.customerList = (req, res) => {
  */
 exports.customerView = (req, res) => {
     User.findOne({_id:req.params.id},function(error,getCustomerDetails){
+        Address.findOne({is_default:1, add_type:Constants.SHIPPING, user_id:req.params.id},function(error,fetchAddress){   
             if(getCustomerDetails)
             {
-                    //console.log(getCustomerDetails);
-                    res.render('user/customer_view', { title: 'Customer View',getCustomerDetails:getCustomerDetails,activeClass:1,left_activeClass:4});
+                if(fetchAddress == null){
+                    fetchAddress = [];
+                }
+                res.render('user/customer_view', { title: 'Customer View',getCustomerDetails:getCustomerDetails,activeClass:1,left_activeClass:4, fetchAddress:fetchAddress});
             }
+        });	
     });	
 };
 
@@ -61,11 +186,11 @@ exports.customerEdit = (req, res) => {
  */
 exports.customerUpdate = (req, res) => {
 	updateData = {
-		'first_name' 	: req.body.first_name,
-		'last_name'		: req.body.last_name,
+            'first_name' 	: req.body.first_name,
+            'last_name'		: req.body.last_name,
 	    'address'		: req.body.address, 
-	    'city'			: req.body.city,
-	    'state'			: req.body.state,
+	    'city'		: req.body.city,
+	    'state'		: req.body.state,
 	    'zip_code'		: req.body.zip_code,
 	    'country'		: req.body.country,
 	};
@@ -84,11 +209,11 @@ exports.customerDelete = (req,res) => {
 	{
 		if(error)
 		{
-			res.send({status:'error',msg:error});
+			res.send({status:'errors',[msg:error]});
 		}
 		else
 		{
-			res.flash('success','Remove Successfully.');
+			res.flash('success',['Remove Successfully.']);
 			res.redirect('/customer/list');
 		}
 	});
@@ -132,7 +257,6 @@ exports.customerAddressList = (req, res) => {
 		{
 			Address.find({ user_id: req.params.customerId}, function(error, availableUserAddresses)
 	        {
-	            //console.log(availableUserAddresses);
 	            var shippingAddress =[];
 	            var billingAddress = [];
 	            availableUserAddresses.forEach(function(item, index) {
@@ -155,7 +279,6 @@ exports.customerAddressList = (req, res) => {
  * Save Customer information
  */
 exports.customerAddressSave = (req, res) => {
-	//console.log(req.body);
 	var addressIns              = new Address();
     addressIns.user_id          = req.params.customerId;
     addressIns.address_type     = req.body.addressType;
@@ -178,7 +301,7 @@ exports.customerAddressSave = (req, res) => {
         }
         else
         {
-            req.flash('success','Added Successfully.');
+            req.flash('success',['Added Successfully.']);
 			res.redirect('/customer/address/'+req.params.customerId);
         }
     });
@@ -190,8 +313,8 @@ exports.customerAddressSave = (req, res) => {
  * User List - here we need to get both users and customers in seprate columns
  */
 exports.userList = (req, res) => {
-        User.find({role_id:5},function(error,getCustomers){
-            User.find({role_id:{$ne : 5}},function(error,getUsers){
+        User.find({role_id:6},function(error,getCustomers){
+            User.find({role_id:{$in : [3,4]}},function(error,getUsers){
                 res.render('user/user_list', { title: 'User List',getCustomers:getCustomers,getUsers:getUsers,left_activeClass:5});
             });
         });	
@@ -204,12 +327,72 @@ exports.userList = (req, res) => {
  * Signup user page.
  */
 exports.userAdd = (req, res) => {
-	Permission.find({},function(error,getPermissions){
-		if(getPermissions)
-		{
-			//console.log(getPermissions);
-			res.render('user/user_add', { title: 'New User',getPermissions:getPermissions,left_activeClass:5});
-		}
+        if(req.user.role_id == Constants.MASTERROLE || req.user.role_id == Constants.ADMINROLE){
+            var permissionType = 'SHOPADMIN';
+        }else{
+            var permissionType = 'SHOPUSER';
+        }
+	Permission.find({type:permissionType},function(error,getPermissions){
+            if(getPermissions){
+                var flag=true;
+                var finalPermission = new Array();
+                var takenElement = new Array();
+                var taa= 0;
+                while(flag){
+                    flag = false;
+                    for(i=0;i<getPermissions.length;i++){
+                        var takenFlag = false;
+                        // To check element is already added into final result or not
+                        for(var tke = 0; tke < takenElement.length; tke++){
+                            if(getPermissions[i]._id == takenElement[tke]){
+                                takenFlag = true;
+                            }
+                        }
+                        if(!takenFlag){
+                            // If parent id is null then added them on root
+                            if(getPermissions[i].parent_id == 0){
+                                takenElement.push(getPermissions[i]._id);// Array is used to check the element is added or not
+                                var tmp = {};
+                                tmp.id = getPermissions[i]._id;
+                                tmp.name = getPermissions[i].name;
+                                //tmp.parent_id = getPermissions[i].parent_id;
+                                tmp.options = new Array();
+                                flag = true;
+                                finalPermission.push(tmp);
+                            }else{
+                                for(j=0;j<finalPermission.length;j++){
+                                    if(finalPermission[j].id == getPermissions[i].parent_id){
+                                        takenElement.push(getPermissions[i]._id);// Array is used to check the element is added or not
+                                        var tmp = {};
+                                        tmp.id = getPermissions[i]._id;
+                                        tmp.name = getPermissions[i].name;
+                                        //tmp.parent_id = getPermissions[i].parent_id;
+                                        tmp.options = new Array();
+                                        flag = true;
+                                        finalPermission[j].options.push(tmp);
+                                    }
+                                    if(finalPermission[j].options.length > 0){
+                                        for(m = 0;m < finalPermission[j].options.length; m++){
+                                            if(finalPermission[j].options.id == getPermissions[i].parent_id){
+                                                takenElement.push(getPermissions[i]._id);// Array is used to check the element is added or not
+                                                var tmp = {};
+                                                tmp.id = getPermissions[i]._id;
+                                                tmp.name = getPermissions[i].name;
+                                                //tmp.parent_id = getPermissions[i].parent_id;
+                                                tmp.options = new Array();
+                                                flag = true;
+                                                finalPermission[j].options.push(tmp);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                res.render('user/user_add', { title: 'New User',getPermissions:finalPermission,left_activeClass:5});
+            }
 	});
 };
 
@@ -219,108 +402,128 @@ exports.userAdd = (req, res) => {
  */
 
 exports.userSave = (req, res) => {
-    User.findOne({$or: [ { email_id: req.body.email_id }, { user_name: req.body.user_name}] }, function(err, existingEmail){
-        if(existingEmail){
-            if(existingEmail.email_id == req.body.email_id){
-                req.flash('errors', ['Email address already exists.']);
-            }else{
-                req.flash('errors', ['Username already exists.']);
-            }
-            
-            Permission.find({},function(error,getPermissions){
-		if(getPermissions){
-                    return res.render('user/user_add',{title: 'New User', data: req.body,getPermissions:getPermissions,left_activeClass:5});
-		}else{
-                    var tmp = new Array();
-                    return res.render('user/user_add',{title: 'New User', data: req.body,getPermissions:tmp,left_activeClass:5});
+    uploadShopImages(req,res,function(err) {
+         if(err) {
+            return res.end("Error uploading file.");
+         }
+        User.findOne({$or: [ { email_id: req.body.email_id }, { user_name: req.body.user_name}] }, function(err, existingEmail){
+            if(existingEmail){
+                if(existingEmail.email_id == req.body.email_id){
+                    req.flash('errors', ['Email address already exists.']);
+                }else{
+                    req.flash('errors', ['Username already exists.']);
                 }
-            });
-        }else{
-            //console.log(req.body);
-            var userIns        		= new User();
-            
-            
-            userIns.shop_name   	= req.body.shop_name;
-            userIns.user_name   	= req.body.user_name;
-            userIns.password    	= req.body.password;
-            userIns.email_id       	= req.body.email_id;
-            userIns.first_name  	= req.body.first_name;
-            userIns.last_name   	= req.body.last_name;
-            userIns.contact_no  	= req.body.contact_no;
-            userIns.dob   		= '';
-            userIns.gender   		= '';
-            userIns.bio   		= '';
-            userIns.cover_image		= '';
-            userIns.profile_image       = '';
-            userIns.social_type   	= '';
-            userIns.social_id   	= '';
-            userIns.access_token   	= '';
-            userIns.is_active   	= true;
-            userIns.is_deleted   	= false;
-            userIns.created        	= Date.now();
-            userIns.updated        	= Date.now();
-            
-            userIns.address        	= req.body.address;
-            userIns.city        	= req.body.city;
-            userIns.state        	= req.body.state;
-            userIns.country        	= req.body.country;
-            userIns.zip                 = req.body.zip;
-            userIns.bio                 = req.body.bio;
-            
-            
-            userIns.save(function(error){
-                if(error === null){
-                    if(req.user.role_id == Constants.MASTERROLE || req.user.role_id == Constants.ADMINROLE){
-                        userIns.shop_id = userIns._id;
-                        userIns.role_id = req.body.role_id;
+                if(req.user.role_id == Constants.MASTERROLE || req.user.role_id == Constants.ADMINROLE){
+                    var permissionType = 'SHOPADMIN';
+                }else{
+                    var permissionType = 'SHOPUSER';
+                }
+                Permission.find({type:permissionType},function(error,getPermissions){
+                    if(getPermissions){
+                        return res.render('user/user_add',{title: 'New User', data: req.body,getPermissions:getPermissions,left_activeClass:5});
                     }else{
-                        userIns.shop_id = req.user.shop_id;
-                        userIns.role_id = Constants.SHOP_EMPLOYEE;
+                        var tmp = new Array();
+                        return res.render('user/user_add',{title: 'New User', data: req.body,getPermissions:tmp,left_activeClass:5});
                     }
-                    
-                    userIns.save(function(error){});
-                    //-- save user permissions 
-                    if(req.body.permissions){
-                        for(var i=0; i<req.body.permissions.length; i++){
-                            var userPermission = new UserPermission();
-                            userPermission.user_id = userIns._id;
-                            userPermission.permission_id = req.body.permissions[i];
-                            userPermission.created = Date.now();
-                            userPermission.save();
+                });
+            }else{
+                var userIns        		= new User();
+                if(req.files.length > 0){
+                    for(var i = 0;i < req.files.length;i++){
+                        switch(req.files[i].fieldname){
+                            case 'cover_image':
+                                userIns.cover_image = req.files[i].path.replace('public','');
+                                break;
+                            case 'profile_image':
+                                userIns.profile_image = req.files[i].path.replace('public','');
+                                break;
                         }
                     }
-                    // Get the get template content for 'registration' and call the helper to send the email         
-                    EmailTemplate.findOne({template_type:'registration'},function(error,getTemplateDetail){
-                        if(getTemplateDetail != null){
-                            var registerTemplateContent = getTemplateDetail.content;
-                            //dynamicTemplateContent= registerTemplateContent.replace(/{first_name}/gi, userIns.first_name).replace(/{last_name}/gi, userIns.last_name);
-                            dynamicTemplateContent = registerTemplateContent.replace(/{customer_name}/gi, userIns.first_name);
-                            if(dynamicTemplateContent){
-                                CommonHelper.emailTemplate(getTemplateDetail.subject, dynamicTemplateContent, userIns._id);      
+                }
+
+                userIns.shop_name   	= req.body.shop_name;
+                userIns.user_name   	= req.body.user_name;
+                userIns.password    	= req.body.password;
+                userIns.email_id       	= req.body.email_id;
+                userIns.first_name  	= req.body.first_name;
+                userIns.last_name   	= req.body.last_name;
+                userIns.contact_no  	= req.body.contact_no;
+                userIns.dob   		= '';
+                userIns.gender   		= '';
+                userIns.bio   		= '';
+                userIns.social_type   	= '';
+                userIns.social_id   	= '';
+                userIns.access_token   	= '';
+                userIns.is_active   	= true;
+                userIns.is_deleted   	= false;
+                userIns.created        	= Date.now();
+                userIns.updated        	= Date.now();
+
+                userIns.address        	= req.body.address;
+                userIns.city        	= req.body.city;
+                userIns.state        	= req.body.state;
+                userIns.country        	= req.body.country;
+                userIns.zip                 = req.body.zip;
+                userIns.bio                 = req.body.bio;
+
+                userIns.shop_id = '';
+                userIns.role_id = '';
+
+
+                userIns.save(function(error){
+                    if(error === null){
+                        if(req.user.role_id == Constants.MASTERROLE || req.user.role_id == Constants.ADMINROLE){
+                            userIns.shop_id = userIns._id;
+                            userIns.role_id = req.body.role_id;
+                        }else{
+                            userIns.shop_id = req.user.shop_id;
+                            userIns.role_id = Constants.SHOP_EMPLOYEE;
+                        }
+
+                        userIns.save(function(error){});
+                        //-- save user permissions 
+                        if(req.body.permissions){
+                            for(var i=0; i<req.body.permissions.length; i++){
+                                var userPermission = new UserPermission();
+                                userPermission.user_id = userIns._id;
+                                userPermission.permission_id = req.body.permissions[i];
+                                userPermission.created = Date.now();
+                                userPermission.save();
                             }
                         }
-                    });
-                    // Send SMS Using Twilio API to perticular user mobile number
-                    if((userIns.contact_no!='') && isNaN(userIns.contact_no)){
-                        //CommonHelper.sendSms(req, res, smsContent, userId);
+                        // Get the get template content for 'registration' and call the helper to send the email         
+                        EmailTemplate.findOne({template_type:'registration'},function(error,getTemplateDetail){
+                            if(getTemplateDetail != null){
+                                var registerTemplateContent = getTemplateDetail.content;
+                                //dynamicTemplateContent= registerTemplateContent.replace(/{first_name}/gi, userIns.first_name).replace(/{last_name}/gi, userIns.last_name);
+                                dynamicTemplateContent = registerTemplateContent.replace(/{customer_name}/gi, userIns.first_name);
+                                if(dynamicTemplateContent){
+                                    CommonHelper.emailTemplate(getTemplateDetail.subject, dynamicTemplateContent, userIns._id);      
+                                }
+                            }
+                        });
+                        // Send SMS Using Twilio API to perticular user mobile number
+                        if((userIns.contact_no!='') && isNaN(userIns.contact_no)){
+                            //CommonHelper.sendSms(req, res, smsContent, userId);
+                        }
+                        req.flash('success', ['User information saved successfully.']);
+                        if(req.user.role_id == Constants.MASTERROLE || req.user.role_id == Constants.ADMINROLE){
+                            return res.redirect('/user/list');
+                        }else if(req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6){
+                            return res.redirect('/user/shop_user_list');
+                        }
+                    }else{
+                        req.flash('error', 'Something wrong!!');
+                        if(req.user.role_id == Constants.MASTERROLE || req.user.role_id == Constants.ADMINROLE){
+                            return res.redirect('/user/list');
+                        }else if(req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6){
+                            return res.redirect('/user/shop_user_list');
+                        }
                     }
-                    req.flash('success', 'User information saved successfully.');
-                    if(req.user.role_id == Constants.MASTERROLE || req.user.role_id == Constants.ADMINROLE){
-                        return res.redirect('/user/list');
-                    }else if(req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6){
-                        return res.redirect('/user/shop_user_list');
-                    }
-                }else{
-                    req.flash('error', 'Something wrong!!');
-                    if(req.user.role_id == Constants.MASTERROLE || req.user.role_id == Constants.ADMINROLE){
-                        return res.redirect('/user/list');
-                    }else if(req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6){
-                        return res.redirect('/user/shop_user_list');
-                    }
-                }
-            }); 
-        }
-    });
+                }); 
+            }
+        });
+    });    
 };
 
 /*
@@ -331,7 +534,6 @@ exports.userView = (req, res) => {
 	User.findOne({_id:req.params.id},function(error,getUserDetails){
 		if(getUserDetails)
 		{
-			console.log(getUserDetails);
 			res.render('user/user_view', { title: 'User View',getUserDetails:getUserDetails,activeClass:1,left_activeClass:5});
 
 		}
@@ -343,7 +545,7 @@ exports.userView = (req, res) => {
  * user view page.
 */
 exports.shopProfile = (req, res) => {
-    User.findOne({shop_id:req.user.shop_id},function(error,getUserDetails){
+    User.findOne({_id:req.user._id},function(error,getUserDetails){
         if(getUserDetails){
             res.render('user/shopProfile', { title: 'Shop view',getUserDetails:getUserDetails,activeClass:1,left_activeClass:5});
         }
@@ -399,7 +601,7 @@ exports.userDelete = (req,res) => {
 		}
 		else
 		{
-			res.flash('success','Remove Successfully.');
+			res.flash('success',['Remove Successfully.']);
 
 			res.redirect('/customer/list');
 
@@ -416,7 +618,6 @@ exports.userShipping = (req, res) => {
 		{
 			ShopShipping.findOne({ user_id: req.params.userId}, function(error, availableShopShipping)
 	        {
-				//console.log(availableShopShipping);
 				if(availableShopShipping == null)
 	        	{
 	        		availableShopShipping = [];
@@ -451,7 +652,7 @@ exports.userShippingSave = (req, res) => {
         }
         else
         {
-            req.flash('success','Shipping Saved Successfully.');
+            req.flash('success',['Shipping Saved Successfully.']);
 			res.redirect('/user/shipping/'+req.params.userId);
         }
     });
@@ -468,7 +669,6 @@ exports.userPaymentMethod = (req, res) => {
 	        	{
 	        		availablePaymentMethod = [];
 	        	}
-				//console.log(availablePaymentMethod);
 				res.render('user/user_payment_method', { title: 'User Payment Method',getUserDetails:getUserDetails,activeClass:3,availablePaymentMethod:availablePaymentMethod,left_activeClass:5});
 			});
 			
@@ -498,7 +698,7 @@ exports.userPaymentMethodSave = (req, res) => {
         }
         else
         {
-            req.flash('success','Payment Method Saved Successfully.');
+            req.flash('success',['Payment Method Saved Successfully.']);
 			res.redirect('/user/paymentMethod/'+req.params.userId);
         }
     });
@@ -515,7 +715,6 @@ exports.userProductReview = (req, res) => {
     User.findOne({_id:req.params.userId},function(error,getUserDetails){
 		if(getUserDetails)
 		{
-			//console.log(getUserDetails);
 			res.render('user/user_product_review', { title: 'User Payment Review',getUserDetails:getUserDetails,activeClass:5,left_activeClass:5});
 		}
 	});
@@ -526,7 +725,6 @@ exports.userAccount = (req, res) => {
     User.findOne({_id:req.params.userId},function(error,getUserDetails){
 		if(getUserDetails)
 		{
-			//console.log(getUserDetails);
 			res.render('user/user_account', { title: 'User Account',getUserDetails:getUserDetails,activeClass:6,left_activeClass:5});
 		}
 	});
@@ -537,21 +735,42 @@ exports.userLinkedAccount = (req, res) => {
     User.findOne({_id:req.params.userId},function(error,getUserDetails){
 		if(getUserDetails)
 		{
-			//console.log(getUserDetails);
 			res.render('user/user_linked_account', { title: 'User Linked Account',getUserDetails:getUserDetails,activeClass:7,left_activeClass:5});
 		}
 	});
 };
 
 /* User Notifications */
+/*
 exports.userNotifications = (req, res) => {
     User.findOne({_id:req.params.userId},function(error,getUserDetails){
-		if(getUserDetails)
-		{
-			console.log(getUserDetails);
-			res.render('user/user_notifications', { title: 'User Notifications',getUserDetails:getUserDetails,activeClass:8,left_activeClass:5});
-		}
-	});
+        if(getUserDetails){
+            res.render('user/user_notifications', { title: 'User Notifications',getUserDetails:getUserDetails,activeClass:8,left_activeClass:5});
+        }
+    });
+};*/
+
+exports.userNotifications = (req, res) => {
+    User.findOne({_id:req.params.userId},function(error,getUserDetails){
+        Notification.findOne({user_id:req.params.userId},function(error,resultRes){
+            if(getUserDetails){
+                if(resultRes){
+                    res.render('user/user_notifications', { title: 'User Notifications',getUserDetails:getUserDetails,activeClass:8,left_activeClass:5,result:resultRes});
+                }else{
+                    resultRes = { _id: req.params.userId,
+                        user_id: req.params.customerId,
+                        new_arrival: [],
+                        promocode: [],
+                        delivery: [],
+                        shipped: [],
+                        news: [] ,
+                        user_id:req.params.customerId
+                    };
+                    res.render('user/user_notifications', { title: 'User Notifications',getUserDetails:getUserDetails,activeClass:8,left_activeClass:5,result:resultRes});
+                }
+            }
+        });
+    });
 };
 
 /**
@@ -586,16 +805,11 @@ exports.userChangePasswordSave = (req, res) => {
  * My Profile view page in edit mode.
  */
 exports.myProfile = (req, res) => {
-	User.findOne(req.body._id,function(error,getProfileDetails){
-		if(getProfileDetails)
-		{
-			console.log(getProfileDetails);
-			res.render('user/myprofile_view', { title: 'My Profile',getProfileDetails:getProfileDetails});
-
-			//res.render('user/user_edit', { title: 'User Edit',getUserDetails:getUserDetails,activeClass:req.params.activeClass});
-
-		}
-	});	
+    User.findOne(req.body._id,function(error,getProfileDetails){
+        if(getProfileDetails){
+            res.render('user/myprofile_view', { title: 'My Profile',getProfileDetails:getProfileDetails});
+        }
+    });	
 };
 
 
@@ -788,10 +1002,8 @@ exports.order = (req, res) => {
 				                {
 				                    if(fetchingAllOrderDetails)
 				                    {
-				                    	//console.log(fetchingAllOrderDetails);
 				                    	User.findOne({_id:fetchingAllOrderDetails.brand_id},function(error,fetchingShopDetails)
 						                {
-						                	//console.log(fetchingShopDetails);
 				                      		orderObj.shop_name   = fetchingShopDetails.first_name+' '+fetchingShopDetails.last_name;
 						                });
 				                    }
@@ -811,7 +1023,6 @@ exports.order = (req, res) => {
 		        },
 		        function(err)
 		        {
-		        //	console.log(finalOrderData);
 		          res.render('user/customer_order', { title: 'Customer Order',activeClass:4,left_activeClass:4,getCustomerDetails:getCustomerDetails,getAllOrders:finalOrderData });
 		        });
 		      }
@@ -833,23 +1044,63 @@ exports.order = (req, res) => {
  * Update user Information
 */
 exports.shopPfofileUpdate = (req, res) => {
-    updateData = {
-        //'first_name' 	: req.body.first_name,
-        //'last_name'	: req.body.last_name,
-        'address'	: req.body.address, 
-        'city'          : req.body.city,
-        'state'		: req.body.state,
-        'zip'		: req.body.zip,
-        'country'	: req.body.country,
-        'bio'           : req.body.bio,
-    };
-    if(req.user.role_id == 3 || req.user.role_id == 4){
-        updateData.shop_name = req.body.shop_name;
-    }
-    User.findByIdAndUpdate(req.user._id,updateData, function(error, updateRes){
-        req.flash('success',['Profile updated successfully']);
-        res.redirect('/user/shopprofile');
-    });
+   uploadShopImages(req,res,function(err) {
+    if(err) {
+       return res.end("Error uploading file.");
+    }  
+        updateData = {
+            //'first_name' 	: req.body.first_name,
+            //'last_name'	: req.body.last_name,
+            'address'	: req.body.address, 
+            'city'          : req.body.city,
+            'state'		: req.body.state,
+            'zip'		: req.body.zip,
+            'country'	: req.body.country,
+            'bio'           : req.body.bio,
+        };
+        
+        if(req.user._id == req.user.shop_id){
+            if(req.files.length > 0){
+                for(var i = 0;i < req.files.length;i++){
+                    switch(req.files[i].fieldname){
+                        case 'cover_image':
+                            updateData.cover_image = req.files[i].path.replace('public','');
+                            break;
+                        case 'profile_image':
+                            updateData.profile_image = req.files[i].path.replace('public','');
+                            break;
+                    }
+                }
+            }
+        }else{
+            if(req.files.length > 0){
+                var updateShopEmployeeData = {};
+                for(var i = 0;i < req.files.length;i++){
+                    switch(req.files[i].fieldname){
+                        case 'cover_image':
+                            updateShopEmployeeData.cover_image = req.files[i].path.replace('public','');
+                            break;
+                        case 'profile_image':
+                            updateData.profile_image = req.files[i].path.replace('public','');
+                            break;
+                    }
+                }
+            }
+        }
+        
+        if(req.user.role_id == 3 || req.user.role_id == 4){
+            updateData.shop_name = req.body.shop_name;
+        }
+        User.findByIdAndUpdate(req.user._id,updateData, function(error, updateRes){
+            if(updateShopEmployeeData!=''){
+                User.update({_id:req.user.shop_id},updateShopEmployeeData,function(error,updateRes){    
+                    
+                }); 
+            }
+            req.flash('success',['Profile updated successfully']);
+            res.redirect('/user/shopprofile');
+        });
+    }); 
 };
 
 exports.shopShippingdetail = (req,res) =>{
@@ -876,7 +1127,7 @@ exports.shopShippingUpdate = (req,res) =>{
         if (error){
             req.flash('errors',['Some thing went wronge!']);
         }else{
-            req.flash('success','Shipping address updated successfully.');
+            req.flash('success',['Shipping address updated successfully.']);
             
         }
         res.redirect('/user/shop_shippping_detail');
@@ -910,7 +1161,7 @@ exports.shop_account_update = (req, res) => {
                 req.flash('errors',['Something went wronge!']);
                 res.redirect('/user/shop_account');
             }else{
-                req.flash('success','Password updated successfully.');
+                req.flash('success',['Password updated successfully.']);
                 res.redirect('/user/shop_account');
             }
         });
@@ -919,7 +1170,6 @@ exports.shop_account_update = (req, res) => {
 exports.shop_notification = (req, res) => {
     //res.render('user/shop_linked_account', { title: 'Linked Account',activeClass:7,left_activeClass:5});
     Notification.findOne({user_id:req.user._id},function(error,resultRes){
-        console.log(resultRes);
         if(resultRes){
             res.render('user/shop_notification', { title: 'Shop User notification',activeClass:7, result:resultRes,left_activeClass:5 });
         }else{
@@ -974,7 +1224,7 @@ exports.shop_notification_update = (req, res) => {
     }
     Notification.update({user_id:req.user._id},updateData,{upsert:true},function(error,updateRes){
         if(updateRes){
-            req.flash('success',['Shop user notification updated successfully!']);
+            req.flash('success',['Notification updated successfully!']);
             res.redirect('/user/shop_notification'); 
         }
     });
@@ -999,4 +1249,276 @@ exports.shop_user_list = (req, res) => {
         });
     });
 }
+
+
+exports.shop_user_view = (req, res) => {
+    User.findOne({_id:req.params.userId},function(error,userRes){
+        if(req.user.role_id == Constants.MASTERROLE || req.user.role_id == Constants.ADMINROLE){
+            var permissionType = 'SHOPADMIN';
+        }else{
+            var permissionType = 'SHOPUSER';
+        }
+	Permission.find({type:permissionType})
+            .sort('parent_id')
+            .exec(function(error,getPermissions){
+            if(getPermissions){
+                var flag=true;
+                var finalPermission = new Array();
+                var takenElement = new Array();
+                var taa= 0;
+                while(flag){
+                    flag = false;
+                    for(i=0;i<getPermissions.length;i++){
+                        var takenFlag = false;
+                        // To check element is already added into final result or not
+                        for(var tke = 0; tke < takenElement.length; tke++){
+                            if(getPermissions[i]._id == takenElement[tke]){
+                                takenFlag = true;
+                            }
+                        }
+                        if(!takenFlag){
+                            // If parent id is null then added them on root
+                            if(getPermissions[i].parent_id == 0){
+                                takenElement.push(getPermissions[i]._id);// Array is used to check the element is added or not
+                                var tmp = {};
+                                tmp.id = getPermissions[i]._id;
+                                tmp.name = getPermissions[i].name;
+                                //tmp.parent_id = getPermissions[i].parent_id;
+                                tmp.options = new Array();
+                                flag = true;
+                                finalPermission.push(tmp);
+                            }else{
+                                for(j=0;j<finalPermission.length;j++){
+                                    if(finalPermission[j].id == getPermissions[i].parent_id){
+                                        takenElement.push(getPermissions[i]._id);// Array is used to check the element is added or not
+                                        var tmp = {};
+                                        tmp.id = getPermissions[i]._id;
+                                        tmp.name = getPermissions[i].name;
+                                        //tmp.parent_id = getPermissions[i].parent_id;
+                                        tmp.options = new Array();
+                                        flag = true;
+                                        finalPermission[j].options.push(tmp);
+                                    }
+                                    if(finalPermission[j].options.length > 0){
+                                        for(m = 0;m < finalPermission[j].options.length; m++){
+                                            if(finalPermission[j].options.id == getPermissions[i].parent_id){
+                                                takenElement.push(getPermissions[i]._id);// Array is used to check the element is added or not
+                                                var tmp = {};
+                                                tmp.id = getPermissions[i]._id;
+                                                tmp.name = getPermissions[i].name;
+                                                //tmp.parent_id = getPermissions[i].parent_id;
+                                                tmp.options = new Array();
+                                                flag = true;
+                                                finalPermission[j].options.push(tmp);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                UserPermission.find({user_id:req.params.userId},function(error,userPerRes){
+                    var finalUserPremission = [];
+                    if(userPerRes){
+                        for(var i=0;i < userPerRes.length;i++){
+                            finalUserPremission.push(userPerRes[i].permission_id);
+                        }
+                    }
+                    res.render('user/shop_user_view', { title: 'Shop User View',activeClass:'',result:userRes,left_activeClass:5,getPermissions:finalPermission,userPermission:finalUserPremission});
+                });
+            }
+        });
+    });
+}
+
+
+
+exports.shop_payment_method = (req, res) => {
+    PaymentMethod.findOne({ user_id: req.user.shop_id}, function(error, resRes){
+        if(resRes == null){
+            resRes = [];
+        }
+        res.render('user/shop_payment_method', { title: 'Shop Payment',activeClass:3,availablePaymentMethod:resRes,left_activeClass:5});
+    });
+};
+/**
+ * POST /user/paymentMethod/save/
+ * User payment Method save
+ */
+exports.shop_payment_method_save = (req, res) => {
+    updateData = {
+        user_id  : req.user.shop_id,// Shop id of the Shop
+        payment_type : req.body.payment_type,
+        paypal_email : req.body.paypal_email,
+        venmo_email   : req.body.venmo_email,
+        direct_deposit_bank_name : req.body.direct_deposit_bank_name,
+        direct_deposit_account_no : req.body.direct_deposit_account_no,
+        direct_deposit_routing_no : req.body.direct_deposit_routing_no
+    }
+    PaymentMethod.update({user_id:req.user.shop_id},updateData,{upsert: true },function(error,paymentMethodObject){
+        if (error){
+            req.flash('errors',['Something went wronge!']);
+        }else{
+            req.flash('success',['Payment information saved successfully!']);
+            res.redirect('/user/shop_payment_method');
+        }
+    });
+};
+
+
+
+exports.shopuser_profile = (req, res) => {
+    User.findOne({_id:req.params.userId},function(error,userRes){
+        res.render('user/shopuser_profile', { title: 'Shop User Profile',activeClass:1,result:userRes,left_activeClass:5});
+    });
+}
+
+
+exports.shopuser_profile_update = (req, res) => {
+    updateData = {
+        'first_name' 	: req.body.first_name,
+        'last_name'	: req.body.last_name,
+        'address'	: req.body.address,
+        'city'		: req.body.city,
+        'state'		: req.body.state,
+        'zip'           : req.body.zip,
+        'country'	: req.body.country,
+        'bio'           : req.body.bio
+    };
+    User.findByIdAndUpdate(req.body.userId,updateData, function(error, updateRes){
+        if(error == null){
+            req.flash('errors',['Something went wronge!']);
+        }else{
+            req.flash('success',['User profile saved successfully!']);
+        }
+        res.redirect('/user/shopuser_profile/'+req.body.userId);
+    });
+}
+
+
+exports.shopuser_notification_update = (req, res) => {
+   var updateData = {};
+   updateData.delivery = new Array();
+   updateData.shipped = new Array();
+   updateData.new_arrival = new Array();
+   updateData.promocode = new Array();
+   updateData.news = new Array();
+    if(req.body.arrival != undefined && req.body.arrival.length > 0){
+        if(req.body.arrival[0] == 'mail' ||  req.body.arrival[1] == 'mail'){
+            updateData.new_arrival.push('mail');
+        }
+    }
+    
+    if(req.body.shipped != undefined && req.body.shipped.length > 0){
+        if(req.body.shipped[0] == 'mail' || req.body.shipped[1] == 'mail'){
+            updateData.shipped.push('mail');
+        }
+    }
+    
+    if(req.body.deliver != undefined && req.body.deliver.length > 0){
+        if(req.body.deliver[0] == 'mail' || req.body.deliver[1] == 'mail'){
+            updateData.delivery.push('mail');
+        }
+    }
+    
+    if(req.body.promo != undefined && req.body.promo.length > 0){
+        if(req.body.promo[0] == 'mail' || req.body.promo[1] == 'mail'){
+            updateData.promocode.push('mail');
+        }
+        
+    }
+    if(req.body.news != undefined  && req.body.news.length > 0){
+        if(req.body.news[0] == 'mail' || req.body.news[1] == 'mail'){
+            updateData.news.push('mail');
+        }
+    }
+    Notification.update({user_id:req.body.userId},updateData,{upsert:true},function(error,updateRes){
+        if(updateRes){
+            req.flash('success',['Shopuser notification updated successfully!']);
+            res.redirect('/user/shopuser_notification/'+req.body.userId); 
+        }
+    });
+}
+
+
+
+exports.shopuser_notification = (req, res) => {
+    User.findOne({_id:req.params.userId},function(error,getUserDetails){
+        Notification.findOne({user_id:req.params.userId},function(error,resultRes){
+            if(getUserDetails){
+                if(resultRes){
+                    res.render('user/shopuser_notification', { title: 'User Notifications',result:getUserDetails,activeClass:3,left_activeClass:5,notificationRes:resultRes});
+                }else{
+                    resultRes = { _id: req.params.userId,
+                        user_id: req.params.customerId,
+                        new_arrival: [],
+                        promocode: [],
+                        delivery: [],
+                        shipped: [],
+                        news: [] ,
+                        user_id:req.params.customerId
+                    };
+                    res.render('user/shopuser_notification', { title: 'User Notifications',result:getUserDetails,activeClass:3,left_activeClass:5,notificationRes:resultRes});
+                }
+            }
+        });
+    });
+};
+
+
+
+/* User Account */
+exports.shopuser_account = (req, res) => {
+    User.findOne({_id:req.params.userId},function(error,getUserDetails){
+        if(getUserDetails){
+            res.render('user/shopuser_account', { title: 'User Account',result:getUserDetails,activeClass:2,left_activeClass:5});
+        }
+    });
+};
+/* User Account */
+exports.shopuser_account_update = (req, res) => {
+    const bcrypt = require('bcrypt-nodejs');
+    bcrypt.hash(req.body.password, null, null, function(err, hash) {
+        updateData = {
+            password  : hash 
+        };
+        User.update({_id:req.body.userId},updateData, function(error, updateRes){
+            if (error){
+                req.flash('errors',['Something went wronge!']);
+                
+            }else{
+                req.flash('success',['Password updated successfully.']);
+            }
+            res.redirect('/user/shopuser_account/'+req.body.userId);
+        });
+    });
+};
+
+
+/* Update Shop Log */
+exports.updateShopLogo = (req, res) => {
+    uploadShopImages(req,res,function(err) {
+        if(err) {
+           return res.end("Error uploading file.");
+        }
+        updateData = {};
+        if(req.files.length > 0){
+            var fileName = req.files[0].path.replace('public','');
+            updateData.shop_logo = fileName;
+            User.update({_id:req.user._id},updateData, function(error, updateRes){
+                if (error){
+                    req.flash('errors',['Something went wronge!']);
+
+                }else{
+                    req.flash('success',['Shop Logo updated successfully.']);
+                }
+                return res.redirect('/dashboard');
+            });
+        }else{
+            req.flash('errors',['There is no any file is selected']);
+            return res.redirect('/dashboard');
+        }
+    });
+};
 

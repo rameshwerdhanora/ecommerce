@@ -41,7 +41,7 @@ exports.listOfProducts = (req, res) => {
     page = (page == 0)?1:page;
     var skipRecord = (page-1)*Constants.RECORDS_PER_PAGE;
     
-     if(req.user.role_id==1){
+     if(req.user.role_id==1 || req.user.role_id==2){
             Product.count(function(error, totalRecord) {
             var totalPage = Math.ceil(totalRecord/Constants.RECORDS_PER_PAGE);
             Product.find()
@@ -79,10 +79,16 @@ exports.listOfProducts = (req, res) => {
                                                     }
                                                 }
                                                 
-                                                var tempProductImages = {};
+                                                var tempProductImages1 = {};
+                                                var tempProductImages2 = {};
+                                                var tempProductImages3 = {};
+                                                var tempProductImages4 = {};
                                                 if(fetchImagesOfProducts){
                                                     for(var i = 0;i< fetchImagesOfProducts.length;i++){
-                                                        tempProductImages[fetchImagesOfProducts[i].product_id] = fetchImagesOfProducts[i].thumb_image_4;
+                                                        tempProductImages1[fetchImagesOfProducts[i].product_id] = fetchImagesOfProducts[i].thumb_image_1;
+                                                        tempProductImages2[fetchImagesOfProducts[i].product_id] = fetchImagesOfProducts[i].thumb_image_2;
+                                                        tempProductImages3[fetchImagesOfProducts[i].product_id] = fetchImagesOfProducts[i].thumb_image_3;
+                                                        tempProductImages4[fetchImagesOfProducts[i].product_id] = fetchImagesOfProducts[i].thumb_image_4;
                                                     }
                                                 }
                                                 
@@ -91,17 +97,15 @@ exports.listOfProducts = (req, res) => {
                                                     for(var i = 0;i< fetchAttrOptionValues.length;i++){
                                                         tempAttrOptionValues[fetchAttrOptionValues[i]._id] = fetchAttrOptionValues[i].value;
                                                     }
-                                                    console.log(tempAttrOptionValues);
                                                 }
-                                                
-                                                
-                                                
                                                 
                                                 res.render('product/admin_list',{
                                                     title: 'Product',
                                                     fetchAllProducts:fetchAllProducts,
                                                     activeClass:1,
                                                     left_activeClass:3,
+                                                    currentPage:page, 
+                                                    totalPage:totalPage,
                                                     allBrands : fetchAllBrands,
                                                     fetchCategories:fetchCategories,
                                                     fetchSubCategories:fetchSubCategories,
@@ -112,7 +116,10 @@ exports.listOfProducts = (req, res) => {
                                                     categoryAr:tempCategory,
                                                     subcategoryAr:tempSubCategory,
                                                     fetchAllTags:fetchAllTags,
-                                                    productImagesArr :tempProductImages,
+                                                    productImagesArr1 :tempProductImages1,
+                                                    productImagesArr2 :tempProductImages2,
+                                                    productImagesArr3 :tempProductImages3,
+                                                    productImagesArr4 :tempProductImages4,
                                                     attrOptionValuesArr :tempAttrOptionValues
                                                 });
                                             });
@@ -125,7 +132,7 @@ exports.listOfProducts = (req, res) => {
                 });
             });	
         });
-     }else{
+     } else if(req.user.role_id==3 || req.user.role_id==4 || req.user.role_id==5){
             Product.count(function(error, totalRecord) {
             var totalPage = Math.ceil(totalRecord/Constants.RECORDS_PER_PAGE);
             Product.find()
@@ -139,56 +146,126 @@ exports.listOfProducts = (req, res) => {
                             Attribute.find({},function(error,fetchAllAttributes){
                                 Color.find({},function(error,fetchAllColors){
                                     Tag.find({},function(error,fetchAllTags){
-                                        var tempBrand = {};
-                                        for(var i = 0;i< fetchAllBrands.length;i++){
-                                            tempBrand[fetchAllBrands[i]._id] = fetchAllBrands[i].brand_name;
-                                        }
-                                        var tempCategory = {};
-                                        for(var i = 0;i< fetchCategories.length;i++){
-                                            tempCategory[fetchCategories[i]._id] = fetchCategories[i].name;
-                                        }
-                                        if(req.params.productId && req.params.productId != 'add'){
-                                            Product.findOne({_id:req.params.productId},function(error,productRes){
-                                                   ProductsHashtag.find({product_id:req.params.productId},{hashtag_id:true, _id:false},function(error,selectedHashtag){
-                                                    res.render('product/list', {
-                                                        title: 'Update product',
-                                                        fetchAllProducts:fetchAllProducts,
-                                                        activeClass:1,
-                                                        left_activeClass:3,
-                                                        allBrands : fetchAllBrands,
-                                                        fetchCategories:fetchCategories,
-                                                        fetchSubCategories:fetchSubCategories,
-                                                        fetchAllAttributes:fetchAllAttributes,
-                                                        fetchAllColors:fetchAllColors,
-                                                        editProduct:true,
-                                                        productRes:productRes,
-                                                        brandAr:tempBrand,
-                                                        categoryAr:tempCategory,
-                                                        fetchAllTags:fetchAllTags,
-                                                        selectedHashtag:selectedHashtag,
-                                                        addFlag :false
-                                                    });
-                                                });
-                                            });
-                                        }else{
-                                            var addFlag = (req.params.productId == 'add')?true:false;
-                                            res.render('product/list',{
-                                                title: 'Product',
-                                                fetchAllProducts:fetchAllProducts,
-                                                activeClass:1,
-                                                left_activeClass:3,
-                                                allBrands : fetchAllBrands,
-                                                fetchCategories:fetchCategories,
-                                                fetchSubCategories:fetchSubCategories,
-                                                fetchAllAttributes:fetchAllAttributes,
-                                                fetchAllColors:fetchAllColors,
-                                                editProduct:false,
-                                                brandAr:tempBrand,
-                                                categoryAr:tempCategory,
-                                                fetchAllTags:fetchAllTags,
-                                                addFlag :addFlag
-                                            });
-                                        }
+                                        ProductImage.find({},function(error,fetchImagesOfProducts){
+                                            AttributeOption.find({},function(error,fetchAttrOptionValues){
+                                                ProductsHashtag.find({},function(error,fetchAllProductsHashtags){
+                                                    var tempBrand = {};
+                                                    var tempBrandLogo = {};
+                                                    if(fetchAllBrands){
+                                                      for(var i = 0;i< fetchAllBrands.length;i++){
+                                                        tempBrand[fetchAllBrands[i]._id] = fetchAllBrands[i].brand_name;
+                                                        tempBrandLogo[fetchAllBrands[i]._id] = fetchAllBrands[i].brand_logo;
+                                                      }  
+                                                    }
+
+                                                    var tempCategory = {};
+                                                    if(fetchCategories){
+                                                      for(var i = 0;i< fetchCategories.length;i++){
+                                                        tempCategory[fetchCategories[i]._id] = fetchCategories[i].name;
+                                                      }
+                                                    }
+
+                                                    var tempSubCategory = {};
+                                                    if(fetchSubCategories){
+                                                        for(var i = 0;i< fetchSubCategories.length;i++){
+                                                            tempSubCategory[fetchSubCategories[i]._id] = fetchSubCategories[i].name;
+                                                        }
+                                                    }
+
+                                                    var tempProductImages1 = {};
+                                                    var tempProductImages2 = {};
+                                                    var tempProductImages3 = {};
+                                                    var tempProductImages4 = {};
+                                                    if(fetchImagesOfProducts){
+                                                        for(var i = 0;i< fetchImagesOfProducts.length;i++){
+                                                            tempProductImages1[fetchImagesOfProducts[i].product_id] = fetchImagesOfProducts[i].thumb_image_1;
+                                                            tempProductImages2[fetchImagesOfProducts[i].product_id] = fetchImagesOfProducts[i].thumb_image_2;
+                                                            tempProductImages3[fetchImagesOfProducts[i].product_id] = fetchImagesOfProducts[i].thumb_image_3;
+                                                            tempProductImages4[fetchImagesOfProducts[i].product_id] = fetchImagesOfProducts[i].thumb_image_4;
+                                                        }
+                                                    }
+
+                                                    var tempAttrOptionValues = {};
+                                                    if(fetchAttrOptionValues){
+                                                        for(var i = 0;i< fetchAttrOptionValues.length;i++){
+                                                            tempAttrOptionValues[fetchAttrOptionValues[i]._id] = fetchAttrOptionValues[i].value;
+                                                        }
+                                                    }
+
+                                                    var tempColors = {};
+                                                    if(fetchAllColors){
+                                                        for(var i = 0;i< fetchAllColors.length;i++){
+                                                            tempColors[fetchAllColors[i]._id] = fetchAllColors[i].color_name;
+                                                        }
+                                                    }
+                                                    
+                                                    if(req.params.productId && req.params.productId != 'add'){
+                                                        Product.findOne({_id:req.params.productId},function(error,productRes){
+                                                            ProductsHashtag.find({product_id:req.params.productId},{hashtag_id:true, _id:false},function(error,selectedHashtag){
+                                                                res.render('product/shop_list', {
+                                                                    title: 'Update product',
+                                                                    fetchAllProducts:fetchAllProducts,
+                                                                    activeClass:1,
+                                                                    left_activeClass:3,
+                                                                    currentPage:page, 
+                                                                    totalPage:totalPage,
+                                                                    allBrands : fetchAllBrands,
+                                                                    fetchCategories:fetchCategories,
+                                                                    fetchSubCategories:fetchSubCategories,
+                                                                    fetchAllAttributes:fetchAllAttributes,
+                                                                    fetchAllColors:fetchAllColors,
+                                                                    editProduct:true,
+                                                                    productRes:productRes,
+                                                                    brandAr:tempBrand,
+                                                                    categoryAr:tempCategory,
+                                                                    subcategoryAr:tempSubCategory,
+                                                                    fetchAllTags:fetchAllTags,
+                                                                    selectedHashtag:selectedHashtag,
+                                                                    addFlag :false,
+                                                                    productImagesArr1 :tempProductImages1,
+                                                                    productImagesArr2 :tempProductImages2,
+                                                                    productImagesArr3 :tempProductImages3,
+                                                                    productImagesArr4 :tempProductImages4,
+                                                                    attrOptionValuesArr :tempAttrOptionValues,
+                                                                    colorsArr:tempColors,
+                                                                    fetchAllProductsHashtags:fetchAllProductsHashtags,
+                                                                    brandLogoArr:tempBrandLogo
+                                                                });
+                                                            });
+                                                        });
+                                                    }else{
+                                                        var addFlag = (req.params.productId == 'add')?true:false;
+                                                        res.render('product/shop_list',{
+                                                            title: 'Product',
+                                                            currentPage:page, 
+                                                            totalPage:totalPage,
+                                                            fetchAllProducts:fetchAllProducts,
+                                                            activeClass:1,
+                                                            left_activeClass:3,
+                                                            allBrands : fetchAllBrands,
+                                                            fetchCategories:fetchCategories,
+                                                            fetchSubCategories:fetchSubCategories,
+                                                            fetchAllAttributes:fetchAllAttributes,
+                                                            fetchAllColors:fetchAllColors,
+                                                            editProduct:false,
+                                                            brandAr:tempBrand,
+                                                            categoryAr:tempCategory,
+                                                            subcategoryAr:tempSubCategory,
+                                                            fetchAllTags:fetchAllTags,
+                                                            addFlag :addFlag,
+                                                            productImagesArr1 :tempProductImages1,
+                                                            productImagesArr2 :tempProductImages2,
+                                                            productImagesArr3 :tempProductImages3,
+                                                            productImagesArr4 :tempProductImages4,
+                                                            attrOptionValuesArr :tempAttrOptionValues,
+                                                            colorsArr:tempColors,
+                                                            fetchAllProductsHashtags:fetchAllProductsHashtags,
+                                                            brandLogoArr:tempBrandLogo
+                                                        });
+                                                    }
+                                                })
+                                            });	   
+                                        });	    
                                     });	
                                 }); 
                             });
@@ -197,6 +274,9 @@ exports.listOfProducts = (req, res) => {
                 });
             });	
         });
+     }else{
+        req.flash('errors', ['Unauthorised user role']);
+        return res.redirect('/dashboard');
      }
     
     

@@ -13,4 +13,5 @@ module.exports = Object.freeze({
     ORDERSTATUSPENDING:'Unfullfilled',
     ORDERSTATUSPAID:'Paid',
     ORDERSTATUSREFUND:'Refund'
+    SHIPPING: "Shipping",
 });

@@ -1,0 +1,527 @@
+extends ../layout
+
+block content
+  .col-sm-9.midlle-bar
+    include ../partials/flash
+    .large-title-row
+      img(src='/images/title-icon3.png', alt='icon')
+      |  PRODUCTS
+    .top-btns.clearfix
+      .btn-s-right
+        a#addPrductBtn.default-btn(href='#modal-container', title='Add Product', role='button', data-toggle='modal') +POST TO FEED
+        //a.default-btn(href='/product/add', title='Add Size', role='button', data-toggle='modal') ADD PRODUCT  
+    .customer-box.clearfix
+       .customer-cl.product_brand_view_left
+          ul#scroller
+            - if (fetchAllProducts.length > 0 ){
+              - for(var i = 0; i < fetchAllProducts.length;i++){
+                - if(i%2 == 0){
+                  | <li>
+                - }
+                    - if(i%2 == 0){
+                     - var modelcontainerId = 'modal-container-702680'+i;        
+                     div(id=modelcontainerId).modal.fade(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+                      .modal-dialog.popup-wdt-1
+                       .modal-content.view_product
+                         .modal-body
+                           .cam_upload
+                             img(src='/#{productImagesArr1[fetchAllProducts[i]._id]}')
+                           ul
+                             li
+                               img(src='/#{productImagesArr2[fetchAllProducts[i]._id]}')
+                             li
+                               img(src='/#{productImagesArr3[fetchAllProducts[i]._id]}')
+                             li
+                               img(src='/#{productImagesArr4[fetchAllProducts[i]._id]}')
+                           .product_info_details
+                             .product_logo
+                               img(src='/#{brandLogoArr[fetchAllProducts[i].brand_id]}')
+                             .product_description
+                               h3 #{fetchAllProducts[i].name}
+                               span #{brandAr[fetchAllProducts[i].brand_id]}
+                               p #{fetchAllProducts[i].blurb}
+                             .product_price_rate $#{fetchAllProducts[i].price}
+                             .clearfix
+                     .product_boxes
+                      .product_boxes_img
+                        img(src='/#{productImagesArr1[fetchAllProducts[i]._id]}')
+                      .product_view
+                        p #{fetchAllProducts[i].name}
+                        span #{brandAr[fetchAllProducts[i].brand_id]}
+                        p.price $#{fetchAllProducts[i].price}
+                        .right-sub
+                          a#modal-702680.btn.save-btn(href='#modal-container-702680#{i}', role='button', data-toggle='modal') ITEM PREVIEW
+                    -}else{
+                     - var modelcontainerId = 'modal-container-702680'+i;        
+                     div(id=modelcontainerId).modal.fade(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+                        .modal-dialog.popup-wdt-1
+                           .modal-content.view_product
+                             .modal-body
+                               .cam_upload
+                                 img(src='/#{productImagesArr1[fetchAllProducts[i]._id]}')
+                               ul
+                                 li
+                                   img(src='/#{productImagesArr2[fetchAllProducts[i]._id]}')
+                                 li
+                                   img(src='/#{productImagesArr3[fetchAllProducts[i]._id]}')
+                                 li
+                                   img(src='/#{productImagesArr4[fetchAllProducts[i]._id]}')
+                               .product_info_details
+                                 .product_logo
+                                   img(src='/#{brandLogoArr[fetchAllProducts[i].brand_id]}')
+                                 .product_description
+                                   h3 #{fetchAllProducts[i].name}
+                                   span #{brandAr[fetchAllProducts[i].brand_id]}
+                                   p #{fetchAllProducts[i].blurb}
+                                 .product_price_rate $#{fetchAllProducts[i].price}
+                                 .clearfix
+                     .product_boxes.product_boxes_right
+                      .product_boxes_img
+                        img(src='/#{productImagesArr1[fetchAllProducts[i]._id]}')
+                      .product_view
+                        p #{fetchAllProducts[i].name}
+                        span #{brandAr[fetchAllProducts[i].brand_id]}
+                        p.price $#{fetchAllProducts[i].price}
+                        .right-sub
+                          a#modal-702680.btn.save-btn(href='#modal-container-702680#{i}', role='button', data-toggle='modal') ITEM PREVIEW
+                     -} 
+                -}
+            - }
+               
+      .profile-cl.product_brand_view_right
+        .product_brand
+          | PRODUCTS POsted 
+          a(href='#')
+            img(src='/images/delete-icon.png')
+        .product_table
+          table(border='0', cellspacing='0', cellpadding='0')
+            tr
+              th
+                input(type='checkbox')
+              th ITEM PHOTOS
+              th ITEM NAME
+              th SIZE 
+              th COLOR
+              th CATEGORY 
+              th  SUBCATEGORY
+              th PRICE
+            tbody
+             if fetchAllProducts.length > 0
+              each fetchAllProduct in fetchAllProducts
+               -i++; 
+                tr
+                  td(rowspan='2')
+                    input(type='checkbox')
+                  td(rowspan='2')
+                    .product_table_img
+                      img(src='/#{productImagesArr1[fetchAllProduct._id]}')
+                      ul.small_thumb
+                        li
+                          a(href='#')
+                            img(src='/#{productImagesArr2[fetchAllProduct._id]}')
+                        li
+                          a(href='#')
+                            img(src='/#{productImagesArr3[fetchAllProduct._id]}')
+                        li
+                          a(href='#')
+                            img(src='/#{productImagesArr4[fetchAllProduct._id]}')
+                  td #{fetchAllProduct.name}
+                  td 
+                    -var fetchAllAttr = fetchAllProduct.attribute;
+                        -if(fetchAllAttr){
+                           -for(var j = 0;j < fetchAllAttr.length; j++){
+                               | #{attrOptionValuesArr[fetchAllAttr[j]]} &nbsp;&nbsp;
+                           -}  
+                        -}
+                  td 
+                    -var fetchAllClr = fetchAllProduct.color;
+                        -if(fetchAllClr){
+                           -for(var k = 0;k < fetchAllClr.length; k++){
+                               | #{colorsArr[fetchAllClr[k]]} &nbsp;&nbsp;
+                           -}  
+                        -}
+                  td #{categoryAr[fetchAllProduct.category_id]}
+                  td #{subcategoryAr[fetchAllProduct.sub_category_id]}
+                  td $#{fetchAllProduct.price}
+                tr
+                  td(colspan='7')
+                    .description
+                      h2 DESCRIPTION
+                      p #{fetchAllProduct.blurb}
+                      p 
+                       -if(fetchAllTags){
+                           -if(fetchAllProductsHashtags){
+                               - for(var i=0;i< fetchAllTags.length;i++){
+                                - for(var j=0;j< fetchAllProductsHashtags.length;j++){
+                                    - if(fetchAllTags[i]._id == fetchAllProductsHashtags[j].hashtag_id){
+                                      - if(fetchAllProduct._id == fetchAllProductsHashtags[j].product_id){
+                                          |##{fetchAllTags[i].name} &nbsp;&nbsp;
+                                      - } 
+                                    -}
+                                - }    
+                             - } 
+                           -}
+                       -}
+                      
+                    .discount
+                      a(href='/product/list/#{fetchAllProduct._id}') EDIT ITEM
+                      a#modal-702679.btn(href='#modal-container-702679', role='button', data-toggle='modal') Apply Discount code
+          
+        include ../partials/pagination
+          
+    // --- add product popup --
+    <!----- discount coupan popup ---->
+    #modal-container-702679.modal.fade(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+      .modal-dialog.discount_coupan.popup-wdt-1
+        .modal-content
+          .modal-header
+            h4 APPLY DISCOUNT CODE
+          .modal-body
+            .profile-right-cl
+              form(action='', method='post')
+                .profile-frm-row
+                  .profile-frm-cl1 Discount Name
+                  .profile-frm-cl2
+                    input#p_add_dis_name(type='text', name='p_add_dis_name', value='')
+                .profile-frm-row
+                  .profile-frm-cl1 Type of Discount
+                  .profile-frm-cl2
+                    select#p_add_dis_type(name='p_add_dis_type')
+                      option(value='percentage') Percentage
+                      option(value='fixed') Fixed
+                      
+                .profile-frm-row
+                  .profile-frm-cl1 Amount
+                  .profile-frm-cl2
+                    input#p_add_dis_amount(type='text', name='p_add_dis_amount', value='')
+                .clearfix
+              .modal-footer
+                button#p_add_dis_btn.btn.btn-primary(type='button') APPLY 
+
+    #modal-container.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+      .modal-dialog.popup-wdt-2
+        form(name='addproduct', action='/product/save', method='POST' enctype='multipart/form-data')
+          input#add_dis_name(type='hidden',name='add_dis_name')
+          input#add_dis_type(type='hidden',name='add_dis_type')
+          input#add_dis_amount(type='hidden',name='add_dis_amount')
+          .modal-content.add_product
+            .modal-header
+              button.close(type='button', data-dismiss='modal', aria-hidden='true')  × 
+              .clearfix
+            .modal-body
+              .cam_upload
+                ul.up-load-btn
+                  li
+                    .fileUpload
+                      span.custom-span 
+                      img(src='/images/upload_cam.png')
+                      p.custom-para UPLOAD PHOTO
+                      input#uploadBtn1.upload(type='file',name='product_image',required='required')
+              ul.up-list
+                li
+                  .fileUpload
+                    span.custom-span +
+                    p.custom-para UPLOAD PHOTO
+                    input#uploadBtn2.upload(type='file',name='product_image2',required='required')
+                li
+                  .fileUpload
+                    span.custom-span +
+                    p.custom-para UPLOAD PHOTO
+                    input#uploadBtn3.upload(type='file',name='product_image3',required='required')
+                li
+                  .fileUpload
+                    span.custom-span +
+                    p.custom-para UPLOAD PHOTO
+                    input#uploadBtn4.upload(type='file',name='product_image4',required='required')
+
+              .profile-right-cl.popup_product
+                form(method='post', action='')
+                  .profile-frm-row
+                    .profile-frm-cl1 PRODUCT NAME
+                    .profile-frm-cl2
+                      input.product_name(type='text', name='name', value='', required='required')
+                  .profile-frm-row
+                    .profile-frm-cl1 PROCUCT BLURB
+                    .profile-frm-cl2
+                      input(type='text', value='', name='blurb')
+                      
+                  .profile-frm-row.product_select
+                    .profile-frm-cl1 BRAND
+                    .profile-frm-cl2
+                      select.product_brand(name='brand_id', required='required')
+                           option(value='0') Select Brand
+                           each allBrand in allBrands
+                            option(value='#{allBrand._id}') #{allBrand.brand_name}
+
+                  .profile-frm-row.product_select
+                    .profile-frm-cl1 SKU-ID
+                    .profile-frm-cl2
+                      input.sku(type='text', name='sku', value='', required='required')
+                  .profile-frm-row.product_select
+                    .profile-frm-cl1 GENDER
+                    .profile-frm-cl2
+                      select#product_gender.product_brand(name='gender', required='required')
+                            option(value='') Select Gender
+                            option(value='male') Male
+                            option(value='female') female
+                            option(value='unisex') Unisex
+                        
+                  .profile-frm-row.product_select
+                    .profile-frm-cl1 CATEGORY
+                    .profile-frm-cl2
+                      select.product_category(name='category_id' onchange='loadSelectedsubCategory(this.value)')
+                        option(value='') Select Category
+                        each fetchCategory in fetchCategories
+                          option(value='#{fetchCategory._id}') #{fetchCategory.name}
+
+                  .profile-frm-row.product_select
+                    .profile-frm-cl1 SUBCATEGORY
+                    .profile-frm-cl2
+                      select.product_sub_category(name='sub_category_id', required='required')
+                        option(value='0') Select Sub Category
+                        each fetchSubCategory in fetchSubCategories
+                          option(value='#{fetchSubCategory._id}') #{fetchSubCategory.name}
+
+                  .profile-frm-row.product_select
+                    .profile-frm-cl1 PRICE
+                    .profile-frm-cl2
+                      input.product_desc(type='text', name='price', value='', required='required')
+                      
+                  .profile-frm-row.product_select.slctClr
+                    .profile-frm-cl1 COLOR
+                    .profile-frm-cl2
+                      select.color(name='color[]',id='color' required='required')
+                        each fetchAllColor in fetchAllColors
+                          option(value='#{fetchAllColor._id}') #{fetchAllColor.color_name}
+                  
+                          
+                  .profile-frm-row.product_select
+                    .profile-frm-cl3
+                      //a(href='#') APPLY DISCOUNT CODE
+                       //.discount
+                      a#modal-702679.btn(href='#modal-container-702679', role='button', data-toggle='modal') Apply Discount code
+
+                      
+                  .profile-frm-row.product_select.slctClr#lastColorSelect
+                    .profile-frm-cl1
+                    .profile-frm-cl2
+                      select.color(name='color[]', required='required')
+                        each fetchAllColor in fetchAllColors
+                          option(value='#{fetchAllColor._id}') #{fetchAllColor.color_name}
+
+                  .profile-frm-row#addClrBtn1
+                    .profile-frm-cl3
+                      a(href='javascript:void(0);',id='addMoreColor') ADD COLOR
+                  //.profile-frm-row.product_size
+                    .sg-row
+                      span.sz-txt Size
+                      a(href='#') xs
+                      a(href='#') s
+                      a(href='#') m
+                      a(href='#') l
+                      a(href='#') xl
+                      a(href='#') xxl
+                  //.clearfix
+                  
+                  .profile-frm-row.product_select
+                    .profile-frm-cl1 Hash Tag
+                    .profile-frm-cl2
+                       select.chosen-select(name='hash_tag[]', data-placeholder='Select hash tag', multiple='') 
+                        each fetchAllTag in fetchAllTags
+                          option(value='#{fetchAllTag._id}') #{fetchAllTag.name}
+
+            .modal-footer
+              input.saveproduct(type='submit', name='saveproduct', value='POST TO FEED')
+
+            script(type='text/javascript').
+                $('#ancUpProduct').trigger('click');
+                    attributeOptions = new Array();;
+
+
+
+    -if(editProduct){
+     #modal-container-7026790.modal.fade(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+      .modal-dialog.discount_coupan.popup-wdt-1
+        .modal-content
+          .modal-header
+            h4 APPLY DISCOUNT CODE
+          .modal-body
+            .profile-right-cl
+              form(action='', method='post')
+                .profile-frm-row
+                  .profile-frm-cl1 Discount Name
+                  .profile-frm-cl2
+                    input#p_edit_dis_name(type='text', name='p_edit_dis_name',value='#{productRes.dis_name}')
+                .profile-frm-row
+                  .profile-frm-cl1 Type of Discount
+                  .profile-frm-cl2
+                    select#p_edit_dis_type(name='p_edit_dis_type')
+                      option(value='percentage',selected=(productRes.dis_type == 'percentage')) Percentage
+                      option(value='fixed',selected=(productRes.dis_type == 'fixed')) Fixed
+                      
+                .profile-frm-row
+                  .profile-frm-cl1 Amount
+                  .profile-frm-cl2
+                    input#p_edit_dis_amount(type='text', name='p_edit_dis_amount',value='#{productRes.dis_amount}')
+                .clearfix
+              .modal-footer
+                button#p_edit_dis_btn.btn.btn-primary(type='button') APPLY 
+                
+    a#ancUpProduct.default-btn.dnone(href='#modal1-container', title='Add Product', role='button', data-toggle='modal') 
+    #modal1-container.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+      .modal-dialog.popup-wdt-2
+        form(name='addproduct', action='/product/update', method='POST' enctype='multipart/form-data')
+          .modal-content.add_product
+            input#edit_dis_name(type='hidden',name='edit_dis_name',value='#{productRes.dis_name}')
+            input#edit_dis_type(type='hidden',name='edit_dis_type',value='#{productRes.dis_type}')
+            input#edit_dis_amount(type='hidden',name='edit_dis_amount',value='#{productRes.dis_amount}')
+            input(type='hidden',name='productId',value='#{productRes._id}')
+            .modal-header
+              button.close(type='button', data-dismiss='modal', aria-hidden='true')  × 
+              .clearfix
+            .modal-body
+              .cam_upload
+                a(href='#')
+                  img(src='/images/upload_cam.png')
+              ul.up-list
+                li
+                  .fileUpload
+                    span.custom-span +
+                    p.custom-para UPLOAD PHOTO
+                    input#uploadBtn1.upload(type='file',name='product_image')
+                li
+                  .fileUpload
+                    span.custom-span +
+                    p.custom-para UPLOAD PHOTO
+                    input#uploadBtn2.upload(type='file',name='product_image2')
+                li
+                  .fileUpload
+                    span.custom-span +
+                    p.custom-para UPLOAD PHOTO
+                    input#uploadBtn3.upload(type='file',name='product_image3')
+                li
+                  .fileUpload
+                    span.custom-span +
+                    p.custom-para UPLOAD PHOTO
+                    input#uploadBtn4.upload(type='file',name='product_image4')
+
+              .profile-right-cl.popup_product
+                form(method='post', action='')
+                  .profile-frm-row
+                    .profile-frm-cl1 PRODUCT NAME
+                    .profile-frm-cl2
+                      input.product_name(type='text', name='name', value='#{productRes.name}', required='required')
+                  .profile-frm-row
+                    .profile-frm-cl1  PROCUCT BLURB
+                    .profile-frm-cl2
+                      input(type='text', value='#{productRes.blurb}', name='blurb',required='required')
+                  .profile-frm-row.product_select
+                    .profile-frm-cl1 BRAND
+                    .profile-frm-cl2
+                      select.product_brand(name='brand_id', required='required')
+                           option(value='0') Select Brand
+                           each allBrand in allBrands
+                            option(value='#{allBrand._id}',selected=(allBrand._id == productRes.brand_id)) #{allBrand.brand_name} 
+
+                  .profile-frm-row.product_select
+                    .profile-frm-cl1 SKU-ID
+                    .profile-frm-cl2
+                      input.sku(type='text', name='sku', value='#{productRes.sku}', required='required')
+                  .profile-frm-row.product_select
+                    .profile-frm-cl1 GENDER
+                    .profile-frm-cl2
+                      select#product_gender_edit.product_brand(name='gender', required='required')
+                        option(value='') Select Gender
+                        option(value='male',selected=(productRes.gender == 'male')) Male
+                        option(value='female',selected=(productRes.gender == 'female')) female
+                        option(value='unisex',selected=(productRes.gender == 'unisex')) Unisex
+                            
+                  .profile-frm-row.product_select
+                    .profile-frm-cl1 CATEGORY
+                    .profile-frm-cl2
+                      select.product_category(name='category_id' onchange='loadSelectedsubCategory(this.value)')
+                        option(value='') Select Category
+                        each fetchCategory in fetchCategories
+                          option(value='#{fetchCategory._id}',selected=(fetchCategory._id == productRes.category_id)) #{fetchCategory.name}
+
+                  .profile-frm-row.product_select
+                    .profile-frm-cl1 SUBCATEGORY
+                    .profile-frm-cl2
+                      select.product_sub_category(name='sub_category_id', required='required')
+                        option(value='0') Select Sub Category
+                        each fetchSubCategory in fetchSubCategories
+                          option(value='#{fetchSubCategory._id}',selected=(fetchSubCategory._id == productRes.sub_category_id)) #{fetchSubCategory.name}
+
+                  .profile-frm-row.product_select
+                    .profile-frm-cl1 PRICE
+                    .profile-frm-cl2
+                      input.product_desc(type='text', name='price', value='#{productRes.price}', required='required')
+                  
+                  
+                  .profile-frm-row.product_select
+                    .profile-frm-cl1 COLOR
+                    .profile-frm-cl2
+                      select.color(name='color[]', required='required')
+                        each fetchAllColor in fetchAllColors
+                            each clr in productRes.color
+                                option(value='#{fetchAllColor._id}',selected=(fetchAllColor._id == clr)) #{fetchAllColor.color_name}
+                  
+                  
+                  .profile-frm-row.product_select
+                    .profile-frm-cl3
+                       a#modal-7026790.btn(href='#modal-container-7026790', role='button', data-toggle='modal') APPLY DISCOUNT CODE
+                      
+                  -for(var i=0;i< (productRes.color.length -1); i++){
+                  .profile-frm-row.product_select.slctClr
+                    .profile-frm-cl1
+                    .profile-frm-cl2
+                      select.color(name='color[]', required='required')
+                        each fetchAllColor in fetchAllColors
+                          option(value='#{fetchAllColor._id}',selected=(fetchAllColor._id == productRes.color[i])) #{fetchAllColor.color_name}
+                  -}
+                  
+                  .profile-frm-row#addClrBtn2
+                    .profile-frm-cl3
+                      a(href='javascript:void(0);',id='addMoreColor') ADD COLOR
+                      
+                  .profile-frm-row.product_select
+                    .profile-frm-cl1 Hash Tag
+                    .profile-frm-cl2
+                       select.chosen-select(name='hash_tag[]', data-placeholder='Select hash tag', multiple='') 
+                        each fetchAllTag in fetchAllTags
+                         - var tempSelect = true
+                         - for(var i=0;i< selectedHashtag.length;i++){
+                            - if(fetchAllTag._id == selectedHashtag[i].hashtag_id){
+                              - var tempSelect = false
+                               option(value="#{fetchAllTag._id}", selected=(fetchAllTag._id == selectedHashtag[i].hashtag_id))  #{fetchAllTag.name}
+                            - } 
+                         - }
+                         - if(tempSelect){
+                            option(value='#{fetchAllTag._id}') #{fetchAllTag.name}
+                         - }
+                           
+                         
+                          
+
+                        
+                        
+                         
+
+            .modal-footer
+              input.saveproduct(type='submit', name='saveproduct', value='POST TO FEED')
+        script(type='text/javascript').
+            $(document).ready(function(n){
+                $('#ancUpProduct').trigger('click');
+                attributeOptions = '#{productRes.attribute}';
+                getSizeOptions($("#product_gender_edit").val(),'addClrBtn2');
+            });
+    -}
+
+    -if(addFlag){
+        script(type='text/javascript').
+            $(document).ready(function(n){
+                $('#addPrductBtn').trigger('click');
+            });
+    -}
+    
+     

@@ -166,7 +166,27 @@ exports.fetchCofiguration = function(req,res){
 		}
 		else 
 		{
-			return res.json({"status":'error',"msg":'Your have not select your configuration.'});
+			Size.find({is_published:'true'},function(error,getAllSizes){
+				if(getAllSizes)
+				{	
+					
+					var sizeArr = [];
+					for (var i = 0; i < getAllSizes.length; i++) 
+					{
+						var sizeObj 		= {};
+						sizeObj.id 			= getAllSizes[i]._id;
+						sizeObj.gender 		= getAllSizes[i].gender;
+						sizeObj.size_name 	= getAllSizes[i].size_name;
+						sizeObj.values 		= ''; 
+						sizeArr.push(sizeObj);
+					}
+					res.send({status:'success',msg:'Successfully fetch all sizes.',sizeAttribute:sizeArr});
+				}
+				else 
+				{
+					res.send({status:'error',msg:'Unable to found any sizes.'});
+				}
+			});	
 		}
 
 	});

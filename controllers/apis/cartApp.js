@@ -345,15 +345,15 @@ exports.updateIntoCart = (req,res) => {
                                                     }
                                                     else
                                                     {
-                                                        discount = '';
+                                                        discount = parseInt(0);
                                                     }
                                                 }
                                                 else 
                                                 {
-                                                    discount = '';
+                                                    discount = parseInt(0);
                                                 }
 
-                                                finaldiscount += discount;
+                                                finaldiscount += parseFloat(discount);
                                                 sumPrice += parseInt(fetchProductPrice.price) * parseInt(ProductId.quantity);
                                                 callback(err);
                                             });
@@ -687,7 +687,7 @@ exports.showCartAccBrand = (req,res) => {
                 {   
                     // console.log(req.body);
 
-                    priceTotalObj.tax           = '10';
+                    priceTotalObj.tax           = (subTotal > 0) ? parseInt(10) : parseInt(0);
                     priceTotalObj.ship_code     = req.body.shipping_array[req.body.index].Code;
                     priceTotalObj.servicename   = req.body.shipping_array[req.body.index].serviceName;
                     priceTotalObj.totalcharges  = parseInt(req.body.shipping_array[req.body.index].TotalCharges);
@@ -718,7 +718,7 @@ exports.showCartAccBrand = (req,res) => {
 /**
  * POST /api/cart/finalcheckoutdisplay
  * Process for Fetch all products of brand in cart.
- */ 
+ */  
 
 exports.finalCheckoutDisplay = (req,res) => {
     
@@ -772,6 +772,7 @@ exports.finalCheckoutDisplay = (req,res) => {
                                     {
                                         Cart.find({user_id:req.body.user_id,brand_id:BrandId._id},function(err,listOfOtherData)
                                         {
+                                            console.log(listOfOtherData);
                                             var sumQuantity = 0;
                                             for (var tq = 0; tq < listOfOtherData.length; tq++) 
                                             {   
@@ -801,7 +802,6 @@ exports.finalCheckoutDisplay = (req,res) => {
                                                             {   
                                                                 discount = fetchProductPrice.dis_amount * ProductId.quantity;
                                                             }
-                                                             
                                                         }
                                                         else 
                                                         {
@@ -814,7 +814,6 @@ exports.finalCheckoutDisplay = (req,res) => {
                                                     }
                                                     
                                                     finaldiscount += discount;
-                                                    
                                                     sumPrice += parseInt(fetchProductPrice.price) * parseInt(ProductId.quantity);
                                                     callback(err);
                                                 });
@@ -844,9 +843,18 @@ exports.finalCheckoutDisplay = (req,res) => {
                         index++; 
                         },
                         function(err){
-                            var tax = '10';
+                            var tax = (parseInt(finalPrice) > 0) ? parseInt(10) : parseInt(0);
                             var totalCartPrice = parseInt(finalPrice) + parseInt(tax) + parseInt(TotalShippingCharges) - finalDiscount;
-                            return res.json({"status":'success',"msg":'Found your cart data.',finalOrder:finalBrandArr,subTotal:finalPrice,tax:tax,shipping_charge:TotalShippingCharges,totalCartPrice:totalCartPrice,finalquantity:finalquantity,shipping_array:req.body.shipping_array,finalDiscount:finalDiscount});
+                            return res.json({"status":'success',"msg":'Found your cart data.',
+                                finalOrder:finalBrandArr,
+                                subTotal:finalPrice,
+                                tax:tax,
+                                shipping_charge:TotalShippingCharges,
+                                totalCartPrice:totalCartPrice,
+                                finalquantity:finalquantity,
+                                shipping_array:req.body.shipping_array,
+                                finalDiscount:finalDiscount
+                            });
                         });
                     }
                     else 

@@ -14,6 +14,7 @@ const ordersSchema = new mongoose.Schema({
 	status : String,
 	payment_status:String,
 	itemquantity:String,
+	finaldiscount:String,
 	shipping_array:Array
 });
 

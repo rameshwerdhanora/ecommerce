@@ -1,6 +1,7 @@
 extends ../layout
 block content
   .col-sm-9.midlle-bar
+    include ../partials/flash
     .large-title-row
       img(src='/images/title-icon5.png', alt='icon')
       |  MY SHOP
@@ -15,22 +16,22 @@ block content
             a.edit-btn(href='javascript:void(0);',onClick='javascript:$("#profile_up_Btn").show();') EDIT
         .profile-form-box
           .profile-right-cl
-            form(action='/user/shopprofileupdate', method='post')
+            form(action='/user/shopprofileupdate', method='post', enctype='multipart/form-data')
               -if(user.role_id == 3 || user.role_id == 4){
               .profile-frm-row
                 .profile-frm-cl1
                   | Brand Name
                 .profile-frm-cl2
-                  input(name='shop_name', type='text', value='#{getUserDetails.shop_name}')
+                  input(name='shop_name', type='text', value='#{getUserDetails.shop_name ? getUserDetails.shop_name : ""}')
               -}
               .profile-frm-row
                 .profile-frm-cl1 Address
                 .profile-frm-cl2
-                  input(name='address', type='text', value='#{getUserDetails.address}')
+                  input(name='address', type='text', value='#{getUserDetails.address ? getUserDetails.address : ""}')
               .profile-frm-row
                 .profile-frm-cl1 City
                 .profile-frm-cl2
-                  input(name='city', type='text', value='#{getUserDetails.city}')
+                  input(name='city', type='text', value='#{getUserDetails.city ? getUserDetails.city : ""}')
               .profile-frm-row
                 .profile-frm-cl1 State
                 .profile-frm-cl2
@@ -47,6 +48,19 @@ block content
                 .profile-frm-cl1 Bio
                 .profile-frm-cl2
                   textarea.large-in(name='bio') #{getUserDetails.bio}
+              .profile-frm-row
+                .profile-frm-cl1 Profile Image
+                .profile-frm-cl2
+                  img(src='/#{getUserDetails.profile_image}', alt='icon')
+                  input(type='file', name='profile_image')
+              -if(user.role_id == 3 || user.role_id == 4){    
+                .profile-frm-row
+                    .profile-frm-cl1 Cover Photo
+                    .profile-frm-cl2
+                      img(src='/#{getUserDetails.cover_image}', alt='icon') 
+                      input(type='file', name='cover_image')
+              -}    
+             
                 .btn-btm
                     button#profile_up_Btn.dnone(type='submit') Save
           .etik-sms Etiqett will use this information to contact you.

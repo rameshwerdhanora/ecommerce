@@ -1,6 +1,7 @@
 extends ../layout
 block content
   .col-sm-9.midlle-bar
+    include ../partials/flash
     .large-title-row
       img(src='/images/title-icon.png', alt='icon')
       |  #{getProfileDetails.first_name} #{getProfileDetails.last_name}
@@ -20,26 +21,31 @@ block content
             form(action='', method='post')
               .profile-frm-row
                 .profile-frm-cl1
-                  | Brand Name
+                  | First Name
                 .profile-frm-cl2
-                  input(name='', type='text', value='#{getProfileDetails.first_name} #{getProfileDetails.last_name}')
+                  input(name='first_name', type='text', value='#{getProfileDetails.first_name}')
+              .profile-frm-row
+                .profile-frm-cl1
+                  | Last Name
+                .profile-frm-cl2
+                  input(name='last_name', type='text', value='#{getProfileDetails.last_name}')
               .profile-frm-row
                 .profile-frm-cl1 Address
                 .profile-frm-cl2
-                  input(name='', type='text', value='')
+                  input(name='address', type='text', value='')
               .profile-frm-row
                 .profile-frm-cl1 City
                 .profile-frm-cl2
-                  input(name='', type='text', value='')
+                  input(name='city', type='text', value='')
               .profile-frm-row
                 .profile-frm-cl1 State
                 .profile-frm-cl2
-                  input(name='', type='text', value='')
+                  input(name='state', type='text', value='')
               .profile-frm-row
                 .profile-frm-cl1 Zip Code 
                 .profile-frm-cl2
-                  input(name='', type='text', value='')
+                  input(name='zip', type='text', value='')
               .profile-frm-row
                 .profile-frm-cl1 Country
                 .profile-frm-cl2
-                  input(name='', type='text', value='')
+                  input(name='country', type='text', value='')

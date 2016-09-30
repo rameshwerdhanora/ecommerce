@@ -39,7 +39,11 @@ const userAppSchema = new mongoose.Schema({
     state:String,
     zip:String,
     country:String,
-    bio:String
+    bio:String,
+    
+    shop_logo:String
+    
+    
   /*profile: {
     name: { type: String, default: '' },
     gender: { type: String, default: '' },
