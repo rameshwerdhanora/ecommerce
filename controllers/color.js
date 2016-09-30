@@ -63,7 +63,7 @@ exports.saveColor = (req,res) => {
                 var errors = req.validationErrors();  
                 if( !errors){   //No errors were found.  Passed Validation!
 
-                            var fileName = req.file.path.replace('public/','');
+                            var fileName = req.file.path.replace('public','');
                             var colorIns  = new Color();
                             colorIns.color_logo = fileName;
                             colorIns.color_name  = req.body.color_name;
@@ -131,7 +131,7 @@ exports.updateColor = (req,res) => {
             'user_id'		: req.body.user_id 
         };
         if(req.file){
-            updateData.color_logo = req.file.path.replace('public/','');
+            updateData.color_logo = req.file.path.replace('public','');
         }
         Color.findByIdAndUpdate(req.body.colorId,updateData, function(error, updateRes){
             req.flash('success',['Color updated successfully']);

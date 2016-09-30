@@ -16,9 +16,9 @@ const Multer 	= require('multer');
 /* Define Folder name where our Shop image store */
 var storage =   Multer.diskStorage({
   destination: function (req, file, callback) {
-    if(file.fieldname=='cover_image' || file.fieldname=='shop_logo'){
+    if(file.fieldname == 'cover_image' || file.fieldname == 'shop_logo'){
        callback(null, 'public/uploads/shop_logo'); 
-    }else if(file.fieldname=='profile_image'){
+    }else if(file.fieldname == 'profile_image'){
        callback(null, 'public/uploads/profile_images');
     }
   },
@@ -257,7 +257,6 @@ exports.customerAddressList = (req, res) => {
 		{
 			Address.find({ user_id: req.params.customerId}, function(error, availableUserAddresses)
 	        {
-	            //console.log(availableUserAddresses);
 	            var shippingAddress =[];
 	            var billingAddress = [];
 	            availableUserAddresses.forEach(function(item, index) {
@@ -280,7 +279,6 @@ exports.customerAddressList = (req, res) => {
  * Save Customer information
  */
 exports.customerAddressSave = (req, res) => {
-	//console.log(req.body);
 	var addressIns              = new Address();
     addressIns.user_id          = req.params.customerId;
     addressIns.address_type     = req.body.addressType;
@@ -342,9 +340,7 @@ exports.userAdd = (req, res) => {
                 var taa= 0;
                 while(flag){
                     flag = false;
-                    console.log(getPermissions);
                     for(i=0;i<getPermissions.length;i++){
-                        console.log(getPermissions[i].parent_id + '---'+ getPermissions[i]._id + '----'+getPermissions[i].name);
                         var takenFlag = false;
                         // To check element is already added into final result or not
                         for(var tke = 0; tke < takenElement.length; tke++){
@@ -364,7 +360,6 @@ exports.userAdd = (req, res) => {
                                 flag = true;
                                 finalPermission.push(tmp);
                             }else{
-                                console.log('nice');
                                 for(j=0;j<finalPermission.length;j++){
                                     if(finalPermission[j].id == getPermissions[i].parent_id){
                                         takenElement.push(getPermissions[i]._id);// Array is used to check the element is added or not
@@ -396,7 +391,6 @@ exports.userAdd = (req, res) => {
                     }
                 }
                 
-                //console.log(getPermissions);
                 res.render('user/user_add', { title: 'New User',getPermissions:finalPermission,left_activeClass:5});
             }
 	});
@@ -438,10 +432,10 @@ exports.userSave = (req, res) => {
                     for(var i = 0;i < req.files.length;i++){
                         switch(req.files[i].fieldname){
                             case 'cover_image':
-                                userIns.cover_image = req.files[i].path.replace('public/','');
+                                userIns.cover_image = req.files[i].path.replace('public','');
                                 break;
                             case 'profile_image':
-                                userIns.profile_image = req.files[i].path.replace('public/','');
+                                userIns.profile_image = req.files[i].path.replace('public','');
                                 break;
                         }
                     }
@@ -540,7 +534,6 @@ exports.userView = (req, res) => {
 	User.findOne({_id:req.params.id},function(error,getUserDetails){
 		if(getUserDetails)
 		{
-			console.log(getUserDetails);
 			res.render('user/user_view', { title: 'User View',getUserDetails:getUserDetails,activeClass:1,left_activeClass:5});
 
 		}
@@ -625,7 +618,6 @@ exports.userShipping = (req, res) => {
 		{
 			ShopShipping.findOne({ user_id: req.params.userId}, function(error, availableShopShipping)
 	        {
-				//console.log(availableShopShipping);
 				if(availableShopShipping == null)
 	        	{
 	        		availableShopShipping = [];
@@ -677,7 +669,6 @@ exports.userPaymentMethod = (req, res) => {
 	        	{
 	        		availablePaymentMethod = [];
 	        	}
-				//console.log(availablePaymentMethod);
 				res.render('user/user_payment_method', { title: 'User Payment Method',getUserDetails:getUserDetails,activeClass:3,availablePaymentMethod:availablePaymentMethod,left_activeClass:5});
 			});
 			
@@ -724,7 +715,6 @@ exports.userProductReview = (req, res) => {
     User.findOne({_id:req.params.userId},function(error,getUserDetails){
 		if(getUserDetails)
 		{
-			//console.log(getUserDetails);
 			res.render('user/user_product_review', { title: 'User Payment Review',getUserDetails:getUserDetails,activeClass:5,left_activeClass:5});
 		}
 	});
@@ -735,7 +725,6 @@ exports.userAccount = (req, res) => {
     User.findOne({_id:req.params.userId},function(error,getUserDetails){
 		if(getUserDetails)
 		{
-			//console.log(getUserDetails);
 			res.render('user/user_account', { title: 'User Account',getUserDetails:getUserDetails,activeClass:6,left_activeClass:5});
 		}
 	});
@@ -746,7 +735,6 @@ exports.userLinkedAccount = (req, res) => {
     User.findOne({_id:req.params.userId},function(error,getUserDetails){
 		if(getUserDetails)
 		{
-			//console.log(getUserDetails);
 			res.render('user/user_linked_account', { title: 'User Linked Account',getUserDetails:getUserDetails,activeClass:7,left_activeClass:5});
 		}
 	});
@@ -1014,10 +1002,8 @@ exports.order = (req, res) => {
 				                {
 				                    if(fetchingAllOrderDetails)
 				                    {
-				                    	//console.log(fetchingAllOrderDetails);
 				                    	User.findOne({_id:fetchingAllOrderDetails.brand_id},function(error,fetchingShopDetails)
 						                {
-						                	//console.log(fetchingShopDetails);
 				                      		orderObj.shop_name   = fetchingShopDetails.first_name+' '+fetchingShopDetails.last_name;
 						                });
 				                    }
@@ -1037,7 +1023,6 @@ exports.order = (req, res) => {
 		        },
 		        function(err)
 		        {
-		        //	console.log(finalOrderData);
 		          res.render('user/customer_order', { title: 'Customer Order',activeClass:4,left_activeClass:4,getCustomerDetails:getCustomerDetails,getAllOrders:finalOrderData });
 		        });
 		      }
@@ -1079,10 +1064,10 @@ exports.shopPfofileUpdate = (req, res) => {
                 for(var i = 0;i < req.files.length;i++){
                     switch(req.files[i].fieldname){
                         case 'cover_image':
-                            updateData.cover_image = req.files[i].path.replace('public/','');
+                            updateData.cover_image = req.files[i].path.replace('public','');
                             break;
                         case 'profile_image':
-                            updateData.profile_image = req.files[i].path.replace('public/','');
+                            updateData.profile_image = req.files[i].path.replace('public','');
                             break;
                     }
                 }
@@ -1093,10 +1078,10 @@ exports.shopPfofileUpdate = (req, res) => {
                 for(var i = 0;i < req.files.length;i++){
                     switch(req.files[i].fieldname){
                         case 'cover_image':
-                            updateShopEmployeeData.cover_image = req.files[i].path.replace('public/','');
+                            updateShopEmployeeData.cover_image = req.files[i].path.replace('public','');
                             break;
                         case 'profile_image':
-                            updateData.profile_image = req.files[i].path.replace('public/','');
+                            updateData.profile_image = req.files[i].path.replace('public','');
                             break;
                     }
                 }
@@ -1185,7 +1170,6 @@ exports.shop_account_update = (req, res) => {
 exports.shop_notification = (req, res) => {
     //res.render('user/shop_linked_account', { title: 'Linked Account',activeClass:7,left_activeClass:5});
     Notification.findOne({user_id:req.user._id},function(error,resultRes){
-        console.log(resultRes);
         if(resultRes){
             res.render('user/shop_notification', { title: 'Shop User notification',activeClass:7, result:resultRes,left_activeClass:5 });
         }else{
@@ -1341,7 +1325,6 @@ exports.shop_user_view = (req, res) => {
                             finalUserPremission.push(userPerRes[i].permission_id);
                         }
                     }
-                    console.log(finalUserPremission);
                     res.render('user/shop_user_view', { title: 'Shop User View',activeClass:'',result:userRes,left_activeClass:5,getPermissions:finalPermission,userPermission:finalUserPremission});
                 });
             }
@@ -1356,7 +1339,6 @@ exports.shop_payment_method = (req, res) => {
         if(resRes == null){
             resRes = [];
         }
-        console.log(resRes);
         res.render('user/shop_payment_method', { title: 'Shop Payment',activeClass:3,availablePaymentMethod:resRes,left_activeClass:5});
     });
 };
@@ -1464,7 +1446,6 @@ exports.shopuser_notification_update = (req, res) => {
 exports.shopuser_notification = (req, res) => {
     User.findOne({_id:req.params.userId},function(error,getUserDetails){
         Notification.findOne({user_id:req.params.userId},function(error,resultRes){
-            console.log(getUserDetails);
             if(getUserDetails){
                 if(resultRes){
                     res.render('user/shopuser_notification', { title: 'User Notifications',result:getUserDetails,activeClass:3,left_activeClass:5,notificationRes:resultRes});
@@ -1521,20 +1502,23 @@ exports.updateShopLogo = (req, res) => {
         if(err) {
            return res.end("Error uploading file.");
         }
+        updateData = {};
         if(req.files.length > 0){
-            var fileName = req.file.path.replace('public/','');
+            var fileName = req.files[0].path.replace('public','');
             updateData.shop_logo = fileName;
-        }
-        
-        User.update({_id:req.user.shop_id},updateData, function(error, updateRes){
-            if (error){
-                req.flash('errors',['Something went wronge!']);
-                
-            }else{
-                req.flash('success',['Shop Logo updated successfully.']);
-            }
+            User.update({_id:req.user._id},updateData, function(error, updateRes){
+                if (error){
+                    req.flash('errors',['Something went wronge!']);
+
+                }else{
+                    req.flash('success',['Shop Logo updated successfully.']);
+                }
+                return res.redirect('/dashboard');
+            });
+        }else{
+            req.flash('errors',['There is no any file is selected']);
             return res.redirect('/dashboard');
-        });
+        }
     });
 };
 

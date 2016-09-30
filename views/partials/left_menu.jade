@@ -2,27 +2,27 @@
   .img-1-wrp
     -if(user.role_id == 3 || user.role_id == 4 || user.role_id == 6){
       .logo-left
-        img#modal-104831(src='#{user.shop_logo}', alt='#{user.shop_name}',width='71')
-        span
-            a#modal-104831(href='#modal-container-104831', role='button', data-toggle='modal')
-                #modal-container-104831.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
-                    .modal-dialog.popup-wdt-1
-                      form(name='updateColor', method='post', action='/user/updateShopLogo', enctype='multipart/form-data')
-                        input(type='hidden',name='colorId',value='')
-                        .modal-content
-                            .modal-header
-                              button.close(type='button', data-dismiss='modal', aria-hidden='true')
-                                img(src='/images/close-icon.png', alt='icon')
-                              h4#myModalLabel.modal-title
-                                | Update Shop Logo
-                            .modal-body
-                              .upload-box
-                                .upload-in
-                                  input.color_logo(type='file', name='color_logo')
-                                p.up-title Upload shop logo
-                            .modal-footer
-                              button(type='submit')
-                                | Save
+        a#modal-104831(href='#modal-container-104831', role='button', data-toggle='modal')
+            img#modal-104831(src='#{user.shop_logo}', alt='#{user.shop_name}',width='71')
+            
+        #modal-container-104831.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+            .modal-dialog.popup-wdt-1
+              form(name='updateColor', method='post', action='/user/updateShopLogo', enctype='multipart/form-data')
+                .modal-content
+                    .modal-header
+                      button.close(type='button', data-dismiss='modal', aria-hidden='true')
+                        img(src='/images/close-icon.png', alt='icon')
+                      h4#myModalLabel.modal-title
+                        | Update Shop Logo
+                    .modal-body
+                      .upload-box
+                        .upload-in
+                          input.color_logo(type='file', name='shop_logo',required='required')
+                        p.up-title Upload shop logo
+                    .modal-footer
+                      button(type='submit')
+                        | Save
+                        
     -}
     -if(user.role_id == 3 || user.role_id == 4 || user.role_id == 6){
        a(href='/dashboard')
