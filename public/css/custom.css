@@ -71,6 +71,7 @@ min-height:900px;
 .modal-body .product_info_details .product_price_rate{
     float: right;
 }
-.vert .simply-scroll-list ul#scroller li{
-    
+
+.product_boxes .product_boxes_img img{
+   height: 180px;
 }

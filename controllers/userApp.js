@@ -18,6 +18,64 @@ const Constants 		= require('../constants/constants');
  * Customer List user page.
  */
 exports.customerList = (req, res) => {
+    if(req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6){
+        var page = (req.query.page == undefined)?1:req.query.page;
+        page = (page == 0)?1:page;
+        var skipRecord = (page-1)*Constants.RECORDS_PER_PAGE;
+        Address.find({is_default:1, add_type:Constants.SHIPPING},function(error,fetchAddress){  
+            User.find({role_id:5},function(error,fetchAllCustomers){  
+                OrderDetails.find({shop_id:req.user._id},function(error,fetchOrderDetails){   
+                    var tempShopUsers = {};
+                    var tempShopUsersArr = [];
+                    if(tempShopUsers){
+                        for(var j = 0; j< fetchAllCustomers.length;j++){
+                          for(var i = 0;i< fetchOrderDetails.length;i++){
+                            if(fetchAllCustomers[j]._id == fetchOrderDetails[i].user_id){
+                                tempShopUsersArr.push(fetchOrderDetails[i].user_id);
+                            }
+                          }
+                        }
+                    }
+                    
+                    User.find({role_id:5,_id:{$in:tempShopUsersArr}},function(error,countAllCustomers){  
+                         var totalRecord = countAllCustomers.length;
+                         var totalPage = Math.ceil(totalRecord/Constants.RECORDS_PER_PAGE);
+
+                        User.find({role_id:5,_id:{$in:tempShopUsersArr}})
+                            .limit(Constants.RECORDS_PER_PAGE)
+                            .skip(skipRecord)
+                            .sort('-_id')
+                            .exec(function(error,getCustomers){
+                               var tempAddressLine1 = {};
+                               var tempCity = {};
+                               var tempPostalCode = {};
+                               var tempContactNo = {};
+                               var tempCountry = {};
+                               var tempState = {};
+                               for(var i =0; i < getCustomers.length;i++){
+                                   for(var j = 0;j< fetchAddress.length;j++){
+                                       if(getCustomers[i]._id == fetchAddress[j].user_id){
+                                           //getCustomers[i].push(fetchAddress[j]['address_line1']);
+                                           tempAddressLine1[getCustomers[i]._id] = fetchAddress[j].address_line1;
+                                           tempCity[getCustomers[i]._id] = fetchAddress[j].city;
+                                           tempPostalCode[getCustomers[i]._id] = fetchAddress[j].postal_code;
+                                           tempCountry[getCustomers[i]._id] = fetchAddress[j].country;
+                                           tempContactNo[getCustomers[i]._id] = fetchAddress[j].contact_no;
+                                           tempState[getCustomers[i]._id] = fetchAddress[j].state;
+                                       }
+                                   }
+                               }
+
+                            if(getCustomers) {
+                                res.render('user/customer_list', { left_activeClass:4, title: 'Customer', currentPage:page, totalPage:totalPage, getCustomers:getCustomers, addressLine1:tempAddressLine1, city:tempCity,postalCode:tempPostalCode,country:tempCountry, contactNo:tempContactNo,state:tempState  });
+                            }   
+                        });    
+                        
+                    });  
+                });    
+            });
+       });
+    } else if(req.user.role_id == 1 || req.user.role_id == 2){ 
         var page = (req.query.page == undefined)?1:req.query.page;
         page = (page == 0)?1:page;
         var skipRecord = (page-1)*Constants.RECORDS_PER_PAGE;
@@ -66,7 +124,12 @@ exports.customerList = (req, res) => {
                          }     
                 });
             });
-        });    
+        });
+    }else{
+        req.flash('errors', ['Unauthorised user role']);
+        return res.redirect('/dashboard');
+    }
+         
 };
 
 /**
@@ -76,12 +139,11 @@ exports.customerList = (req, res) => {
 exports.customerView = (req, res) => {
     User.findOne({_id:req.params.id},function(error,getCustomerDetails){
         Address.findOne({is_default:1, add_type:Constants.SHIPPING, user_id:req.params.id},function(error,fetchAddress){   
-            if(getCustomerDetails){
-                console.log(fetchAddress);
+            if(getCustomerDetails)
+            {
                 if(fetchAddress == null){
-                    fetchAddress= [];
+                    fetchAddress = [];
                 }
-                console.log(getCustomerDetails);
                 res.render('user/customer_view', { title: 'Customer View',getCustomerDetails:getCustomerDetails,activeClass:1,left_activeClass:4, fetchAddress:fetchAddress});
             }
         });	

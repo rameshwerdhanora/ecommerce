@@ -166,7 +166,16 @@ exports.fetchCofiguration = function(req,res){
 		}
 		else 
 		{
-			return res.json({"status":'error',"msg":'Your have not select your configuration.'});
+			Size.find({is_published:'true'},function(error,getAllSizes){
+				if(getAllSizes)
+				{
+					res.send({status:'success',msg:'Successfully fetch all sizes.',getAllSizes:getAllSizes});
+				}
+				else 
+				{
+					res.send({status:'error',msg:'Unable to found any sizes.'});
+				}
+			});	
 		}
 
 	});
