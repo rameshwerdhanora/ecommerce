@@ -1,6 +1,7 @@
 const async           = require('async');
 const Order           = require('../models/orders');
 const User           = require('../models/userApp');
+const Like           = require('../models/like');
 const Constants       = require('../constants/constants');
 const dateFormat = require('dateformat');
 /**
@@ -131,6 +132,25 @@ exports.index = (req, res) => {
                   },function(error){
                       finalDashboradObj.totalUser = totalUser;
                       finalDashboradObj.newUsers = newUsers;
+                      //callback();
+                  });
+                }
+              });
+
+              //-- Like ME Count
+              Like.find({},function(error,fetchAllLike){
+                if(fetchAllLike)
+                {
+                  var share = 0;
+                  var like = 0;
+                  async.eachSeries(fetchAllLike, function(fetchLike, callback)
+                  {
+                    share ++;
+                    like ++;
+                    callback(error);
+                  },function(error){
+                      finalDashboradObj.share = share;
+                      finalDashboradObj.like = like;
                       callback();
                   });
                 }
