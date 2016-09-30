@@ -209,7 +209,7 @@ exports.customerDelete = (req,res) => {
 	{
 		if(error)
 		{
-			res.send({status:'errors', msg:error});
+			res.send({status:'errors',msg:error});
 		}
 		else
 		{
