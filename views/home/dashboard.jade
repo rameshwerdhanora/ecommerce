@@ -6,19 +6,19 @@ block content
       .new-ord-box
         .new-ord-in
           h3.box-title New Orders
-          p.num-txt 5
+          p.num-txt #{dashboardData.newOrder.length}
           p.ready-txt Ready To Pack And Ship!
       .today-sale-box
         .today-sale-in
           h3.box-title Today's Sales
-          p.num-txt.colr1 $2019.00
+          p.num-txt.colr1 $ #{dashboardData.todaySale}
           p.ready-txt.colr2 LAST SALE 2 HOURS AGO
       .shipping-total-box
         .shipping-total-in
           h3.box-title Shipping Totals
-          p.blue-title.top-spc $311.00
+          p.blue-title.top-spc $ #{dashboardData.todayShippingTotal}
           h3.box-title.top-spc PayMENT fees
-          p.blue-title.top-spc $295.00
+          p.blue-title.top-spc $ #{dashboardData.todayPaymentFees}
     .mdl-row.clearfix
       .col-sm-8.mdl-tab-box
         .mdl-cmn.mdl-tab
@@ -131,62 +131,18 @@ block content
                   table(width='100%', border='0', cellspacing='0', cellpadding='0')
                     tr
                       th ORDER #
-                      th BRAND
-                      th  DATE                              
+                      th DATE                              
                       th TOTAL
-                    tr
-                      td.ord-title 12345
-                      td FAKE STREET
-                      td 30 July 2016 8:30 PT
-                      td  $223.00
-                    tr
-                      td.ord-title 12345
-                      td FAKE STREET
-                      td 30 July 2016 8:30 PT
-                      td  $223.00
-                    tr
-                      td.ord-title 12345
-                      td FAKE STREET
-                      td 30 July 2016 8:30 PT
-                      td  $223.00
-                    tr
-                      td.ord-title 12345
-                      td FAKE STREET
-                      td 30 July 2016 8:30 PT
-                      td  $223.00
-                    tr
-                      td.ord-title 12345
-                      td FAKE STREET
-                      td 30 July 2016 8:30 PT
-                      td  $223.00
-        .mdl-cmn.low-inv
-          h2.right-title  Low inventory
-          .low-tbl-box
-            table(width='100%', border='0', cellspacing='0', cellpadding='0')
-              tr
-                th  
-                th PRODUCT                                 
-                th SIZE                                   
-                th PRICE     
-                th QTY
-              tr
-                td 1
-                td The LS Black Tee
-                td M
-                td  $25.00 
-                td 2
-              tr
-                td 2
-                td  
-                td  
-                td  
-                td  
-              tr
-                td 3
-                td  
-                td  
-                td  
-                td  
+                    if dashboardData.newOrder.length > 0
+                      each newOrder in dashboardData.newOrder
+                        tr
+                          td.ord-title #{newOrder.order_number}
+                          td #{newOrder.orderdate}
+                          td $ #{newOrder.totalprice}
+                    else
+                      tr
+                        td(colspan=3)
+                          | No new Orders      
       .col-sm-4.wkl-sale
         .seals.right-cmn
           h2.right-title Weekly sales
@@ -194,22 +150,22 @@ block content
             .sealsLeft
               h3 Total sales
             .sealsRight
-              h3 $20,000
+              h3 $ #{dashboardData.weeklyTotalSale}
           .bgwhite
             .sealsLeft
               h3 # of Sales
             .sealsRight
-              h3 220
+              h3 #{dashboardData.weeklyNoOfSale}
           .bgwhite
             .sealsLeft
               h3 AVG sale
             .sealsRight
-              h3 $90.91
+              h3 $ #{dashboardData.weeklyAvgSale}
           .bgwhite
             .sealsLeft
               h3 YTD SALE
             .sealsRight
-              h3 $50,000.00
+              h3 $ #{dashboardData.yearlyYtdSale}
         .social.right-cmn
           h2.right-title SOCIALOMETER
           .bgblue
@@ -218,28 +174,28 @@ block content
             .socialCenter
               img(src='images/icon1.png', alt='')
             .socialRight
-              h3 1,000
+              h3 #{dashboardData.totalUser}
           .bgblue
             .socialLeft
               h3 NEW USERS
             .socialCenter
               img(src='images/icon2.png', alt='')
             .socialRight
-              h3 5,000
+              h3 #{dashboardData.newUsers}
           .bgblue
             .socialLeft
               h3 LIFETIME LIKES
             .socialCenter
               img(src='images/icon3.png', alt='')
             .socialRight
-              h3 15,000
+              h3 #{dashboardData.totalUser}
           .bgblue
             .socialLeft
               h3 TOTAL USERS
             .socialCenter
               img(src='images/icon2.png', alt='')
             .socialRight
-              h3 546
+              h3 #{dashboardData.totalUser}
 script(src='js/bootstrap.min.js', type='text/javascript')
 script(src='js/bootstrap-select.min.js', type='text/javascript')
 script(type='text/javascript').
