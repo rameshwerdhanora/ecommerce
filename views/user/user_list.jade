@@ -23,7 +23,7 @@ block content
                 img(alt='Delete', src='/images/delete-icon.png')
             ul.nav.nav-tabs
               li.active
-                a(href='#panel-278853', data-toggle='tab') Customers 
+                a(href='#panel-278853', data-toggle='tab') Users 
               li
                 a(href='#panel-4338', data-toggle='tab') Shops
             .tab-content
@@ -38,9 +38,7 @@ block content
                           th Photo
                           th username
                           th Name
-                          th PassworD
-                          th User SInce
-                          th Total
+                          th User Since
                           th STATUS
                           th
                         if getCustomers.length > 0
@@ -49,13 +47,11 @@ block content
                               td(align='center')
                                 input#checkbox4(type='checkbox', name='checkbox4')
                               td
-                                img(src='/images/user-img.png', alt='img')
+                                img.custImg(src='/#{getCustomer.profile_image}', alt='img')
                               td @#{getCustomer.user_name} 
                               td.ord-title 
                                 a.ord-title(href='/user/shopuser_profile/#{getCustomer._id}') #{getCustomer.first_name} #{getCustomer.last_name}
-                              td ********** 
-                              td 30 Jan 2015 8:05 AM
-                              td $103.00
+                              td #{dateFormat(parseInt(getCustomer.createdAt),"dS mmm yyyy h:MM:ss TT")}
                               td
                                 | ONLINE 
                                 span.online-icon
@@ -83,7 +79,7 @@ block content
                           th SHOP TYPE
                           th Address
                           th City
-                          th  State
+                          th State
                           th ZIP CODE
                           th Country
                           th E-MAil ADDRESS
@@ -94,16 +90,21 @@ block content
                               td(align='center')
                                 input#checkbox4(type='checkbox', name='checkbox4')
                               td
-                                img(src='/images/fake-icon.png', alt='img')
+                                img.custImg(src='/#{getUser.profile_image}', alt='img')
                               td.ord-title 
                                 a.ord-title(href='/user/view/#{getUser._id}') #{getUser.shop_name}
-                              td 30 Jan 2015 8:05 AM
-                              td Brand 
-                              td 1439 S. Rimhurst Ave.
-                              td Glednora
-                              td CA 
-                              td  91740 
-                              td USA
+                              td #{dateFormat(parseInt(getUser.createdAt),"dS mmm yyyy h:MM:ss TT")}
+                              td 
+                               - if(user.role_id==3){
+                                    | Brand
+                               - }else{
+                                    | Boutique
+                               - } 
+                              td #{getUser.address}
+                              td #{getUser.city}
+                              td #{getUser.state} 
+                              td #{getUser.zip}
+                              td #{getUser.country}
                               td #{getUser.email_id}
                               td
                                 a.edit-btn.view-btn(href='#')

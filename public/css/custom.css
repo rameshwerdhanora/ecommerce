@@ -75,3 +75,8 @@ min-height:900px;
 .product_boxes .product_boxes_img img{
    height: 180px;
 }
+
+.low-tbl-box tr td .custImg{
+    width: 118px;
+    height: auto;
+}

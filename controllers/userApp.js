@@ -313,9 +313,10 @@ exports.customerAddressSave = (req, res) => {
  * User List - here we need to get both users and customers in seprate columns
  */
 exports.userList = (req, res) => {
+       var dateFormat = require('dateformat');
         User.find({role_id:6},function(error,getCustomers){
             User.find({role_id:{$in : [3,4]}},function(error,getUsers){
-                res.render('user/user_list', { title: 'User List',getCustomers:getCustomers,getUsers:getUsers,left_activeClass:5});
+                res.render('user/user_list', { title: 'User List',getCustomers:getCustomers,getUsers:getUsers,left_activeClass:5,dateFormat:dateFormat});
             });
         });	
 };
