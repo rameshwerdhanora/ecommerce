@@ -13,7 +13,7 @@ exports.fetchPrivacySetting = (req, res) => {
   	{
   		if(fetchUserPrivacy)
   		{
-  			return res.json({"status":'success',"msg":'Fetch your privacy settings.',privacysetting:fetchUserPrivacy});
+  			return res.json({"status":'success',"msg":'Fetch your preferences settings.',privacysetting:fetchUserPrivacy});
   		}
   		else 
   		{
@@ -47,7 +47,7 @@ exports.privacySettingofUser = (req, res) => {
   					}
   					else 
   					{
-  						return res.json({"status":'success',"msg":'Privacy is updated successfully.'});
+  						return res.json({"status":'success',"msg":'Preferences is updated successfully.'});
   					}
   				});
   			}
@@ -69,7 +69,7 @@ exports.privacySettingofUser = (req, res) => {
 		  			}
 		  			else 
 		  			{
-		  				return res.json({"status":'success',"msg":'Privacy is stored successfully.'});
+		  				return res.json({"status":'success',"msg":'Preferences is stored successfully.'});
 		  			}
   				});
   			}
