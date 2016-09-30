@@ -934,7 +934,16 @@ exports.BrandDetailView = (req, res) => {
             });
 
           });
-        }
+        },
+        function(callback)
+          {
+            Follow.findOne({user_id:req.params.userId,brand_id:req.params.brandId},function(error,fetchFollowUnFollowBrand)
+            {
+              var brandFollow = (fetchFollowUnFollowBrand) ? 'true' : 'false';
+              filterObj.brand_follow         = brandFollow;
+              callback(error); 
+            })
+          }
       ],
       function(err)
       {

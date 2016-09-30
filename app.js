@@ -97,7 +97,7 @@ mongoose.connection.on('error', () => {
 /**
  * Express configuration.
  */
-app.set('port', process.env.PORT || 8081);
+app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(compression());
@@ -221,7 +221,7 @@ app.get('/api/product/fetchfilter/:brandId/:userId',productAppController.fetchFi
 app.get('/api/follow/:userId/:brandId',followAppController.followUnFollowBrand);
 app.get('/api/listoffollow/:userId',followAppController.listOfFollowUser);
 
-app.get('/api/brand/details/:brandId',productAppController.BrandDetailView);
+app.get('/api/brand/details/:brandId/:userId',productAppController.BrandDetailView);
 app.get('/api/brand/itfits/:brandId/:userId',productAppController.BrandItFitsProducts);
 
 /* Filter Controller */
