@@ -552,7 +552,7 @@ exports.userView = (req, res) => {
  * user view page.
 */
 exports.shopProfile = (req, res) => {
-    User.findOne({shop_id:req.user.shop_id},function(error,getUserDetails){
+    User.findOne({_id:req.user._id},function(error,getUserDetails){
         if(getUserDetails){
             res.render('user/shopProfile', { title: 'Shop view',getUserDetails:getUserDetails,activeClass:1,left_activeClass:5});
         }
@@ -1064,23 +1064,63 @@ exports.order = (req, res) => {
  * Update user Information
 */
 exports.shopPfofileUpdate = (req, res) => {
-    updateData = {
-        //'first_name' 	: req.body.first_name,
-        //'last_name'	: req.body.last_name,
-        'address'	: req.body.address, 
-        'city'          : req.body.city,
-        'state'		: req.body.state,
-        'zip'		: req.body.zip,
-        'country'	: req.body.country,
-        'bio'           : req.body.bio,
-    };
-    if(req.user.role_id == 3 || req.user.role_id == 4){
-        updateData.shop_name = req.body.shop_name;
-    }
-    User.findByIdAndUpdate(req.user._id,updateData, function(error, updateRes){
-        req.flash('success',['Profile updated successfully']);
-        res.redirect('/user/shopprofile');
-    });
+   uploadShopImages(req,res,function(err) {
+    if(err) {
+       return res.end("Error uploading file.");
+    }  
+        updateData = {
+            //'first_name' 	: req.body.first_name,
+            //'last_name'	: req.body.last_name,
+            'address'	: req.body.address, 
+            'city'          : req.body.city,
+            'state'		: req.body.state,
+            'zip'		: req.body.zip,
+            'country'	: req.body.country,
+            'bio'           : req.body.bio,
+        };
+        
+        if(req.user._id == req.user.shop_id){
+            if(req.files.length > 0){
+                for(var i = 0;i < req.files.length;i++){
+                    switch(req.files[i].fieldname){
+                        case 'cover_image':
+                            updateData.cover_image = req.files[i].path.replace('public/','');
+                            break;
+                        case 'profile_image':
+                            updateData.profile_image = req.files[i].path.replace('public/','');
+                            break;
+                    }
+                }
+            }
+        }else{
+            if(req.files.length > 0){
+                var updateShopEmployeeData = {};
+                for(var i = 0;i < req.files.length;i++){
+                    switch(req.files[i].fieldname){
+                        case 'cover_image':
+                            updateShopEmployeeData.cover_image = req.files[i].path.replace('public/','');
+                            break;
+                        case 'profile_image':
+                            updateData.profile_image = req.files[i].path.replace('public/','');
+                            break;
+                    }
+                }
+            }
+        }
+        
+        if(req.user.role_id == 3 || req.user.role_id == 4){
+            updateData.shop_name = req.body.shop_name;
+        }
+        User.findByIdAndUpdate(req.user._id,updateData, function(error, updateRes){
+            if(updateShopEmployeeData!=''){
+                User.update({_id:req.user.shop_id},updateShopEmployeeData,function(error,updateRes){    
+                    
+                }); 
+            }
+            req.flash('success',['Profile updated successfully']);
+            res.redirect('/user/shopprofile');
+        });
+    }); 
 };
 
 exports.shopShippingdetail = (req,res) =>{
