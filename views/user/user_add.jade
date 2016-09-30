@@ -6,7 +6,7 @@ block content
       img(src='/images/title-icon.png', alt='icon')
       |  USERS
     .customer-box.clearfix
-      form(method='post', action='/user/save')
+      form(method='post', action='/user/save', enctype='multipart/form-data')
         .customer-cl
           h2 USERS
           ul
@@ -84,6 +84,15 @@ block content
                 .profile-frm-cl1 Bio
                 .profile-frm-cl2
                   textarea.large-in(name='bio') #{data ? data.bio :""}
+              .profile-frm-row
+                .profile-frm-cl1 Profile Image
+                .profile-frm-cl2
+                  input(type='file', name='profile_image', required='required')
+              .profile-frm-row
+                .profile-frm-cl1 Cover Photo
+                .profile-frm-cl2
+                  input(type='file', name='cover_image', required='required')
+                  
                   
               -if(user.role_id == 1 || user.role_id == 2){
               .profile-frm-row.botique-spc

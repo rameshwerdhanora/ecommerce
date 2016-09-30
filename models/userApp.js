@@ -41,8 +41,7 @@ const userAppSchema = new mongoose.Schema({
     country:String,
     bio:String,
     
-    shop_logo:String,
-    shop_cover:String
+    shop_logo:String
     
     
   /*profile: {
