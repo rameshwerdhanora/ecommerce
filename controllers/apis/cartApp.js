@@ -687,7 +687,7 @@ exports.showCartAccBrand = (req,res) => {
                 {   
                     // console.log(req.body);
 
-                    priceTotalObj.tax           = '10';
+                    priceTotalObj.tax           = (subTotal > 0) ? parseInt(10) : parseInt(0);
                     priceTotalObj.ship_code     = req.body.shipping_array[req.body.index].Code;
                     priceTotalObj.servicename   = req.body.shipping_array[req.body.index].serviceName;
                     priceTotalObj.totalcharges  = parseInt(req.body.shipping_array[req.body.index].TotalCharges);
@@ -843,7 +843,7 @@ exports.finalCheckoutDisplay = (req,res) => {
                         index++; 
                         },
                         function(err){
-                            var tax = '10';
+                            var tax = (parseInt(finalPrice) > 0) ? parseInt(10) : parseInt(0);
                             var totalCartPrice = parseInt(finalPrice) + parseInt(tax) + parseInt(TotalShippingCharges) - finalDiscount;
                             return res.json({"status":'success',"msg":'Found your cart data.',
                                 finalOrder:finalBrandArr,
