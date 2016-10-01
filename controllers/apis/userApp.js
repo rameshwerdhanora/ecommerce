@@ -386,20 +386,21 @@ exports.postUpdateProfile = function(req,res)
 
 function signUpFromSocial(req,res,constants)
 {
-
-	var email_id = (req.body.email_id) ?  req.body.email_id : '';
+	//console.log(req.body);
+	var email_id = (req.body.email) ?  req.body.email : '';
 	var userIns        		= new User();
 	userIns.role_id    		= Constants.CUSTOMERROLE;
-	userIns.user_name   	= '';
-	userIns.password    	= '';
-    userIns.email       	= email_id;
-	userIns.first_name  	= '';
-    userIns.last_name   	= '';
+	userIns.user_name   	= email_id;
+	userIns.password    	= '$2a$10$7MMAHRBcyOF2EakY2mDTEukRL6ev/YWJbsGvMUTToBoAccGQALs2K';
+    userIns.email_id       	= email_id;
+	userIns.first_name  	= req.body.first_name;
+    userIns.last_name   	= req.body.last_name;
     userIns.contact_no  	= '';
     userIns.dob   			= '';
     userIns.gender   		= '';
     userIns.bio   			= '';
     userIns.cover_image		= '';
+    userIns.isFomo			= '0';
     userIns.profile_image   = '';
     userIns.social_type   	= constants ;
     userIns.social_id   	= req.body.userid;
@@ -407,7 +408,7 @@ function signUpFromSocial(req,res,constants)
     userIns.is_active   	= true;
     userIns.is_deleted   	= false;
     userIns.created        	= Date.now();
-    userIns.updated        	= '';
+    userIns.updated        	= Date.now();
 
     userIns.save(function(error){
 		if(error)
@@ -416,8 +417,19 @@ function signUpFromSocial(req,res,constants)
 		}
 		else 
 		{
+			UserDetails.findOne({user_id:userIns._id},function(error,fetchUserDetails)
+			{
+				if(fetchUserDetails)
+				{
+					return res.json({"status":'success',"msg":'Login Successfully.',newId:userIns._id,alluserData:userIns,configData:fetchUserDetails.configDetail});
+				}
+				else 
+				{
+					return res.json({"status":'success',"msg":'Login Successfully.',newId:userIns._id,alluserData:userIns,configData:''});
+				}
+			});
 			// SendMailToUser(req.body);
-			return res.json({"status":'success',"msg":'Your details is successfully stored.',"newId":userIns._id});
+			//return res.json({"status":'success',"msg":'Your details is successfully stored.',"newId":userIns._id});
 		}
     }); 
 }
@@ -431,10 +443,20 @@ exports.postSignupFacebook = function(req,res)
 {
 	if(req.body.device_token !== '')
   	{
-		User.findOne({ access_token: req.body.token }, function(err, tokenExist){
+		User.findOne({ email_id: req.body.email}, function(err, tokenExist){
 			if(tokenExist)
 			{
-				return res.json({"status":'success',"msg":'Got your token',"newId":tokenExist._id});
+				UserDetails.findOne({user_id:tokenExist._id},function(error,fetchUserDetails)
+				{
+					if(fetchUserDetails)
+					{
+						return res.json({"status":'success',"msg":'Login Successfully.',newId:tokenExist._id,alluserData:tokenExist,configData:fetchUserDetails.configDetail});
+					}
+					else 
+					{
+						return res.json({"status":'success',"msg":'Login Successfully.',newId:tokenExist._id,alluserData:tokenExist,configData:''});
+					}
+				});
 			}
 			else 
 			{
@@ -459,14 +481,26 @@ exports.postSignupGooglePlus = function(req,res)
 {
 	if(req.body.device_token !== '')
   	{
-		User.findOne({ access_token: req.body.token }, function(err, tokenExist){
+		User.findOne({ email_id: req.body.email }, function(err, tokenExist){
 			if(tokenExist)
-			{
-				return res.json({"status":'success',"msg":'Got your token',"newId":tokenExist._id});
+			{  
+				UserDetails.findOne({user_id:tokenExist._id},function(error,fetchUserDetails)
+				{
+					if(fetchUserDetails)
+					{
+						return res.json({"status":'success',"msg":'Login Successfully.',newId:tokenExist._id,alluserData:tokenExist,configData:fetchUserDetails.configDetail});
+					}
+					else 
+					{
+						return res.json({"status":'success',"msg":'Login Successfully.',newId:tokenExist._id,alluserData:tokenExist,configData:''});
+					}
+				});
+
+				//return res.json({"status":'success',"msg":'Got your token',"newId":tokenExist._id,alluserData:tokenExist,configData:fetchUserDetails.configDetail});
 			}
 			else 
 			{
-				signUpFromSocial(req,res,Constants.FACEBOOKLOGIN);
+				signUpFromSocial(req,res,Constants.GPLUSLOGIN);
 			}
 		});
 	}
@@ -728,11 +762,3 @@ function sendMailToUser (user, done)
 		done(err);
 	});
 }
-
-
-
-
-
-
-
-
