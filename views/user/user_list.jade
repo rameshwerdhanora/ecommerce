@@ -50,14 +50,14 @@ block content
                                 img.custImg.profile-icons(src='/#{getCustomer.profile_image ? getCustomer.profile_image : "noPhoto2.png"}', alt='img')
                               td @#{getCustomer.user_name} 
                               td.ord-title 
-                                a.ord-title(href='/user/shopuser_profile/#{getCustomer._id}') #{getCustomer.first_name} #{getCustomer.last_name}
+                                a.ord-title(href='/user/shop_user_view/#{getCustomer._id}') #{getCustomer.first_name} #{getCustomer.last_name}
                               td #{dateFormat(getCustomer.createdAt,'dS mmm yyyy h:MM:ss TT')} 
                               td
                                 | ONLINE 
                                 span.online-icon
                                   img(src='/images/online-icon.png', alt='online')
                               td
-                                a.edit-btn.view-btn(href='/user/shopuser_profile/#{getCustomer._id}')
+                                a.edit-btn.view-btn(href='/user/shop_user_view/#{getCustomer._id}')
                                   span
                                     img(src='/images/eye-icon.png', alt='icon')
                                   |                               VIEW    
