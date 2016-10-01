@@ -314,11 +314,42 @@ exports.customerAddressSave = (req, res) => {
  */
 exports.userList = (req, res) => {
        var dateFormat = require('dateformat');
-        User.find({role_id:6},function(error,getCustomers){
-            User.find({role_id:{$in : [3,4]}},function(error,getUsers){
-                res.render('user/user_list', { title: 'User List',getCustomers:getCustomers,getUsers:getUsers,left_activeClass:5,dateFormat:dateFormat});
-            });
-        });	
+       
+       /** For users pagination **/
+       var page       = (req.query.page == undefined)?1:req.query.page;
+           page       = (page == 0)?1:page;
+       var skipRecord = (page-1)*Constants.RECORDS_PER_PAGE;
+       
+       /** For shop pagination **/
+       var pagesecond       = (req.query.pagesecond == undefined)?1:req.query.pagesecond;
+           pagesecond       = (pagesecond == 0)?1:pagesecond;
+       var skipRecordSecond = (pagesecond-1)*Constants.RECORDS_PER_PAGE;
+       
+       
+        User.find({role_id:6},function(error,countAllCustomers){  
+            var totalRecord = countAllCustomers.length;
+            var totalPage = Math.ceil(totalRecord/Constants.RECORDS_PER_PAGE);
+                User.find({role_id:6})
+                    .limit(Constants.RECORDS_PER_PAGE)
+                    .skip(skipRecord)
+                    .sort('-_id')
+                    .exec(function(error,getCustomers){   
+
+                    User.find({role_id:{$in : [3,4]}},function(error,countAllUsers){
+                        var totalRecordSecond = countAllUsers.length;
+                        var totalPageSecond = Math.ceil(totalRecordSecond/Constants.RECORDS_PER_PAGE);
+                        User.find({role_id:{$in : [3,4]}})
+                            .limit(Constants.RECORDS_PER_PAGE)
+                            .skip(skipRecordSecond)
+                            .sort('-_id')
+                            .exec(function(error,getUsers){
+                        
+                            res.render('user/user_list', { title: 'User List',getCustomers:getCustomers,getUsers:getUsers,left_activeClass:5,dateFormat:dateFormat, currentPage:page, totalPage:totalPage, currentPageSecond:pagesecond, totalPageSecond:totalPageSecond});
+                        });    
+                    });
+                    
+               });
+         });
 };
 
 

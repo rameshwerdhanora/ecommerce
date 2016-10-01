@@ -38,7 +38,17 @@ block content
                     .profile-frm-cl2
                         select(multiple='multiple' name='listofattrmap[]' class='listofattrmap')
                           each fetchAllAttributes in fetchAllAttribute
-                           option(value='#{fetchAllAttributes._id}') #{fetchAllAttributes.name} 
+                            - var tempSelect = true
+                            - for(var i=0; i<fetchSize.listofattrmap.length; i++){
+                                  - if(fetchAllAttributes._id == fetchSize.listofattrmap[i]){
+                                     - var tempSelect = false
+                                       option(value='#{fetchAllAttributes._id}', selected=(fetchAllAttributes._id == fetchSize.listofattrmap[i])) #{fetchAllAttributes.name} 
+                                  - }    
+                             - }
+                            - if(tempSelect){
+                                 option(value='#{fetchAllAttributes._id}') #{fetchAllAttributes.name} 
+                            - }
+                           
                 .profile-frm-row
                     .profile-frm-cl1  
                         |Published

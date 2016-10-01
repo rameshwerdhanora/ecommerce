@@ -92,7 +92,7 @@ exports.listOfSize = (req, res) => {
             }
             */
 
-
+            console.log(finalRs);
 
             res.render('size/list', {
                 title: 'Size',
@@ -156,14 +156,14 @@ exports.editSize = (req,res) => {
 	{
 		Attribute.find({},function(error,fetchAllAttribute)
 		{
-			if(error)
-			{
-				res.send({status:'error',msg:error});
-			}
-			else 
-			{
-				res.render('size/edit_size', { title: 'Size',fetchSize:fetchSize,fetchAllAttribute:fetchAllAttribute});
-			}
+                    if(error)
+                    {
+                            res.send({status:'error',msg:error});
+                    }
+                    else 
+                    {
+                            res.render('size/edit_size', { title: 'Size',fetchSize:fetchSize,fetchAllAttribute:fetchAllAttribute});
+                    }
 		});	
 	});
 };

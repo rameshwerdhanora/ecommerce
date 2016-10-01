@@ -23,9 +23,9 @@ block content
                 img(alt='Delete', src='/images/delete-icon.png')
             ul.nav.nav-tabs
               li.active
-                a(href='#panel-278853', data-toggle='tab') Users 
+                a.userTab(href='#panel-278853', data-toggle='tab') Users 
               li
-                a(href='#panel-4338', data-toggle='tab') Shops
+                a.shopTab(href='#panel-4338', data-toggle='tab') Shops
             .tab-content
               #panel-278853.tab-pane.active
                 .low-tbl-box.order-txt
@@ -47,17 +47,17 @@ block content
                               td(align='center')
                                 input#checkbox4(type='checkbox', name='checkbox4')
                               td
-                                img.custImg(src='/#{getCustomer.profile_image}', alt='img')
+                                img.custImg.profile-icons(src='/#{getCustomer.profile_image ? getCustomer.profile_image : "noPhoto2.png"}', alt='img')
                               td @#{getCustomer.user_name} 
                               td.ord-title 
-                                a.ord-title(href='/user/shopuser_profile/#{getCustomer._id}') #{getCustomer.first_name} #{getCustomer.last_name}
-                              td #{dateFormat(parseInt(getCustomer.createdAt),"dS mmm yyyy h:MM:ss TT")}
+                                a.ord-title(href='/user/view/#{getCustomer._id}') #{getCustomer.first_name} #{getCustomer.last_name}
+                              td #{dateFormat(getCustomer.createdAt,'dS mmm yyyy h:MM:ss TT')} 
                               td
                                 | ONLINE 
                                 span.online-icon
                                   img(src='/images/online-icon.png', alt='online')
                               td
-                                a.edit-btn.view-btn(href='#')
+                                a.edit-btn.view-btn(href='/user/view/#{getCustomer._id}')
                                   span
                                     img(src='/images/eye-icon.png', alt='icon')
                                   |                               VIEW    
@@ -90,10 +90,10 @@ block content
                               td(align='center')
                                 input#checkbox4(type='checkbox', name='checkbox4')
                               td
-                                img.custImg(src='/#{getUser.profile_image}', alt='img')
+                                img.custImg.profile-icons(src='/#{getUser.profile_image ? getUser.profile_image : "images/noPhoto2.png"}', alt='img')
                               td.ord-title 
                                 a.ord-title(href='/user/view/#{getUser._id}') #{getUser.shop_name}
-                              td #{dateFormat(parseInt(getUser.createdAt),"dS mmm yyyy h:MM:ss TT")}
+                              td #{dateFormat(getUser.createdAt,"dS mmm yyyy h:MM:ss TT")}
                               td 
                                - if(user.role_id==3){
                                     | Brand
@@ -107,11 +107,58 @@ block content
                               td #{getUser.country}
                               td #{getUser.email_id}
                               td
-                                a.edit-btn.view-btn(href='#')
+                                a.edit-btn.view-btn(href='/user/view/#{getUser._id}')
                                   span
                                     img(src='/images/eye-icon.png', alt='icon')
                                   |  VIEW
                         else
                           tr
                             td(colspan=12)
-                              | No Customers  
+                              | No Customers     
+        #showUserPagi                      
+            include ../partials/pagination   
+        #showShopPagi.dnone                                  
+            - if(totalPageSecond > 1){
+                - currentPageSecond = parseInt(currentPageSecond)
+                 ul.pagination
+                    - var links = 3;
+                    - var scls = (currentPageSecond  == 1)?'disabled':'';
+                    - var lcls = (totalPageSecond == currentPageSecond)?'disabled':'';
+
+                    - var firstCls = (currentPageSecond == 1)?'disabled':'';
+                    li(class=firstCls)
+                        span
+                            a(href='?pagesecond=1') First
+                    li(class=scls)
+                        span
+                            a(href='?pagesecond='+(currentPageSecond-1)) &laquo;        
+
+                    - for (var i=1; i<=totalPageSecond; i++){
+                        - var cpageCls1 = (currentPageSecond == i)?'active':'';
+                        - if( ((i >= (currentPageSecond-links)) && (i <= currentPageSecond)) || ((i <= (currentPageSecond+links)) && (i > currentPageSecond))){
+                            li(class=cpageCls1)
+                              span
+                                a(href='?pagesecond='+i ) #{i}
+                        - } 
+                    - }
+
+                    li(class=lcls)
+                        span
+                            a(href='?pagesecond='+(currentPageSecond+1)) &raquo;
+
+                    - var firstCls = (currentPageSecond == totalPageSecond)?'disabled':'';
+                    li(class=firstCls)
+                        span
+                            a(href='?pagesecond='+totalPageSecond) Last
+            - }
+            script.
+              $(document).ready(function() {
+                $('.userTab').click(function(){
+                   $('#showUserPagi').show();
+                   $('#showShopPagi').hide();
+                });
+                $('.shopTab').click(function(){
+                   $('#showShopPagi').show();
+                   $('#showUserPagi').hide();
+                });
+              });

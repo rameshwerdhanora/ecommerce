@@ -16,15 +16,14 @@ block content
         .profile-top-row
           h2 MANAGE SIZES
         h3.sub-heading 
-          | SIZES  
         .profile-form-box.users-in
           .low-tbl-box
             table(width='100%')
              tr
               //th Sr.no
               th GENDER
-              th CATEGORIES
-              //th Size Name
+              th SIZES
+              th Options
               //th Remove
               //th Edit
              - var i=0;
@@ -45,7 +44,7 @@ block content
                 td
                   - for(var cr=0;cr<result[i].length;cr++){
                       p
-                        | #{result[i][cr].name}
+                        a.ord-title(href='/size/edit/#{result[i][cr].id}') #{result[i][cr].name}
                   - }
 
                 td

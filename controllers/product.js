@@ -589,8 +589,10 @@ exports.getAttrib = (req,res)=>{
         var sizeAr = new Array();
         if(sizeRes !== undefined){
             for(var i=0;i < sizeRes.length;i++){
-                for(j=0;j < sizeRes[i].listofattrmap.length;j++){
-                    sizeAr.push(sizeRes[i].listofattrmap[j]);
+                if(sizeRes[i].listofattrmap.length>0){
+                    for(j=0;j < sizeRes[i].listofattrmap.length;j++){
+                        sizeAr.push(sizeRes[i].listofattrmap[j]);
+                    }
                 }
             }
             // Get Attribute for the Sizes
