@@ -265,6 +265,13 @@ block content
                             option(value='male') Male
                             option(value='female') female
                             option(value='unisex') Unisex
+                  .profile-frm-row.product_select
+                    .profile-frm-cl1 FEATURED
+                    .profile-frm-cl2
+                      select#is_featured.is_featured(name='is_featured', required='required')
+                            option(value='') Select Feature
+                            option(value='1') Yes
+                            option(value='0') No
                         
                   .profile-frm-row.product_select
                     .profile-frm-cl1 CATEGORY
@@ -435,6 +442,13 @@ block content
                         option(value='male',selected=(productRes.gender == 'male')) Male
                         option(value='female',selected=(productRes.gender == 'female')) female
                         option(value='unisex',selected=(productRes.gender == 'unisex')) Unisex
+                  .profile-frm-row.product_select
+                    .profile-frm-cl1 FEATURED
+                    .profile-frm-cl2
+                      select#is_featured.is_featured(name='is_featured', required='required')
+                            option(value='') Select Feature
+                            option(value='1',selected=(productRes.is_featured == '1')) Yes
+                            option(value='0',selected=(productRes.is_featured == '0')) No    
                             
                   .profile-frm-row.product_select
                     .profile-frm-cl1 CATEGORY

@@ -13,7 +13,7 @@ exports.index = (req, res) => {
     return res.redirect('/login');
   }
 
-  Order.find({status:Constants.ORDERSTATUSPENDING},function(error,fetchAllOrderData){
+  /*Order.find({status:Constants.ORDERSTATUSPENDING},function(error,fetchAllOrderData){
 
     if(fetchAllOrderData)
     {
