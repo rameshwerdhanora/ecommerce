@@ -387,6 +387,7 @@ exports.postUpdateProfile = function(req,res)
 function signUpFromSocial(req,res,constants)
 {
 	//console.log(req.body);
+	var profile_image = req.body.profile_image != '' ? req.body.profile_image : '';
 	var email_id = (req.body.email) ?  req.body.email : '';
 	var userIns        		= new User();
 	userIns.role_id    		= Constants.CUSTOMERROLE;
@@ -401,7 +402,7 @@ function signUpFromSocial(req,res,constants)
     userIns.bio   			= '';
     userIns.cover_image		= '';
     userIns.isFomo			= '0';
-    userIns.profile_image   = '';
+    userIns.profile_image   = profile_image;
     userIns.social_type   	= constants ;
     userIns.social_id   	= req.body.userid;
     userIns.access_token   	= req.body.token;
