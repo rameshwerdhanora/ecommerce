@@ -315,6 +315,7 @@ app.post('/product/update', passportConfig.isAuthenticated,  productController.u
 app.get('/product/delete/:productId', passportConfig.isAuthenticated,  productController.removeProduct);
 app.get('/product/fetchselectedcategory/:catId', passportConfig.isAuthenticated,  productController.selectedCategory);
 app.get('/product/loadattrvalues/:attrId', passportConfig.isAuthenticated,  productController.loadAttrValues);
+app.post('/product/updatediscount', passportConfig.isAuthenticated,  productController.updateDiscount);
 
 
 /* Category CRUD Section */ // Need isAuthenticated code for check user is loggedin.

@@ -107,6 +107,7 @@ block content
               th PRICE
             tbody
              if fetchAllProducts.length > 0
+              - var i=0;
               each fetchAllProduct in fetchAllProducts
                -i++; 
                 tr
@@ -165,38 +166,41 @@ block content
                       
                     .discount
                       a(href='/product/list/#{fetchAllProduct._id}') EDIT ITEM
-                      a#modal-702679.btn(href='#modal-container-702679', role='button', data-toggle='modal') Apply Discount code
+                      a.btn(href='#modal-container-#{fetchAllProduct._id}', role='button', data-toggle='modal',id='modal-#{fetchAllProduct._id}') Apply Discount code
+                    
+                    .modal.fade(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true',id='modal-container-#{fetchAllProduct._id}')
+                        .modal-dialog.discount_coupan.popup-wdt-1
+                          .modal-content
+                            .modal-header
+                              h4 APPLY DISCOUNT CODE
+                            .modal-body
+                              .profile-right-cl
+                                form(action='/product/updatediscount', method='post')
+                                  .profile-frm-row
+                                    .profile-frm-cl1 Discount Name
+                                    .profile-frm-cl2
+                                      input(type='hidden',name='product_id',value='#{fetchAllProduct._id}')
+                                      input#up_dis_name(type='text', name='up_dis_name',value='#{fetchAllProduct.dis_name}',required='required')
+                                  .profile-frm-row
+                                    .profile-frm-cl1 Type of Discount
+                                    .profile-frm-cl2
+                                      select#up_dis_type(name='up_dis_type',required='required')
+                                        option(value='percentage',selected=(fetchAllProduct.dis_type == 'percentage')) Percentage
+                                        option(value='fixed',selected=(fetchAllProduct.dis_type == 'fixed')) Fixed
+
+                                  .profile-frm-row
+                                    .profile-frm-cl1 Amount
+                                    .profile-frm-cl2
+                                      input#up_dis_amount(type='number', name='up_dis_amount',value='#{fetchAllProduct.dis_amount}',required='required')
+                                  .clearfix
+                                    .modal-footer
+                                      button#upCoponFrm.btn.btn-primary(type='submit') APPLY
           
         include ../partials/pagination
           
     // --- add product popup --
     <!----- discount coupan popup ---->
-    #modal-container-702679.modal.fade(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
-      .modal-dialog.discount_coupan.popup-wdt-1
-        .modal-content
-          .modal-header
-            h4 APPLY DISCOUNT CODE
-          .modal-body
-            .profile-right-cl
-              form(action='', method='post')
-                .profile-frm-row
-                  .profile-frm-cl1 Discount Name
-                  .profile-frm-cl2
-                    input#p_add_dis_name(type='text', name='p_add_dis_name', value='')
-                .profile-frm-row
-                  .profile-frm-cl1 Type of Discount
-                  .profile-frm-cl2
-                    select#p_add_dis_type(name='p_add_dis_type')
-                      option(value='percentage') Percentage
-                      option(value='fixed') Fixed
-                      
-                .profile-frm-row
-                  .profile-frm-cl1 Amount
-                  .profile-frm-cl2
-                    input#p_add_dis_amount(type='text', name='p_add_dis_amount', value='')
-                .clearfix
-              .modal-footer
-                button#p_add_dis_btn.btn.btn-primary(type='button') APPLY 
+     
 
     #modal-container.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
       .modal-dialog.popup-wdt-2

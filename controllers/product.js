@@ -444,7 +444,6 @@ exports.saveProduct = (req, res) => {
             req.flash('errors',er);
             res.redirect('/product/list');
         }
-        
     });
 }; 
 
@@ -650,5 +649,22 @@ exports.getAttrib = (req,res)=>{
         }else{
             res.send({status:'error',data:{}});
         }
+    });
+};
+
+
+exports.updateDiscount = (req,res) => {
+    updateData = {
+        dis_name : req.body.up_dis_name,
+	dis_type : req.body.up_dis_type,
+	dis_amount : req.body.up_dis_amount,  
+    };
+    Product.update({_id:req.body.product_id},updateData,{upsert:true},function(error,upRes){
+        if(error == null){
+            req.flash('success', ['Discount has been added for the product']);
+        }else{
+            req.flash('errors', ['Something went wronge!']);
+        }
+        return res.redirect('/product/list');
     });
 };
