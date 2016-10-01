@@ -72,7 +72,20 @@
                   a(href='/product/list/add') Add Product
             -}
             
-            -if(user.role_id ==1  && user.role_id ==2){
+            
+            -if(user.role_id == 1  || user.role_id == 2){
+            
+            li
+              a(href='/category/list') Manage Categories
+            li
+              a(href='/color/list') Manage Colors
+            li
+              a(href='/size/list') Manage Sizes
+            li
+              a(href='/brand/list') Manage Brands
+            li
+              a(href='/attribute/list') Manage Attributes
+
             li
               span.sub-title Hash Tag
             li
