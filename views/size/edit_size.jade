@@ -31,6 +31,7 @@ block content
                         select.sizegender(name='gender')
                             option(value='male', selected=(fetchSize.gender == 'male')) Male
                             option(value='female', selected=(fetchSize.gender == 'female')) female
+                            option(value='unisex', selected=(fetchSize.gender == 'unisex')) Unisex
                             
                 .profile-frm-row
                     .profile-frm-cl1 
@@ -40,11 +41,11 @@ block content
                           each fetchAllAttributes in fetchAllAttribute
                             - var tempSelect = true
                             - for(var i=0; i<fetchSize.listofattrmap.length; i++){
-                                  - if(fetchAllAttributes._id == fetchSize.listofattrmap[i]){
-                                     - var tempSelect = false
-                                       option(value='#{fetchAllAttributes._id}', selected=(fetchAllAttributes._id == fetchSize.listofattrmap[i])) #{fetchAllAttributes.name} 
-                                  - }    
-                             - }
+                                - if(fetchAllAttributes._id == fetchSize.listofattrmap[i]){
+                                    - var tempSelect = false
+                                    option(value='#{fetchAllAttributes._id}', selected=(fetchAllAttributes._id == fetchSize.listofattrmap[i])) #{fetchAllAttributes.name} 
+                                - }
+                            - }
                             - if(tempSelect){
                                  option(value='#{fetchAllAttributes._id}') #{fetchAllAttributes.name} 
                             - }

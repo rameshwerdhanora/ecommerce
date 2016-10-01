@@ -28,7 +28,7 @@ exports.listOfSize = (req, res) => {
             var tmpAr = {};
             tmpAr['id']  = record._id;
             tmpAr['name'] = record.size_name;
-            console.log(1);
+
             /* Use asyn Parallel method for waiting those functions value */
             async.parallel(
                 [
@@ -92,7 +92,7 @@ exports.listOfSize = (req, res) => {
             }
             */
 
-            console.log(finalRs);
+            
 
             res.render('size/list', {
                 title: 'Size',
@@ -111,7 +111,8 @@ exports.addSize = (req, res) => {
 		res.render('size/add_size', {
 		    title: 'Size',
 		    fetchAllAttribute:fetchAllAttribute,
-                    left_activeClass:3
+                    left_activeClass:3,
+                    activeClass:4,
 		});	
 	})	
   
@@ -162,7 +163,8 @@ exports.editSize = (req,res) => {
                     }
                     else 
                     {
-                            res.render('size/edit_size', { title: 'Size',fetchSize:fetchSize,fetchAllAttribute:fetchAllAttribute});
+                            res.render('size/edit_size', { title: 'Size',fetchSize:fetchSize,fetchAllAttribute:fetchAllAttribute,left_activeClass:3,
+                    activeClass:4});
                     }
 		});	
 	});
@@ -172,7 +174,6 @@ exports.editSize = (req,res) => {
 
 exports.updateSize = (req,res) => {
 
-	console.log(req.body);
 	updateData = {
 		'size_name' 		: req.body.size_name,
 		'gender'			: req.body.gender,

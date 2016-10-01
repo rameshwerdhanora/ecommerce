@@ -584,7 +584,8 @@ exports.loadAttrValues = (req,res) => {
 
 exports.getAttrib = (req,res)=>{
     //Get Size for the Gender
-    Size.find({gender:req.body.gender},function(error,sizeRes){
+    //Size.find({gender:req.body.gender},function(error,sizeRes){
+    Size.find({"$or":[{"gender": req.body.gender},{"gender": "unisex"}]},function(error,sizeRes){
         var sizeAr = new Array();
         if(sizeRes !== undefined){
             for(var i=0;i < sizeRes.length;i++){
