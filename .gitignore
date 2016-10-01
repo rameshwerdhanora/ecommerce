@@ -33,3 +33,8 @@ Thumbs.db
 /Ecommerce/nbproject/private/
 /ecommerce/nbproject/private/
 /EcommerceNode/nbproject/private/
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
