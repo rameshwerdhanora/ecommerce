@@ -91,16 +91,33 @@ exports.postSignupManuallySave = function(req,res)
 				    userIns.save(function(error){
 						if(error === null)
 						{	
-							// SendMailToUser(req.body);
-							return res.json({"status":'success',"msg":'Your details is successfully stored.',
-								"newId":userIns._id,
-								"username" : userIns.user_name,
-								"email_id" : userIns.email_id,
-								"first_name" : userIns.first_name,
-								"last_name" : userIns.last_name
+							
+							var userDetailsIns  			= new UserDetails();
+							userDetailsIns.shr_fb 			= '0';
+							userDetailsIns.shr_tw 			= '0';
+							userDetailsIns.shr_intg 		= '0';
+							userDetailsIns.enable_filter 	= '0';
+							userDetailsIns.user_id 			= userIns._id;
+							//userDetailsIns.configDetail 	= new Array({Size:new Array(),brands:new Array()});
+							userDetailsIns.save(function(error){
+								if(error)
+								{	
+									return res.json({"status":'error',"msg":error});
+								}
+								else 
+								{ 
+									return res.json({"status":'success',"msg":'Your details is successfully stored.',
+										"newId":userIns._id,
+										"username" : userIns.user_name,
+										"email_id" : userIns.email_id,
+										"first_name" : userIns.first_name,
+										"last_name" : userIns.last_name
+									});
+									// SendMailToUser(req.body);
+								}
 							});
-						}
-						else 
+						}	
+						else  
 						{
 							return res.json({"status":'error',"msg":error});
 						}
@@ -211,7 +228,7 @@ exports.postForgetPassword = function(req,res)
 				return res.json({"status":'error',"msg":'This Email address is not available.'});
 			}
 		});
-  	}
+  	} 
   	else 
 	{
 		return res.json({"status":'error',"msg":'Device Token is not available.'});
@@ -313,6 +330,7 @@ exports.getUserProfile = function(req,res)
 
 exports.postUpdateProfile = function(req,res) 
 {
+
 	if(req.body.device_token !== '')
   	{	
   		updateData = {
@@ -332,9 +350,9 @@ exports.postUpdateProfile = function(req,res)
 			}
 			else 
 			{
-				UserDetails.findOne({user_id:req.params.userid},function(error,fetchUserDetails)
+				UserDetails.findOne({user_id:req.body.userid},function(error,fetchUserDetails)
 				{
-					if(fetchUserDetails.shr_fb)
+					if(fetchUserDetails.shr_fb != null)
 					{
 						updateUserDetailsData = 
 						{
@@ -351,11 +369,12 @@ exports.postUpdateProfile = function(req,res)
 					}
 					else 
 					{
-						var userDetailsIns  	= new UserDetails();
-						userDetailsIns.shr_fb 	= req.body.shr_fb;
-						userDetailsIns.shr_tw 	= req.body.shr_fb;
-						userDetailsIns.shr_intg = req.body.shr_fb;
-						userDetailsIns.enable_filter = req.body.shr_fb;
+						var userDetailsIns  			= new UserDetails();
+						userDetailsIns.shr_fb 			= req.body.shr_fb;
+						userDetailsIns.shr_tw 			= req.body.shr_fb;
+						userDetailsIns.shr_intg 		= req.body.shr_fb;
+						userDetailsIns.enable_filter 	= req.body.shr_fb;
+						userDetailsIns.user_id 			= req.body.user_id;
 						userDetailsIns.save(function(error){
 							if(error)
 							{	
@@ -418,15 +437,22 @@ function signUpFromSocial(req,res,constants)
 		}
 		else 
 		{
-			UserDetails.findOne({user_id:userIns._id},function(error,fetchUserDetails)
-			{
-				if(fetchUserDetails)
-				{
-					return res.json({"status":'success',"msg":'Login Successfully.',newId:userIns._id,alluserData:userIns,configData:fetchUserDetails.configDetail});
+			var userDetailsIns  			= new UserDetails();
+			userDetailsIns.shr_fb 			= '0';
+			userDetailsIns.shr_tw 			= '0';
+			userDetailsIns.shr_intg 		= '0';
+			userDetailsIns.enable_filter 	= '0';
+			userDetailsIns.user_id 			= userIns._id;
+			//userDetailsIns.configDetail 	= new Array({Size:new Array(),brands:new Array()});
+			userDetailsIns.save(function(error){
+				if(error)
+				{	
+					return res.json({"status":'error',"msg":error});
 				}
 				else 
 				{
-					return res.json({"status":'success',"msg":'Login Successfully.',newId:userIns._id,alluserData:userIns,configData:''});
+					return res.json({"status":'success',"msg":'Login Successfully.',newId:userIns._id,alluserData:userIns,configData:userDetailsIns.configDetail});
+					// SendMailToUser(req.body);
 				}
 			});
 			// SendMailToUser(req.body);
