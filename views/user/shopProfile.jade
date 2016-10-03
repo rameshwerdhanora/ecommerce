@@ -51,13 +51,13 @@ block content
               .profile-frm-row
                 .profile-frm-cl1 Profile Image
                 .profile-frm-cl2
-                  img(src='/#{getUserDetails.profile_image}', alt='icon')
+                  img(src='#{getUserDetails.profile_image}', alt='icon')
                   input(type='file', name='profile_image')
               -if(user.role_id == 3 || user.role_id == 4){    
                 .profile-frm-row
                     .profile-frm-cl1 Cover Photo
                     .profile-frm-cl2
-                      img(src='/#{getUserDetails.cover_image}', alt='icon') 
+                      img(src='#{getUserDetails.cover_image}', alt='icon') 
                       input(type='file', name='cover_image')
               -}    
              
