@@ -91,6 +91,12 @@ exports.listOfSizeAttribute = (req, res) => {
 * Process to Save user configuration from Application.
 */
 
+function checkAvailability(arr, val) {
+    return arr.some(function(arrVal) {
+        return val == arrVal;
+    });
+}
+
 exports.fetchCofiguration = function(req,res){
 
 	User.findOne({_id:req.params.userId}, { isFomo: true, _id: false } ,function(error,checkFomoSetting)
@@ -125,9 +131,9 @@ exports.fetchCofiguration = function(req,res){
 					          	[
 					            	function(callback)
 					             	{
-				             			if(tempAttribAr[0] == sizeId._id)
+				             			var checkSizeId = checkAvailability(tempAttribAr, sizeId._id); //false
+				             			if(checkSizeId)
 				             			{
-				             				tempAttribAr.shift();
 					             			fetchingAllAttrValue(saveAttr[sizeId._id], function(err, res)
 					             			{
 							                	if(res)
