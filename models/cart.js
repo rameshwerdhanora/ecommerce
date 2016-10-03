@@ -5,7 +5,7 @@ const cartSchema = new mongoose.Schema({
 	product_id : String,
 	brand_id : String,
 	quantity:String,
-	size:String,//Comma separated
+	size:Array,//Comma separated
 	color_id:String,
 	appliedcoupon:String,
 	created:Date,
