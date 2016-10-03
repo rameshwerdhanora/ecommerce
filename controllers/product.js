@@ -133,9 +133,9 @@ exports.listOfProducts = (req, res) => {
             });	
         });
      } else if(req.user.role_id==3 || req.user.role_id==4 || req.user.role_id==5){
-            Product.count(function(error, totalRecord) {
+            Product.count({user_id:req.user._id},function(error, totalRecord) {
             var totalPage = Math.ceil(totalRecord/Constants.RECORDS_PER_PAGE);
-            Product.find()
+            Product.find({user_id:req.user._id})
                 .limit(Constants.RECORDS_PER_PAGE)
                 .skip(skipRecord)
                 .sort('-_id')
@@ -396,7 +396,7 @@ exports.saveProduct = (req, res) => {
             productIns.user_id = req.user._id; 
             productIns.created = Date.now();
             productIns.update = Date.now();
-            productIns.users_id = 1;
+            //productIns.users_id = 1;
             productIns.dis_name = req.body.add_dis_name;
             productIns.dis_type = req.body.add_dis_type;
             productIns.dis_amount = req.body.add_dis_amount;

@@ -23,7 +23,7 @@ header
               a(href='#')
                 span.my-name  #{user.first_name} #{user.last_name}
                 span.my-photo
-                  img(src='#{user.profile_image}', alt='img')
+                  img(src='#{user.profile_image ? user.profile_image : "/images/noPhoto2.png"}', alt='img')
             //li
               a(href='#')
                 i.fa.fa-check-square-o

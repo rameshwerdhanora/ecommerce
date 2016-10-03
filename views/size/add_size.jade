@@ -35,7 +35,7 @@ block content
                         .profile-frm-cl1
                             |Select Attribute
                         .profile-frm-cl2
-                            select(multiple='multiple' name='listofattrmap[]' class='listofattrmap')
+                            select.multiselect-item(multiple='multiple' name='listofattrmap[]' class='listofattrmap')
                                 each fetchAllAttributes in fetchAllAttribute
                                     option(value='#{fetchAllAttributes._id}') #{fetchAllAttributes.name}
                                     

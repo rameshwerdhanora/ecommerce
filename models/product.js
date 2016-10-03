@@ -10,7 +10,7 @@ const productSchema = new mongoose.Schema({
         sku : String,
         price : String,
         description : String,
-	users_id : String,
+	user_id : String,
 	description : String,
 	productview:String,
 	is_featured : String,

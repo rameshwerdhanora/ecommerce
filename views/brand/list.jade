@@ -38,13 +38,14 @@ block content
                       | ADD BRAND
                   .modal-body
                     .upload-box
-                      .upload-in
-                        input.brand_logo(type='file', name='brand_logo', required='required')
+                      .upload-in.fileUpload.fl-upload 
+                          span.up-txt Upload
+                          input.brand_logo.upload(type='file', name='brand_logo', required='required')
                       p.up-title Upload Logo
                     .color-row
                       .cl-name Brand Cover
                       .cl-inp
-                        input(name='brand_cover', type='file', required='required')  
+                        input.custom-cover(name='brand_cover', type='file', required='required')  
                     .color-row
                       .cl-name Brand Name
                       .cl-inp
@@ -54,7 +55,7 @@ block content
                       .cl-inp
                         textarea(name='brand_desc', required='required')
                   .modal-footer
-                    input(type='submit',value='| Save',name='save')
+                    input(type='submit',value='Save',name='save')
 
 
         -if(editRes){
@@ -71,8 +72,9 @@ block content
                       | Update BRAND
                   .modal-body
                     .upload-box
-                      .upload-in
-                        input.brand_logo(type='file', name='brand_logo')
+                      .upload-in.fileUpload.fl-upload 
+                        span.up-txt Upload
+                        input.brand_logo.upload(type='file', name='brand_logo')
                       p.up-title Upload Logo
                     .color-row
                       .cl-name Brand Name
@@ -81,7 +83,7 @@ block content
                     .color-row
                       .cl-name Brand Cover
                       .cl-inp
-                        input(name='brand_cover', type='file',value="#{editRes.brand_cover}")    
+                        input.custom-cover(name='brand_cover', type='file',value="#{editRes.brand_cover}")    
                     .color-row
                       .cl-name Brand Description
                       .cl-inp

@@ -104,7 +104,7 @@ $(document).ready(function() {
   
     /* Attribut Page:  To add more attribut Row */
     $("input[type='button'][name='addMoreAttribBtn']").click(function(n){
-          var rowHtml =  '<div class="profile-frm-row attribOptionRow"><div class="profile-frm-cl1"><input type="text" value="" name="optionName[]" required="required" /></div><div class="profile-frm-cl2"><span class="yes-cl"><input type="button" name="delOptionBtn[]" value="Delete" class="css-checkbox"/></span></div></div>';
+          var rowHtml =  '<div class="profile-frm-row attribOptionRow"><div class="profile-frm-cl1"><input type="text" value="" name="optionName[]" required="required" /></div><div class="profile-frm-cl2"><span class="yes-cl"><input type="button" name="delOptionBtn[]" value="Delete" class="css-checkbox other-btn"/></span></div></div>';
           $(".addAttribOptionHeaderRow").after(rowHtml);
     });
     $(".attributeType").change(function(){

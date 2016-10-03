@@ -42,8 +42,9 @@ block content
                     | ADD COLOR
                 .modal-body
                   .upload-box
-                    .upload-in
-                      input.color_logo(type='file', name='color_logo', required='required')
+                    .upload-in.fileUpload.fl-upload 
+                      span.up-txt Upload
+                      input.color_logo.upload(type='file', name='color_logo', required='required')
                     p.up-title Upload color
                   .color-row.spc-row
                     .cl-name COLOR NAME
@@ -68,8 +69,9 @@ block content
                         | Update COLOR
                     .modal-body
                       .upload-box
-                        .upload-in
-                          input.color_logo(type='file', name='color_logo')
+                        .upload-in.fileUpload.fl-upload 
+                          span.up-txt Upload
+                          input.color_logo.upload(type='file', name='color_logo')
                         p.up-title Upload color
                       .color-row.spc-row
                         .cl-name COLOR NAME

@@ -19,7 +19,7 @@ block content
                     input(type='submit', name='save', value='Save',class='save-btn')
                     input(type='hidden', name='template_id', value='#{result._id}')
                 .profile-form-box
-                  .profile-right-cl
+                  .profile-right-cl.profile-full-cl
                     form(action='', method='post')
                       .profile-frm-row
                         .profile-frm-cl1  Name 
@@ -49,7 +49,7 @@ block content
                         .profile-frm-cl2
                           textarea(name='mobile_content',id='mobile_content') #{result.mobile_content}       
                       .profile-frm-row
-                        .profile-frm-cl1 Email Content
+                        .profile-frm-cl1.email-content Email Content
                         .profile-frm-cl2.w610
                             textarea(name='content',id='editor') #{result.content}
                           
