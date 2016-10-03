@@ -47,7 +47,7 @@ block content
                               td(align='center')
                                 input#checkbox4(type='checkbox', name='checkbox4')
                               td
-                                img.custImg.profile-icons(src='#{getCustomer.profile_image ? getCustomer.profile_image : "noPhoto2.png"}', alt='img')
+                                img.custImg.profile-icons(src='#{getCustomer.profile_image ? getCustomer.profile_image : "/images/noPhoto2.png"}', alt='img')
                               td @#{getCustomer.user_name} 
                               td.ord-title 
                                 a.ord-title(href='/user/shop_user_view/#{getCustomer._id}') #{getCustomer.first_name} #{getCustomer.last_name}
@@ -90,7 +90,7 @@ block content
                               td(align='center')
                                 input#checkbox4(type='checkbox', name='checkbox4')
                               td
-                                img.custImg.profile-icons(src='#{getUser.profile_image ? getUser.profile_image : "images/noPhoto2.png"}', alt='img')
+                                img.custImg.profile-icons(src='#{getUser.profile_image ? getUser.profile_image : "/images/noPhoto2.png"}', alt='img')
                               td.ord-title 
                                 a.ord-title(href='/user/shopuser_profile/#{getUser._id}') #{getUser.shop_name}
                               td #{dateFormat(getUser.createdAt,"dS mmm yyyy h:MM:ss TT")}

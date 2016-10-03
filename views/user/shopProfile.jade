@@ -35,15 +35,15 @@ block content
               .profile-frm-row
                 .profile-frm-cl1 State
                 .profile-frm-cl2
-                  input(name='state', type='text', value='#{getUserDetails.state}')
+                  input(name='state', type='text', value='#{getUserDetails.state ? getUserDetails.state : ""}')
               .profile-frm-row
                 .profile-frm-cl1 Zip Code 
                 .profile-frm-cl2
-                  input(name='zip', type='text', value='#{getUserDetails.zip}')
+                  input(name='zip', type='text', value='#{getUserDetails.zip ? getUserDetails.zip : ""}')
               .profile-frm-row
                 .profile-frm-cl1 Country
                 .profile-frm-cl2
-                  input(name='country', type='text', value='#{getUserDetails.country}')
+                  input(name='country', type='text', value='#{getUserDetails.country ? getUserDetails.country : ""}')
               .profile-frm-row
                 .profile-frm-cl1 Bio
                 .profile-frm-cl2
@@ -51,7 +51,7 @@ block content
               .profile-frm-row
                 .profile-frm-cl1 Profile Image
                 .profile-frm-cl2
-                  img(src='#{getUserDetails.profile_image}', alt='icon')
+                  img(src='#{getUserDetails.profile_image ? getUserDetails.profile_image : "/images/noPhoto2.png"}', alt='icon')
                   input(type='file', name='profile_image')
               -if(user.role_id == 3 || user.role_id == 4){    
                 .profile-frm-row
