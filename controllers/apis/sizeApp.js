@@ -174,9 +174,7 @@ exports.fetchCofiguration = function(req,res){
 		{
 			Size.find({is_published:'true'},function(error,getAllSizes){
 				if(getAllSizes)
-				{	
-					
-					var sizeArr = [];
+				{						var sizeArr = [];
 					for (var i = 0; i < getAllSizes.length; i++) 
 					{
 						var sizeObj 		= {};
@@ -199,7 +197,7 @@ exports.fetchCofiguration = function(req,res){
 }
 
 
-function fetchingAllAttrValue(attributeSizes, callback)
+function fetchingAllAttrValue(attributeSizes, callback) 
 {
 	AttributeOption.find({_id:{$in:attributeSizes}},function(error,fetchAllAttributeOptions)
 	{
@@ -220,7 +218,9 @@ function fetchingAllAttrValue(attributeSizes, callback)
 		 
 		if(fetchUserConfigDetails.configDetail)
 	 	{	
-	 		var userSize = fetchUserConfigDetails.configDetail[0].Size;
+ 			var userSize = fetchUserConfigDetails.configDetail[0].Size;
+
+	 		
 	 		/*var saveAttr 		= new Array();
 	 		for (var w = 0; w < userSize.length; w++) 
 			{	
@@ -301,7 +301,7 @@ exports.updateUserSizes = function(req,res)
 
   			var flag = false;
 	  		for(i=0; i<temSize.length;i++)
-	  		{	
+	  		{	 
 	  			var tmp = {};
 	  			tmp.attributeId = temSize[i].attributeId;
 	  			
@@ -321,15 +321,17 @@ exports.updateUserSizes = function(req,res)
 	  		{
 	  			tempSize.push(newSelectedVal[0]);
 	  		}
-	  		//console.log(tempSize);
 
-  			var sizeObj 		= {};
+	  		 
+	  		//console.log(tempSize);
+	  		var sizeObj 		= {};
   			sizeObj.Size  		= tempSize;
   			configDetailArr.push(sizeObj);
 
-  			var sizeObj 		= {};
-  			sizeObj.brands 		= fetchUserSizeData.configDetail[1].brands;
-  			configDetailArr.push(sizeObj);
+			var sizeObj 		= {};
+			sizeObj.brands 		= fetchUserSizeData.configDetail[1].brands;
+			configDetailArr.push(sizeObj);
+  			 	
 
   			var updateData = 
   			{
@@ -364,10 +366,3 @@ function fetchingAllSelectedAttrValue(attId, callback)
 		callback(error,fetchAllAttributeOptions);
 	});
 }
-
-
-
-
-
-
-
