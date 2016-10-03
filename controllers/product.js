@@ -343,6 +343,14 @@ exports.editProduct = (req, res) => {
 /* Save Product */
 exports.saveProduct = (req, res) => {
     
+    /***To create directory if not exist***/
+    var fs = require('fs');
+    var dirProductImg = './public/uploads/product_images';
+
+    if (!fs.existsSync(dirProductImg)){
+        fs.mkdirSync(dirProductImg);
+    }
+    
     // If Super user trying to create product then give deny him
     if(req.user.role_id == Constants.MASTERROLE && req.params.productId == 'add'){
         req.flash('errors', ['Super admin can not create product. This feature is only for the Shop user']);

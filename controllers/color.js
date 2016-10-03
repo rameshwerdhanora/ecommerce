@@ -53,6 +53,15 @@ exports.listOfColor = (req, res) => {
 
 /* Save Color Information */
 exports.saveColor = (req,res) => {
+    
+    /***To create directory if not exist***/
+    var fs = require('fs');
+    var dirColorImg = './public/uploads/color_logo';
+
+    if (!fs.existsSync(dirColorImg)){
+        fs.mkdirSync(dirColorImg);
+    }
+    
     uploadColor(req,res,function(err) {
         Color.count({color_name:req.body.color_name},function(error,colorCount){
             if(colorCount == 0){
@@ -121,6 +130,15 @@ exports.editColor = (req,res) => {
 
 /* Update edit details */
 exports.updateColor = (req,res) => {
+    
+    /***To create directory if not exist***/
+    var fs = require('fs');
+    var dirColorImg = './public/uploads/color_logo';
+
+    if (!fs.existsSync(dirColorImg)){
+        fs.mkdirSync(dirColorImg);
+    }
+    
     uploadColor(req,res,function(err) {
         if(err) {
             req.flash('errors', 'Something Wrong!!');

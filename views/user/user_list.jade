@@ -50,14 +50,14 @@ block content
                                 img.custImg.profile-icons(src='#{getCustomer.profile_image ? getCustomer.profile_image : "/images/noPhoto2.png"}', alt='img')
                               td @#{getCustomer.user_name} 
                               td.ord-title 
-                                a.ord-title(href='/user/shop_user_view/#{getCustomer._id}') #{getCustomer.first_name} #{getCustomer.last_name}
+                                a.ord-title(href='/user/shopuser_profile/#{getCustomer._id}') #{getCustomer.first_name} #{getCustomer.last_name}
                               td #{dateFormat(getCustomer.createdAt,'dS mmm yyyy h:MM:ss TT')} 
                               td
                                 | ONLINE 
                                 span.online-icon
                                   img(src='/images/online-icon.png', alt='online')
                               td
-                                a.edit-btn.view-btn(href='/user/shop_user_view/#{getCustomer._id}')
+                                a.edit-btn.view-btn(href='/user/shopuser_profile/#{getCustomer._id}')
                                   span
                                     img(src='/images/eye-icon.png', alt='icon')
                                   |                               VIEW    
@@ -90,9 +90,9 @@ block content
                               td(align='center')
                                 input#checkbox4(type='checkbox', name='checkbox4')
                               td
-                                img.custImg.profile-icons(src='#{getUser.profile_image ? getUser.profile_image : "/images/noPhoto2.png"}', alt='img')
+                                img.custImg(src='#{getUser.profile_image ? getUser.profile_image : "/images/noPhoto2.png"}', alt='img')
                               td.ord-title 
-                                a.ord-title(href='/user/shopuser_profile/#{getUser._id}') #{getUser.shop_name}
+                                a.ord-title(href='/user/shop_user_view/#{getUser._id}') #{getUser.shop_name}
                               td #{dateFormat(getUser.createdAt,"dS mmm yyyy h:MM:ss TT")}
                               td 
                                - if(user.role_id==3){
@@ -107,7 +107,7 @@ block content
                               td #{getUser.country}
                               td #{getUser.email_id}
                               td
-                                a.edit-btn.view-btn(href='/user/shopuser_profile/#{getUser._id}')
+                                a.edit-btn.view-btn(href='/user/shop_user_view/#{getUser._id}')
                                   span
                                     img(src='/images/eye-icon.png', alt='icon')
                                   |  VIEW

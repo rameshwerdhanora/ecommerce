@@ -59,6 +59,20 @@ exports.listOfBrand = (req, res) => {
 
 /* Save Brand Information */
 exports.saveBrand = (req,res) => {
+    
+    /***To create directory if not exist***/
+    var fs = require('fs');
+    var dirBrandLogo = './public/uploads/brands_logo';
+    var dirProfileImg = './public/uploads/profile_images';
+
+    if (!fs.existsSync(dirBrandLogo)){
+        fs.mkdirSync(dirBrandLogo);
+    }
+
+    if (!fs.existsSync(dirProfileImg)){
+        fs.mkdirSync(dirProfileImg);
+    }
+    
     uploadBrand(req,res,function(err) {
         req.assert('brand_name', 'Brand name is required').notEmpty();
         req.assert('brand_desc', 'Brand description is required').notEmpty();

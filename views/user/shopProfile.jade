@@ -13,7 +13,7 @@ block content
         .profile-top-row
           h2 SHOP PROFILE
           .edit-btn-cl
-            a.edit-btn(href='javascript:void(0);',onClick='javascript:$("#profile_up_Btn").show();') EDIT
+            a.edit-btn(href='javascript:void(0);',onClick='javascript:$("#profile_up_Btn").show();$(this).hide();') EDIT
         .profile-form-box
           .profile-right-cl
             form(action='/user/shopprofileupdate', method='post', enctype='multipart/form-data')
