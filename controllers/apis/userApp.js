@@ -82,7 +82,7 @@ exports.postSignupManuallySave = function(req,res)
 				    userIns.social_type   	= '';
 				    userIns.social_id   	= '';
 				    userIns.access_token   	= '';
-				    userIns.isFomo   		= '0';
+				    userIns.isFomo   		= '1';
 				    userIns.is_active   	= true;
 				    userIns.is_deleted   	= false;
 				    userIns.created        	= Date.now();
@@ -98,7 +98,7 @@ exports.postSignupManuallySave = function(req,res)
 							userDetailsIns.shr_intg 		= '0';
 							userDetailsIns.enable_filter 	= '0';
 							userDetailsIns.user_id 			= userIns._id;
-							//userDetailsIns.configDetail 	= new Array({Size:new Array(),brands:new Array()});
+							userDetailsIns.configDetail 	= new Array();
 							userDetailsIns.save(function(error){
 								if(error)
 								{	
@@ -420,7 +420,7 @@ function signUpFromSocial(req,res,constants)
     userIns.gender   		= '';
     userIns.bio   			= '';
     userIns.cover_image		= '';
-    userIns.isFomo			= '0';
+    userIns.isFomo			= '1';
     userIns.profile_image   = profile_image;
     userIns.social_type   	= constants ;
     userIns.social_id   	= req.body.userid;
@@ -429,7 +429,7 @@ function signUpFromSocial(req,res,constants)
     userIns.is_deleted   	= false;
     userIns.created        	= Date.now();
     userIns.updated        	= Date.now();
-
+ 
     userIns.save(function(error){
 		if(error)
 		{	
@@ -443,7 +443,7 @@ function signUpFromSocial(req,res,constants)
 			userDetailsIns.shr_intg 		= '0';
 			userDetailsIns.enable_filter 	= '0';
 			userDetailsIns.user_id 			= userIns._id;
-			//userDetailsIns.configDetail 	= new Array({Size:new Array(),brands:new Array()});
+			userDetailsIns.configDetail 	= new Array();
 			userDetailsIns.save(function(error){
 				if(error)
 				{	
@@ -661,6 +661,7 @@ exports.saveUserCofiguration = function(req,res)
 {
 	UserDetails.findOne({user_id:req.body.user_id},function(error,fetchUserConfigDetails)
 	{
+
 		if(fetchUserConfigDetails)
 		{ 
 			userConfigDetails = {
