@@ -57,7 +57,7 @@ block content
                 .profile-frm-row
                     .profile-frm-cl1 Cover Photo
                     .profile-frm-cl2
-                      img(src='#{getUserDetails.cover_image}', alt='icon') 
+                      img(src='#{getUserDetails.cover_image ? getUserDetails.cover_image : "/images/noPhoto2.png"}', alt='icon') 
                       input(type='file', name='cover_image')
               -}    
              
