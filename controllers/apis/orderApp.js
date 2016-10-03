@@ -74,7 +74,7 @@ exports.saveUserFinalOrder = (req,res) => {
 		                            				finalCartObj.price_quan		= parseInt(fetchProductDataForCart.price) * CartRes.quantity;
 		                            				finalCartObj.quantity		= CartRes.quantity;
 		                            				finalCartObj.shop_id		= fetchProductDataForCart.shop_id
-									totalPrice				   += parseInt(fetchProductDataForCart.price) * CartRes.quantity;
+													totalPrice				   += parseInt(fetchProductDataForCart.price) * CartRes.quantity;
 		                            				callback();
 			                           			}
 		                            		});
@@ -131,7 +131,7 @@ exports.saveUserFinalOrder = (req,res) => {
 		                            	},
 		                            	function(callback)
 		                            	{
-		                            		var optionIds = CartRes.size.split(',');
+		                            		var optionIds = CartRes.size;
 			                                getOptAttribute(optionIds,function(err,opRes)
 			                                {
 			                                    var tmpAttributeKey = new Array();
@@ -141,6 +141,7 @@ exports.saveUserFinalOrder = (req,res) => {
 			                                        tmpOptionValue[kk] = opRes[kk].value;
 			                                    }
 			                                    var tmpOoptionFinalAr = new Array();
+			                                    
 			                                    getAttrib(tmpAttributeKey,function(err,attribRes){
 			                                        for(var i=0;i<tmpAttributeKey.length;i++){
 			                                            for(j=0;j<attribRes.length;j++){
@@ -164,7 +165,7 @@ exports.saveUserFinalOrder = (req,res) => {
 		                            	var orderDetailsIns = new OrderDetails;
 		                            	orderDetailsIns.order_id 	= orderIns._id;
 		                            	orderDetailsIns.brand_id 	= finalCartObj.brand_id;
-						orderDetailsIns.user_id 	= req.body.user_id;
+										orderDetailsIns.user_id 	= req.body.user_id;
 		                            	orderDetailsIns.shop_id 	= finalCartObj.shop_id;
 		                            	orderDetailsIns.index 		= 'product';
 		                            	orderDetailsIns.data 		= finalCartObj;
@@ -280,7 +281,7 @@ exports.detailsOfSelectedOrder = (req,res) => {
         	orderData.itemquantity		= fetchOrdersDetails.itemquantity;
         	orderData.shipping_address	= fetchOrdersDetails.shipping_address;
         	orderData.shipping_array	= fetchOrdersDetails.shipping_array;
-        	orderData.status			= 'Unfullfilled';
+        	orderData.status			= fetchOrdersDetails.status;
         	orderData.billing_address	= fetchOrdersDetails.billing_address;
         	orderData.payment_details	= fetchOrdersDetails.payment_details;
         	orderData.order_date		= finalDate;
