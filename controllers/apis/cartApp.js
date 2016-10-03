@@ -127,7 +127,7 @@ exports.getCartProduct = (req,res) => {
                                 });
                             },
                             function(callback){// To get attribut name and option name
-                                var optionIds = CproductRes.size.split(',');
+                                var optionIds = CproductRes.size;
                                 getOptAttribute(optionIds,function(err,opRes){
                                     var tmpAttributeKey = new Array();
                                     var tmpOptionValue = new Array();
@@ -648,7 +648,7 @@ exports.showCartAccBrand = (req,res) => {
                             },
                             function(callback)
                             {// To get attribut name and option name
-                                var optionIds = CproductRes.size.split(',');
+                                var optionIds = CproductRes.size;
                                 getOptAttribute(optionIds,function(err,opRes){
                                     var tmpAttributeKey = new Array();
                                     var tmpOptionValue = new Array();
@@ -692,6 +692,7 @@ exports.showCartAccBrand = (req,res) => {
                     priceTotalObj.servicename   = req.body.shipping_array[req.body.index].serviceName;
                     priceTotalObj.totalcharges  = parseInt(req.body.shipping_array[req.body.index].TotalCharges);
                     priceTotalObj.totaldiscount = finalPriceWithDis;
+		    priceTotalObj.subtotal      = subTotal;
                     priceTotalObj.totalprice    = subTotal + parseInt(priceTotalObj.tax) + parseInt(priceTotalObj.totalcharges);
 
                     
