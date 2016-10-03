@@ -316,6 +316,7 @@ app.get('/product/delete/:productId', passportConfig.isAuthenticated,  productCo
 app.get('/product/fetchselectedcategory/:catId', passportConfig.isAuthenticated,  productController.selectedCategory);
 app.get('/product/loadattrvalues/:attrId', passportConfig.isAuthenticated,  productController.loadAttrValues);
 app.post('/product/updatediscount', passportConfig.isAuthenticated,  productController.updateDiscount);
+app.post('/product/delete-shop-product', passportConfig.isAuthenticated,  productController.removeShopProduct);
 
 
 /* Category CRUD Section */ // Need isAuthenticated code for check user is loggedin.

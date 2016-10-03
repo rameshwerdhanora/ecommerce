@@ -13,6 +13,9 @@ const Constants 		= require('../constants/constants');
 const Size 		= require('../models/size');
 const Tag				= require('../models/tag');
 const ProductsHashtag		= require('../models/productHashtag');
+const Cart		= require('../models/cart');
+const Like		= require('../models/like');
+const Wishlist		= require('../models/wishlist');
 
 
 /* Define Folder name where our user porfile stored */
@@ -677,5 +680,28 @@ exports.updateDiscount = (req,res) => {
             req.flash('errors', ['Something went wronge!']);
         }
         return res.redirect('/product/list');
+    });
+};
+
+
+/* Remove Product */
+exports.removeShopProduct = (req, res) => {
+    console.log(req.body.deleteProductArr);
+    Product.remove({_id:{$in:req.body.deleteProductArr}}, function(error, removeProductId){
+        ProductsHashtag.remove({product_id:{$in:req.body.deleteProductArr}}, function(err, removeHashtag){
+            ProductImage.remove({product_id:{$in:req.body.deleteProductArr}}, function(err, removeProductImage){
+                Cart.remove({product_id:{$in:req.body.deleteProductArr}}, function(err, removeCartProduct){
+                    Like.remove({product_id:{$in:req.body.deleteProductArr}}, function(err, removeLikeProduct){
+                        Wishlist.remove({product_id:{$in:req.body.deleteProductArr}}, function(err, removeWishlistProduct){
+                            if(err == null){
+                                res.send({status:'success',data:['Remove Successfully.']});
+                            }else{
+                                res.send({status:'error',data:err});
+                            }
+                        });    
+                    });    
+                });    
+            });    
+       }); 
     });
 };

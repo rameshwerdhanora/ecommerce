@@ -91,13 +91,13 @@ block content
       .profile-cl.product_brand_view_right
         .product_brand
           | PRODUCTS POsted 
-          a(href='#')
+          a(href='javascript:void(0);', onclick='deleteShopProducts()')
             img(src='/images/delete-icon.png')
         .product_table
           table(border='0', cellspacing='0', cellpadding='0')
             tr
               th
-                input(type='checkbox')
+                input#select_all(type='checkbox')
               th ITEM PHOTOS
               th ITEM NAME
               th SIZE 
@@ -106,95 +106,97 @@ block content
               th  SUBCATEGORY
               th PRICE
             tbody
-             if fetchAllProducts.length > 0
-              - var i=0;
-              each fetchAllProduct in fetchAllProducts
-               -i++; 
-                tr
-                  td(rowspan='2')
-                    input(type='checkbox')
-                  td(rowspan='2')
-                    .product_table_img
-                      img(src='/#{productImagesArr1[fetchAllProduct._id]}')
-                      ul.small_thumb
-                        li
-                          a(href='#')
-                            img(src='/#{productImagesArr2[fetchAllProduct._id]}')
-                        li
-                          a(href='#')
-                            img(src='/#{productImagesArr3[fetchAllProduct._id]}')
-                        li
-                          a(href='#')
-                            img(src='/#{productImagesArr4[fetchAllProduct._id]}')
-                  td #{fetchAllProduct.name}
-                  td 
-                    -var fetchAllAttr = fetchAllProduct.attribute;
-                        -if(fetchAllAttr){
-                           -for(var j = 0;j < fetchAllAttr.length; j++){
-                               | #{attrOptionValuesArr[fetchAllAttr[j]]} &nbsp;&nbsp;
-                           -}  
-                        -}
-                  td 
-                    -var fetchAllClr = fetchAllProduct.color;
-                        -if(fetchAllClr){
-                           -for(var k = 0;k < fetchAllClr.length; k++){
-                               | #{colorsArr[fetchAllClr[k]]} &nbsp;&nbsp;
-                           -}  
-                        -}
-                  td #{categoryAr[fetchAllProduct.category_id]}
-                  td #{subcategoryAr[fetchAllProduct.sub_category_id]}
-                  td $#{fetchAllProduct.price}
-                tr
-                  td(colspan='7')
-                    .description
-                      h2 DESCRIPTION
-                      p #{fetchAllProduct.blurb}
-                      p 
-                       -if(fetchAllTags){
-                           -if(fetchAllProductsHashtags){
-                               - for(var i=0;i< fetchAllTags.length;i++){
-                                - for(var j=0;j< fetchAllProductsHashtags.length;j++){
-                                    - if(fetchAllTags[i]._id == fetchAllProductsHashtags[j].hashtag_id){
-                                      - if(fetchAllProduct._id == fetchAllProductsHashtags[j].product_id){
-                                          |##{fetchAllTags[i].name} &nbsp;&nbsp;
-                                      - } 
-                                    -}
-                                - }    
-                             - } 
+                if fetchAllProducts.length > 0
+                 - var i=0;
+                 each fetchAllProduct in fetchAllProducts
+                  -i++; 
+                   tr
+                     td(rowspan='2')
+                       input.checkbox-row(type='checkbox', name='checkbox[]', value="#{fetchAllProduct._id}")
+                     td(rowspan='2')
+                       .product_table_img
+                         img(src='/#{productImagesArr1[fetchAllProduct._id]}')
+                         ul.small_thumb
+                           li
+                             a(href='#')
+                               img(src='/#{productImagesArr2[fetchAllProduct._id]}')
+                           li
+                             a(href='#')
+                               img(src='/#{productImagesArr3[fetchAllProduct._id]}')
+                           li
+                             a(href='#')
+                               img(src='/#{productImagesArr4[fetchAllProduct._id]}')
+                     td #{fetchAllProduct.name}
+                     td 
+                       -var fetchAllAttr = fetchAllProduct.attribute;
+                           -if(fetchAllAttr){
+                              -for(var j = 0;j < fetchAllAttr.length; j++){
+                                  | #{attrOptionValuesArr[fetchAllAttr[j]]} &nbsp;&nbsp;
+                              -}  
                            -}
-                       -}
-                      
-                    .discount
-                      a(href='/product/list/#{fetchAllProduct._id}') EDIT ITEM
-                      a.btn(href='#modal-container-#{fetchAllProduct._id}', role='button', data-toggle='modal',id='modal-#{fetchAllProduct._id}') Apply Discount code
-                    
-                    .modal.fade(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true',id='modal-container-#{fetchAllProduct._id}')
-                        .modal-dialog.discount_coupan.popup-wdt-1
-                          .modal-content
-                            .modal-header
-                              h4 APPLY DISCOUNT CODE
-                            .modal-body
-                              .profile-right-cl
-                                form(action='/product/updatediscount', method='post')
-                                  .profile-frm-row
-                                    .profile-frm-cl1 Discount Name
-                                    .profile-frm-cl2
-                                      input(type='hidden',name='product_id',value='#{fetchAllProduct._id}')
-                                      input#up_dis_name(type='text', name='up_dis_name',value='#{fetchAllProduct.dis_name}',required='required')
-                                  .profile-frm-row
-                                    .profile-frm-cl1 Type of Discount
-                                    .profile-frm-cl2
-                                      select#up_dis_type(name='up_dis_type',required='required')
-                                        option(value='percentage',selected=(fetchAllProduct.dis_type == 'percentage')) Percentage
-                                        option(value='fixed',selected=(fetchAllProduct.dis_type == 'fixed')) Fixed
+                     td 
+                       -var fetchAllClr = fetchAllProduct.color;
+                           -if(fetchAllClr){
+                              -for(var k = 0;k < fetchAllClr.length; k++){
+                                  | #{colorsArr[fetchAllClr[k]]} &nbsp;&nbsp;
+                              -}  
+                           -}
+                     td #{categoryAr[fetchAllProduct.category_id]}
+                     td #{subcategoryAr[fetchAllProduct.sub_category_id]}
+                     td $#{fetchAllProduct.price}
+                   tr
+                     td(colspan='7')
+                       .description
+                         h2 DESCRIPTION
+                         p #{fetchAllProduct.blurb}
+                         p 
+                          -if(fetchAllTags){
+                              -if(fetchAllProductsHashtags){
+                                  - for(var i=0;i< fetchAllTags.length;i++){
+                                   - for(var j=0;j< fetchAllProductsHashtags.length;j++){
+                                       - if(fetchAllTags[i]._id == fetchAllProductsHashtags[j].hashtag_id){
+                                         - if(fetchAllProduct._id == fetchAllProductsHashtags[j].product_id){
+                                             |##{fetchAllTags[i].name} &nbsp;&nbsp;
+                                         - } 
+                                       -}
+                                   - }    
+                                - } 
+                              -}
+                          -}
+                       .discount
+                         a(href='/product/list/#{fetchAllProduct._id}') EDIT ITEM
+                         a.btn(href='#modal-container-#{fetchAllProduct._id}', role='button', data-toggle='modal',id='modal-#{fetchAllProduct._id}') Apply Discount code
 
-                                  .profile-frm-row
-                                    .profile-frm-cl1 Amount
-                                    .profile-frm-cl2
-                                      input#up_dis_amount(type='number', name='up_dis_amount',value='#{fetchAllProduct.dis_amount}',required='required')
-                                  .clearfix
-                                    .modal-footer
-                                      button#upCoponFrm.btn.btn-primary(type='submit') APPLY
+                       .modal.fade(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true',id='modal-container-#{fetchAllProduct._id}')
+                           .modal-dialog.discount_coupan.popup-wdt-1
+                             .modal-content
+                               .modal-header
+                                 h4 APPLY DISCOUNT CODE
+                               .modal-body
+                                 .profile-right-cl
+                                   form(action='/product/updatediscount', method='post')
+                                     .profile-frm-row
+                                       .profile-frm-cl1 Discount Name
+                                       .profile-frm-cl2
+                                         input(type='hidden',name='product_id',value='#{fetchAllProduct._id}')
+                                         input#up_dis_name(type='text', name='up_dis_name',value='#{fetchAllProduct.dis_name}',required='required')
+                                     .profile-frm-row
+                                       .profile-frm-cl1 Type of Discount
+                                       .profile-frm-cl2
+                                         select#up_dis_type(name='up_dis_type',required='required')
+                                           option(value='percentage',selected=(fetchAllProduct.dis_type == 'percentage')) Percentage
+                                           option(value='fixed',selected=(fetchAllProduct.dis_type == 'fixed')) Fixed
+
+                                     .profile-frm-row
+                                       .profile-frm-cl1 Amount
+                                       .profile-frm-cl2
+                                         input#up_dis_amount(type='number', name='up_dis_amount',value='#{fetchAllProduct.dis_amount}',required='required')
+                                     .clearfix
+                                       .modal-footer
+                                         button#upCoponFrm.btn.btn-primary(type='submit') APPLY
+                else
+                    tr
+                      td(colspan=7) No Products                           
           
         include ../partials/pagination
           
@@ -542,4 +544,22 @@ block content
             });
     -}
     
+     script.
+        //select all checkboxes
+        $("#select_all").change(function(){  //"select all" change
+        var status = this.checked; // "select all" checked status
+            $('.checkbox-row').each(function(){ //iterate all listed checkbox items
+                this.checked = status; //change ".checkbox" checked status
+            });
+        });
+        $('.checkbox-row').change(function(){ //".checkbox" change
+            //uncheck "select all", if one of the listed checkbox item is unchecked
+            if(this.checked == false){ //if this item is unchecked
+                $("#select_all")[0].checked = false; //change "select all" checked status to false
+            }
+            //check "select all" if all checkbox items are checked
+            if ($('.checkbox-row:checked').length == $('.checkbox-row').length ){
+                $("#select_all")[0].checked = true; //change "select all" checked status to true
+            }
+        });
      
