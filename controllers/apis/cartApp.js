@@ -182,13 +182,13 @@ exports.addTocart = (req,res) => {
         cartModel.product_id =  req.body.product_id;
         cartModel.brand_id = req.body.brand_id; // We will pass brand_id too
         cartModel.quantity= req.body.quantity;
-//         var quamaSepSize = '';
-//         var size = req.body.size;
-//         for(var i = 0; i<size.length;i++){
-//             quamaSepSize+=size[i];
-//         }
-//         quamaSepSize = quamaSepSize.substring(0, quamaSepSize.length - 1);
-        cartModel.size= req.body.size;//Comma separated
+        // var quamaSepSize = '';
+        // var size = req.body.size;
+        // for(var i = 0; i<size.length;i++){
+        //     quamaSepSize+=size[i];
+        // }
+        // quamaSepSize = quamaSepSize.substring(0, quamaSepSize.length - 1);
+        cartModel.size = req.body.size;//Comma separated
         cartModel.color_id= req.body.color_id;
         cartModel.created= new Date();
         cartModel.updated= new Date();
@@ -649,21 +649,25 @@ exports.showCartAccBrand = (req,res) => {
                             function(callback)
                             {// To get attribut name and option name
                                 var optionIds = CproductRes.size;
+                                //console.log('#####################');
+                                //console.log(CproductRes.size);
                                 getOptAttribute(optionIds,function(err,opRes){
+                                    //console.log(opRes);
                                     var tmpAttributeKey = new Array();
                                     var tmpOptionValue = new Array();
                                     for(var kk=0;kk<opRes.length;kk++){
                                         tmpAttributeKey[kk] = opRes[kk].attribute_id;
                                         tmpOptionValue[kk] = opRes[kk].value;
                                     }
+                                    //console.log(tmpAttributeKey);
                                     var tmpOoptionFinalAr = new Array();
                                     getAttrib(tmpAttributeKey,function(err,attribRes){
                                         for(var i=0;i<tmpAttributeKey.length;i++){
                                             for(j=0;j<attribRes.length;j++){
                                                 if(attribRes[j]._id == tmpAttributeKey[i]){
-                                                    tmpOoptionFinalAr[i] = new Array();
-                                                    tmpOoptionFinalAr[i][0] = attribRes[j].name; 
-                                                    tmpOoptionFinalAr[i][1] = tmpOptionValue[i];
+                                                    tmpOoptionFinalAr[i] = {};
+                                                    tmpOoptionFinalAr[i]['att_name'] = attribRes[j].name; 
+                                                    tmpOoptionFinalAr[i]['att_value'] = tmpOptionValue[i];
                                                 }
                                             }
                                         }
@@ -692,15 +696,10 @@ exports.showCartAccBrand = (req,res) => {
                     priceTotalObj.servicename   = req.body.shipping_array[req.body.index].serviceName;
                     priceTotalObj.totalcharges  = parseInt(req.body.shipping_array[req.body.index].TotalCharges);
                     priceTotalObj.totaldiscount = finalPriceWithDis;
-		    priceTotalObj.subtotal      = subTotal;
                     priceTotalObj.totalprice    = subTotal + parseInt(priceTotalObj.tax) + parseInt(priceTotalObj.totalcharges);
-
-                    
+                    priceTotalObj.subtotal      = subTotal;
                     //priceTotalObj.totalcharges  = '6.95'
                     priceTotalObj.finalTotal    = subTotal + parseInt(priceTotalObj.tax) + parseInt(priceTotalObj.totalcharges) - finalPriceWithDis;
-
-                     
-
                     return res.json({"status":'success',"msg":'List of all products of selected brand.',tempCartProduct:tempCartProduct,shipping_array:req.body.shipping_array,priceTotalObj:priceTotalObj});
                 });
             } 
@@ -773,7 +772,7 @@ exports.finalCheckoutDisplay = (req,res) => {
                                     {
                                         Cart.find({user_id:req.body.user_id,brand_id:BrandId._id},function(err,listOfOtherData)
                                         {
-                                            console.log(listOfOtherData);
+                                            //console.log(listOfOtherData);
                                             var sumQuantity = 0;
                                             for (var tq = 0; tq < listOfOtherData.length; tq++) 
                                             {   
@@ -872,9 +871,3 @@ exports.finalCheckoutDisplay = (req,res) => {
         return res.json({"status":'error',"msg":'Device token is not avaible.'})
     }
 };
-
-
-
-
-
- 
