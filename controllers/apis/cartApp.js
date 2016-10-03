@@ -182,13 +182,13 @@ exports.addTocart = (req,res) => {
         cartModel.product_id =  req.body.product_id;
         cartModel.brand_id = req.body.brand_id; // We will pass brand_id too
         cartModel.quantity= req.body.quantity;
-        var quamaSepSize = '';
-        var size = req.body.size;
-        for(var i = 0; i<size.length;i++){
-            quamaSepSize+=size[i];
-        }
-        quamaSepSize = quamaSepSize.substring(0, quamaSepSize.length - 1);
-        cartModel.size= quamaSepSize;//Comma separated
+//         var quamaSepSize = '';
+//         var size = req.body.size;
+//         for(var i = 0; i<size.length;i++){
+//             quamaSepSize+=size[i];
+//         }
+//         quamaSepSize = quamaSepSize.substring(0, quamaSepSize.length - 1);
+        cartModel.size= req.body.size;//Comma separated
         cartModel.color_id= req.body.color_id;
         cartModel.created= new Date();
         cartModel.updated= new Date();
