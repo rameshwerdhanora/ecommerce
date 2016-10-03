@@ -589,7 +589,7 @@ exports.getAttrib = (req,res)=>{
         var sizeAr = new Array();
         if(sizeRes !== undefined){
             for(var i=0;i < sizeRes.length;i++){
-                if(sizeRes[i].listofattrmap.length>0){
+                if((sizeRes[i].listofattrmap!=null) && (sizeRes[i].listofattrmap.length>0)){
                     for(j=0;j < sizeRes[i].listofattrmap.length;j++){
                         sizeAr.push(sizeRes[i].listofattrmap[j]);
                     }
@@ -612,34 +612,36 @@ exports.getAttrib = (req,res)=>{
                         result.size = sizeRes[i].size_name;
                         result.attributes = new Array();
                         // Sizes
-                        for(j=0;j < sizeRes[i].listofattrmap.length;j++){
-                            if(attributRes){
-                                //Attributes
-                                for(var k=0;k<attributRes.length;k++){
-                                    if(attributRes[k]._id == sizeRes[i].listofattrmap[j]){
-                                        var rs1 = {};
-                                        rs1.attribute = attributRes[k].name;
-                                        rs1.attributeId = attributRes[k]._id;
-                                        rs1.type = attributRes[k].type;
-                                        //Attributes Options
-                                        if(attributRes[k].type == 'select' || attributRes[k].type == 'multiselect'){
-                                            rs1.options = new Array();
-                                            if(attribOptionRes){
-                                               for(var l=0;l < attribOptionRes.length; l++){
-                                                    if(attributRes[k]._id  == attribOptionRes[l].attribute_id){
-                                                        var tempOption = {};
-                                                        tempOption.id= attribOptionRes[l]._id;
-                                                        tempOption.value= attribOptionRes[l].value;
-                                                        rs1.options.push(tempOption);
-                                                    }
-                                               }  
+                        if((sizeRes[i].listofattrmap!=null) && (sizeRes[i].listofattrmap.length>0)){
+                            for(j=0;j < sizeRes[i].listofattrmap.length;j++){
+                                if(attributRes){
+                                    //Attributes
+                                    for(var k=0;k<attributRes.length;k++){
+                                        if(attributRes[k]._id == sizeRes[i].listofattrmap[j]){
+                                            var rs1 = {};
+                                            rs1.attribute = attributRes[k].name;
+                                            rs1.attributeId = attributRes[k]._id;
+                                            rs1.type = attributRes[k].type;
+                                            //Attributes Options
+                                            if(attributRes[k].type == 'select' || attributRes[k].type == 'multiselect'){
+                                                rs1.options = new Array();
+                                                if(attribOptionRes){
+                                                   for(var l=0;l < attribOptionRes.length; l++){
+                                                        if(attributRes[k]._id  == attribOptionRes[l].attribute_id){
+                                                            var tempOption = {};
+                                                            tempOption.id= attribOptionRes[l]._id;
+                                                            tempOption.value= attribOptionRes[l].value;
+                                                            rs1.options.push(tempOption);
+                                                        }
+                                                   }  
+                                                }
                                             }
+                                            //console.log(rs1);
+                                            result.attributes.push(rs1);
                                         }
-                                        //console.log(rs1);
-                                        result.attributes.push(rs1);
                                     }
                                 }
-                            }
+                            }    
                         }
                         //console.log(result);
                         mainResult.push(result);
