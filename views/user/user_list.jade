@@ -19,7 +19,7 @@ block content
         .profile-form-box.users-in
           #tabs-222574.customer-tabs
             .edit-btn-cl
-              a(href='#')
+              a(href='javascript:void(0);', onclick='deleteUsersAndShop()')
                 img(alt='Delete', src='/images/delete-icon.png')
             ul.nav.nav-tabs
               li.active
@@ -34,7 +34,7 @@ block content
                       tbody
                         tr
                           th(align='center')
-                            input#checkbox2(type='checkbox', name='checkbox2')
+                            input#select_all_users(type='checkbox', name='checkbox2')
                           th Photo
                           th username
                           th Name
@@ -45,7 +45,7 @@ block content
                           each getCustomer in getCustomers 
                             tr
                               td(align='center')
-                                input#checkbox4(type='checkbox', name='checkbox4')
+                                input.user-checkbox-row(type='checkbox', name='checkbox4[]', value='#{getCustomer._id}')
                               td
                                 img.custImg.profile-icons(src='#{getCustomer.profile_image ? getCustomer.profile_image : "/images/noPhoto2.png"}', alt='img')
                               td @#{getCustomer.user_name} 
@@ -72,7 +72,7 @@ block content
                       tbody
                         tr
                           th(align='center')
-                            input#checkbox2(type='checkbox', name='checkbox2')
+                            input#select_all_cust(type='checkbox', name='checkbox2')
                           th Photo
                           th Name
                           th User SInce
@@ -88,7 +88,7 @@ block content
                           each getUser in getUsers 
                             tr
                               td(align='center')
-                                input#checkbox4(type='checkbox', name='checkbox4')
+                                input.cust-checkbox-row(type='checkbox', name='checkbox5[]', value='#{getUser._id}')
                               td
                                 img.custImg(src='#{getUser.profile_image ? getUser.profile_image : "/images/noPhoto2.png"}', alt='img')
                               td.ord-title 
@@ -160,5 +160,46 @@ block content
                 $('.shopTab').click(function(){
                    $('#showShopPagi').show();
                    $('#showUserPagi').hide();
+                });
+                
+                //select all checkboxes
+                $("#select_all_users").change(function(){  
+                var status = this.checked; 
+                    $('.user-checkbox-row').each(function(){ 
+                        this.checked = status; 
+                    });
+                    $('.cust-checkbox-row').each(function(){ 
+                        this.checked = false; 
+                    });
+                     $("#select_all_cust")[0].checked = false; 
+                });
+                
+                $("#select_all_cust").change(function(){  
+                var status = this.checked; 
+                    $('.cust-checkbox-row').each(function(){ 
+                        this.checked = status; 
+                    });
+                    $("#select_all_users")[0].checked = false; 
+                    $('.user-checkbox-row').each(function(){ 
+                        this.checked = false; 
+                    });
+                });
+                
+                $('.user-checkbox-row').change(function(){ 
+                    if(this.checked == false){ 
+                        $("#select_all_users")[0].checked = false; 
+                    }
+                    if ($('.user-checkbox-row:checked').length == $('.user-checkbox-row').length ){
+                        $("#select_all_users")[0].checked = true; 
+                    }
+                });
+                
+                 $('.cust-checkbox-row').change(function(){ 
+                    if(this.checked == false){ 
+                        $("#select_all_cust")[0].checked = false; 
+                    }
+                    if ($('.cust-checkbox-row:checked').length == $('.cust-checkbox-row').length ){
+                        $("#select_all_cust")[0].checked = true; //change "select all" checked status to true
+                    }
                 });
               });

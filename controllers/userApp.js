@@ -1577,3 +1577,13 @@ exports.updateShopLogo = (req, res) => {
     });
 };
 
+/* Remove Product */
+exports.removeUsersAndShop = (req, res) => {
+    User.remove({$or: [ { _id: req.body.deleteUserArr }, { shop_id: req.body.deleteUserArr}]}, function(error, removeUserId){
+        if(error == null){
+            res.send({status:'success',data:['Remove Successfully.']});
+        }else{
+            res.send({status:'error',data:err});
+        }
+    });
+};

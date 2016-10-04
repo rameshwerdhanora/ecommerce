@@ -36,6 +36,7 @@ function deleteUser(id)
 	}
 }
 
+// Delete shop product
 function deleteShopProducts()
 {
     var deleteProductArr = [];
@@ -49,6 +50,32 @@ function deleteShopProducts()
                 type: "POST",
                 url: "/product/delete-shop-product",
                 data: { deleteProductArr:deleteProductArr },
+                dataType: 'json',
+                success: function(res){
+                    window.location.reload(true);
+                }
+            });
+        }
+    }else{
+        confirm("Please select atleast one item");
+    }
+   
+}
+
+
+function deleteUsersAndShop()
+{
+    var deleteUserArr = [];
+    $('.user-checkbox-row:checked, .cust-checkbox-row:checked').each(function(){ //iterate all listed checkbox items
+        deleteUserArr.push($(this).val());
+    });
+    if(deleteUserArr.length>0){
+        var tFalse = confirm("Are you sure ?");
+        if(tFalse){
+            $.ajax({
+                type: "POST",
+                url: "/user/delete-users-shop",
+                data: { deleteUserArr:deleteUserArr },
                 dataType: 'json',
                 success: function(res){
                     window.location.reload(true);

@@ -472,6 +472,7 @@ app.get('/user/changePassword/:userId', passportConfig.isAuthenticated,  userApp
 app.post('/user/changePasswordSave/:userId', passportConfig.isAuthenticated,  userAppControlleraAdmin.userChangePasswordSave);
 
 app.post('/user/updateShopLogo', passportConfig.isAuthenticated,  userAppControlleraAdmin.updateShopLogo);
+app.post('/user/delete-users-shop', passportConfig.isAuthenticated,  userAppControlleraAdmin.removeUsersAndShop);
 
 
 /**
