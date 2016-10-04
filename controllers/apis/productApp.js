@@ -507,13 +507,11 @@ function callItsFitsWithoutConfigData(userId,req, res)
  */
 
 exports.checkFomoAlertAccToUser = (req, res) => { 
-
-  User.findOne({_id:req.params.userId},function(error,fetchConfigDetailsOfUser)
-  { 
-    var iFomo = fetchConfigDetailsOfUser.isFomo == '1' ?  true : false ; 
-    return res.json({"status":'success',"msg":'Fomo.',isFomo:iFomo});
+  UsersDetails.findOne({user_id:req.params.userId},function(error,fetchConfigDetails){
+      var iFomo = (fetchConfigDetails.configDetail[0].Size.length > 0) ?  true : false ; 
+      return res.json({"status":'success',"msg":'Fomo.',isFomo:iFomo});
   });
-};
+}; 
 
 /**
  * GET /api/product/details/:productId/:userId
