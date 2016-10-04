@@ -1580,16 +1580,6 @@ exports.updateShopLogo = (req, res) => {
 /* Remove Product */
 exports.removeUsersAndShop = (req, res) => {
     
-    updateData = {};
-    updateData.is_deleted = "true";
-    User.update({$or: [ { _id: req.body.deleteUserArr }, { shop_id: req.body.deleteUserArr}]}, updateData, function(error, removeUserRes){
-        if(error == null){
-            res.send({status:'success',data:['Remove Successfully.']});
-        }else{
-            res.send({status:'error',data:error});
-        }
-    });
-    
     /*User.remove({$or: [ { _id: req.body.deleteUserArr }, { shop_id: req.body.deleteUserArr}]}, function(error, removeUserId){
         if(error == null){
             res.send({status:'success',data:['Remove Successfully.']});
