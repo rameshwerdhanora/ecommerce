@@ -77,8 +77,13 @@ function deleteUsersAndShop()
                 url: "/user/delete-users-shop",
                 data: { deleteUserArr:deleteUserArr },
                 dataType: 'json',
-                success: function(res){
+                success: function(data){
+                    console.log(data);
                     window.location.reload(true);
+                },
+                error: function(data){
+                    console.log(data);
+                    alert('failure');
                 }
             });
         }

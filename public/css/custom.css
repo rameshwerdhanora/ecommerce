@@ -148,7 +148,6 @@ select.multiselect-item {
 }
 
 .low-tbl-box td {
-   
     max-width: 140px;
 }
 
@@ -159,7 +158,6 @@ select.multiselect-item {
 }
 .profile-full-cl{
     max-width: 100%;
-    
 }
 .profile-full-cl .profile-frm-cl1{
     width: 135px;
@@ -169,7 +167,5 @@ select.multiselect-item {
     width: 100% !important;
 }
 .profile-full-cl .profile-frm-cl2 {
-   
     width: 255px;
-  
-}
+} 
