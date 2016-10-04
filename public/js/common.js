@@ -83,8 +83,7 @@ function deleteUsersAndShop()
                 },
                 error: function(data){
                     console.log(data);
-                    alert('failure');
-                }
+                } 
             });
         }
     }else{
