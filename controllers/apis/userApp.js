@@ -146,32 +146,39 @@ exports.postLoginManually = function(req,res)
 	if(req.body.device_token !== '')
   	{
 
-  		User.findOne({ user_name: req.body.user_name}, function(error, checkForLogin) 
+  		User.findOne({ user_name: req.body.user_name,role_id:Constants.CUSTOMERROLE}, function(error, checkForLogin) 
   		{
   			//console.log(checkForLogin)
   			if(checkForLogin)
   			{
-  				bcrypt.compare(req.body.password, checkForLogin.password, (err, isMatch) => {
+  				if(checkForLogin.is_deleted == false)
+  				{
+	  				bcrypt.compare(req.body.password, checkForLogin.password, (err, isMatch) => {
 
-				    if(isMatch) 
-				    {	
-				        UserDetails.findOne({user_id:checkForLogin._id},function(error,fetchUserDetails)
-						{
-							if(fetchUserDetails)
+					    if(isMatch) 
+					    {	
+					        UserDetails.findOne({user_id:checkForLogin._id},function(error,fetchUserDetails)
 							{
-								return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:fetchUserDetails.configDetail});
-							}
-							else 
-							{
-								return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:''});
-							}
-						});
-				  	}
-				  	else
-				    {
-				    	return res.json({"status":'error',"msg":'Your Password is incorrect.'});
-				    }
-			    });
+								if(fetchUserDetails)
+								{
+									return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:fetchUserDetails.configDetail,counter:1});
+								}
+								else 
+								{
+									return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:'',counter:1});
+								}
+							});
+					  	}
+					  	else
+					    {
+					    	return res.json({"status":'error',"msg":'Your Password is incorrect.'});
+					    }
+				    });
+			    }
+			    else 
+			    {
+			    	return res.json({"status":'error',"msg":'Admin has blocked your account.'});
+			    }
 			    
   			}
   			else 
@@ -470,20 +477,28 @@ exports.postSignupFacebook = function(req,res)
 {
 	if(req.body.device_token !== '')
   	{
-		User.findOne({ email_id: req.body.email}, function(err, tokenExist){
+		User.findOne({ email_id: req.body.email,role_id:Constants.CUSTOMERROLE}, function(err, tokenExist){
 			if(tokenExist)
 			{
-				UserDetails.findOne({user_id:tokenExist._id},function(error,fetchUserDetails)
+				if(tokenExist.is_deleted == false)
 				{
-					if(fetchUserDetails)
+					UserDetails.findOne({user_id:tokenExist._id},function(error,fetchUserDetails)
 					{
-						return res.json({"status":'success',"msg":'Login Successfully.',newId:tokenExist._id,alluserData:tokenExist,configData:fetchUserDetails.configDetail});
-					}
-					else 
-					{
-						return res.json({"status":'success',"msg":'Login Successfully.',newId:tokenExist._id,alluserData:tokenExist,configData:''});
-					}
-				});
+						if(fetchUserDetails)
+						{
+							return res.json({"status":'success',"msg":'Login Successfully.',newId:tokenExist._id,alluserData:tokenExist,configData:fetchUserDetails.configDetail,counter:1});
+						}
+						else 
+						{
+							return res.json({"status":'success',"msg":'Login Successfully.',newId:tokenExist._id,alluserData:tokenExist,configData:'',counter:1});
+						}
+					});
+				}
+				else
+				{
+					return res.json({"status":'error',"msg":'Admin has blocked your account.'});
+				}
+				
 			}
 			else 
 			{
@@ -508,21 +523,27 @@ exports.postSignupGooglePlus = function(req,res)
 {
 	if(req.body.device_token !== '')
   	{
-		User.findOne({ email_id: req.body.email }, function(err, tokenExist){
+		User.findOne({ email_id: req.body.email ,role_id:Constants.CUSTOMERROLE}, function(err, tokenExist){
 			if(tokenExist)
 			{  
-				UserDetails.findOne({user_id:tokenExist._id},function(error,fetchUserDetails)
+				if(tokenExist.is_deleted == false)
 				{
-					if(fetchUserDetails)
+					UserDetails.findOne({user_id:tokenExist._id},function(error,fetchUserDetails)
 					{
-						return res.json({"status":'success',"msg":'Login Successfully.',newId:tokenExist._id,alluserData:tokenExist,configData:fetchUserDetails.configDetail});
-					}
-					else 
-					{
-						return res.json({"status":'success',"msg":'Login Successfully.',newId:tokenExist._id,alluserData:tokenExist,configData:''});
-					}
-				});
-
+						if(fetchUserDetails)
+						{
+							return res.json({"status":'success',"msg":'Login Successfully.',newId:tokenExist._id,alluserData:tokenExist,configData:fetchUserDetails.configDetail,counter:1});
+						}
+						else 
+						{
+							return res.json({"status":'success',"msg":'Login Successfully.',newId:tokenExist._id,alluserData:tokenExist,configData:'',counter:1});
+						}
+					});
+				}
+				else
+				{
+					return res.json({"status":'error',"msg":'Admin has blocked your account.'});
+				}	
 				//return res.json({"status":'success',"msg":'Got your token',"newId":tokenExist._id,alluserData:tokenExist,configData:fetchUserDetails.configDetail});
 			}
 			else 
