@@ -1,30 +1,122 @@
 function getSizeOptions(gender,appendId){
-    $.ajax({
+    
+    if(gender != ''){
+        $.ajax({
+            type: "POST",
+            url: "/product/getSize",
+            data: {gender:gender},
+            dataType: 'json',
+            success: function(res){
+                $(".product_size").remove();
+
+                if(res.status == 'success'){
+                    var selectList = $("#product_size");
+                    selectList.find("option:gt(0)").remove();
+                    for(var i=0; i < res.data.length;i++){
+                        var option = new Option(res.data[i].size_name, res.data[i].id);
+                        selectList.append($(option));
+                    }
+                }else{
+                    //res.data.
+                }
+            }
+        });
+    }else{
+        alert("Please select gender first!");
+    }
+}
+/*
+
+$.ajax({
+        type: "POST",
+        url: "/product/getAttrib",
+        data: {gender:gender},
+        dataType: 'json',
+        success: function(res){
+            $(".product_size").remove();
+            if(res.status == 'success'){
+                var html = '';
+                for(var i=0; i < res.data.length;i++){//size
+
+
+                    for(var j=0; j < res.data[i].attributes.length;j++){
+                        html+='<div class=" profile-frm-row product_size"><div class="sg-row"><span class="sz-txt">';
+                        html+= res.data[i].size;
+                        html+= ' ('+res.data[i].attributes[j].attribute +') ';
+                        if(res.data[i].attributes[j].type == 'select' || res.data[i].attributes[j].type == 'multiselect'){
+                            if(res.data[i].attributes[j].options.length){
+                                for(var k = 0; k < res.data[i].attributes[j].options.length; k++){
+                                    //html+= '<a href="#">'+ res.data[i].attributes[j].options[k].value+'</a>';
+                                     if(attributeOptions.indexOf(res.data[i].attributes[j].options[k].id) == -1){
+                                         html+= '<input type="checkbox" value="'+res.data[i].attributes[j].options[k].id+'" name="size[]" />'+ res.data[i].attributes[j].options[k].value+'';//'+res.data[i].attributes[j].attributeId+'
+                                     }else{
+                                         html+= '<input checked="checked" type="checkbox" value="'+res.data[i].attributes[j].options[k].id+'" name="size[]" />'+ res.data[i].attributes[j].options[k].value+'';//'+res.data[i].attributes[j].attributeId+'
+                                     }
+
+                                }
+                                html+='</span></div></div>';
+                            }else{
+                                html+='No option found</span></div></div><div class="clearfix"></div>';
+                            }
+                        }else{
+                            // textbox or textarea
+                            html+= '<input type="'+res.data[i].attributes[j].type+'"  name="size['+res.data[i].attributes[j].attributeId+']" />';//'+res.data[i].attributes[j].attributeId+'
+                        }
+                    }
+                    //html+='</span></div></div>';
+
+                    
+                }
+                $("#"+appendId).after(html);
+            }else{
+                //res.data.
+            }
+        }
+    });
+    
+    */
+$(document).ready(function() {
+    $(".tableCheckbox").change(function(n){
+        var checkedProp = $(this).is(':checked');
+        $(".rowCheckbox").each(function(){
+           $(this).prop('checked',checkedProp); 
+        });
+    });
+    var sizeRowCount = 0;
+    $(".addProduct").on('change','select[name="size[]"]',function(n){
+        /*.profile-frm-row.product_select#size_div
+            .profile-frm-cl1 SIZE
+            .profile-frm-cl2
+              select#product_size.product_brand(name='size[]', required='required')
+                    option(value='') Select Size */
+        $.ajax({
             type: "POST",
             url: "/product/getAttrib",
-            data: {gender:gender},
+            data: {size:$(this).val()},
             dataType: 'json',
             success: function(res){
                 $(".product_size").remove();
                 if(res.status == 'success'){
                     var html = '';
                     for(var i=0; i < res.data.length;i++){//size
-                        
-                        
-                        for(var j=0; j < res.data[i].attributes.length;j++){
-                            html+='<div class=" profile-frm-row product_size"><div class="sg-row"><span class="sz-txt">';
+                        var attribCount = res.data[i].attributes.length; 
+                        for(var j= 0; j < attribCount;j++){
+                            var bbCls = '';
+                            if((j+1) == attribCount){
+                                bbCls = 'b_b';
+                            }
+                            html+='<div class="sizeRow sizeOptions profile-frm-row product_size '+bbCls+'"><div class="sg-row"><span class="sz-txt">';
                             html+= res.data[i].size;
                             html+= ' ('+res.data[i].attributes[j].attribute +') ';
                             if(res.data[i].attributes[j].type == 'select' || res.data[i].attributes[j].type == 'multiselect'){
                                 if(res.data[i].attributes[j].options.length){
                                     for(var k = 0; k < res.data[i].attributes[j].options.length; k++){
                                         //html+= '<a href="#">'+ res.data[i].attributes[j].options[k].value+'</a>';
-                                         if(attributeOptions.indexOf(res.data[i].attributes[j].options[k].id) == -1){
-                                             html+= '<input type="checkbox" value="'+res.data[i].attributes[j].options[k].id+'" name="size[]" />'+ res.data[i].attributes[j].options[k].value+'';//'+res.data[i].attributes[j].attributeId+'
-                                         }else{
-                                             html+= '<input checked="checked" type="checkbox" value="'+res.data[i].attributes[j].options[k].id+'" name="size[]" />'+ res.data[i].attributes[j].options[k].value+'';//'+res.data[i].attributes[j].attributeId+'
-                                         }
-
+                                        if(attributeOptions.indexOf(res.data[i].attributes[j].options[k].id) == -1){
+                                             html+= '<input type="checkbox" value="'+res.data[i].attributes[j].options[k].id+'" name="size[]" /><span>'+ res.data[i].attributes[j].options[k].value+'</span>';//'+res.data[i].attributes[j].attributeId+'
+                                        }else{
+                                             html+= '<input checked="checked" type="checkbox" value="'+res.data[i].attributes[j].options[k].id+'" name="size[]" /><span>'+ res.data[i].attributes[j].options[k].value+'</span>';//'+res.data[i].attributes[j].attributeId+'
+                                        }
                                     }
                                     html+='</span></div></div>';
                                 }else{
@@ -32,28 +124,49 @@ function getSizeOptions(gender,appendId){
                                 }
                             }else{
                                 // textbox or textarea
-                                html+= '<input type="'+res.data[i].attributes[j].type+'"  name="size['+res.data[i].attributes[j].attributeId+']" />';//'+res.data[i].attributes[j].attributeId+'
+                                // But not required this option
+                                //html+= '<input type="'+res.data[i].attributes[j].type+'"  name="size['+res.data[i].attributes[j].attributeId+']" />';//'+res.data[i].attributes[j].attributeId+'
                             }
                         }
                         //html+='</span></div></div>';
-                        
-                        /*html.='<div class=" profile-frm-row product_size"><div class="sg-row">';
-                          span.sz-txt Size
-                          a(href='#') xs
-                          a(href='#') s
-                          a(href='#') m
-                          a(href='#') l
-                          a(href='#') xl
-                          a(href='#') xxl*/
                     }
-                    $("#"+appendId).after(html);
+                    $(".sizeRow:last").after(html);
                 }else{
                     //res.data.
                 }
             }
-        });
-}
-$(document).ready(function() {
+        });                 
+    });
+    var sizeCount = 0;
+    $("#addMoreSize").click(function(n){
+        var gender = $("#product_gender").val();
+        if(gender != ''){
+            $.ajax({
+                type: "POST",
+                url: "/product/getSize",
+                data: {gender:gender},
+                dataType: 'json',
+                success: function(res){
+                    var cln = $(".sizeRow:first").clone();
+                    cln.find('select').attr('id','size-'+sizeCount);
+                    cln.find("option:gt(0)").remove();
+                    cln.find('.color-right').remove();
+                    if(res.status == 'success'){
+                        for(var i=0; i < res.data.length;i++){
+                            var option = new Option(res.data[i].size_name, res.data[i].id);
+                            cln.find('select').append($(option));
+                        }
+                        $(".sizeRow:last").after(cln);
+                    }else{
+                        //res.data.
+                    }
+                }
+            });
+        }else{
+            alert("Please select gender first!");
+        }
+    });
+    
     $('#p_add_dis_btn').click(function(n){
         if($("#p_add_dis_name").val() == '' || $("#p_add_dis_type").val() == '' || $("#p_add_dis_amount").val() == ''){
             alert('All the fields are required!');
@@ -81,12 +194,18 @@ $(document).ready(function() {
     });
         
         
-    
+    colorLength =0;
     $("#addMoreColor").click(function(n){
+        
         if($('.slctClr').length < $("#color option").length){
-            var cln = $("#lastColorSelect").clone();
-            cln.attr('id','');
-            $(".slctClr:last").after(cln);
+            var cln = $("#lastColorSelect .profile-frm-cl2").clone();
+            cln.find('select').attr('id','color-'+colorLength);
+            
+            html='<div class="profile-frm-row.product_select"><div class="profile-frm-cl1">COLOR</div><div class="profile-frm-cl2">';
+            html+=cln.html();
+            html+='</div></div>';
+            colorLength++;
+            $(".slctClr:last").after(html);
         }else{
             alert("Color drop down are reached to the number of option available in it");
         }

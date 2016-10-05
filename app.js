@@ -308,6 +308,7 @@ app.post('/size/update', passportConfig.isAuthenticated,  sizeController.updateS
 /* Products CRUD Section */ // Need isAuthenticated code for check user is loggedin.
 app.get('/product/list/:productId?', passportConfig.isAuthenticated,  productController.listOfProducts);
 app.post('/product/getAttrib', passportConfig.isAuthenticated,  productController.getAttrib);
+app.post('/product/getSize', passportConfig.isAuthenticated,  productController.getSize);
 app.get('/product/add', passportConfig.isAuthenticated,  productController.addProduct);
 app.post('/product/save', passportConfig.isAuthenticated,  productController.saveProduct);
 app.get('/product/edit/:productId', passportConfig.isAuthenticated,  productController.editProduct);
@@ -563,6 +564,7 @@ app.get('/auth/pinterest/callback', passport.authorize('pinterest', { failureRed
 /**
  * Error Handler.
  */
+
 
 app.use(function(req, res) {
       res.status(404);

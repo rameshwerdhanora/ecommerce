@@ -203,7 +203,33 @@ block content
     // --- add product popup --
     <!----- discount coupan popup ---->
      
+    #modal-container-702679.modal.fade(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+          .modal-dialog.discount_coupan.popup-wdt-1
+            .modal-content
+              .modal-header
+                h4 APPLY DISCOUNT CODE
+              .modal-body
+                .profile-right-cl
+                  form(action='', method='post')
+                    .profile-frm-row
+                      .profile-frm-cl1 Discount Name
+                      .profile-frm-cl2
+                        input#p_add_dis_name(type='text', name='p_add_dis_name', value='')
+                    .profile-frm-row
+                      .profile-frm-cl1 Type of Discount
+                      .profile-frm-cl2
+                        select#p_add_dis_type(name='p_add_dis_type')
+                          option(value='percentage') Percentage
+                          option(value='fixed') Fixed
 
+                    .profile-frm-row
+                      .profile-frm-cl1 Amount
+                      .profile-frm-cl2
+                        input#p_add_dis_amount(type='text', name='p_add_dis_amount', value='')
+                    .clearfix
+                  .modal-footer
+                    button#p_add_dis_btn.btn.btn-primary(type='button') APPLY 
+                    
     #modal-container.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
       .modal-dialog.popup-wdt-2
         form(name='addproduct', action='/product/save', method='POST' enctype='multipart/form-data')
@@ -240,7 +266,7 @@ block content
                     p.custom-para UPLOAD PHOTO
                     input#uploadBtn4.upload(type='file',name='product_image4',required='required')
 
-              .profile-right-cl.popup_product
+              .profile-right-cl.popup_product.addProduct
                 form(method='post', action='')
                   .profile-frm-row
                     .profile-frm-cl1 PRODUCT NAME
@@ -271,6 +297,9 @@ block content
                             option(value='male') Male
                             option(value='female') female
                             option(value='unisex') Unisex
+                            
+                  
+                            
                   .profile-frm-row.product_select
                     .profile-frm-cl1 FEATURED
                     .profile-frm-cl2
@@ -300,51 +329,49 @@ block content
                     .profile-frm-cl2
                       input.product_desc(type='text', name='price', value='', required='required')
                       
-                  .profile-frm-row.product_select.slctClr
-                    .profile-frm-cl1 COLOR
-                    .profile-frm-cl2
-                      select.color(name='color[]',id='color' required='required')
-                        each fetchAllColor in fetchAllColors
-                          option(value='#{fetchAllColor._id}') #{fetchAllColor.color_name}
+                  .clr-row.slctClr#lastColorSelect
+                    .color-left
+                        .profile-frm-cl1 COLOR
+                        .profile-frm-cl2
+                          select.color(name='color[]',id='color' required='required')
+                            each fetchAllColor in fetchAllColors
+                              option(value='#{fetchAllColor._id}') #{fetchAllColor.color_name}
                   
-                          
-                  .profile-frm-row.product_select
-                    .profile-frm-cl3
-                      //a(href='#') APPLY DISCOUNT CODE
-                       //.discount
-                      a#modal-702679.btn(href='#modal-container-702679', role='button', data-toggle='modal') Apply Discount code
-
+                    .color-right.colorBtn.clearfix
+                        a(href='javascript:void(0);',id='addMoreColor') ADD COLOR
+                       
+                  
                       
-                  .profile-frm-row.product_select.slctClr#lastColorSelect
-                    .profile-frm-cl1
-                    .profile-frm-cl2
-                      select.color(name='color[]', required='required')
-                        each fetchAllColor in fetchAllColors
-                          option(value='#{fetchAllColor._id}') #{fetchAllColor.color_name}
-
-                  .profile-frm-row#addClrBtn1
-                    .profile-frm-cl3
-                      a(href='javascript:void(0);',id='addMoreColor') ADD COLOR
-                  //.profile-frm-row.product_size
-                    .sg-row
-                      span.sz-txt Size
-                      a(href='#') xs
-                      a(href='#') s
-                      a(href='#') m
-                      a(href='#') l
-                      a(href='#') xl
-                      a(href='#') xxl
-                  //.clearfix
+                      
                   
-                  .profile-frm-row.product_select
+
+                  .profile-frm-row.full-row
                     .profile-frm-cl1 Hash Tag
                     .profile-frm-cl2
                        select.chosen-select(name='hash_tag[]', data-placeholder='Select hash tag', multiple='') 
                         each fetchAllTag in fetchAllTags
                           option(value='#{fetchAllTag._id}') #{fetchAllTag.name}
 
+
+                  .clr-row.sizeRow#sizeRow
+                    .color-left
+                        .profile-frm-row
+                          .profile-frm-cl1 SIZE
+                          .profile-frm-cl2
+                            select#product_size.product_brand(name='size[]', required='required')
+                                  option(value='') Select Size
+                    .color-right.clearfix
+                        a(href='javascript:void(0);',id='addMoreSize') ADD MORE SIZE
+                            
+                       
+
             .modal-footer
-              input.saveproduct(type='submit', name='saveproduct', value='POST TO FEED')
+                
+                .aply-btn-row
+                    .apl-div
+                       a#modal-702679.btn(href='#modal-container-702679', role='button', data-toggle='modal') Apply Discount code
+                    .apl-div-2
+                      input.saveproduct(type='submit', name='saveproduct', value='POST TO FEED')
 
             script(type='text/javascript').
                 $('#ancUpProduct').trigger('click');

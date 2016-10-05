@@ -13,7 +13,7 @@ block content
             tbody
               tr
                 th(align='center')
-                  input#checkbox2(type='checkbox', name='checkbox2')
+                  input.tableCheckbox#checkbox2(type='checkbox', name='checkbox2')
                 th ORDER # 
                 th DATE 
                 th Customer
@@ -24,7 +24,7 @@ block content
                 each orderdatas in orderdata      
                   tr
                     td(align='center')
-                      input#checkbox4(type='checkbox', name='checkbox4')
+                      input.rowCheckbox#checkbox4(type='checkbox', name='checkbox4')
                     td 
                       a(href='/order/detail/#{orderdatas._id}' class='ord-title') #{orderdatas.order_number}
                     td #{orderdatas.orderdate}

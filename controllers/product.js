@@ -593,7 +593,112 @@ exports.loadAttrValues = (req,res) => {
     });
 };
 
+exports.getSize = (req,res)=>{
+    //Get Size for the Gender
+    //Size.find({gender:req.body.gender},function(error,sizeRes){
+    Size.find({"$or":[{"gender": req.body.gender},{"gender": "unisex"}]},function(error,sizeRes){
+        var sizeAr = new Array();
+        if(sizeRes != null){
+            for(var i=0;i < sizeRes.length;i++){
+                var tmp = {};
+                tmp.id = sizeRes[i]._id;
+                tmp.size_name = sizeRes[i].size_name;
+                sizeAr.push(tmp);
+            }
+            res.send({status:'success',data:sizeAr});
+        }else{
+            res.send({status:'error',data:{}});
+        }
+    });
+};
 exports.getAttrib = (req,res)=>{
+    
+     Size.find({_id:req.body.size},function(error,sizeRes){
+        var AttrAr = new Array();
+        if(sizeRes != undefined){
+            for(var i=0;i < sizeRes.length;i++){
+                if((sizeRes[i].listofattrmap!=null) && (sizeRes[i].listofattrmap.length>0)){
+                    for(j=0;j < sizeRes[i].listofattrmap.length;j++){
+                        AttrAr.push(sizeRes[i].listofattrmap[j]);
+                    }
+                }
+            }
+            // Get Attribute for the Sizes
+            Attribute.find({_id:{$in:AttrAr}},function(error,attributRes){
+                var attribAr = new Array();
+                if(attributRes != undefined){
+                  for(var i=0;i < attributRes.length;i++){
+                    attribAr.push(attributRes[i]._id);
+                  }
+                }
+                
+                AttributeOption.find({attribute_id:{$in:attribAr}},function(error,attribOptionRes){
+                    var mainResult = new Array();
+                    for(var i=0;i < sizeRes.length;i++){
+                        var result = {};
+                        result.size = sizeRes[i].size_name;
+                        result.attributes = new Array();
+                        // Sizes
+                        if((sizeRes[i].listofattrmap!=null) && (sizeRes[i].listofattrmap.length>0)){
+                            for(j=0;j < sizeRes[i].listofattrmap.length;j++){
+                                if(attributRes){
+                                    //Attributes
+                                    for(var k=0;k<attributRes.length;k++){
+                                        if(attributRes[k]._id == sizeRes[i].listofattrmap[j]){
+                                            var rs1 = {};
+                                            rs1.attribute = attributRes[k].name;
+                                            rs1.attributeId = attributRes[k]._id;
+                                            rs1.type = attributRes[k].type;
+                                            //Attributes Options
+                                            if(attributRes[k].type == 'select' || attributRes[k].type == 'multiselect'){
+                                                rs1.options = new Array();
+                                                if(attribOptionRes){
+                                                   for(var l=0;l < attribOptionRes.length; l++){
+                                                        if(attributRes[k]._id  == attribOptionRes[l].attribute_id){
+                                                            var tempOption = {};
+                                                            tempOption.id= attribOptionRes[l]._id;
+                                                            tempOption.value= attribOptionRes[l].value;
+                                                            rs1.options.push(tempOption);
+                                                        }
+                                                   }  
+                                                }
+                                            }
+                                            result.attributes.push(rs1);
+                                        }
+                                    }
+                                }
+                            }    
+                        }
+                        
+                        mainResult.push(result);
+                    }
+                    res.send({status:'success',data:mainResult});
+                });	
+            });
+        }else{
+            res.send({status:'error',data:{}});
+        }
+    });
+            
+    //Get Size for the Gender
+    //Size.find({gender:req.body.gender},function(error,sizeRes){
+    /*
+    Size.find({"$or":[{"gender": req.body.gender},{"gender": "unisex"}]},function(error,sizeRes){
+        var sizeAr = new Array();
+        if(sizeRes != null){
+            for(var i=0;i < sizeRes.length;i++){
+                var tmp = {};
+                tmp.id = sizeRes[i]._id;
+                tmp.size_name = sizeRes[i].size_name;
+                sizeAr.push(tmp);
+            }
+            res.send({status:'success',data:sizeAr});
+        }else{
+            res.send({status:'error',data:{}});
+        }
+    });*/
+};
+exports.getAttrib_old = (req,res)=>{
     //Get Size for the Gender
     //Size.find({gender:req.body.gender},function(error,sizeRes){
     Size.find({"$or":[{"gender": req.body.gender},{"gender": "unisex"}]},function(error,sizeRes){
@@ -686,7 +791,6 @@ exports.updateDiscount = (req,res) => {
 
 /* Remove Product */
 exports.removeShopProduct = (req, res) => {
-    console.log(req.body.deleteProductArr);
     Product.remove({_id:{$in:req.body.deleteProductArr}}, function(error, removeProductId){
         ProductsHashtag.remove({product_id:{$in:req.body.deleteProductArr}}, function(err, removeHashtag){
             ProductImage.remove({product_id:{$in:req.body.deleteProductArr}}, function(err, removeProductImage){
