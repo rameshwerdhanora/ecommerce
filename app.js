@@ -65,7 +65,7 @@ const sizeController           = require('./controllers/size');
 const productController        = require('./controllers/product');
 const categoryController       = require('./controllers/category');
 const categorySubController    = require('./controllers/subCategory');
-
+const searchController         = require('./controllers/search');
 
 const attributeController      = require('./controllers/attribute');
 const orderController          = require('./controllers/order');
@@ -97,7 +97,7 @@ mongoose.connection.on('error', () => {
 /**
  * Express configuration.
  */
-app.set('port', process.env.PORT || 8081);
+app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(compression());
@@ -396,7 +396,7 @@ app.get('/customer/order/:customerId', passportConfig.isAuthenticated,  userAppC
 app.get('/customer/payments/:customerId', passportConfig.isAuthenticated,  userAppControlleraAdmin.payments);
 app.get('/customer/address/:customerId', passportConfig.isAuthenticated,  userAppControlleraAdmin.customerAddressList);
 app.post('/customer/address/save/:customerId', passportConfig.isAuthenticated,  userAppControlleraAdmin.customerAddressSave);
-
+app.post('/search', passportConfig.isAuthenticated,  searchController.searchResult)
 
 
 
