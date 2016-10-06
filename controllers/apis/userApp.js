@@ -11,13 +11,14 @@ const bcrypt 			= require('bcrypt-nodejs');
 const NodeMailer 		= require('nodemailer');
 const Passport 			= require('passport');
 const Multer 			= require('multer');
-const User 				= require('../../models/userApp');
-const ForgetPassword	= require('../../models/forgetPassword');
+const User 			= require('../../models/userApp');
+const ForgetPassword		= require('../../models/forgetPassword');
 const Constants 		= require('../../constants/constants');
 const UserDetails 		= require('../../models/usersDetails');
-const Brand             = require('../../models/brand');
-const Attribute         = require('../../models/attribute');
-const AttributeOptions  = require('../../models/attributeOption');
+const Brand             	= require('../../models/brand');
+const Attribute         	= require('../../models/attribute');
+const AttributeOptions  	= require('../../models/attributeOption');
+const Cart             	 	= require('../../models/cart');
 
 
 
@@ -161,11 +162,21 @@ exports.postLoginManually = function(req,res)
 							{
 								if(fetchUserDetails)
 								{
-									return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:fetchUserDetails.configDetail,counter:1});
+									Cart.find({user_id:checkForLogin._id},function(error,fetchUserCartProducts)
+									{
+										if(fetchUserCartProducts.length > 0)
+										{
+											return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:fetchUserDetails.configDetail,counter:fetchUserCartProducts.length});
+										}
+										else
+										{
+											return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:'',counter:0});
+										}
+									});
 								}
 								else 
 								{
-									return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:'',counter:1});
+									return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:'',counter:0});
 								}
 							});
 					  	}
@@ -486,11 +497,21 @@ exports.postSignupFacebook = function(req,res)
 					{
 						if(fetchUserDetails)
 						{
-							return res.json({"status":'success',"msg":'Login Successfully.',newId:tokenExist._id,alluserData:tokenExist,configData:fetchUserDetails.configDetail,counter:1});
+							Cart.find({user_id:checkForLogin._id},function(error,fetchUserCartProducts)
+							{
+								if(fetchUserCartProducts.length > 0)
+								{
+									return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:fetchUserDetails.configDetail,counter:fetchUserCartProducts.length});
+								}
+								else
+								{
+									return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:'',counter:0});
+								}
+							});
 						}
 						else 
 						{
-							return res.json({"status":'success',"msg":'Login Successfully.',newId:tokenExist._id,alluserData:tokenExist,configData:'',counter:1});
+							return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:'',counter:0});
 						}
 					});
 				}
@@ -532,11 +553,21 @@ exports.postSignupGooglePlus = function(req,res)
 					{
 						if(fetchUserDetails)
 						{
-							return res.json({"status":'success',"msg":'Login Successfully.',newId:tokenExist._id,alluserData:tokenExist,configData:fetchUserDetails.configDetail,counter:1});
+							Cart.find({user_id:checkForLogin._id},function(error,fetchUserCartProducts)
+							{
+								if(fetchUserCartProducts.length > 0)
+								{
+									return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:fetchUserDetails.configDetail,counter:fetchUserCartProducts.length});
+								}
+								else
+								{
+									return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:'',counter:0});
+								}
+							});
 						}
 						else 
 						{
-							return res.json({"status":'success',"msg":'Login Successfully.',newId:tokenExist._id,alluserData:tokenExist,configData:'',counter:1});
+							return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:'',counter:0});
 						}
 					});
 				}
