@@ -1346,7 +1346,7 @@ exports.shop_user_view = (req, res) => {
                                     }
                                     if(finalPermission[j].options.length > 0){
                                         for(m = 0;m < finalPermission[j].options.length; m++){
-                                            if(finalPermission[j].options.id == getPermissions[i].parent_id){
+                                            if(finalPermission[j].options[m].id == getPermissions[i].parent_id){
                                                 takenElement.push(getPermissions[i]._id);// Array is used to check the element is added or not
                                                 var tmp = {};
                                                 tmp.id = getPermissions[i]._id;
@@ -1354,7 +1354,7 @@ exports.shop_user_view = (req, res) => {
                                                 //tmp.parent_id = getPermissions[i].parent_id;
                                                 tmp.options = new Array();
                                                 flag = true;
-                                                finalPermission[j].options.push(tmp);
+                                                finalPermission[j].options[m].options.push(tmp);
                                             }
                                         }
                                     }

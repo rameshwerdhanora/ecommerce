@@ -115,7 +115,7 @@ block content
                         li(class='#{ps}')
                             input(type='checkbox', name='permissions[]', value='#{getPermission.id}',checked=(ps == true))
                             | #{getPermission.name}
-                            -if(getPermission.options){
+                            -if(getPermission.options.length > 0){
                             ul.perms-sub-list
                                 each level1 in getPermission.options
                                     - var ps = false;
@@ -128,7 +128,7 @@ block content
                                     li
                                         input(type='checkbox', name='permissions[]', value='#{level1.id}',checked=(ps == true))
                                         | #{level1.name}
-                                        -if(level1.options){
+                                        -if(level1.options.length > 0){
                                         ul.perms-sub-list
                                             each level2 in level1.options
                                                 - var ps = false;
