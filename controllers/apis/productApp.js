@@ -1004,13 +1004,12 @@ exports.BrandItFitsProducts = (req, res) => {
           },
           function(callback)
             {
-              fetchFollowUnFollow(req.params.brandId,req.params.userId, function(err, fetchFollowUnfollow)
-              {
-                var brandFollwo = (fetchFollowUnfollow.length > 0) ? 'true' : 'false';
+              Follow.findOne({user_id:req.params.userId,brand_id:req.params.brandId},function(error,fetchFollowDetails){
+                var brandFollwo = (fetchFollowDetails) ? true : false;
                 filterObj.brand_follow         = brandFollwo;
                 finalArray.push(filterObj);
-                callback(err); 
-              });
+                callback(); 
+              })
             }
         ],
         function(err)
