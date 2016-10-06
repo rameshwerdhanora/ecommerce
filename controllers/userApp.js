@@ -1575,6 +1575,95 @@ exports.updateShopLogo = (req, res) => {
     });
 };
 
+
+exports.updateShopProfile = (req, res) => {
+    uploadShopImages(req,res,function(err) {
+        if(err) {
+            return res.end("Error uploading file.");
+        }
+        var userId = req.body.user_id;
+        User.findOne({_id:{$ne:userId},$or: [ { email_id: req.body.email_id }, { user_name: req.body.user_name}] }, function(err, existingEmail){
+            if(existingEmail){
+                if(existingEmail.email_id == req.body.email_id){
+                    req.flash('errors', ['Email address already exists.']);
+                }else{
+                    req.flash('errors', ['Username already exists.']);
+                }
+                return res.redirect('/user/shop_user_view/'+userId);
+                
+            }else{
+                var updateData = {};
+                if(req.files.length > 0){
+                    for(var i = 0;i < req.files.length;i++){
+                        switch(req.files[i].fieldname){
+                            case 'cover_image':
+                                updateData.cover_image = req.files[i].path.replace('public','');
+                                break;
+                            case 'profile_image':
+                                updateData.profile_image = req.files[i].path.replace('public','');
+                                break;
+                        }
+                    }
+                }
+                updateData.shop_name   	= req.body.shop_name;
+                updateData.user_name   	= req.body.user_name;
+                updateData.first_name  	= req.body.first_name;
+                updateData.last_name   	= req.body.last_name;
+                updateData.email_id       	= req.body.email_id;                
+                updateData.contact_no  	= req.body.contact_no;
+                
+                
+                updateData.address        	= req.body.address;
+                updateData.city        	= req.body.city;
+                updateData.state        	= req.body.state;
+                updateData.country        	= req.body.country;
+                updateData.zip             = req.body.zip;
+                updateData.bio             = req.body.bio;
+                updateData.updated        	= Date.now();
+
+
+                User.update({_id:userId},updateData,function(error){
+                    if(error === null){
+                        // Delete previous permission
+                        UserPermission.remove({user_id:userId},function(error,delRes){
+                            //-- save user permissions 
+                            if(req.body.permissions){
+                                for(var i=0; i<req.body.permissions.length; i++){
+                                    var userPermission = new UserPermission();
+                                    userPermission.user_id = userId;
+                                    userPermission.permission_id = req.body.permissions[i];
+                                    userPermission.created = Date.now();
+                                    userPermission.save();
+                                }
+                            }
+                            // Get the get template content for 'registration' and call the helper to send the email         
+                            /*EmailTemplate.findOne({template_type:'registration'},function(error,getTemplateDetail){
+                                if(getTemplateDetail != null){
+                                    var registerTemplateContent = getTemplateDetail.content;
+                                    //dynamicTemplateContent= registerTemplateContent.replace(/{first_name}/gi, userIns.first_name).replace(/{last_name}/gi, userIns.last_name);
+                                    dynamicTemplateContent = registerTemplateContent.replace(/{customer_name}/gi, userIns.first_name);
+                                    if(dynamicTemplateContent){
+                                        CommonHelper.emailTemplate(getTemplateDetail.subject, dynamicTemplateContent, userIns._id);      
+                                    }
+                                }
+                            });*/
+                            // Send SMS Using Twilio API to perticular user mobile number
+                            if((updateData.contact_no!='') && isNaN(updateData.contact_no)){
+                                //CommonHelper.sendSms(req, res, smsContent, userId);
+                            }
+                            req.flash('success', ['User information updated successfully.']);
+                            return res.redirect('/user/shop_user_view/'+userId);
+                        });
+                    }else{
+                        req.flash('error', 'Something wrong!!');
+                        return res.redirect('/user/shop_user_view/'+userId);
+                    }
+                });
+            }
+        });
+    });  
+};
+
 /* Remove Product */
 exports.removeUsersAndShop = (req, res) => {
     

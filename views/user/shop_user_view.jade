@@ -6,7 +6,7 @@ block content
       img(src='/images/title-icon.png', alt='icon')
       |  USERS
     .customer-box.clearfix
-        //form(method='post', action='/user/save')
+      form(method='post', action='/user/update-shop-profile', enctype='multipart/form-data')
         .customer-cl
           h2 USERS
           ul
@@ -22,6 +22,7 @@ block content
         .profile-cl
           .profile-top-row
             h2 VIEW USER
+            input(type='hidden',name='user_id',value='#{result._id}')
           .profile-form-box
             .add-user-cl1.col-sm-6
               h4 VIEW USER
@@ -143,3 +144,5 @@ block content
                                                     | #{level2.name}
                                         -}
                             -}
+            .btn-btm
+              button(type='submit') UPDATE USER
