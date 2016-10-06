@@ -67,9 +67,10 @@ exports.postSignupManuallySave = function(req,res)
 				}
 				else 
 				{
+					var username 			= req.body.user_name.toLowerCase();
 					var userIns        		= new User();
 					userIns.role_id    		= Constants.CUSTOMERROLE;
-					userIns.user_name   	= req.body.user_name;
+					userIns.user_name   	= username;
 					userIns.password    	= req.body.password;
 				    userIns.email_id       	= req.body.email_id;
 					userIns.first_name  	= req.body.first_name;
@@ -146,8 +147,8 @@ exports.postLoginManually = function(req,res)
 {
 	if(req.body.device_token !== '')
   	{
-
-  		User.findOne({ user_name: req.body.user_name,role_id:Constants.CUSTOMERROLE}, function(error, checkForLogin) 
+  		var username = req.body.user_name.toLowerCase();
+  		User.findOne({ user_name: username,role_id:Constants.CUSTOMERROLE}, function(error, checkForLogin) 
   		{
   			//console.log(checkForLogin)
   			if(checkForLogin)
@@ -426,9 +427,10 @@ function signUpFromSocial(req,res,constants)
 	//console.log(req.body);
 	var profile_image = req.body.profile_image != '' ? req.body.profile_image : '';
 	var email_id = (req.body.email) ?  req.body.email : '';
+	var username 			= email_id.toLowerCase();
 	var userIns        		= new User();
 	userIns.role_id    		= Constants.CUSTOMERROLE;
-	userIns.user_name   	= email_id;
+	userIns.user_name   	= username;
 	userIns.password    	= '$2a$10$7MMAHRBcyOF2EakY2mDTEukRL6ev/YWJbsGvMUTToBoAccGQALs2K';
     userIns.email_id       	= email_id;
 	userIns.first_name  	= req.body.first_name;
