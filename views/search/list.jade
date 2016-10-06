@@ -4,20 +4,89 @@ block content
     .large-title-row
       img(src='/images/title-icon2.png', alt='icon')
       |  Search Result
+    p Search Result for 
+      b "#{postData}"
     .customer-box.cmn-in.clearfix
       .low-tbl-box.order-txt
+
         form(name='form2', method='post', action='')
-          table(width='100%', cellspacing='0', cellpadding='0', border='0')
-            tbody
-              tr
-                th(align='center')
-                  input.tableCheckbox#checkbox2(type='checkbox', name='checkbox2')
-                th ORDER # 
-                th DATE 
-                th Customer
-                th payment STATUS
-                th Total
-                th STATUS
-              tr
-                td(colspan=8) Order is not created
-        
+          script(type='text/javascript', src='/js/tabsearch.js')
+          link(rel='stylesheet', type='text/css', href='/css/tabsearch.css?v=1.0')
+
+          ul.searchtab
+           li(onclick='showresult("tabusers")' class='tabs active' id='tabusers') USERS (#{searchdata.userData.length})
+           li(onclick='showresult("tabproducts")' class='tabs' id='tabproducts') PRODUCTS (#{searchdata.productData.length})
+           li(onclick='showresult("taborders")' class='tabs' id='taborders') ORDERS (#{searchdata.orderData.length})
+          ul.showresults
+            li.tabusers
+              table(width='100%', cellspacing='0', cellpadding='0', border='0')
+                tbody
+                  tr
+                    th  
+                    th Name 
+                    th Email 
+                    th Gender
+                    th B-Day
+                    th Image
+                    if searchdata.userData.length > 0 
+                      each userData in searchdata.userData      
+                        tr
+                          td    
+                          td 
+                            a(href='/customer/view/#{userData._id}' class='ord-title' title='#{userData.first_name} #{userData.last_name}') #{userData.first_name} #{userData.last_name}
+                          td #{userData.email}  
+                          td #{userData.gender}
+                          td #{userData.dob}
+                          td 
+                            img(src='#{userData.profile_image}', alt='icon' class='userimage' title='#{userData.first_name} #{userData.last_name}')
+                    else
+                      tr
+                        td(colspan=6) Not found any users according to your search key
+                          
+            li.tabproducts(style='display:none')
+              table(width='100%', cellspacing='0', cellpadding='0', border='0')
+                tbody
+                  tr
+                    th 
+                    th Name 
+                    th SKU 
+                    th Price
+                    th Gender
+                    th Created
+                    if searchdata.productData.length > 0 
+                      each productData in searchdata.productData      
+                        tr
+                          td    
+                          td 
+                            a(href='/product/list/#{productData._id}' class='ord-title' title='#{productData.name}') #{productData.name} 
+                          td #{productData.sku} 
+                          td $#{productData.price}
+                          td #{productData.gender}
+                          td #{productData.created}
+                    else
+                      tr
+                        td(colspan=6) Not found any product according to your search key
+
+             li.taborders(style='display:none')
+              table(width='100%', cellspacing='0', cellpadding='0', border='0')
+                tbody
+                  tr
+                    th
+                    th ORDER # 
+                    th STATUS 
+                    th DATE 
+                    th Total
+                    if searchdata.orderData.length > 0 
+                      each orderData in searchdata.orderData      
+                        tr
+                          td    
+                          td 
+                            a(href='/order/detail/#{orderData._id}' class='ord-title' title='#{orderData.name}') #{orderData.order_number} 
+                          td #{orderData.status} 
+                          td #{orderData.order_date}
+                          td $#{orderData.totalprice}
+                          td #{orderData.created}
+                    else
+                      tr
+                        td(colspan=6) Not found any order according to your search key
+
