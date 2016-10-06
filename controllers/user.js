@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const passport = require('passport');
 const User = require('../models/userApp');
+const CommonHelper = require('../helpers/commonHelper');
 
 /**
  * GET /login
@@ -40,10 +41,30 @@ exports.postLogin = (req, res, next) => {
       return res.redirect('/login');
     }
     req.logIn(user, (err) => {
-      if (err) { return next(err); }
-      req.flash('success', ['Success! You are logged in.' ]);
-      var redirectUrl = (req.session.returnTo == '/')?'/dashboard':req.session.returnTo;
-      res.redirect(redirectUrl || '/dashboard');
+        if (err) { return next(err); }
+        req.flash('success', ['Success! You are logged in.' ]);
+        var redirectUrl = (req.session.returnTo == '/')?'/dashboard':req.session.returnTo;
+        if(user.role_id == 3 || user.role_id == 4 || user.role_id == 6){
+            if(user.role_id == 3 || user.role_id == 4){
+                if(CommonHelper.hasPermission(user._id,'57c04c7043592d87b0e6f5f9')){
+                    res.redirect(redirectUrl || '/dashboard');
+                }else{
+                     res.redirect('/user/shopprofile');
+                }
+            }else if(user.role_id == 6){
+                if(CommonHelper.hasPermission(user.shop_id,'57c04c7043592d87b0e6f5f9')){
+                    if(CommonHelper.hasPermission(user._id,'57c04c7043592d87b0e6f5f9')){
+                        res.redirect(redirectUrl || '/dashboard');
+                    }else{
+                        res.redirect('/user/shopprofile');
+                    }
+                }else{
+                     res.redirect('/user/shopprofile');
+                }
+            }
+        }else{
+            res.redirect(redirectUrl || '/dashboard');
+        }
     });
   })(req, res, next);
 };

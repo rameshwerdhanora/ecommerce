@@ -210,6 +210,7 @@ app.get('/api/product/featured/:userId',productAppController.listofAllFeaturedPr
 app.get('/api/product/chkfomoalert/:userId',productAppController.checkFomoAlertAccToUser);
 app.get('/api/product/fits/:userId/:config',productAppController.listofAllItFitsProd);
 app.get('/api/product/details/:productId/:userId',productAppController.productDetailView);
+
 app.post('/api/product/fetchsort',productAppController.fetchSortValues);
 app.get('/api/product/addcartoptions/:productId',productAppController.addCartOptions);
 

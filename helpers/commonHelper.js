@@ -1,4 +1,5 @@
 const User = require('../models/userApp');
+const UserPermissions = require('../models/userPermissions');
 const nodemailer = require('nodemailer');
 
 // Send email to user with email template
@@ -71,3 +72,12 @@ exports.sendSms = (req, res, smsContent, userId) => {
         }
     });	
 };*/
+
+
+exports.hasPermission = function(user_id, permissionId) {
+    UserPermissions.count({user_id:user_id,permission_id:permissionId},function(error,hasPermission){
+        console.log('helper table'+hasPermission);
+        return (hasPermission != 0)?true:false;
+        
+    });
+};
