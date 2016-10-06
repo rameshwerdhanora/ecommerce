@@ -778,7 +778,7 @@ exports.fetchFilterValues = (req, res) => {
 function brandDetailsWithFilterAndSort(saveFilterSort,req, res)
 {
 
-  Brand.findOne({_id:saveFilterSort.brand_id},function(error,fetchAllBrands)
+  Brand.findOne({_id:req.params.brandId},function(error,fetchAllBrands)
   { 
       if(fetchAllBrands)
       {
@@ -796,7 +796,7 @@ function brandDetailsWithFilterAndSort(saveFilterSort,req, res)
         ([
           function(callback)
           {
-            fetchingFilterProduct(fetchAllBrands._id,saveFilterSort, function(err, fetchAllProducts)
+            fetchingFilterProduct(req.params.brandId,saveFilterSort, function(err, fetchAllProducts)
             {
               filterObj.product = fetchAllProducts;
               async.eachSeries(fetchAllProducts, function(fetchProductImage, callback)
@@ -1005,7 +1005,7 @@ exports.BrandItFitsProducts = (req, res) => {
           function(callback)
             {
               Follow.findOne({user_id:req.params.userId,brand_id:req.params.brandId},function(error,fetchFollowDetails){
-                var brandFollwo = (fetchFollowDetails) ? true : false;
+                var brandFollwo = (fetchFollowDetails) ? 'yes' : 'no';
                 filterObj.brand_follow         = brandFollwo;
                 finalArray.push(filterObj);
                 callback(); 
@@ -1304,6 +1304,7 @@ function fetchingSortProduct(bid,type,price,itfits,callback)
 
 function fetchingFilterProduct(bid,saveFilterSort,callback)
 {
+
     //var query     = {brand_id:bid};
     var minprice  = saveFilterSort.filter[0].minprice;
     var maxprice  = saveFilterSort.filter[0].maxprice;
@@ -1313,7 +1314,7 @@ function fetchingFilterProduct(bid,saveFilterSort,callback)
     var typeSort;
     var priceSort;
 
-    query.brand_id = saveFilterSort.filter[0].brand_id;
+    query.brand_id = bid;
 
     if(saveFilterSort.filter[0].catId){
       query.category_id = saveFilterSort.filter[0].catId;
