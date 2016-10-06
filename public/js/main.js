@@ -1,5 +1,5 @@
-function getSizeOptions(gender,appendId){
-    
+function getSizeOptions(gender,frmID){
+    $("#"+frmID+" .sizeRow:gt(0)").remove();// To delete all the row accept first 
     if(gender != ''){
         $.ajax({
             type: "POST",
@@ -7,10 +7,9 @@ function getSizeOptions(gender,appendId){
             data: {gender:gender},
             dataType: 'json',
             success: function(res){
-                $(".product_size").remove();
-
+                $("#"+frmID+" .size-0").remove();// To delete previous options
                 if(res.status == 'success'){
-                    var selectList = $("#product_size");
+                    var selectList = $("#"+frmID+" #size-0");
                     selectList.find("option:gt(0)").remove();
                     for(var i=0; i < res.data.length;i++){
                         var option = new Option(res.data[i].size_name, res.data[i].id);
@@ -25,77 +24,19 @@ function getSizeOptions(gender,appendId){
         alert("Please select gender first!");
     }
 }
-/*
-
-$.ajax({
-        type: "POST",
-        url: "/product/getAttrib",
-        data: {gender:gender},
-        dataType: 'json',
-        success: function(res){
-            $(".product_size").remove();
-            if(res.status == 'success'){
-                var html = '';
-                for(var i=0; i < res.data.length;i++){//size
-
-
-                    for(var j=0; j < res.data[i].attributes.length;j++){
-                        html+='<div class=" profile-frm-row product_size"><div class="sg-row"><span class="sz-txt">';
-                        html+= res.data[i].size;
-                        html+= ' ('+res.data[i].attributes[j].attribute +') ';
-                        if(res.data[i].attributes[j].type == 'select' || res.data[i].attributes[j].type == 'multiselect'){
-                            if(res.data[i].attributes[j].options.length){
-                                for(var k = 0; k < res.data[i].attributes[j].options.length; k++){
-                                    //html+= '<a href="#">'+ res.data[i].attributes[j].options[k].value+'</a>';
-                                     if(attributeOptions.indexOf(res.data[i].attributes[j].options[k].id) == -1){
-                                         html+= '<input type="checkbox" value="'+res.data[i].attributes[j].options[k].id+'" name="size[]" />'+ res.data[i].attributes[j].options[k].value+'';//'+res.data[i].attributes[j].attributeId+'
-                                     }else{
-                                         html+= '<input checked="checked" type="checkbox" value="'+res.data[i].attributes[j].options[k].id+'" name="size[]" />'+ res.data[i].attributes[j].options[k].value+'';//'+res.data[i].attributes[j].attributeId+'
-                                     }
-
-                                }
-                                html+='</span></div></div>';
-                            }else{
-                                html+='No option found</span></div></div><div class="clearfix"></div>';
-                            }
-                        }else{
-                            // textbox or textarea
-                            html+= '<input type="'+res.data[i].attributes[j].type+'"  name="size['+res.data[i].attributes[j].attributeId+']" />';//'+res.data[i].attributes[j].attributeId+'
-                        }
-                    }
-                    //html+='</span></div></div>';
-
-                    
-                }
-                $("#"+appendId).after(html);
-            }else{
-                //res.data.
-            }
-        }
-    });
-    
-    */
 $(document).ready(function() {
-    $(".tableCheckbox").change(function(n){
-        var checkedProp = $(this).is(':checked');
-        $(".rowCheckbox").each(function(){
-           $(this).prop('checked',checkedProp); 
-        });
-    });
-    var sizeRowCount = 0;
-    $(".addProduct").on('change','select[name="size[]"]',function(n){
-        /*.profile-frm-row.product_select#size_div
-            .profile-frm-cl1 SIZE
-            .profile-frm-cl2
-              select#product_size.product_brand(name='size[]', required='required')
-                    option(value='') Select Size */
+    $(".addProduct").on('change','select[name="attribute[]"]',function(n){
+        
+        var selectElement = $(this);
+        var formId = $(this).closest('form').attr('id');
+        parentDivId = selectElement.closest('.sizeRow').attr('id');
         $.ajax({
             type: "POST",
             url: "/product/getAttrib",
             data: {size:$(this).val()},
             dataType: 'json',
             success: function(res){
-                $(".product_size").remove();
+                $("."+parentDivId).remove();// To delete all it's previous options to reset
                 if(res.status == 'success'){
                     var html = '';
                     for(var i=0; i < res.data.length;i++){//size
@@ -105,14 +46,16 @@ $(document).ready(function() {
                             if((j+1) == attribCount){
                                 bbCls = 'b_b';
                             }
-                            html+='<div class="sizeRow sizeOptions profile-frm-row product_size '+bbCls+'"><div class="sg-row"><span class="sz-txt">';
-                            html+= res.data[i].size;
-                            html+= ' ('+res.data[i].attributes[j].attribute +') ';
+                            html+='<div class="sizeRow sizeOptions profile-frm-row product_size '+bbCls+' '+parentDivId+'"><div class="sg-row"><span class="sz-txt">';
+                            //html+= res.data[i].size;
+                            //html+= ' ('+res.data[i].attributes[j].attribute +') ';
+                            html+= res.data[i].attributes[j].attribute +' ';
                             if(res.data[i].attributes[j].type == 'select' || res.data[i].attributes[j].type == 'multiselect'){
                                 if(res.data[i].attributes[j].options.length){
                                     for(var k = 0; k < res.data[i].attributes[j].options.length; k++){
                                         //html+= '<a href="#">'+ res.data[i].attributes[j].options[k].value+'</a>';
-                                        if(attributeOptions.indexOf(res.data[i].attributes[j].options[k].id) == -1){
+                                        
+                                        if(attributeOptions.indexOf(res.data[i].attributes[j].options[k].id) == -1 || formId == 'addproduct'){
                                              html+= '<input type="checkbox" value="'+res.data[i].attributes[j].options[k].id+'" name="size[]" /><span>'+ res.data[i].attributes[j].options[k].value+'</span>';//'+res.data[i].attributes[j].attributeId+'
                                         }else{
                                              html+= '<input checked="checked" type="checkbox" value="'+res.data[i].attributes[j].options[k].id+'" name="size[]" /><span>'+ res.data[i].attributes[j].options[k].value+'</span>';//'+res.data[i].attributes[j].attributeId+'
@@ -130,38 +73,51 @@ $(document).ready(function() {
                         }
                         //html+='</span></div></div>';
                     }
-                    $(".sizeRow:last").after(html);
+                    $("#"+formId+" #"+parentDivId).after(html);
                 }else{
                     //res.data.
                 }
             }
         });                 
     });
-    var sizeCount = 0;
-    $("#addMoreSize").click(function(n){
-        var gender = $("#product_gender").val();
+    
+    $(".addProduct").on('click','#addMoreSize',function(n){
+        var formId  = $(this).closest('form').attr('id');
+        console.log(formId);
+        var gender = $("#"+formId+" select[name='gender']").val();
+        console.log(gender);
         if(gender != ''){
-            $.ajax({
-                type: "POST",
-                url: "/product/getSize",
-                data: {gender:gender},
-                dataType: 'json',
-                success: function(res){
-                    var cln = $(".sizeRow:first").clone();
-                    cln.find('select').attr('id','size-'+sizeCount);
-                    cln.find("option:gt(0)").remove();
-                    cln.find('.color-right').remove();
-                    if(res.status == 'success'){
-                        for(var i=0; i < res.data.length;i++){
-                            var option = new Option(res.data[i].size_name, res.data[i].id);
-                            cln.find('select').append($(option));
+            var sizeCount = $("#"+formId+" .sizeRowDropDown").length;
+            console.log('sizeRow->'+sizeCount);
+            var totalOption = parseInt($("#"+formId+" #size-0 option").length);
+            console.log('totalOption->'+totalOption);
+            if(sizeCount < (totalOption -1 )){
+                $.ajax({
+                    type: "POST",
+                    url: "/product/getSize",
+                    data: {gender:gender},
+                    dataType: 'json',
+                    success: function(res){
+                        var cln = $("#"+formId+" .sizeRow:first").clone();
+                        cln.attr('id','sizeRow-'+sizeCount);
+                        cln.find('select').attr('id','size-'+sizeCount);
+                        cln.find("option:gt(0)").remove();
+                        cln.find('.color-right').remove();
+                        if(res.status == 'success'){
+                            for(var i=0; i < res.data.length;i++){
+                                var option = new Option(res.data[i].size_name, res.data[i].id);
+                                cln.find('select').append($(option));
+                            }
+                            $("#"+formId+" .sizeRow:last").after(cln);
+                        }else{
+                            //res.data.
                         }
-                        $(".sizeRow:last").after(cln);
-                    }else{
-                        //res.data.
                     }
-                }
-            });
+                });
+            }else{
+                alert('Max attribute limit is over');
+            }
+            
         }else{
             alert("Please select gender first!");
         }
@@ -190,22 +146,28 @@ $(document).ready(function() {
         }
     });
     $('#product_gender').change(function(n){
-        getSizeOptions($(this).val(),'addClrBtn1');
+        var frmId = $(this).closest('form').attr('id');
+        getSizeOptions($(this).val(),frmId);
     });
         
-        
-    colorLength =0;
-    $("#addMoreColor").click(function(n){
-        
-        if($('.slctClr').length < $("#color option").length){
-            var cln = $("#lastColorSelect .profile-frm-cl2").clone();
+    $(".tableCheckbox").change(function(n){
+        var checkedProp = $(this).is(':checked');
+        $(".rowCheckbox").each(function(){
+           $(this).prop('checked',checkedProp); 
+        });
+    });
+    
+    $(".addProduct").on('click','#addMoreColor',function(n){
+        var formId = $(this).closest('form').attr('id');
+        var colorLength = $("form#"+formId+" .slctClr").length;
+        if($('#'+formId+' .slctClr').length < $("#"+formId+" #color option").length){
+            var cln = $("#"+formId+" #lastColorSelect .profile-frm-cl2").clone();
             cln.find('select').attr('id','color-'+colorLength);
             
-            html='<div class="profile-frm-row.product_select"><div class="profile-frm-cl1">COLOR</div><div class="profile-frm-cl2">';
+            html='<div class="profile-frm-row product_select slctClr"><div class="profile-frm-cl1">COLOR</div><div class="profile-frm-cl2">';
             html+=cln.html();
             html+='</div></div>';
-            colorLength++;
-            $(".slctClr:last").after(html);
+            $("#"+formId+" .slctClr:last").after(html);
         }else{
             alert("Color drop down are reached to the number of option available in it");
         }

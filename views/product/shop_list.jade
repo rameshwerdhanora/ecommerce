@@ -232,7 +232,7 @@ block content
                     
     #modal-container.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
       .modal-dialog.popup-wdt-2
-        form(name='addproduct', action='/product/save', method='POST' enctype='multipart/form-data')
+        form(name='addproduct',id='addproduct', action='/product/save', method='POST' enctype='multipart/form-data')
           input#add_dis_name(type='hidden',name='add_dis_name')
           input#add_dis_type(type='hidden',name='add_dis_type')
           input#add_dis_amount(type='hidden',name='add_dis_amount')
@@ -267,7 +267,6 @@ block content
                     input#uploadBtn4.upload(type='file',name='product_image4',required='required')
 
               .profile-right-cl.popup_product.addProduct
-                form(method='post', action='')
                   .profile-frm-row
                     .profile-frm-cl1 PRODUCT NAME
                     .profile-frm-cl2
@@ -353,12 +352,12 @@ block content
                           option(value='#{fetchAllTag._id}') #{fetchAllTag.name}
 
 
-                  .clr-row.sizeRow#sizeRow
+                  .clr-row.sizeRow.sizeRowDropDown#sizeRow-0
                     .color-left
                         .profile-frm-row
                           .profile-frm-cl1 SIZE
                           .profile-frm-cl2
-                            select#product_size.product_brand(name='size[]', required='required')
+                            select#size-0.product_brand(name='attribute[]', required='required')
                                   option(value='') Select Size
                     .color-right.clearfix
                         a(href='javascript:void(0);',id='addMoreSize') ADD MORE SIZE
@@ -410,7 +409,7 @@ block content
     a#ancUpProduct.default-btn.dnone(href='#modal1-container', title='Add Product', role='button', data-toggle='modal') 
     #modal1-container.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
       .modal-dialog.popup-wdt-2
-        form(name='addproduct', action='/product/update', method='POST' enctype='multipart/form-data')
+        form(name='editProduct',id='editProduct', action='/product/update', method='POST' enctype='multipart/form-data')
           .modal-content.add_product
             input#edit_dis_name(type='hidden',name='edit_dis_name',value='#{productRes.dis_name}')
             input#edit_dis_type(type='hidden',name='edit_dis_type',value='#{productRes.dis_type}')
@@ -445,122 +444,186 @@ block content
                     p.custom-para UPLOAD PHOTO
                     input#uploadBtn4.upload(type='file',name='product_image4')
 
-              .profile-right-cl.popup_product
-                form(method='post', action='')
-                  .profile-frm-row
-                    .profile-frm-cl1 PRODUCT NAME
-                    .profile-frm-cl2
-                      input.product_name(type='text', name='name', value='#{productRes.name}', required='required')
-                  .profile-frm-row
-                    .profile-frm-cl1  PROCUCT BLURB
-                    .profile-frm-cl2
-                      input(type='text', value='#{productRes.blurb}', name='blurb',required='required')
-                  .profile-frm-row.product_select
-                    .profile-frm-cl1 BRAND
-                    .profile-frm-cl2
-                      select.product_brand(name='brand_id', required='required')
-                           option(value='0') Select Brand
-                           each allBrand in allBrands
-                            option(value='#{allBrand._id}',selected=(allBrand._id == productRes.brand_id)) #{allBrand.brand_name} 
+              .profile-right-cl.popup_product.addProduct
+                    .profile-frm-row
+                      .profile-frm-cl1 PRODUCT NAME
+                      .profile-frm-cl2
+                        input.product_name(type='text', name='name', value='#{productRes.name}', required='required')
+                    .profile-frm-row
+                      .profile-frm-cl1  PROCUCT BLURB
+                      .profile-frm-cl2
+                        input(type='text', value='#{productRes.blurb}', name='blurb',required='required')
+                    .profile-frm-row.product_select
+                      .profile-frm-cl1 BRAND
+                      .profile-frm-cl2
+                        select.product_brand(name='brand_id', required='required')
+                             option(value='0') Select Brand
+                             each allBrand in allBrands
+                              option(value='#{allBrand._id}',selected=(allBrand._id == productRes.brand_id)) #{allBrand.brand_name} 
 
-                  .profile-frm-row.product_select
-                    .profile-frm-cl1 SKU-ID
-                    .profile-frm-cl2
-                      input.sku(type='text', name='sku', value='#{productRes.sku}', required='required')
-                  .profile-frm-row.product_select
-                    .profile-frm-cl1 GENDER
-                    .profile-frm-cl2
-                      select#product_gender_edit.product_brand(name='gender', required='required')
-                        option(value='') Select Gender
-                        option(value='male',selected=(productRes.gender == 'male')) Male
-                        option(value='female',selected=(productRes.gender == 'female')) female
-                        option(value='unisex',selected=(productRes.gender == 'unisex')) Unisex
-                  .profile-frm-row.product_select
-                    .profile-frm-cl1 FEATURED
-                    .profile-frm-cl2
-                      select#is_featured.is_featured(name='is_featured', required='required')
-                            option(value='') Select Feature
-                            option(value='1',selected=(productRes.is_featured == '1')) Yes
-                            option(value='0',selected=(productRes.is_featured == '0')) No    
+                    .profile-frm-row.product_select
+                      .profile-frm-cl1 SKU-ID
+                      .profile-frm-cl2
+                        input.sku(type='text', name='sku', value='#{productRes.sku}', required='required')
+                    .profile-frm-row.product_select
+                      .profile-frm-cl1 GENDER
+                      .profile-frm-cl2
+                        select#product_gender_edit.product_brand(name='gender', required='required')
+                          option(value='') Select Gender
+                          option(value='male',selected=(productRes.gender == 'male')) Male
+                          option(value='female',selected=(productRes.gender == 'female')) female
+                          option(value='unisex',selected=(productRes.gender == 'unisex')) Unisex
+                    .profile-frm-row.product_select
+                      .profile-frm-cl1 FEATURED
+                      .profile-frm-cl2
+                        select#is_featured.is_featured(name='is_featured', required='required')
+                              option(value='') Select Feature
+                              option(value='1',selected=(productRes.is_featured == '1')) Yes
+                              option(value='0',selected=(productRes.is_featured == '0')) No    
+
+                    .profile-frm-row.product_select
+                      .profile-frm-cl1 CATEGORY
+                      .profile-frm-cl2
+                        select.product_category(name='category_id' onchange='loadSelectedsubCategory(this.value)')
+                          option(value='') Select Category
+                          each fetchCategory in fetchCategories
+                            option(value='#{fetchCategory._id}',selected=(fetchCategory._id == productRes.category_id)) #{fetchCategory.name}
+
+                    .profile-frm-row.product_select
+                      .profile-frm-cl1 SUBCATEGORY
+                      .profile-frm-cl2
+                        select.product_sub_category(name='sub_category_id', required='required')
+                          option(value='0') Select Sub Category
+                          each fetchSubCategory in fetchSubCategories
+                            option(value='#{fetchSubCategory._id}',selected=(fetchSubCategory._id == productRes.sub_category_id)) #{fetchSubCategory.name}
+
+                    .profile-frm-row.product_select
+                      .profile-frm-cl1 PRICE
+                      .profile-frm-cl2
+                        input.product_desc(type='text', name='price', value='#{productRes.price}', required='required')
+
+
+                    .clr-row.slctClr#lastColorSelect
+                      .color-left
+                          .profile-frm-cl1 COLOR
+                          .profile-frm-cl2
+                            select.color#color(name='color[]', required='required')
+                                each fetchAllColor in fetchAllColors
+                                    each clr in productRes.color
+                                      -var tmpClrSelection = '';
+                                      -if(fetchAllColor._id == clr){
+                                          - tmpClrSelection = clr;
+                                      -}
+                                    option(value='#{fetchAllColor._id}',selected=(String(fetchAllColor._id) == String(tmpClrSelection))) #{fetchAllColor.color_name}
+
+                      .color-right.colorBtn.clearfix
+                          a(href='javascript:void(0);',id='addMoreColor') ADD COLOR
+
+
+
+                    -for(var i=0;i< (productRes.color.length -1); i++){
+                    .profile-frm-row.product_select.slctClr
+                      .profile-frm-cl1
+                      .profile-frm-cl2
+                        select.color(name='color[]', required='required',id='color-#{i+1}')
+                          each fetchAllColor in fetchAllColors
+                            option(value='#{fetchAllColor._id}',selected=(fetchAllColor._id == productRes.color[i])) #{fetchAllColor.color_name}
+                    -}
+
+
+
+
+
+                    .profile-frm-row.full-row
+                        .profile-frm-cl1 Hash Tag
+                        .profile-frm-cl2
+                           select.chosen-select(name='hash_tag[]', data-placeholder='Select hash tag', multiple='') 
+                            each fetchAllTag in fetchAllTags
+                             - var tempSelect = true
+                             - for(var i=0;i< selectedHashtag.length;i++){
+                                - if(fetchAllTag._id == selectedHashtag[i].hashtag_id){
+                                  - var tempSelect = false
+                                   option(value="#{fetchAllTag._id}", selected=(fetchAllTag._id == selectedHashtag[i].hashtag_id))  #{fetchAllTag.name}
+                                - } 
+                             - }
+                             - if(tempSelect){
+                                option(value='#{fetchAllTag._id}') #{fetchAllTag.name}
+                             - }
+
+                    .clr-row.sizeRow.sizeRowDropDown#sizeRow-0
+                        .color-left
+                            .profile-frm-row
+                              .profile-frm-cl1 SIZE
+                              .profile-frm-cl2
+                                select#size-0.product_brand(name='attribute[]', required='required')
+                                      option(value='') Select Size
+                                      -if(sizeResult.length){
+                                        -var selectFirstSize = (productSize.length > 0) ? productSize[0]:'';
+                                        -for(var i=0;i< sizeResult.length;i++){
+                                            option(value="#{sizeResult[i]._id}", selected=(String(selectFirstSize) == String(sizeResult[i]._id))) #{sizeResult[i].size_name}
+                                            
+                                        -}
+                                        script(type='text/javascript').
+                                            $(document).ready(function(n){
+                                                $("#editProduct #size-0").trigger('change');
+                                            });
+                                      -}
+                                      
+                        .color-right.clearfix
+                            a(href='javascript:void(0);',id='addMoreSize') ADD MORE SIZE
                             
-                  .profile-frm-row.product_select
-                    .profile-frm-cl1 CATEGORY
-                    .profile-frm-cl2
-                      select.product_category(name='category_id' onchange='loadSelectedsubCategory(this.value)')
-                        option(value='') Select Category
-                        each fetchCategory in fetchCategories
-                          option(value='#{fetchCategory._id}',selected=(fetchCategory._id == productRes.category_id)) #{fetchCategory.name}
-
-                  .profile-frm-row.product_select
-                    .profile-frm-cl1 SUBCATEGORY
-                    .profile-frm-cl2
-                      select.product_sub_category(name='sub_category_id', required='required')
-                        option(value='0') Select Sub Category
-                        each fetchSubCategory in fetchSubCategories
-                          option(value='#{fetchSubCategory._id}',selected=(fetchSubCategory._id == productRes.sub_category_id)) #{fetchSubCategory.name}
-
-                  .profile-frm-row.product_select
-                    .profile-frm-cl1 PRICE
-                    .profile-frm-cl2
-                      input.product_desc(type='text', name='price', value='#{productRes.price}', required='required')
+                    -if(productSize.length > 1){
+                        -for(var i=1; i < productSize.length; i++){
+                            .clr-row.sizeRow.sizeRowDropDown(id='sizeRow-#{i}')
+                                .color-left
+                                    .profile-frm-row
+                                      .profile-frm-cl1 SIZE
+                                      .profile-frm-cl2
+                                        select.product_brand(name='attribute[]', required='required',id='size-#{i}')
+                                              option(value='') Select Size
+                                                -if(sizeResult.length){
+                                                    -for(var j=0;j< sizeResult.length;j++){
+                                                        option(value="#{sizeResult[j]._id}", selected=(String(productSize[i]) == String(sizeResult[j]._id))) #{sizeResult[j].size_name}
+                                                        
+                                                    -}
+                                                    script(type='text/javascript').
+                                                        $(document).ready(function(n){
+                                                            setTimeout(function(){
+                                                                $("#editProduct #size-#{i}").trigger('change');
+                                                            }, 300*#{i});
+                                                        });
+                                                -}
+                                                
+                        -}
+                    -}
                   
-                  
-                  .profile-frm-row.product_select
-                    .profile-frm-cl1 COLOR
-                    .profile-frm-cl2
-                      select.color(name='color[]', required='required')
-                        each fetchAllColor in fetchAllColors
-                            each clr in productRes.color
-                                option(value='#{fetchAllColor._id}',selected=(fetchAllColor._id == clr)) #{fetchAllColor.color_name}
-                  
-                  
-                  .profile-frm-row.product_select
-                    .profile-frm-cl3
-                       a#modal-7026790.btn(href='#modal-container-7026790', role='button', data-toggle='modal') APPLY DISCOUNT CODE
-                      
-                  -for(var i=0;i< (productRes.color.length -1); i++){
-                  .profile-frm-row.product_select.slctClr
-                    .profile-frm-cl1
-                    .profile-frm-cl2
-                      select.color(name='color[]', required='required')
-                        each fetchAllColor in fetchAllColors
-                          option(value='#{fetchAllColor._id}',selected=(fetchAllColor._id == productRes.color[i])) #{fetchAllColor.color_name}
-                  -}
-                  
-                  .profile-frm-row#addClrBtn2
-                    .profile-frm-cl3
-                      a(href='javascript:void(0);',id='addMoreColor') ADD COLOR
-                      
-                  .profile-frm-row.product_select
-                    .profile-frm-cl1 Hash Tag
-                    .profile-frm-cl2
-                       select.chosen-select(name='hash_tag[]', data-placeholder='Select hash tag', multiple='') 
-                        each fetchAllTag in fetchAllTags
-                         - var tempSelect = true
-                         - for(var i=0;i< selectedHashtag.length;i++){
-                            - if(fetchAllTag._id == selectedHashtag[i].hashtag_id){
-                              - var tempSelect = false
-                               option(value="#{fetchAllTag._id}", selected=(fetchAllTag._id == selectedHashtag[i].hashtag_id))  #{fetchAllTag.name}
-                            - } 
-                         - }
-                         - if(tempSelect){
-                            option(value='#{fetchAllTag._id}') #{fetchAllTag.name}
-                         - }
-                           
-                         
-                          
-
-                        
-                        
-                         
-
+                    
             .modal-footer
-              input.saveproduct(type='submit', name='saveproduct', value='POST TO FEED')
+                .aply-btn-row
+                    .apl-div
+                       a#modal-7026790.btn(href='#modal-container-7026790', role='button', data-toggle='modal') APPLY DISCOUNT CODE      
+                    .apl-div-2
+                      input.saveproduct(type='submit', name='saveproduct', value='POST TO FEED')
+              
         script(type='text/javascript').
             $(document).ready(function(n){
                 $('#ancUpProduct').trigger('click');
                 attributeOptions = '#{productRes.attribute}';
-                getSizeOptions($("#product_gender_edit").val(),'addClrBtn2');
+                //getSizeOptions($("#product_gender_edit").val(),'editProduct');
+                //var sizeData = '#{productSize}';
+                /*if(sizeData !=''){
+                    sizeData = sizeData.split(',');
+                    for(var sz=0;sz < sizeData.length;sz++){
+                        if(sz == 0){
+                            setTimeout(function(){
+                                $('#editProduct #sizeRow-0 select[name="attribute[]"]').val(sizeData[sz]).change();
+                            }, 1000);
+                        }else{
+                            $('#editProduct #addMoreSize').trigger('click');
+                            //$('#editProduct #sizeRow-'+sz+' select').val(sizeData[sz]).change();
+                        }
+                    }
+                }*/
             });
     -}
 

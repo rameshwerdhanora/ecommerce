@@ -136,9 +136,9 @@ exports.listOfProducts = (req, res) => {
             });	
         });
      } else if(req.user.role_id==3 || req.user.role_id==4 || req.user.role_id==5){
-            Product.count({user_id:req.user._id},function(error, totalRecord) {
+        Product.count({shop_id:req.user.shop_id},function(error, totalRecord) {
             var totalPage = Math.ceil(totalRecord/Constants.RECORDS_PER_PAGE);
-            Product.find({user_id:req.user._id})
+            Product.find({shop_id:req.user.shop_id})
                 .limit(Constants.RECORDS_PER_PAGE)
                 .skip(skipRecord)
                 .sort('-_id')
@@ -203,36 +203,59 @@ exports.listOfProducts = (req, res) => {
                                                     }
                                                     
                                                     if(req.params.productId && req.params.productId != 'add'){
+                                                        // For edit product case
                                                         Product.findOne({_id:req.params.productId},function(error,productRes){
-                                                            ProductsHashtag.find({product_id:req.params.productId},{hashtag_id:true, _id:false},function(error,selectedHashtag){
-                                                                res.render('product/shop_list', {
-                                                                    title: 'Update product',
-                                                                    fetchAllProducts:fetchAllProducts,
-                                                                    activeClass:1,
-                                                                    left_activeClass:3,
-                                                                    currentPage:page, 
-                                                                    totalPage:totalPage,
-                                                                    allBrands : fetchAllBrands,
-                                                                    fetchCategories:fetchCategories,
-                                                                    fetchSubCategories:fetchSubCategories,
-                                                                    fetchAllAttributes:fetchAllAttributes,
-                                                                    fetchAllColors:fetchAllColors,
-                                                                    editProduct:true,
-                                                                    productRes:productRes,
-                                                                    brandAr:tempBrand,
-                                                                    categoryAr:tempCategory,
-                                                                    subcategoryAr:tempSubCategory,
-                                                                    fetchAllTags:fetchAllTags,
-                                                                    selectedHashtag:selectedHashtag,
-                                                                    addFlag :false,
-                                                                    productImagesArr1 :tempProductImages1,
-                                                                    productImagesArr2 :tempProductImages2,
-                                                                    productImagesArr3 :tempProductImages3,
-                                                                    productImagesArr4 :tempProductImages4,
-                                                                    attrOptionValuesArr :tempAttrOptionValues,
-                                                                    colorsArr:tempColors,
-                                                                    fetchAllProductsHashtags:fetchAllProductsHashtags,
-                                                                    brandLogoArr:tempBrandLogo
+                                                            //Find attribute option to get size of them
+                                                            AttributeOption.find({_id:{$in:productRes.attribute}},function(error,productAttributeRes){
+                                                                var finalAttribResult = new Array();
+                                                                if(productAttributeRes != null){
+                                                                    for(var attribCt = 0 ;attribCt < productAttributeRes.length ;attribCt++ ){
+                                                                        finalAttribResult.push(productAttributeRes[attribCt].attribute_id);
+                                                                    }
+                                                                }//Find selected size for the product
+                                                                Size.find({"$or":[{"gender": productRes.gender},{"gender": "unisex"}]},function(error,allSizeRes){
+                                                                    console.log(allSizeRes);
+                                                                    Size.find({listofattrmap:{$in:finalAttribResult}},function(error,sizeRes){
+                                                                        var finalSize = new Array();
+                                                                        if(sizeRes != null){
+                                                                            for(var attribCt = 0 ;attribCt < sizeRes.length ;attribCt++ ){
+                                                                                finalSize.push(sizeRes[attribCt]._id);
+                                                                            }
+                                                                        }
+                                                                        ProductsHashtag.find({product_id:req.params.productId},{hashtag_id:true, _id:false},function(error,selectedHashtag){
+                                                                            res.render('product/shop_list', {
+                                                                                title: 'Update product',
+                                                                                fetchAllProducts:fetchAllProducts,
+                                                                                activeClass:1,
+                                                                                left_activeClass:3,
+                                                                                currentPage:page, 
+                                                                                totalPage:totalPage,
+                                                                                allBrands : fetchAllBrands,
+                                                                                fetchCategories:fetchCategories,
+                                                                                fetchSubCategories:fetchSubCategories,
+                                                                                fetchAllAttributes:fetchAllAttributes,
+                                                                                fetchAllColors:fetchAllColors,
+                                                                                editProduct:true,
+                                                                                productRes:productRes,
+                                                                                productSize:finalSize,
+                                                                                sizeResult:allSizeRes,
+                                                                                brandAr:tempBrand,
+                                                                                categoryAr:tempCategory,
+                                                                                subcategoryAr:tempSubCategory,
+                                                                                fetchAllTags:fetchAllTags,
+                                                                                selectedHashtag:selectedHashtag,
+                                                                                addFlag :false,
+                                                                                productImagesArr1 :tempProductImages1,
+                                                                                productImagesArr2 :tempProductImages2,
+                                                                                productImagesArr3 :tempProductImages3,
+                                                                                productImagesArr4 :tempProductImages4,
+                                                                                attrOptionValuesArr :tempAttrOptionValues,
+                                                                                colorsArr:tempColors,
+                                                                                fetchAllProductsHashtags:fetchAllProductsHashtags,
+                                                                                brandLogoArr:tempBrandLogo
+                                                                            });
+                                                                        });
+                                                                    });
                                                                 });
                                                             });
                                                         });

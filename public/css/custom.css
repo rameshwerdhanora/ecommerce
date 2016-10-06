@@ -1,0 +1,258 @@
+.dnone{
+    display: none;
+}
+.chosen-container{
+    display: block;
+    width: 100% !important;
+}
+.chosen-container-multi .chosen-choices li.search-field {
+   
+    width: auto;
+    height: auto;
+}
+.chosen-container-multi .chosen-choices li.search-field {
+
+    border: none;
+}
+.chosen-container .chosen-results li{
+    text-align: left;
+}
+
+.chosen-container-multi .chosen-choices li.search-field input[type="text"]{
+    width: 144px !important;
+}
+
+.dropdown-backdrop{
+ display:none !important;
+}
+.nav-left .dropdown-menu li a {
+  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+}
+.order-txt .product_table_img .small_thumb img{
+  max-width: 28px;  
+}
+.add-user-cl1 .profile-frm-cl2 input[type="password"] {
+    height: 26px;
+    padding: 5px;
+}
+
+.profile-frm-cl2 input[type="password"] {
+    border: 1px solid #333333;
+    color: #000;
+    font-size: 15px;
+    font-weight: 600;
+    height: 34px;
+    line-height: 34px;
+    padding: 0 10px 0 10px;
+    width: 100%;
+}
+
+.midlle-bar{
+min-height:900px;
+}
+
+.product_table .product_table_img ul.small_thumb img{
+   max-width: 28px;  
+}
+
+.vert .simply-scroll-list .view_product ul li{
+    height: auto;
+    float: left;
+    width: 32.3%;
+    border: 1px solid #aaaaaa;
+}
+ 
+.vert .simply-scroll-list .view_product .modal-body .product_info_details{
+   padding: 12px 10px 0;
+}
+
+.modal-body .product_info_details .product_price_rate{
+    float: right;
+}
+
+.product_boxes .product_boxes_img img{
+   height: 180px;
+}
+
+.low-tbl-box tr td .custImg{
+    width: 82px;
+    height: auto;
+}
+
+
+.profile-icons{
+    border: solid 2px #000;
+}
+
+.up-txt{
+    min-width: inherit;
+    background: #e1e1e1;
+    color: #00cfff;
+    line-height: 28px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 3px;
+    padding: 0 20px;
+    display: block;
+}
+
+.up-txt:hover{
+    background: #000000;
+    color: #fff;
+}
+
+.fl-upload{
+    padding: 20px;
+}
+select.multiselect-item {
+    height: 80px;
+    background: #fff;
+}
+
+.custom-cover {
+    padding: 4px;
+    font-size: 12px;
+}
+
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
+    z-index: 0;
+    color: #fff;
+    cursor: default;
+    background-color: #00cfff;
+    border-color: #00cfff;
+}
+
+.pagination .active a:hover, .pagination .active a {
+    color: #FFF;
+
+}
+.main-page-row{text-align: center; border-top: 1px solid #d2d2d2;}
+
+.other-btn{
+    background: #000000;
+    border: medium none;
+    color: #ffffff;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 34px;
+    min-width: 115px;
+    padding: 0 10px;
+    text-align: center;
+}
+
+.other-btn:hover {
+    background: #000000;
+    color: #fff;
+}
+
+.low-tbl-box td {
+    max-width: 140px;
+}
+
+.email-content {
+    width: 100%;
+    text-align: left;
+    padding-bottom: 15px;
+}
+.profile-full-cl{
+    max-width: 100%;
+}
+.profile-full-cl .profile-frm-cl1{
+    width: 135px;
+}
+
+.w610 {
+    width: 100% !important;
+}
+.profile-full-cl .profile-frm-cl2 {
+    width: 255px;
+} 
+
+.vert {
+    height: 755px !important;
+}
+.apl-div {
+    margin-bottom: 5px;
+}
+
+
+.apl-div a {
+  color: #00cfff;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 34px;
+  text-align: center;
+
+}
+.aply-btn-row {
+  clear: both;
+}
+
+.alert .close {
+  font-size: 22px;
+  font-weight: normal;
+  margin-top: -2px;
+}
+.small_thumb {
+  margin: 15px auto;
+  max-width: 120px;
+}
+.clr-row{
+    clear: both;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.color-right {
+  float: left;
+  padding-left: 30px;
+  text-align: center;
+  width: 50%;
+}
+.color-right  a{
+    color: #00cfff;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 34px;
+  text-align: center;
+}
+.color-left {
+  float: left;
+  width: 50%;
+}
+
+.clr-row::after {
+  clear: both;
+  content: "";
+  display: block;
+}
+.popup-wdt-2 .popup_product .full-row .profile-frm-cl1 {
+  width: 20%;
+}
+.popup-wdt-2 .popup_product .full-row .profile-frm-cl2 {
+  width: 80%;
+}
+
+
+.product_size {
+  clear: both;
+  text-align: left;
+}
+.product_size  input {
+  margin-left: 10px;
+  vertical-align: middle;
+}
+
+.sz-txt > span {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: normal;
+  padding-left: 2px;
+  padding-top: 4px;
+  vertical-align: middle;
+}
+
+.b_b {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+}
