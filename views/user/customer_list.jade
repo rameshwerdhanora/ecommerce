@@ -16,15 +16,15 @@ block content
               tbody
                 tr
                   th(align='center')
-                    input#checkbox2(type='checkbox', name='checkbox2')
+                    input#checkbox2(type='checkbox', name='checkbox2' class='tableCheckbox')
                   th CUSTOMER NAME 
+                  th E-Mail 
                   th ADDRESS 
                   th CITY
                   th STATE
                   th ZIP CODE 
                   th COUNTRY
                   th PHONE
-                  th E-Mail 
                   th GENDER
                   th B-day
                   th
@@ -34,16 +34,16 @@ block content
                   each getCustomer in getCustomers       
                     tr
                       td(align='center')
-                        input#checkbox4(type='checkbox', name='checkbox4')
+                        input#checkbox4(type='checkbox', name='checkbox4' class='rowCheckbox')
                       td 
                         a.ord-title(href='/customer/view/#{getCustomer._id}') #{getCustomer.first_name} #{getCustomer.last_name}
+                      td #{getCustomer.email_id}  
                       td #{addressLine1[getCustomer._id]}
                       td #{city[getCustomer._id]}
                       td #{state[getCustomer._id]} 
                       td #{postalCode[getCustomer._id]} 
                       td #{city[getCustomer._id]}
                       td.clr-s1 #{contactNo[getCustomer._id]}
-                      td #{getCustomer.email_id}
                       td #{getCustomer.gender}
                       td #{getCustomer.dob}
                       td               
