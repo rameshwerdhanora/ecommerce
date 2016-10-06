@@ -151,7 +151,7 @@ exports.postLoginManually = function(req,res)
   			//console.log(checkForLogin)
   			if(checkForLogin)
   			{
-  				if(checkForLogin.is_deleted == false)
+  				if(checkForLogin.is_deleted == 'false')
   				{
 	  				bcrypt.compare(req.body.password, checkForLogin.password, (err, isMatch) => {
 
@@ -480,7 +480,7 @@ exports.postSignupFacebook = function(req,res)
 		User.findOne({ email_id: req.body.email,role_id:Constants.CUSTOMERROLE}, function(err, tokenExist){
 			if(tokenExist)
 			{
-				if(tokenExist.is_deleted == false)
+				if(tokenExist.is_deleted == 'false')
 				{
 					UserDetails.findOne({user_id:tokenExist._id},function(error,fetchUserDetails)
 					{
@@ -526,7 +526,7 @@ exports.postSignupGooglePlus = function(req,res)
 		User.findOne({ email_id: req.body.email ,role_id:Constants.CUSTOMERROLE}, function(err, tokenExist){
 			if(tokenExist)
 			{  
-				if(tokenExist.is_deleted == false)
+				if(tokenExist.is_deleted == 'false')
 				{
 					UserDetails.findOne({user_id:tokenExist._id},function(error,fetchUserDetails)
 					{
