@@ -8,7 +8,9 @@ block content
       |  PRODUCTS
     .top-btns.clearfix
       .btn-s-right
-        a#addPrductBtn.default-btn(href='#modal-container', title='Add Product', role='button', data-toggle='modal') +POST TO FEED
+        -if(user.userPermissions.indexOf('57c04fbd43592d87b0e6f600') != -1){
+            a#addPrductBtn.default-btn(href='#modal-container', title='Add Product', role='button', data-toggle='modal') +POST TO FEED
+        -}
         //a.default-btn(href='/product/add', title='Add Size', role='button', data-toggle='modal') ADD PRODUCT  
     .customer-box.clearfix
        .customer-cl.product_brand_view_left

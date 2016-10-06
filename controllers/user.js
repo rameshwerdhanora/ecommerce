@@ -44,24 +44,32 @@ exports.postLogin = (req, res, next) => {
         if (err) { return next(err); }
         req.flash('success', ['Success! You are logged in.' ]);
         var redirectUrl = (req.session.returnTo == '/')?'/dashboard':req.session.returnTo;
+        /* Start code to check user is authenticate for the dashboard or not*/
         if(user.role_id == 3 || user.role_id == 4 || user.role_id == 6){
             if(user.role_id == 3 || user.role_id == 4){
-                if(CommonHelper.hasPermission(user._id,'57c04c7043592d87b0e6f5f9')){
-                    res.redirect(redirectUrl || '/dashboard');
-                }else{
-                     res.redirect('/user/shopprofile');
-                }
-            }else if(user.role_id == 6){
-                if(CommonHelper.hasPermission(user.shop_id,'57c04c7043592d87b0e6f5f9')){
-                    if(CommonHelper.hasPermission(user._id,'57c04c7043592d87b0e6f5f9')){
+                CommonHelper.hasPermission(user._id,'57c04c7043592d87b0e6f5f9',function(permissionRes){
+                    if(permissionRes){
                         res.redirect(redirectUrl || '/dashboard');
                     }else{
                         res.redirect('/user/shopprofile');
                     }
-                }else{
-                     res.redirect('/user/shopprofile');
-                }
+                });
+            }else if(user.role_id == 6){
+                CommonHelper.hasPermission(user.shop_id,'57c04c7043592d87b0e6f5f9',function(permissionRes){// Check first for the SHop
+                    if(permissionRes){
+                        CommonHelper.hasPermission(user._id,'57c04c7043592d87b0e6f5f9',function(permissionRes){// Check for the employee who is going to login
+                            if(permissionRes){
+                                res.redirect(redirectUrl || '/dashboard');
+                            }else{
+                                res.redirect('/user/shopprofile');
+                            }
+                        });
+                    }else{
+                        res.redirect('/user/shopprofile');
+                    }
+                });
             }
+        /* End of code to check user is authenticate for the dashboard or not*/
         }else{
             res.redirect(redirectUrl || '/dashboard');
         }

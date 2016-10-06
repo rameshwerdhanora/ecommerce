@@ -13,5 +13,6 @@ module.exports = Object.freeze({
     ORDERSTATUSPENDING:'Unfullfilled',
     ORDERSTATUSPAID:'Paid',
     ORDERSTATUSREFUND:'Refund',
-    SHIPPING: "Shipping"
+    SHIPPING: "Shipping",
+    SHOP_PERMISSION_ERROR_MSG: "We are sorry! you don't have permission",
 });

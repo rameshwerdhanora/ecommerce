@@ -25,8 +25,13 @@
                         
     -}
     -if(user.role_id == 3 || user.role_id == 4 || user.role_id == 6){
-       a(href='/dashboard')
-        img(src='#{user.cover_image}', alt='img',width='300',height='123')
+       -if(user.userPermissions.indexOf('57c04c7043592d87b0e6f5f9') != -1){
+            a(href='/dashboard')
+             img(src='#{user.cover_image}', alt='img',width='300',height='123')
+       -}else{
+            a(href='javascript:void(0)')
+             img(src='#{user.cover_image}', alt='img',width='300',height='123')
+       -}
     -}else{
         a(href='/dashboard')
           img(src='/images/img-1.jpg', alt='img')
@@ -35,64 +40,70 @@
   .nav-left
     .nav-in
       ul
-        li(class=(left_activeClass == 1)?'active':'')
-          a(href='/dashboard')
-            img(src='/images/left-icon1.png', alt='icon')
-            |  Dashboard 
-        li(class=(left_activeClass == 2)?'active':'')
-          a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', href='/order/list')
-            img(src='/images/left-icon2.png', alt='icon')
-            | Orders                    
-          ul.easy-sidebar.dropdown-menu
-            li
-              span.nav-close
-                a(href='javascript:void(0);')
-                  img(src='/images/close-white.png', alt='close')
-            li
-              span.sub-title USERS
-            li
-              a(href='javascript:void(0);') Mange Users
-            li
-              a(href='javascript:void(0);') Add User
-        li(class=(left_activeClass == 3)? 'active':'')
-          a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='javascript:void(0);')
-            img(src='/images/left-icon3.png', alt='icon')
-            | Products
-          ul.easy-sidebar.dropdown-menu
-            li
-              span.nav-close
-                a(href='javascript:void(0);')
-                  img(src='/images/close-white.png', alt='close')
-            li
-              span.sub-title PRODUCTS
-            li
-              a(href='/product/list') Product list
-            -if(user.role_id != 1 && user.role_id !=2){
+        -if(user.role_id == 1 || user.role_id == 2 || user.userPermissions.indexOf('57c04c7043592d87b0e6f5f9') != -1){
+            li(class=(left_activeClass == 1)?'active':'')
+              a(href='/dashboard')
+                img(src='/images/left-icon1.png', alt='icon')
+                |  Dashboard 
+        -}
+        -if(user.role_id == 1 || user.role_id == 2 || user.userPermissions.indexOf('57c04cb743592d87b0e6f5fa') != -1){
+            li(class=(left_activeClass == 2)?'active':'')
+              a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', href='/order/list')
+                img(src='/images/left-icon2.png', alt='icon')
+                | Orders                    
+              ul.easy-sidebar.dropdown-menu
                 li
-                  a(href='/product/list/add') Add Product
-            -}
-            
-            
-            -if(user.role_id == 1  || user.role_id == 2){
-            
-            li
-              a(href='/category/list') Manage Categories
-            li
-              a(href='/color/list') Manage Colors
-            li
-              a(href='/size/list') Manage Sizes
-            li
-              a(href='/brand/list') Manage Brands
-            li
-              a(href='/attribute/list') Manage Attributes
+                  span.nav-close
+                    a(href='javascript:void(0);')
+                      img(src='/images/close-white.png', alt='close')
+                li
+                  span.sub-title USERS
+                li
+                  a(href='javascript:void(0);') Mange Users
+                li
+                  a(href='javascript:void(0);') Add User
+        -}
+        -if(user.role_id == 1 || user.role_id == 2 || user.userPermissions.indexOf('57c04f9a43592d87b0e6f5ff') != -1){
+            li(class=(left_activeClass == 3)? 'active':'')
+              a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='javascript:void(0);')
+                img(src='/images/left-icon3.png', alt='icon')
+                | Products
+              ul.easy-sidebar.dropdown-menu
+                li
+                  span.nav-close
+                    a(href='javascript:void(0);')
+                      img(src='/images/close-white.png', alt='close')
+                li
+                  span.sub-title PRODUCTS
+                li
+                  a(href='/product/list') Product list
+                -if(user.role_id != 1 && user.role_id !=2){
+                    li
+                      a(href='/product/list/add') Add Product
+                -}
 
-            li
-              span.sub-title Hash Tag
-            li
-              a(href='/tag/list') Hash Tag list
-            li
-              a(href='/tag/add') Add Hash Tag    
-            -}
+
+                -if(user.role_id == 1  || user.role_id == 2){
+
+                li
+                  a(href='/category/list') Manage Categories
+                li
+                  a(href='/color/list') Manage Colors
+                li
+                  a(href='/size/list') Manage Sizes
+                li
+                  a(href='/brand/list') Manage Brands
+                li
+                  a(href='/attribute/list') Manage Attributes
+
+                li
+                  span.sub-title Hash Tag
+                li
+                  a(href='/tag/list') Hash Tag list
+                li
+                  a(href='/tag/add') Add Hash Tag    
+                -}
+        -}
         li(class=(left_activeClass == 4)?'active':'')
           a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='javascript:void(0);')
             img(src='/images/left-icon4.png', alt='icon')

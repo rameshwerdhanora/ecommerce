@@ -11,6 +11,7 @@ const LinkedInStrategy = require('passport-linkedin-oauth2').Strategy;
 const OpenIDStrategy = require('passport-openid').Strategy;
 const OAuthStrategy = require('passport-oauth').OAuthStrategy;
 const OAuth2Strategy = require('passport-oauth').OAuth2Strategy;
+const UserPermission = require('../models/userPermissions');
 
 const UserApp = require('../models/userApp');
 
@@ -60,24 +61,66 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, don
         });*/
         bcrypt.compare(password, user.password, (err, isMatch) => {
             if (isMatch) {
-                
-                if(user.role_id == 6){
-                    // Updated cover photo & Logo for the shop employee to the latest one when they are login
-                    UserApp.findOne({ _id: user.shop_id }, (err, shopRes) => {
-                        if(shopRes == null){
-                            return done(null, user);
-                        }else{
-                            upData = {
-                                'cover_image' : shopRes.cover_image,
-                                'shop_logo' : shopRes.shop_logo,
-                                'shop_name' : shopRes.shop_name
+                if(user.role_id == 3 || user.role_id == 4){
+                    UserPermission.find({user_id:user._id},function(error,userPerRes){
+                        if(userPerRes != null){
+                            var tmpAr = new Array();
+                            for(var i = 0;i< userPerRes.length; i++){
+                                tmpAr.push(String(userPerRes[i].permission_id));
                             }
-                            console.log(upData);
+                            upData = {};
+                            upData.userPermissions = tmpAr;
                             UserApp.update({_id:user._id},upData,function(error,upRes){
                                 return done(null, user);
                             });
+                        }else{
+                            return done(null, user);
                         }
-                        
+                    });
+                }else if(user.role_id == 6){
+                    UserPermission.find({user_id:user._id},function(error,userPerRes){
+                        if(userPerRes != null){
+                            var tmpAr = new Array();
+                            for(var i = 0;i< userPerRes.length; i++){
+                                tmpAr.push(String(userPerRes[i].permission_id));
+                            }
+                            upData = {};
+                            upData.userPermissions = tmpAr;
+                            UserApp.update({_id:user._id},upData,function(error,upRes){
+                                // Updated cover photo & Logo for the shop employee to the latest one when they are login                    
+                                UserApp.findOne({ _id: user.shop_id }, (err, shopRes) => {
+                                    if(shopRes == null){
+                                        return done(null, user);
+                                    }else{
+                                        upData = {
+                                            'cover_image' : shopRes.cover_image,
+                                            'shop_logo' : shopRes.shop_logo,
+                                            'shop_name' : shopRes.shop_name
+                                        }
+                                        UserApp.update({_id:user._id},upData,function(error,upRes){
+                                            return done(null, user);
+                                        });
+                                    }
+
+                                });
+                            });
+                        }else{
+                            // Updated cover photo & Logo for the shop employee to the latest one when they are login                    
+                            UserApp.findOne({ _id: user.shop_id }, (err, shopRes) => {
+                                if(shopRes == null){
+                                    return done(null, user);
+                                }else{
+                                    upData = {
+                                        'cover_image' : shopRes.cover_image,
+                                        'shop_logo' : shopRes.shop_logo,
+                                        'shop_name' : shopRes.shop_name
+                                    }
+                                    UserApp.update({_id:user._id},upData,function(error,upRes){
+                                        return done(null, user);
+                                    });
+                                }
+                            });
+                        }
                     });
                 }else{                
                     return done(null, user);

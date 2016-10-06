@@ -74,10 +74,9 @@ exports.sendSms = (req, res, smsContent, userId) => {
 };*/
 
 
-exports.hasPermission = function(user_id, permissionId) {
+exports.hasPermission = function(user_id, permissionId,callback) {
     UserPermissions.count({user_id:user_id,permission_id:permissionId},function(error,hasPermission){
-        console.log('helper table'+hasPermission);
-        return (hasPermission != 0)?true:false;
-        
+        var permissionRes = (hasPermission != 0)?true:false;
+        callback(permissionRes);
     });
 };

@@ -4,6 +4,7 @@ const Order           = require('../models/orders');
 const OrderDetails    = require('../models/orderDetails');
 const User            = require('../models/userApp');
 const ShopShipping   = require('../models/shopShipping');
+const Constants       = require('../constants/constants');
 
 /**
  * GET /order/list
@@ -11,72 +12,75 @@ const ShopShipping   = require('../models/shopShipping');
  */
 
 exports.list = (req, res) => {
-  if (!req.user) {
-    return res.redirect('/login');
-  }	
 
-  Order.find({},function(error,getAllOrders)
-  {
-      if(getAllOrders)
-      {
-        var finalOrderData = new Array();
-        async.eachSeries(getAllOrders, function(OrderIds, callback)
+    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c04c7043592d87b0e6f5f9') == -1){
+      req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
+      res.redirect('/user/shopprofile');
+    }else{
+
+        Order.find({},function(error,getAllOrders)
         {
-          var orderObj = {};
-          var dateTime = new Date(parseInt(OrderIds.order_date));
-        
-          //var split = dateTime.split(' ');
-   
-          var year  = dateTime.getFullYear();
-          var month = dateTime.getMonth()+1;
-          var date  = dateTime.getDate();
-          finalDate = month+'/'+date+'/'+year 
-
-          orderObj._id = OrderIds._id;
-          orderObj.order_number = OrderIds.order_number;
-          orderObj.status       = OrderIds.status;
-          orderObj.totalprice   = OrderIds.totalprice;
-          orderObj.orderdate    = finalDate;
-
-          async.parallel
-          (
-            [
-                function(callback)
-                {
-                  User.findOne({_id:OrderIds.user_id},function(error,fetUserDetails)
-                  {
-                    if(fetUserDetails)
-                    {
-                      orderObj.user_id    = OrderIds.user_id;
-                      orderObj.user_name  = fetUserDetails.user_name;
-                      orderObj.email_id   = fetUserDetails.email_id;
-                      orderObj.first_name = fetUserDetails.first_name;
-                      orderObj.last_name  = fetUserDetails.last_name;
-                      orderObj.gender     = fetUserDetails.gender;
-                    }
-                    callback(error);
-                  });
-                }
-            ],
-            function(err)
+            if(getAllOrders)
             {
-              finalOrderData.push(orderObj);
-              callback(err);
+              var finalOrderData = new Array();
+              async.eachSeries(getAllOrders, function(OrderIds, callback)
+              {
+                var orderObj = {};
+                var dateTime = new Date(parseInt(OrderIds.order_date));
+
+                //var split = dateTime.split(' ');
+
+                var year  = dateTime.getFullYear();
+                var month = dateTime.getMonth()+1;
+                var date  = dateTime.getDate();
+                finalDate = month+'/'+date+'/'+year 
+
+                orderObj._id = OrderIds._id;
+                orderObj.order_number = OrderIds.order_number;
+                orderObj.status       = OrderIds.status;
+                orderObj.totalprice   = OrderIds.totalprice;
+                orderObj.orderdate    = finalDate;
+
+                async.parallel
+                (
+                  [
+                      function(callback)
+                      {
+                        User.findOne({_id:OrderIds.user_id},function(error,fetUserDetails)
+                        {
+                          if(fetUserDetails)
+                          {
+                            orderObj.user_id    = OrderIds.user_id;
+                            orderObj.user_name  = fetUserDetails.user_name;
+                            orderObj.email_id   = fetUserDetails.email_id;
+                            orderObj.first_name = fetUserDetails.first_name;
+                            orderObj.last_name  = fetUserDetails.last_name;
+                            orderObj.gender     = fetUserDetails.gender;
+                          }
+                          callback(error);
+                        });
+                      }
+                  ],
+                  function(err)
+                  {
+                    finalOrderData.push(orderObj);
+                    callback(err);
+                  }
+                );
+
+              },
+              function(err)
+              {
+                res.render('order/list', { title: 'Order List',left_activeClass:2,orderdata:finalOrderData});
+              });
             }
-          );
-          
-        },
-        function(err)
-        {
-          res.render('order/list', { title: 'Order List',left_activeClass:2,orderdata:finalOrderData});
+            else 
+            {
+              req.flash('success',['Order is not created.']);
+              res.render('order/list',{title: 'Order List',left_activeClass:2,orderdata:''});
+            }
         });
-      }
-      else 
-      {
-        req.flash('success',['Order is not created.']);
-        res.render('order/list',{title: 'Order List',left_activeClass:2,orderdata:''});
-      }
-  });
+    }
 };
 
 

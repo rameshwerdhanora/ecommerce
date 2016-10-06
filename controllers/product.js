@@ -40,6 +40,11 @@ exports.listOfProducts = (req, res) => {
         return res.redirect('/product/list');
     }
     
+    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c04f9a43592d87b0e6f5ff') == -1){
+      req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
+      res.redirect('/user/shopprofile');
+    }
+    
     var page = (req.query.page == undefined)?1:req.query.page;
     page = (page == 0)?1:page;
     var skipRecord = (page-1)*Constants.RECORDS_PER_PAGE;
@@ -261,6 +266,10 @@ exports.listOfProducts = (req, res) => {
                                                         });
                                                     }else{
                                                         var addFlag = (req.params.productId == 'add')?true:false;
+                                                        if(addFlag && (req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c04fbd43592d87b0e6f600') == -1){
+                                                            req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
+                                                            res.redirect('/user/shopprofile');
+                                                        }
                                                         res.render('product/shop_list',{
                                                             title: 'Product',
                                                             currentPage:page, 
@@ -368,117 +377,121 @@ exports.editProduct = (req, res) => {
 
 /* Save Product */
 exports.saveProduct = (req, res) => {
-    
-    /***To create directory if not exist***/
-    var fs = require('fs');
-    var dirProductImg = './public/uploads/product_images';
+    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c04fbd43592d87b0e6f600') == -1){
+        req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
+        res.redirect('/user/shopprofile');
+    }else{
+        /***To create directory if not exist***/
+        var fs = require('fs');
+        var dirProductImg = './public/uploads/product_images';
 
-    if (!fs.existsSync(dirProductImg)){
-        fs.mkdirSync(dirProductImg);
-    }
-    
-    // If Super user trying to create product then give deny him
-    if(req.user.role_id == Constants.MASTERROLE && req.params.productId == 'add'){
-        req.flash('errors', ['Super admin can not create product. This feature is only for the Shop user']);
-        return res.redirect('/product/list');
-    }
-    
-    uploadProductImage(req,res,function(err){
-        if(err){
-            return res.end("Error uploading file.");
+        if (!fs.existsSync(dirProductImg)){
+            fs.mkdirSync(dirProductImg);
         }
-        
-        /*const readChunk = require('read-chunk'); // npm install read-chunk 
-        const fileType = require('file-type');
-        const buffer = readChunk.sync(req.body.product_image, 0, 262);
-        
-        console.log(fileType(buffer));*/
-        
-        req.assert('name', 'Product name is required').notEmpty();    
-        req.assert('blurb', 'Product blurb is required').notEmpty();    
-        req.assert('sku', 'Sku ID is required').notEmpty();
-        req.assert('gender', 'Gender is required').notEmpty();
-        req.assert('category_id', 'Category is required').notEmpty();
-        req.assert('price', 'Price is required').notEmpty();
-        req.assert('color', 'Color is required').notEmpty();
-        var errors = req.validationErrors();  
-        if(!errors){ 
-            var fineSku = req.body.sku.replace(' ','-');
-            var productIns = new Product();
-            productIns.name  = req.body.name;
-            productIns.blurb  = req.body.blurb;
-            productIns.description = req.body.blurb;
-            productIns.sku  = fineSku;
-            productIns.gender = req.body.gender;
-            productIns.category_id  = req.body.category_id;
-            productIns.sub_category_id = req.body.sub_category_id;
-            productIns.brand_id = req.body.brand_id;
-            productIns.is_featured = req.body.is_featured;
-            productIns.price  = req.body.price;
-            productIns.color  = req.body.color;
-            productIns.productview = '0';
-            //productIns.attribute = req.body.selectedAttr;
-            productIns.attribute = req.body.size;
-            productIns.user_id = req.user._id; 
-            productIns.created = Date.now();
-            productIns.update = Date.now();
-            //productIns.users_id = 1;
-            productIns.dis_name = req.body.add_dis_name;
-            productIns.dis_type = req.body.add_dis_type;
-            productIns.dis_amount = req.body.add_dis_amount;
-            productIns.shop_id = req.user.shop_id;
-            
 
+        // If Super user trying to create product then give deny him
+        if(req.user.role_id == Constants.MASTERROLE && req.params.productId == 'add'){
+            req.flash('errors', ['Super admin can not create product. This feature is only for the Shop user']);
+            return res.redirect('/product/list');
+        }
 
-            productIns.save(function(err){
-                if (err){
-                    res.send({status:'error',error:err});
-                }else {
-                    //var finePath = req.files[0].path.replace('public/','');
-                    var productImageIns = new ProductImage();
-                    productImageIns.product_id  = productIns._id;
-                    productImageIns.thumb_image_1 	= req.files[0].path.replace('public/','');;
-                    productImageIns.large_image_1 	= req.files[0].path.replace('public/','');;
-                    productImageIns.image_name_1 	= req.files[0].filename;
-                    productImageIns.thumb_image_2 	= req.files[1].path.replace('public/','');;
-                    productImageIns.large_image_2 	= req.files[1].path.replace('public/','');;
-                    productImageIns.image_name_2 	= req.files[1].filename;
-                    productImageIns.thumb_image_3 	= req.files[2].path.replace('public/','');;
-                    productImageIns.large_image_3 	= req.files[2].path.replace('public/','');;
-                    productImageIns.image_name_3 	= req.files[2].filename;
-                    productImageIns.thumb_image_4 	= req.files[3].path.replace('public/','');;
-                    productImageIns.large_image_4 	= req.files[3].path.replace('public/','');;
-                    productImageIns.image_name_4 	= req.files[3].filename;
-                    productImageIns.save(function(err){
-                        if (err){
-                            //res.send({status:'error',error:err});
-                            req.flash('errors', ['Something went wronge']);
-                            res.redirect('/product/list');
-                        }else {
-                             hashtagIdArr = req.body.hash_tag;
-                                if(hashtagIdArr){
-                                   hashtagIdArr.forEach(function(hashtagId) {
-                                     var productsHashtagIns = new ProductsHashtag();
-                                     productsHashtagIns.product_id = productIns._id;
-                                     productsHashtagIns.hashtag_id = hashtagId;
-                                     productsHashtagIns.save();
-                                  });
-                             }
-                             req.flash('success', ['Product added successfully.']);
-                             res.redirect('/product/list');
-                        }
-                    });
-                }
-            });
-        }else{
-            var er = new Array();
-            for(var i = 0;i<errors.length;i++){
-                er.push(errors[i].msg);
+        uploadProductImage(req,res,function(err){
+            if(err){
+                return res.end("Error uploading file.");
             }
-            req.flash('errors',er);
-            res.redirect('/product/list');
-        }
-    });
+
+            /*const readChunk = require('read-chunk'); // npm install read-chunk 
+            const fileType = require('file-type');
+            const buffer = readChunk.sync(req.body.product_image, 0, 262);
+
+            console.log(fileType(buffer));*/
+
+            req.assert('name', 'Product name is required').notEmpty();    
+            req.assert('blurb', 'Product blurb is required').notEmpty();    
+            req.assert('sku', 'Sku ID is required').notEmpty();
+            req.assert('gender', 'Gender is required').notEmpty();
+            req.assert('category_id', 'Category is required').notEmpty();
+            req.assert('price', 'Price is required').notEmpty();
+            req.assert('color', 'Color is required').notEmpty();
+            var errors = req.validationErrors();  
+            if(!errors){ 
+                var fineSku = req.body.sku.replace(' ','-');
+                var productIns = new Product();
+                productIns.name  = req.body.name;
+                productIns.blurb  = req.body.blurb;
+                productIns.description = req.body.blurb;
+                productIns.sku  = fineSku;
+                productIns.gender = req.body.gender;
+                productIns.category_id  = req.body.category_id;
+                productIns.sub_category_id = req.body.sub_category_id;
+                productIns.brand_id = req.body.brand_id;
+                productIns.is_featured = req.body.is_featured;
+                productIns.price  = req.body.price;
+                productIns.color  = req.body.color;
+                productIns.productview = '0';
+                //productIns.attribute = req.body.selectedAttr;
+                productIns.attribute = req.body.size;
+                productIns.user_id = req.user._id; 
+                productIns.created = Date.now();
+                productIns.update = Date.now();
+                //productIns.users_id = 1;
+                productIns.dis_name = req.body.add_dis_name;
+                productIns.dis_type = req.body.add_dis_type;
+                productIns.dis_amount = req.body.add_dis_amount;
+                productIns.shop_id = req.user.shop_id;
+
+
+
+                productIns.save(function(err){
+                    if (err){
+                        res.send({status:'error',error:err});
+                    }else {
+                        //var finePath = req.files[0].path.replace('public/','');
+                        var productImageIns = new ProductImage();
+                        productImageIns.product_id  = productIns._id;
+                        productImageIns.thumb_image_1 	= req.files[0].path.replace('public/','');;
+                        productImageIns.large_image_1 	= req.files[0].path.replace('public/','');;
+                        productImageIns.image_name_1 	= req.files[0].filename;
+                        productImageIns.thumb_image_2 	= req.files[1].path.replace('public/','');;
+                        productImageIns.large_image_2 	= req.files[1].path.replace('public/','');;
+                        productImageIns.image_name_2 	= req.files[1].filename;
+                        productImageIns.thumb_image_3 	= req.files[2].path.replace('public/','');;
+                        productImageIns.large_image_3 	= req.files[2].path.replace('public/','');;
+                        productImageIns.image_name_3 	= req.files[2].filename;
+                        productImageIns.thumb_image_4 	= req.files[3].path.replace('public/','');;
+                        productImageIns.large_image_4 	= req.files[3].path.replace('public/','');;
+                        productImageIns.image_name_4 	= req.files[3].filename;
+                        productImageIns.save(function(err){
+                            if (err){
+                                //res.send({status:'error',error:err});
+                                req.flash('errors', ['Something went wronge']);
+                                res.redirect('/product/list');
+                            }else {
+                                 hashtagIdArr = req.body.hash_tag;
+                                    if(hashtagIdArr){
+                                       hashtagIdArr.forEach(function(hashtagId) {
+                                         var productsHashtagIns = new ProductsHashtag();
+                                         productsHashtagIns.product_id = productIns._id;
+                                         productsHashtagIns.hashtag_id = hashtagId;
+                                         productsHashtagIns.save();
+                                      });
+                                 }
+                                 req.flash('success', ['Product added successfully.']);
+                                 res.redirect('/product/list');
+                            }
+                        });
+                    }
+                });
+            }else{
+                var er = new Array();
+                for(var i = 0;i<errors.length;i++){
+                    er.push(errors[i].msg);
+                }
+                req.flash('errors',er);
+                res.redirect('/product/list');
+            }
+        });
+    }
 }; 
 
 /* Update Product */

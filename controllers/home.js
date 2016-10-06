@@ -12,11 +12,15 @@ exports.index = (req, res) => {
   if (!req.user) {
     return res.redirect('/login');
   }
-  res.render('home/dashboard', {
-    title: 'Home',
-    left_activeClass:1,
-  });
-
+  if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c04c7043592d87b0e6f5f9') == -1){
+      req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
+      res.redirect('/user/shopprofile');
+  }else{
+    res.render('home/dashboard', {
+      title: 'Home',
+      left_activeClass:1,
+    });
+  }
 };
 
 

@@ -36,8 +36,8 @@ const userAppSchema = new mongoose.Schema({
     zip:{type:String,default:''},
     country:{type:String,default:''},
     bio:{type:String,default:''},
-    shop_logo:{type:String,default:''}
-    
+    shop_logo:{type:String,default:''},
+    userPermissions:{type:Array,default:[]}
     
   /*profile: {
     name: { type: {type:String,default:''}, default: '' },
