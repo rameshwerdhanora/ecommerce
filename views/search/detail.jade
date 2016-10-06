@@ -1,0 +1,245 @@
+extends ../layout
+
+block content
+  .col-sm-9.midlle-bar
+    .large-title-row.large_tittle
+      img(src='/images/title-icon2.png', alt='icon')
+      |  ORDERS 
+      .right-sub
+        a.save-btn(href='#') PRINT INVOICE
+    .customer-box.clearfix
+      .customer-cl.order_details
+        .profile-top-row
+          h2 ORDER # #{orderdata.order_number}
+        
+        ul
+          li
+          li
+            .order_label
+              strong order date:
+            .order_field #{orderdata.orderdate}
+            .clearfix
+          li
+          li
+            .order_label
+              strong Order time:
+            .order_field #{orderdata.ordertime}
+            .clearfix
+          li
+          li
+            .order_label
+              strong order status:
+            .order_field #{orderdata.status}
+            .clearfix
+          li
+      .profile-cl.order_details
+        .profile-top-row
+          h2 CUSTOMER
+        ul
+          li
+          li
+            .order_label
+              strong Username:
+            .order_field @#{orderdata.user_name}
+            .clearfix
+          li
+          li
+            .order_label
+              strong FIRST NAME:
+            .order_field #{orderdata.first_name}
+            .clearfix
+          li
+          li
+            .order_label
+              strong LAST NAME:
+            .order_field #{orderdata.last_name}
+            .clearfix
+          li
+      .customer-cl.order_details
+        .profile-top-row
+          h2 BILLING ADDRESS
+        ul
+          li
+            .order_label
+              strong Address:
+            .order_field  #{orderdata.billing_address[0].address_line1} #{orderdata.billing_address[0].address_line2}
+            .clearfix
+          li
+            .order_label
+              strong CITY:
+            .order_field  #{orderdata.billing_address[0].city}
+            .clearfix
+          li
+            .order_label
+              strong ZIP code:
+            .order_field  #{orderdata.billing_address[0].postal_code}
+            .clearfix
+          li
+            .order_label
+              strong State:
+            .order_field  #{orderdata.billing_address[0].state}
+            .clearfix
+          li
+            .order_label
+              strong Country:
+            .order_field  #{orderdata.billing_address[0].country}
+            .clearfix
+      .profile-cl.order_details
+        .profile-top-row
+          h2 SHIPPING ADDRESS
+        ul
+          li
+            .order_label
+              strong Address:
+            .order_field  #{orderdata.shipping_address[0].address_line1} #{orderdata.shipping_address[0].address_line2} 
+            .clearfix
+          li
+            .order_label
+              strong CITY:
+            .order_field  #{orderdata.shipping_address[0].city}
+            .clearfix
+          li
+            .order_label
+              strong ZIP code:
+            .order_field  #{orderdata.shipping_address[0].postal_code}
+            .clearfix
+          li
+            .order_label
+              strong State:
+            .order_field  #{orderdata.shipping_address[0].state}
+            .clearfix
+          li
+            .order_label
+              strong Country:
+            .order_field  #{orderdata.shipping_address[0].country}
+            .clearfix
+      .customer-cl.order_details
+        .profile-top-row
+          h2 ITEMS TO SHIP
+          
+        each productdetails in orderdata.details  
+          .product_info
+            .product_img
+              img(src='/#{productdetails.data[0].productImages.thumb_image_1}' height='97px' width='92px')
+              
+            .product_details
+              ul
+                li
+                  .order_label
+                    strong BRAND:
+                  .order_field  #{productdetails.data[0].brand.brand_name}
+                  .clearfix
+                li
+                  .order_label
+                    strong PRODUCT:
+                  .order_field  #{productdetails.data[0].product.name}
+                  .clearfix
+                li
+                  .order_label
+                    strong SKU:
+                  .order_field  #{productdetails.data[0].product.sku}
+                  .clearfix
+                li
+                  .order_label
+                    strong SIZE:
+                  .order_field  #{productdetails.data[0].options}
+                  .clearfix
+                li
+                  .order_label
+                    strong COLOR:
+                  .order_field  #{productdetails.data[0].color.color_name}
+                  .clearfix
+                li
+                  .order_label
+                    strong QTY:
+                  .order_field  #{productdetails.data[0].quantity}
+                  .clearfix
+             - var total = productdetails.data[0].product.price * productdetails.data[0].quantity   
+            .product_price  $#{total}
+            .clearfix
+        
+        .total
+          .total_item TOTAL ITEMS: #{orderdata.itemquantity}
+          .total_price
+            ul
+              li
+                .order_label
+                  strong SUB TOTAL:
+                .order_field $#{orderdata.subtotal}
+                .clearfix
+              li
+                .order_label
+                  strong TAX:
+                .order_field $#{orderdata.tax}
+                .clearfix
+              li
+                .order_label
+                  strong DELIVERY:
+                .order_field $#{orderdata.shipping_charges}
+                .clearfix
+          .clearfix
+        .total_money TOTAL $#{orderdata.totalprice}
+      .profile-cl.order_details
+        .profile-top-row
+          h2 SHIP FROM ADDRESS
+        each shopShippingDetail in orderdata.shopperDetails    
+          ul
+            li
+              .order_label
+                strong SHOP:
+              .order_field  @ashleyexplainsitall
+              .clearfix
+            li
+              .order_label
+                strong Address:
+              .order_field  #{shopShippingDetail.address}
+              .clearfix
+            li
+              .order_label
+                strong CITY:
+              .order_field  #{shopShippingDetail.city}
+              .clearfix
+            li
+              .order_label
+                strong ZIP code:
+              .order_field  #{shopShippingDetail.postal_code}
+              .clearfix
+            li
+              .order_label
+                strong State:
+              .order_field  #{shopShippingDetail.state}
+              .clearfix
+            li
+              .order_label
+                strong Country:
+              .order_field  #{shopShippingDetail.country}
+              .clearfix
+      .profile-cl.order_details
+        .profile-top-row
+          h2 PAYMENT METHOD
+        ul
+          li
+            .order_label
+              img(src='images/mastercard.jpg')
+            .order_field
+              | MASTERCARD   
+              br
+              | Ending In XXX-1010 
+              br
+              | EXP 02/20   CVV  123
+            .clearfix
+          li
+            .order_label
+              strong CHARGED:
+            .order_field $121.25
+            .clearfix
+      .profile-cl.order_details.shipping_method
+        .profile-top-row
+          h2 SHIPPING METHOD
+        ul
+          li
+            strong UPS 2-DAY SHIPPING
+          li
+            strong UPS ACCOUNT 1237912837019
+        .btn-btm
+          button ADD TRACKING

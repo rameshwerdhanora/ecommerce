@@ -1,0 +1,23 @@
+extends ../layout
+block content
+  .col-sm-9.midlle-bar
+    .large-title-row
+      img(src='/images/title-icon2.png', alt='icon')
+      |  Search Result
+    .customer-box.cmn-in.clearfix
+      .low-tbl-box.order-txt
+        form(name='form2', method='post', action='')
+          table(width='100%', cellspacing='0', cellpadding='0', border='0')
+            tbody
+              tr
+                th(align='center')
+                  input.tableCheckbox#checkbox2(type='checkbox', name='checkbox2')
+                th ORDER # 
+                th DATE 
+                th Customer
+                th payment STATUS
+                th Total
+                th STATUS
+              tr
+                td(colspan=8) Order is not created
+        
