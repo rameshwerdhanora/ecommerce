@@ -382,7 +382,7 @@ exports.userAdd = (req, res) => {
                         }
                         if(!takenFlag){
                             // If parent id is null then added them on root
-                            if(getPermissions[i].parent_id == 0){
+                            if(getPermissions[i].parent_id == 0 || getPermissions[i].parent_id == undefined){
                                 takenElement.push(getPermissions[i]._id);// Array is used to check the element is added or not
                                 var tmp = {};
                                 tmp.id = getPermissions[i]._id;
@@ -405,7 +405,7 @@ exports.userAdd = (req, res) => {
                                     }
                                     if(finalPermission[j].options.length > 0){
                                         for(m = 0;m < finalPermission[j].options.length; m++){
-                                            if(finalPermission[j].options.id == getPermissions[i].parent_id){
+                                            if(finalPermission[j].options[m].id == getPermissions[i].parent_id){
                                                 takenElement.push(getPermissions[i]._id);// Array is used to check the element is added or not
                                                 var tmp = {};
                                                 tmp.id = getPermissions[i]._id;
@@ -413,7 +413,7 @@ exports.userAdd = (req, res) => {
                                                 //tmp.parent_id = getPermissions[i].parent_id;
                                                 tmp.options = new Array();
                                                 flag = true;
-                                                finalPermission[j].options.push(tmp);
+                                                finalPermission[j].options[m].options.push(tmp);
                                             }
                                         }
                                     }
@@ -422,7 +422,6 @@ exports.userAdd = (req, res) => {
                         }
                     }
                 }
-                
                 res.render('user/user_add', { title: 'New User',getPermissions:finalPermission,left_activeClass:5});
             }
 	});
@@ -1092,7 +1091,6 @@ exports.shopPfofileUpdate = (req, res) => {
     
     uploadShopImages(req,res,function(err) {
      if(err) {
-         console.log(err);
         return res.end("Error uploading file.");
      }  
          updateData = {

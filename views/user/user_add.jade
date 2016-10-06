@@ -117,19 +117,19 @@ block content
                         li
                             input(type='checkbox', name='permissions[]', value='#{getPermission.id}')
                             | #{getPermission.name}
-                            -if(getPermission.options){
-                            ul.perms-sub-list
-                                each level1 in getPermission.options
-                                    li
-                                        input(type='checkbox', name='permissions[]', value='#{level1.id}')
-                                        | #{level1.name}
-                                        -if(level1.options){
-                                        ul.perms-sub-list
-                                            each level2 in level1.options
-                                                li
-                                                    input(type='checkbox', name='permissions[]', value='#{level2.id}')
-                                                    | #{level2.name}
-                                        -}
+                            -if(getPermission.options.length > 0){
+                                ul.perms-sub-list
+                                    each level1 in getPermission.options
+                                        li
+                                            input(type='checkbox', name='permissions[]', value='#{level1.id}')
+                                            | #{level1.name}
+                                            -if(level1.options.length > 0){
+                                                ul.perms-sub-list
+                                                    each level2 in level1.options
+                                                        li
+                                                            input(type='checkbox', name='permissions[]', value='#{level2.id}')
+                                                            | #{level2.name}
+                                            -}
                             -}    
           .btn-btm
             button(type='submit') ADD USER
