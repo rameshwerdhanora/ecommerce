@@ -1,0 +1,30 @@
+
+.searchtab {
+	background: #000;
+    width: 100%;
+    float: left;
+    text-align: center;
+}
+
+.searchtab li {
+    width: 33.3%;
+    float: left;
+    text-align: center;
+    font-size: 20px;
+    padding: 6px 0px;
+    color: #0dd0ff;
+    background: #000;
+}
+
+.searchtab li:hover,.searchtab li.active {
+    background: #FFFFFF;
+    color: #0dd0ff;
+    cursor: pointer;
+}
+
+.userimage{
+    width: 60px;
+    height: auto;
+    border: 1px solid #ccc;
+    padding: 2px;
+}
