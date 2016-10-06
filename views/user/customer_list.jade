@@ -15,38 +15,78 @@ block content
             table(width='100%', cellspacing='0', cellpadding='0', border='0')
               tbody
                 tr
-                  th(align='center')
-                    input#checkbox2(type='checkbox', name='checkbox2' class='tableCheckbox')
-                  th CUSTOMER NAME 
-                  th E-Mail 
-                  th ADDRESS 
-                  th CITY
-                  th STATE
-                  th ZIP CODE 
-                  th COUNTRY
-                  th PHONE
-                  th GENDER
-                  th B-day
-                  th
-                    a(href='#')
-                      img(src='/images/delete-icon.png', alt='Delete')
+                    th(align='center')
+                      input#checkbox2(type='checkbox', name='checkbox2' class='tableCheckbox')
+                    -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0522a43592d87b0e6f60b') != -1){
+                      th CUSTOMER NAME
+                    -}
+                    -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0527c43592d87b0e6f612') != -1){
+                        th E-Mail 
+                    -}
+                    -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0523743592d87b0e6f60c') != -1){
+                        th ADDRESS 
+                    -}
+                    -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0524043592d87b0e6f60d') != -1){
+                        th CITY
+                    -}
+                    -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0524743592d87b0e6f60e') != -1){
+                        th STATE
+                    -}
+                    -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0525743592d87b0e6f60f') != -1){
+                        th ZIP CODE 
+                    -}
+                    -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0526443592d87b0e6f610') != -1){
+                        th COUNTRY
+                    -}
+                    -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0527043592d87b0e6f611') != -1){
+                        th PHONE
+                    -}
+                    -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0528a43592d87b0e6f613') != -1){
+                        th GENDER
+                    -}
+                    -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0529843592d87b0e6f614') != -1){
+                        th B-day
+                    -}
+                    th
+                      a(href='#')
+                        img(src='/images/delete-icon.png', alt='Delete')
                 if getCustomers.length > 0
                   each getCustomer in getCustomers       
                     tr
-                      td(align='center')
-                        input#checkbox4(type='checkbox', name='checkbox4' class='rowCheckbox')
-                      td 
-                        a.ord-title(href='/customer/view/#{getCustomer._id}') #{getCustomer.first_name} #{getCustomer.last_name}
-                      td #{getCustomer.email_id}  
-                      td #{addressLine1[getCustomer._id]}
-                      td #{city[getCustomer._id]}
-                      td #{state[getCustomer._id]} 
-                      td #{postalCode[getCustomer._id]} 
-                      td #{city[getCustomer._id]}
-                      td.clr-s1 #{contactNo[getCustomer._id]}
-                      td #{getCustomer.gender}
-                      td #{getCustomer.dob}
-                      td               
+                        td(align='center')
+                          input#checkbox4(type='checkbox', name='checkbox4' class='rowCheckbox')
+                        -if(user.role_id == 1 || user.role_id == 2 || user.userPermissions.indexOf('57c0522a43592d87b0e6f60b') != -1){
+                            td 
+                              a.ord-title(href='/customer/view/#{getCustomer._id}') #{getCustomer.first_name} #{getCustomer.last_name}
+                        -}
+                        -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0527c43592d87b0e6f612') != -1){
+                            td #{getCustomer.email_id}  
+                        -}
+                        -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0523743592d87b0e6f60c') != -1){
+                            td #{addressLine1[getCustomer._id]}
+                        -}
+                        -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0524043592d87b0e6f60d') != -1){
+                            td #{city[getCustomer._id]}
+                        -}
+                        -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0524743592d87b0e6f60e') != -1){
+                            td #{state[getCustomer._id]} 
+                        -}
+                        -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0525743592d87b0e6f60f') != -1){
+                            td #{postalCode[getCustomer._id]} 
+                        -}
+                        -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0526443592d87b0e6f610') != -1){
+                            td #{city[getCustomer._id]}
+                        -}
+                        -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0527043592d87b0e6f611') != -1){
+                            td.clr-s1 #{contactNo[getCustomer._id]}
+                        -}
+                        -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0528a43592d87b0e6f613') != -1){
+                            td #{getCustomer.gender}
+                        -}
+                        -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0529843592d87b0e6f614') != -1){
+                            td #{getCustomer.dob}
+                        -}
+                        td               
                 else
                   tr
                     td(colspan=12)

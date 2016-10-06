@@ -52,7 +52,9 @@ block content
                         span #{brandAr[fetchAllProducts[i].brand_id]}
                         p.price $#{fetchAllProducts[i].price}
                         .right-sub
-                          a#modal-702680.btn.save-btn(href='#modal-container-702680#{i}', role='button', data-toggle='modal') ITEM PREVIEW
+                          -if(user.userPermissions.indexOf('57c04fce43592d87b0e6f601') != -1){
+                            a#modal-702680.btn.save-btn(href='#modal-container-702680#{i}', role='button', data-toggle='modal') ITEM PREVIEW
+                          -}
                     -}else{
                      - var modelcontainerId = 'modal-container-702680'+i;        
                      div(id=modelcontainerId).modal.fade(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
@@ -85,7 +87,9 @@ block content
                         span #{brandAr[fetchAllProducts[i].brand_id]}
                         p.price $#{fetchAllProducts[i].price}
                         .right-sub
-                          a#modal-702680.btn.save-btn(href='#modal-container-702680#{i}', role='button', data-toggle='modal') ITEM PREVIEW
+                          -if(user.userPermissions.indexOf('57c04fce43592d87b0e6f601') != -1){
+                            a#modal-702680.btn.save-btn(href='#modal-container-702680#{i}', role='button', data-toggle='modal') ITEM PREVIEW
+                          -}
                      -} 
                 -}
             - }
@@ -166,7 +170,9 @@ block content
                               -}
                           -}
                        .discount
-                         a(href='/product/list/#{fetchAllProduct._id}') EDIT ITEM
+                         -if(user.userPermissions.indexOf('57c04fdb43592d87b0e6f602') != -1){
+                            a(href='/product/list/#{fetchAllProduct._id}') EDIT ITEM
+                         -}
                          a.btn(href='#modal-container-#{fetchAllProduct._id}', role='button', data-toggle='modal',id='modal-#{fetchAllProduct._id}') Apply Discount code
 
                        .modal.fade(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true',id='modal-container-#{fetchAllProduct._id}')

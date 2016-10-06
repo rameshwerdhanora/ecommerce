@@ -496,87 +496,92 @@ exports.saveProduct = (req, res) => {
 
 /* Update Product */
 exports.updateProduct = (req, res) => {
-    uploadProductImage(req,res,function(err) {
-        if(err){
-                return res.end("Error uploading file.");
-        }
- 
-        req.assert('name', 'Product name is required').notEmpty();    
-        req.assert('blurb', 'Product blurb is required').notEmpty();    
-        req.assert('sku', 'Sku ID is required').notEmpty();
-        req.assert('gender', 'Gender is required').notEmpty();
-        req.assert('category_id', 'Category is required').notEmpty();
-        req.assert('price', 'Price is required').notEmpty();
-        req.assert('color', 'Color is required').notEmpty();
-        var errors = req.validationErrors();  
-        if(!errors){ 
-            updateFineSku = req.body.sku.replace(' ','-');
-            updateProductData = {
-                'name'			: req.body.name,
-                'blurb'                 : req.body.blurb,
-                'sku'  			: updateFineSku,
-                'description' 		: req.body.description,
-                'category_id' 		: req.body.category_id,
-                'sub_category_id'	: req.body.sub_category_id,
-                'brand_id' 		: req.body.brand_id,
-                'is_featured'		: req.body.is_featured,
-                'price' 		: req.body.price,
-                'user_id' 		: req.user.productId,
-                'update' 		: Date.now(),
-                'attribute'         : req.body.size,
-                'color'             : req.body.color,
-                'gender'            : req.body.gender,
-                'dis_name'          : req.body.edit_dis_name,
-                'dis_type'          : req.body.edit_dis_type,
-                'dis_amount'        : req.body.edit_dis_amount
-            };
-
-            Product.findByIdAndUpdate(req.body.productId,updateProductData, function(error, updateProductRes){
-                if(req.file){
-                    var finePath 			= req.file.path.replace('public/','');
-                    var updateProductImage 	= {
-                        'product_id'	: req.body.productId,
-                        'thumb_image'	: finePath,
-                        'large_image'	: finePath,
-                        'image_name'	: req.file.filename 
-                    }
-                    ProductImage.update(req.body.productId,updateProductImage, function(error, updateProductImageRes){
-                        if(updateProductImageRes){
-                                req.flash('success', ['Update product images successfully.']);
-                        }else{
-                                req.flash('success', ['Update product details successfully.']);
-                                res.redirect('/product/list');
-                        }
-                    });
-                }else{
-                   ProductsHashtag.remove({product_id:req.body.productId}, function(error, removeHashtag){
-                     if(error){
-                        res.send({status:'error',msg:error});
-                     }else{
-                        hashtagIdArr = req.body.hash_tag;
-                        if(hashtagIdArr){
-                            hashtagIdArr.forEach(function(hashtagId) {
-                               var productsHashtagIns = new ProductsHashtag();
-                               productsHashtagIns.product_id = req.body.productId;
-                               productsHashtagIns.hashtag_id = hashtagId;
-                               productsHashtagIns.save();
-                            });
-                        }
-                     }
-                  });
-                    req.flash('success', ['Update product details successfully.']);
-                    res.redirect('/product/list');
-                }
-            });
-        }else{
-            var er = new Array();
-            for(var i = 0;i<errors.length;i++){
-                er.push(errors[i].msg);
+    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c04fdb43592d87b0e6f602') == -1){
+        req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
+        res.redirect('/user/shopprofile');
+    }else{
+        uploadProductImage(req,res,function(err) {
+            if(err){
+                    return res.end("Error uploading file.");
             }
-            req.flash('errors',er);
-            res.redirect('/product/list');
-        }
-    });
+
+            req.assert('name', 'Product name is required').notEmpty();    
+            req.assert('blurb', 'Product blurb is required').notEmpty();    
+            req.assert('sku', 'Sku ID is required').notEmpty();
+            req.assert('gender', 'Gender is required').notEmpty();
+            req.assert('category_id', 'Category is required').notEmpty();
+            req.assert('price', 'Price is required').notEmpty();
+            req.assert('color', 'Color is required').notEmpty();
+            var errors = req.validationErrors();  
+            if(!errors){ 
+                updateFineSku = req.body.sku.replace(' ','-');
+                updateProductData = {
+                    'name'			: req.body.name,
+                    'blurb'                 : req.body.blurb,
+                    'sku'  			: updateFineSku,
+                    'description' 		: req.body.description,
+                    'category_id' 		: req.body.category_id,
+                    'sub_category_id'	: req.body.sub_category_id,
+                    'brand_id' 		: req.body.brand_id,
+                    'is_featured'		: req.body.is_featured,
+                    'price' 		: req.body.price,
+                    'user_id' 		: req.user.productId,
+                    'update' 		: Date.now(),
+                    'attribute'         : req.body.size,
+                    'color'             : req.body.color,
+                    'gender'            : req.body.gender,
+                    'dis_name'          : req.body.edit_dis_name,
+                    'dis_type'          : req.body.edit_dis_type,
+                    'dis_amount'        : req.body.edit_dis_amount
+                };
+
+                Product.findByIdAndUpdate(req.body.productId,updateProductData, function(error, updateProductRes){
+                    if(req.file){
+                        var finePath 			= req.file.path.replace('public/','');
+                        var updateProductImage 	= {
+                            'product_id'	: req.body.productId,
+                            'thumb_image'	: finePath,
+                            'large_image'	: finePath,
+                            'image_name'	: req.file.filename 
+                        }
+                        ProductImage.update(req.body.productId,updateProductImage, function(error, updateProductImageRes){
+                            if(updateProductImageRes){
+                                    req.flash('success', ['Update product images successfully.']);
+                            }else{
+                                    req.flash('success', ['Update product details successfully.']);
+                                    res.redirect('/product/list');
+                            }
+                        });
+                    }else{
+                       ProductsHashtag.remove({product_id:req.body.productId}, function(error, removeHashtag){
+                         if(error){
+                            res.send({status:'error',msg:error});
+                         }else{
+                            hashtagIdArr = req.body.hash_tag;
+                            if(hashtagIdArr){
+                                hashtagIdArr.forEach(function(hashtagId) {
+                                   var productsHashtagIns = new ProductsHashtag();
+                                   productsHashtagIns.product_id = req.body.productId;
+                                   productsHashtagIns.hashtag_id = hashtagId;
+                                   productsHashtagIns.save();
+                                });
+                            }
+                         }
+                      });
+                        req.flash('success', ['Update product details successfully.']);
+                        res.redirect('/product/list');
+                    }
+                });
+            }else{
+                var er = new Array();
+                for(var i = 0;i<errors.length;i++){
+                    er.push(errors[i].msg);
+                }
+                req.flash('errors',er);
+                res.redirect('/product/list');
+            }
+        });
+    }
 };
 
 /* Remove Product */
