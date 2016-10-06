@@ -159,7 +159,7 @@ $(document).ready(function() {
     
     $(".addProduct").on('click','#addMoreColor',function(n){
         var formId = $(this).closest('form').attr('id');
-        var colorLength = $("form#"+formId+" .slctClr").length;
+        var colorLength = $("form#"+formId+" .slctClr").length;  
         if($('#'+formId+' .slctClr').length < $("#"+formId+" #color option").length){
             var cln = $("#"+formId+" #lastColorSelect .profile-frm-cl2").clone();
             cln.find('select').attr('id','color-'+colorLength);
