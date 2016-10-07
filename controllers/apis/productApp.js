@@ -937,7 +937,7 @@ exports.BrandDetailView = (req, res) => {
           {
             Follow.findOne({user_id:req.params.userId,brand_id:req.params.brandId},function(error,fetchFollowUnFollowBrand)
             {
-              var brandFollow = (fetchFollowUnFollowBrand) ? 'true' : 'false';
+             var brandFollow = (fetchFollowUnFollowBrand) ? 'yes' : 'no';
               filterObj.brand_follow         = brandFollow;
               callback(error); 
             })
