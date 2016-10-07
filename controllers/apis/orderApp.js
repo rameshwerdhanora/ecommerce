@@ -265,12 +265,12 @@ exports.detailsOfSelectedOrder = (req,res) => {
 			var orderData = {};
 			var ProductDetailsArr = new Array();
 
-        	var dateTime = new Date(parseInt(fetchOrdersDetails.order_date));
+      //   	var dateTime = new Date(parseInt(fetchOrdersDetails.order_date));
 
-        	var year  = dateTime.getFullYear();
-    		var month = dateTime.getMonth()+1;
-    		var date  = dateTime.getDate();
-    		finalDate = month+'/'+date+'/'+year
+      //   	var year  = dateTime.getFullYear();
+    		// var month = dateTime.getMonth()+1;
+    		// var date  = dateTime.getDate();
+    		// finalDate = month+'/'+date+'/'+year
 
         	orderData.order_number 		= fetchOrdersDetails.order_number;
         	orderData.user_id 			= fetchOrdersDetails.user_id;
@@ -284,8 +284,8 @@ exports.detailsOfSelectedOrder = (req,res) => {
         	orderData.status			= fetchOrdersDetails.status;
         	orderData.billing_address	= fetchOrdersDetails.billing_address;
         	orderData.payment_details	= fetchOrdersDetails.payment_details;
-        	orderData.order_date		= finalDate;
-        	orderData.expected_date		= finalDate;
+        	orderData.order_date		= dateFormat(parseInt(OrderRes.order_date),'mm/dd/yyyy');;
+        	orderData.expected_date		= dateFormat(parseInt(OrderRes.order_date),'mm/dd/yyyy');;
 
         	OrderDetails.find({order_id:fetchOrdersDetails._id},function(error,fetchOrdersProductDetails)
         	{
