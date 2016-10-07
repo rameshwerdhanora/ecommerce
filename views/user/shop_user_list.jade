@@ -16,8 +16,10 @@ block content
               a(href='/user/shop_user_list')
                 | Manage Users
             li(class=(activeClass == 2)?'active':'')
-              a(href='/user/add') 
-                | Add User
+              -if((user.role_id == 3 || user.role_id == 4 ) || (user.role_id == 6 && user.userPermissions.indexOf('57ecd4a5eb288f37067b23c8') != -1 )){
+                a(href='/user/add') 
+                  | Add User
+              -}
         .profile-cl
           .profile-top-row
             h2 Users
