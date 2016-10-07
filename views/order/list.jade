@@ -5,8 +5,8 @@ block content
       img(src='/images/title-icon2.png', alt='icon')
       |  ORDERS
       .edit-btn-cl
-        -if(user.userPermissions.indexOf('57c04f7043592d87b0e6f5fd') != -1){
-            a.edit-btn(href='#') PRINT INVOICE
+        -if(((user.role_id == 3 || user.role_id == 4) &&  user.userPermissions.indexOf('57c04f7043592d87b0e6f5fd') != -1) || (user.role_id == 6 &&  user.userPermissions.indexOf('57ecccf9eb288fb8157b23c7') != -1)){
+            a.save-btn(href='#') PRINT INVOICE
         -}
     .customer-box.cmn-in.clearfix
       .low-tbl-box.order-txt
