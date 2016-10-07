@@ -40,8 +40,10 @@ block content
                                   //td #{getAllAttribute.product_manager}
                                   td #{getAllAttribute.display_type}
                                   td 
-                                     a.addsize.sizebuttons(href='/attribute/edit/#{getAllAttribute._id}', title='Edit Attribute') Edit | 
-                                     a.rmvsize.sizebuttons(href='#', onclick='deleteAttribute("#{getAllAttribute._id}")' title='Delete Attribute') Delete
+                                     a.addsize.sizebuttons(href='/attribute/edit/#{getAllAttribute._id}', title='Edit Attribute') Edit 
+                                     -if(user.role_id == 1 || user.role_id == 2){
+                                        a.rmvsize.sizebuttons(href='#', onclick='deleteAttribute("#{getAllAttribute._id}")' title='Delete Attribute') | Delete
+                                     -}
                                 - count++;
                         else
                             tr

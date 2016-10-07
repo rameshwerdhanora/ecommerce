@@ -103,7 +103,7 @@ block content
           table(border='0', cellspacing='0', cellpadding='0')
             tr
               th
-                input#select_all(type='checkbox')
+                input.tableCheckbox(type='checkbox')
               th ITEM PHOTOS
               th ITEM NAME
               th SIZE 
@@ -118,7 +118,7 @@ block content
                   -i++; 
                    tr
                      td(rowspan='2')
-                       input.checkbox-row(type='checkbox', name='checkbox[]', value="#{fetchAllProduct._id}")
+                       input.rowCheckbox.checkbox-row(type='checkbox', name='checkbox[]', value="#{fetchAllProduct._id}")
                      td(rowspan='2')
                        .product_table_img
                          img(src='/#{productImagesArr1[fetchAllProduct._id]}')

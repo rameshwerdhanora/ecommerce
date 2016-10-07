@@ -22,7 +22,7 @@ block content
                 tbody
                   tr
                     th(align='center')
-                      input#checkbox2(type='checkbox', name='checkbox2')
+                      input.tableCheckbox(type='checkbox', name='checkbox2')
                     th
                       | USERNAME  
                       span.paginng-icon
@@ -76,7 +76,7 @@ block content
                       - i++;
                       tr(class='productTr_#{fetchAllProduct._id}')
                        td  
-                        input#checkbox2(type='checkbox', name='checkbox2')
+                        input.rowCheckbox(type='checkbox', name='checkbox2')
                        td --
                        td #{brandAr[fetchAllProduct.brand_id]}
                        td
