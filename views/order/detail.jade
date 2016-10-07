@@ -222,13 +222,13 @@ block content
         ul
           li
             .order_label
-              img(src='images/mastercard.jpg')
-            .order_field
-              | MASTERCARD   
+              img(src='/images/cards/#{orderdata.payment_details[0].type}.png')
+            .order_field(style='text-transform: capitalize;')
+              | #{orderdata.payment_details[0].type}
               br
-              | Ending In XXX-1010 
+              | Ending In #{orderdata.payment_details[0].number}    
               br
-              | EXP 02/20   CVV  123
+              | EXP #{orderdata.payment_details[0].expire_date}   CVV  123
             .clearfix
           li
             .order_label
