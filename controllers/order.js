@@ -5,6 +5,7 @@ const OrderDetails    = require('../models/orderDetails');
 const User            = require('../models/userApp');
 const ShopShipping   = require('../models/shopShipping');
 const Constants       = require('../constants/constants');
+const dateFormat = require('dateformat');
 
 /**
  * GET /order/list
@@ -17,69 +18,76 @@ exports.list = (req, res) => {
       req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
       res.redirect('/user/shopprofile');
     }else{
-
-        Order.find({},function(error,getAllOrders)
-        {
-            if(getAllOrders)
-            {
-              var finalOrderData = new Array();
-              async.eachSeries(getAllOrders, function(OrderIds, callback)
+        var page = (req.query.page == undefined)?1:req.query.page;
+        page = (page == 0)?1:page;
+        var skipRecord = (page-1)*Constants.RECORDS_PER_PAGE;
+        Order.count(function(err, totalRecord) {
+          var totalPage = Math.ceil(totalRecord/Constants.RECORDS_PER_PAGE);
+          Order.find({},function(error,getAllOrders)
+          {
+              if(getAllOrders)
               {
-                var orderObj = {};
-                var dateTime = new Date(parseInt(OrderIds.order_date));
+                var finalOrderData = new Array();
+                async.eachSeries(getAllOrders, function(OrderIds, callback)
+                {
+                  var orderObj = {};
+                  // var dateTime = new Date(parseInt(OrderIds.order_date));
 
-                //var split = dateTime.split(' ');
+                  // //var split = dateTime.split(' ');
 
-                var year  = dateTime.getFullYear();
-                var month = dateTime.getMonth()+1;
-                var date  = dateTime.getDate();
-                finalDate = month+'/'+date+'/'+year 
+                  // var year  = dateTime.getFullYear();
+                  // var month = dateTime.getMonth()+1;
+                  // var date  = dateTime.getDate();
+                  // finalDate = month+'/'+date+'/'+year 
 
-                orderObj._id = OrderIds._id;
-                orderObj.order_number = OrderIds.order_number;
-                orderObj.status       = OrderIds.status;
-                orderObj.totalprice   = OrderIds.totalprice;
-                orderObj.orderdate    = finalDate;
+                  orderObj._id = OrderIds._id;
+                  orderObj.order_number = OrderIds.order_number;
+                  orderObj.status       = OrderIds.status;
+                  orderObj.totalprice   = OrderIds.totalprice;
+                  orderObj.orderdate    = dateFormat(parseInt(OrderIds.order_date),'mmmm dS yyyy h:MM TT');
 
-                async.parallel
-                (
-                  [
-                      function(callback)
-                      {
-                        User.findOne({_id:OrderIds.user_id},function(error,fetUserDetails)
+                  async.parallel
+                  (
+                    [
+                        function(callback)
                         {
-                          if(fetUserDetails)
+                          User.findOne({_id:OrderIds.user_id},function(error,fetUserDetails)
                           {
-                            orderObj.user_id    = OrderIds.user_id;
-                            orderObj.user_name  = fetUserDetails.user_name;
-                            orderObj.email_id   = fetUserDetails.email_id;
-                            orderObj.first_name = fetUserDetails.first_name;
-                            orderObj.last_name  = fetUserDetails.last_name;
-                            orderObj.gender     = fetUserDetails.gender;
-                          }
-                          callback(error);
-                        });
-                      }
-                  ],
-                  function(err)
-                  {
-                    finalOrderData.push(orderObj);
-                    callback(err);
-                  }
-                );
+                            if(fetUserDetails)
+                            {
+                              orderObj.user_id    = OrderIds.user_id;
+                              orderObj.user_name  = fetUserDetails.user_name;
+                              orderObj.email_id   = fetUserDetails.email_id;
+                              orderObj.first_name = fetUserDetails.first_name;
+                              orderObj.last_name  = fetUserDetails.last_name;
+                              orderObj.gender     = fetUserDetails.gender;
+                            }
+                            callback(error);
+                          });
+                        }
+                    ],
+                    function(err)
+                    {
+                      finalOrderData.push(orderObj);
+                      callback(err);
+                    }
+                  );
 
-              },
-              function(err)
+                },
+                function(err)
+                {
+                  res.render('order/list', { title: 'Order List',left_activeClass:2,orderdata:finalOrderData,currentPage:page, totalRecord:totalRecord, totalPage:totalPage});
+                });
+              }
+              else 
               {
-                res.render('order/list', { title: 'Order List',left_activeClass:2,orderdata:finalOrderData});
-              });
-            }
-            else 
-            {
-              req.flash('success',['Order is not created.']);
-              res.render('order/list',{title: 'Order List',left_activeClass:2,orderdata:''});
-            }
-        });
+                req.flash('success',['Order is not created.']);
+                res.render('order/list',{title: 'Order List',left_activeClass:2,orderdata:''});
+              }
+          }).limit(Constants.RECORDS_PER_PAGE)
+                .skip(skipRecord)
+                .sort('-_id');
+        });  
     }
 };
 
@@ -108,20 +116,20 @@ exports.detail = (req, res) => {
         async.eachSeries(getAllOrders, function(OrderIds, callback)
         {
           var orderDetailObj = {};
-          var dateTime = new Date(parseInt(OrderIds.order_date));
+          //var dateTime = new Date(parseInt(OrderIds.order_date));
           
           //var split = dateTime.split(' ');
    
-          var year  = dateTime.getFullYear();
-          var month = dateTime.getMonth()+1;
-          var date  = dateTime.getDate();
+          // var year  = dateTime.getFullYear();
+          // var month = dateTime.getMonth()+1;
+          // var date  = dateTime.getDate();
 
-          var hour  = dateTime.getHours() == 0 ? 12 : (dateTime.getHours() > 12 ? dateTime.getHours() - 12 : dateTime.getHours());
-          var min   = dateTime.getMinutes() < 10 ? '0' + dateTime.getMinutes() : dateTime.getMinutes();
-          var ampm  = dateTime.getHours() < 12 ? 'AM' : 'PM';
-          var time  = hour + ':' + min + ' ' + ampm;
+          // var hour  = dateTime.getHours() == 0 ? 12 : (dateTime.getHours() > 12 ? dateTime.getHours() - 12 : dateTime.getHours());
+          // var min   = dateTime.getMinutes() < 10 ? '0' + dateTime.getMinutes() : dateTime.getMinutes();
+          // var ampm  = dateTime.getHours() < 12 ? 'AM' : 'PM';
+          // var time  = hour + ':' + min + ' ' + ampm;
 
-          finalDate = month+'/'+date+'/'+year ;
+          // finalDate = month+'/'+date+'/'+year ;
 
           orderDetailObj._id                  = OrderIds._id;
           orderDetailObj.order_number         = OrderIds.order_number;
@@ -134,8 +142,8 @@ exports.detail = (req, res) => {
           orderDetailObj.tax                  = OrderIds.tax;
           orderDetailObj.subtotal             = OrderIds.subtotal;
           orderDetailObj.itemquantity         = OrderIds.itemquantity;
-          orderDetailObj.orderdate            = finalDate;
-          orderDetailObj.ordertime            = time;
+          orderDetailObj.orderdate            = dateFormat(parseInt(OrderIds.order_date),'mmmm dS yyyy');
+          orderDetailObj.ordertime            = dateFormat(parseInt(OrderIds.order_date),'h:MM TT');
 
           
           async.parallel
