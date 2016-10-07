@@ -38,139 +38,44 @@ exports.listOfProducts = (req, res) => {
     if(req.user.role_id == Constants.MASTERROLE && req.params.productId == 'add'){
         req.flash('errors', ['Super admin can not create product. This feature is only for the Shop user']);
         return res.redirect('/product/list');
-    }
-    
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c04f9a43592d87b0e6f5ff') == -1){
+    }else if(((req.user.role_id == 3 || req.user.role_id == 4) && req.user.userPermissions.indexOf('57c04f9a43592d87b0e6f5ff') == -1) || (req.user.role_id == 6 && req.user.userPermissions.indexOf('57eccb11eb288f37067b23c6') == -1)){
       req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
       res.redirect('/user/shopprofile');
-    }
+    }else{
     
-    var page = (req.query.page == undefined)?1:req.query.page;
-    page = (page == 0)?1:page;
-    var skipRecord = (page-1)*Constants.RECORDS_PER_PAGE;
-    
-     if(req.user.role_id==1 || req.user.role_id==2){
-            Product.count(function(error, totalRecord) {
-            var totalPage = Math.ceil(totalRecord/Constants.RECORDS_PER_PAGE);
-            Product.find()
-                .limit(Constants.RECORDS_PER_PAGE)
-                .skip(skipRecord)
-                .sort('-_id')
-                .exec(function(error,fetchAllProducts){
-                Category.find({is_active:1},function(error,fetchCategories){
-                    SubCategory.find({is_active:1},function(error,fetchSubCategories){
-                        Brand.find({},function(error,fetchAllBrands){
-                            Attribute.find({},function(error,fetchAllAttributes){
-                                Color.find({},function(error,fetchAllColors){
-                                    Tag.find({},function(error,fetchAllTags){
-                                        ProductImage.find({},function(error,fetchImagesOfProducts){
-                                            AttributeOption.find({},function(error,fetchAttrOptionValues){
-                                            
-                                                var tempBrand = {};
-                                                if(fetchAllBrands){
-                                                    for(var i = 0;i< fetchAllBrands.length;i++){
-                                                        tempBrand[fetchAllBrands[i]._id] = fetchAllBrands[i].brand_name;
-                                                    }
-                                                }
-                                                
-                                                var tempCategory = {};
-                                                if(fetchCategories){
-                                                    for(var i = 0;i< fetchCategories.length;i++){
-                                                        tempCategory[fetchCategories[i]._id] = fetchCategories[i].name;
-                                                    }
-                                                }
+        var page = (req.query.page == undefined)?1:req.query.page;
+        page = (page == 0)?1:page;
+        var skipRecord = (page-1)*Constants.RECORDS_PER_PAGE;
 
-                                                var tempSubCategory = {};
-                                                if(fetchSubCategories){
-                                                    for(var i = 0;i< fetchSubCategories.length;i++){
-                                                        tempSubCategory[fetchSubCategories[i]._id] = fetchSubCategories[i].name;
-                                                    }
-                                                }
-                                                
-                                                var tempProductImages1 = {};
-                                                var tempProductImages2 = {};
-                                                var tempProductImages3 = {};
-                                                var tempProductImages4 = {};
-                                                if(fetchImagesOfProducts){
-                                                    for(var i = 0;i< fetchImagesOfProducts.length;i++){
-                                                        tempProductImages1[fetchImagesOfProducts[i].product_id] = fetchImagesOfProducts[i].thumb_image_1;
-                                                        tempProductImages2[fetchImagesOfProducts[i].product_id] = fetchImagesOfProducts[i].thumb_image_2;
-                                                        tempProductImages3[fetchImagesOfProducts[i].product_id] = fetchImagesOfProducts[i].thumb_image_3;
-                                                        tempProductImages4[fetchImagesOfProducts[i].product_id] = fetchImagesOfProducts[i].thumb_image_4;
-                                                    }
-                                                }
-                                                
-                                                var tempAttrOptionValues = {};
-                                                if(fetchAttrOptionValues){
-                                                    for(var i = 0;i< fetchAttrOptionValues.length;i++){
-                                                        tempAttrOptionValues[fetchAttrOptionValues[i]._id] = fetchAttrOptionValues[i].value;
-                                                    }
-                                                }
-                                                
-                                                res.render('product/admin_list',{
-                                                    title: 'Product',
-                                                    fetchAllProducts:fetchAllProducts,
-                                                    activeClass:1,
-                                                    left_activeClass:3,
-                                                    currentPage:page, 
-                                                    totalPage:totalPage,
-                                                    allBrands : fetchAllBrands,
-                                                    fetchCategories:fetchCategories,
-                                                    fetchSubCategories:fetchSubCategories,
-                                                    fetchAllAttributes:fetchAllAttributes,
-                                                    fetchAllColors:fetchAllColors,
-                                                    editProduct:false,
-                                                    brandAr:tempBrand,
-                                                    categoryAr:tempCategory,
-                                                    subcategoryAr:tempSubCategory,
-                                                    fetchAllTags:fetchAllTags,
-                                                    productImagesArr1 :tempProductImages1,
-                                                    productImagesArr2 :tempProductImages2,
-                                                    productImagesArr3 :tempProductImages3,
-                                                    productImagesArr4 :tempProductImages4,
-                                                    attrOptionValuesArr :tempAttrOptionValues
-                                                });
-                                            });
-                                        }); 
-                                    });	
-                                }); 
-                            });
-                        });
-                    });
-                });
-            });	
-        });
-     } else if(req.user.role_id==3 || req.user.role_id==4 || req.user.role_id==5){
-        Product.count({shop_id:req.user.shop_id},function(error, totalRecord) {
-            var totalPage = Math.ceil(totalRecord/Constants.RECORDS_PER_PAGE);
-            Product.find({shop_id:req.user.shop_id})
-                .limit(Constants.RECORDS_PER_PAGE)
-                .skip(skipRecord)
-                .sort('-_id')
-                .exec(function(error,fetchAllProducts){
-                Category.find({is_active:1},function(error,fetchCategories){
-                    SubCategory.find({is_active:1},function(error,fetchSubCategories){
-                        Brand.find({},function(error,fetchAllBrands){
-                            Attribute.find({},function(error,fetchAllAttributes){
-                                Color.find({},function(error,fetchAllColors){
-                                    Tag.find({},function(error,fetchAllTags){
-                                        ProductImage.find({},function(error,fetchImagesOfProducts){
-                                            AttributeOption.find({},function(error,fetchAttrOptionValues){
-                                                ProductsHashtag.find({},function(error,fetchAllProductsHashtags){
+         if(req.user.role_id==1 || req.user.role_id==2){
+                Product.count(function(error, totalRecord) {
+                var totalPage = Math.ceil(totalRecord/Constants.RECORDS_PER_PAGE);
+                Product.find()
+                    .limit(Constants.RECORDS_PER_PAGE)
+                    .skip(skipRecord)
+                    .sort('-_id')
+                    .exec(function(error,fetchAllProducts){
+                    Category.find({is_active:1},function(error,fetchCategories){
+                        SubCategory.find({is_active:1},function(error,fetchSubCategories){
+                            Brand.find({},function(error,fetchAllBrands){
+                                Attribute.find({},function(error,fetchAllAttributes){
+                                    Color.find({},function(error,fetchAllColors){
+                                        Tag.find({},function(error,fetchAllTags){
+                                            ProductImage.find({},function(error,fetchImagesOfProducts){
+                                                AttributeOption.find({},function(error,fetchAttrOptionValues){
+
                                                     var tempBrand = {};
-                                                    var tempBrandLogo = {};
                                                     if(fetchAllBrands){
-                                                      for(var i = 0;i< fetchAllBrands.length;i++){
-                                                        tempBrand[fetchAllBrands[i]._id] = fetchAllBrands[i].brand_name;
-                                                        tempBrandLogo[fetchAllBrands[i]._id] = fetchAllBrands[i].brand_logo;
-                                                      }  
+                                                        for(var i = 0;i< fetchAllBrands.length;i++){
+                                                            tempBrand[fetchAllBrands[i]._id] = fetchAllBrands[i].brand_name;
+                                                        }
                                                     }
 
                                                     var tempCategory = {};
                                                     if(fetchCategories){
-                                                      for(var i = 0;i< fetchCategories.length;i++){
-                                                        tempCategory[fetchCategories[i]._id] = fetchCategories[i].name;
-                                                      }
+                                                        for(var i = 0;i< fetchCategories.length;i++){
+                                                            tempCategory[fetchCategories[i]._id] = fetchCategories[i].name;
+                                                        }
                                                     }
 
                                                     var tempSubCategory = {};
@@ -200,121 +105,213 @@ exports.listOfProducts = (req, res) => {
                                                         }
                                                     }
 
-                                                    var tempColors = {};
-                                                    if(fetchAllColors){
-                                                        for(var i = 0;i< fetchAllColors.length;i++){
-                                                            tempColors[fetchAllColors[i]._id] = fetchAllColors[i].color_name;
+                                                    res.render('product/admin_list',{
+                                                        title: 'Product',
+                                                        fetchAllProducts:fetchAllProducts,
+                                                        activeClass:1,
+                                                        left_activeClass:3,
+                                                        currentPage:page, 
+                                                        totalPage:totalPage,
+                                                        allBrands : fetchAllBrands,
+                                                        fetchCategories:fetchCategories,
+                                                        fetchSubCategories:fetchSubCategories,
+                                                        fetchAllAttributes:fetchAllAttributes,
+                                                        fetchAllColors:fetchAllColors,
+                                                        editProduct:false,
+                                                        brandAr:tempBrand,
+                                                        categoryAr:tempCategory,
+                                                        subcategoryAr:tempSubCategory,
+                                                        fetchAllTags:fetchAllTags,
+                                                        productImagesArr1 :tempProductImages1,
+                                                        productImagesArr2 :tempProductImages2,
+                                                        productImagesArr3 :tempProductImages3,
+                                                        productImagesArr4 :tempProductImages4,
+                                                        attrOptionValuesArr :tempAttrOptionValues
+                                                    });
+                                                });
+                                            }); 
+                                        });	
+                                    }); 
+                                });
+                            });
+                        });
+                    });
+                });	
+            });
+         } else if(req.user.role_id==3 || req.user.role_id==4 || req.user.role_id==6){
+            Product.count({shop_id:req.user.shop_id},function(error, totalRecord) {
+                var totalPage = Math.ceil(totalRecord/Constants.RECORDS_PER_PAGE);
+                Product.find({shop_id:req.user.shop_id})
+                    .limit(Constants.RECORDS_PER_PAGE)
+                    .skip(skipRecord)
+                    .sort('-_id')
+                    .exec(function(error,fetchAllProducts){
+                    Category.find({is_active:1},function(error,fetchCategories){
+                        SubCategory.find({is_active:1},function(error,fetchSubCategories){
+                            Brand.find({},function(error,fetchAllBrands){
+                                Attribute.find({},function(error,fetchAllAttributes){
+                                    Color.find({},function(error,fetchAllColors){
+                                        Tag.find({},function(error,fetchAllTags){
+                                            ProductImage.find({},function(error,fetchImagesOfProducts){
+                                                AttributeOption.find({},function(error,fetchAttrOptionValues){
+                                                    ProductsHashtag.find({},function(error,fetchAllProductsHashtags){
+                                                        var tempBrand = {};
+                                                        var tempBrandLogo = {};
+                                                        if(fetchAllBrands){
+                                                          for(var i = 0;i< fetchAllBrands.length;i++){
+                                                            tempBrand[fetchAllBrands[i]._id] = fetchAllBrands[i].brand_name;
+                                                            tempBrandLogo[fetchAllBrands[i]._id] = fetchAllBrands[i].brand_logo;
+                                                          }  
                                                         }
-                                                    }
-                                                    
-                                                    if(req.params.productId && req.params.productId != 'add'){
-                                                        // For edit product case
-                                                        Product.findOne({_id:req.params.productId},function(error,productRes){
-                                                            //Find attribute option to get size of them
-                                                            AttributeOption.find({_id:{$in:productRes.attribute}},function(error,productAttributeRes){
-                                                                var finalAttribResult = new Array();
-                                                                if(productAttributeRes != null){
-                                                                    for(var attribCt = 0 ;attribCt < productAttributeRes.length ;attribCt++ ){
-                                                                        finalAttribResult.push(productAttributeRes[attribCt].attribute_id);
-                                                                    }
-                                                                }//Find selected size for the product
-                                                                Size.find({"$or":[{"gender": productRes.gender},{"gender": "unisex"}]},function(error,allSizeRes){
-                                                                    console.log(allSizeRes);
-                                                                    Size.find({listofattrmap:{$in:finalAttribResult}},function(error,sizeRes){
-                                                                        var finalSize = new Array();
-                                                                        if(sizeRes != null){
-                                                                            for(var attribCt = 0 ;attribCt < sizeRes.length ;attribCt++ ){
-                                                                                finalSize.push(sizeRes[attribCt]._id);
-                                                                            }
+
+                                                        var tempCategory = {};
+                                                        if(fetchCategories){
+                                                          for(var i = 0;i< fetchCategories.length;i++){
+                                                            tempCategory[fetchCategories[i]._id] = fetchCategories[i].name;
+                                                          }
+                                                        }
+
+                                                        var tempSubCategory = {};
+                                                        if(fetchSubCategories){
+                                                            for(var i = 0;i< fetchSubCategories.length;i++){
+                                                                tempSubCategory[fetchSubCategories[i]._id] = fetchSubCategories[i].name;
+                                                            }
+                                                        }
+
+                                                        var tempProductImages1 = {};
+                                                        var tempProductImages2 = {};
+                                                        var tempProductImages3 = {};
+                                                        var tempProductImages4 = {};
+                                                        if(fetchImagesOfProducts){
+                                                            for(var i = 0;i< fetchImagesOfProducts.length;i++){
+                                                                tempProductImages1[fetchImagesOfProducts[i].product_id] = fetchImagesOfProducts[i].thumb_image_1;
+                                                                tempProductImages2[fetchImagesOfProducts[i].product_id] = fetchImagesOfProducts[i].thumb_image_2;
+                                                                tempProductImages3[fetchImagesOfProducts[i].product_id] = fetchImagesOfProducts[i].thumb_image_3;
+                                                                tempProductImages4[fetchImagesOfProducts[i].product_id] = fetchImagesOfProducts[i].thumb_image_4;
+                                                            }
+                                                        }
+
+                                                        var tempAttrOptionValues = {};
+                                                        if(fetchAttrOptionValues){
+                                                            for(var i = 0;i< fetchAttrOptionValues.length;i++){
+                                                                tempAttrOptionValues[fetchAttrOptionValues[i]._id] = fetchAttrOptionValues[i].value;
+                                                            }
+                                                        }
+
+                                                        var tempColors = {};
+                                                        if(fetchAllColors){
+                                                            for(var i = 0;i< fetchAllColors.length;i++){
+                                                                tempColors[fetchAllColors[i]._id] = fetchAllColors[i].color_name;
+                                                            }
+                                                        }
+
+                                                        if(req.params.productId && req.params.productId != 'add'){
+                                                            // For edit product case
+                                                            Product.findOne({_id:req.params.productId},function(error,productRes){
+                                                                //Find attribute option to get size of them
+                                                                AttributeOption.find({_id:{$in:productRes.attribute}},function(error,productAttributeRes){
+                                                                    var finalAttribResult = new Array();
+                                                                    if(productAttributeRes != null){
+                                                                        for(var attribCt = 0 ;attribCt < productAttributeRes.length ;attribCt++ ){
+                                                                            finalAttribResult.push(productAttributeRes[attribCt].attribute_id);
                                                                         }
-                                                                        ProductsHashtag.find({product_id:req.params.productId},{hashtag_id:true, _id:false},function(error,selectedHashtag){
-                                                                            res.render('product/shop_list', {
-                                                                                title: 'Update product',
-                                                                                fetchAllProducts:fetchAllProducts,
-                                                                                activeClass:1,
-                                                                                left_activeClass:3,
-                                                                                currentPage:page, 
-                                                                                totalPage:totalPage,
-                                                                                allBrands : fetchAllBrands,
-                                                                                fetchCategories:fetchCategories,
-                                                                                fetchSubCategories:fetchSubCategories,
-                                                                                fetchAllAttributes:fetchAllAttributes,
-                                                                                fetchAllColors:fetchAllColors,
-                                                                                editProduct:true,
-                                                                                productRes:productRes,
-                                                                                productSize:finalSize,
-                                                                                sizeResult:allSizeRes,
-                                                                                brandAr:tempBrand,
-                                                                                categoryAr:tempCategory,
-                                                                                subcategoryAr:tempSubCategory,
-                                                                                fetchAllTags:fetchAllTags,
-                                                                                selectedHashtag:selectedHashtag,
-                                                                                addFlag :false,
-                                                                                productImagesArr1 :tempProductImages1,
-                                                                                productImagesArr2 :tempProductImages2,
-                                                                                productImagesArr3 :tempProductImages3,
-                                                                                productImagesArr4 :tempProductImages4,
-                                                                                attrOptionValuesArr :tempAttrOptionValues,
-                                                                                colorsArr:tempColors,
-                                                                                fetchAllProductsHashtags:fetchAllProductsHashtags,
-                                                                                brandLogoArr:tempBrandLogo
+                                                                    }//Find selected size for the product
+                                                                    Size.find({"$or":[{"gender": productRes.gender},{"gender": "unisex"}]},function(error,allSizeRes){
+                                                                        console.log(allSizeRes);
+                                                                        Size.find({listofattrmap:{$in:finalAttribResult}},function(error,sizeRes){
+                                                                            var finalSize = new Array();
+                                                                            if(sizeRes != null){
+                                                                                for(var attribCt = 0 ;attribCt < sizeRes.length ;attribCt++ ){
+                                                                                    finalSize.push(sizeRes[attribCt]._id);
+                                                                                }
+                                                                            }
+                                                                            ProductsHashtag.find({product_id:req.params.productId},{hashtag_id:true, _id:false},function(error,selectedHashtag){
+                                                                                res.render('product/shop_list', {
+                                                                                    title: 'Update product',
+                                                                                    fetchAllProducts:fetchAllProducts,
+                                                                                    activeClass:1,
+                                                                                    left_activeClass:3,
+                                                                                    currentPage:page, 
+                                                                                    totalPage:totalPage,
+                                                                                    allBrands : fetchAllBrands,
+                                                                                    fetchCategories:fetchCategories,
+                                                                                    fetchSubCategories:fetchSubCategories,
+                                                                                    fetchAllAttributes:fetchAllAttributes,
+                                                                                    fetchAllColors:fetchAllColors,
+                                                                                    editProduct:true,
+                                                                                    productRes:productRes,
+                                                                                    productSize:finalSize,
+                                                                                    sizeResult:allSizeRes,
+                                                                                    brandAr:tempBrand,
+                                                                                    categoryAr:tempCategory,
+                                                                                    subcategoryAr:tempSubCategory,
+                                                                                    fetchAllTags:fetchAllTags,
+                                                                                    selectedHashtag:selectedHashtag,
+                                                                                    addFlag :false,
+                                                                                    productImagesArr1 :tempProductImages1,
+                                                                                    productImagesArr2 :tempProductImages2,
+                                                                                    productImagesArr3 :tempProductImages3,
+                                                                                    productImagesArr4 :tempProductImages4,
+                                                                                    attrOptionValuesArr :tempAttrOptionValues,
+                                                                                    colorsArr:tempColors,
+                                                                                    fetchAllProductsHashtags:fetchAllProductsHashtags,
+                                                                                    brandLogoArr:tempBrandLogo
+                                                                                });
                                                                             });
                                                                         });
                                                                     });
                                                                 });
                                                             });
-                                                        });
-                                                    }else{
-                                                        var addFlag = (req.params.productId == 'add')?true:false;
-                                                        if(addFlag && (req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c04fbd43592d87b0e6f600') == -1){
-                                                            req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
-                                                            res.redirect('/user/shopprofile');
+                                                        }else{
+                                                            var addFlag = (req.params.productId == 'add')?true:false;
+                                                            if(addFlag && (req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c04fbd43592d87b0e6f600') == -1){
+                                                                req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
+                                                                res.redirect('/user/shopprofile');
+                                                            }
+                                                            res.render('product/shop_list',{
+                                                                title: 'Product',
+                                                                currentPage:page, 
+                                                                totalPage:totalPage,
+                                                                fetchAllProducts:fetchAllProducts,
+                                                                activeClass:1,
+                                                                left_activeClass:3,
+                                                                allBrands : fetchAllBrands,
+                                                                fetchCategories:fetchCategories,
+                                                                fetchSubCategories:fetchSubCategories,
+                                                                fetchAllAttributes:fetchAllAttributes,
+                                                                fetchAllColors:fetchAllColors,
+                                                                editProduct:false,
+                                                                brandAr:tempBrand,
+                                                                categoryAr:tempCategory,
+                                                                subcategoryAr:tempSubCategory,
+                                                                fetchAllTags:fetchAllTags,
+                                                                addFlag :addFlag,
+                                                                productImagesArr1 :tempProductImages1,
+                                                                productImagesArr2 :tempProductImages2,
+                                                                productImagesArr3 :tempProductImages3,
+                                                                productImagesArr4 :tempProductImages4,
+                                                                attrOptionValuesArr :tempAttrOptionValues,
+                                                                colorsArr:tempColors,
+                                                                fetchAllProductsHashtags:fetchAllProductsHashtags,
+                                                                brandLogoArr:tempBrandLogo
+                                                            });
                                                         }
-                                                        res.render('product/shop_list',{
-                                                            title: 'Product',
-                                                            currentPage:page, 
-                                                            totalPage:totalPage,
-                                                            fetchAllProducts:fetchAllProducts,
-                                                            activeClass:1,
-                                                            left_activeClass:3,
-                                                            allBrands : fetchAllBrands,
-                                                            fetchCategories:fetchCategories,
-                                                            fetchSubCategories:fetchSubCategories,
-                                                            fetchAllAttributes:fetchAllAttributes,
-                                                            fetchAllColors:fetchAllColors,
-                                                            editProduct:false,
-                                                            brandAr:tempBrand,
-                                                            categoryAr:tempCategory,
-                                                            subcategoryAr:tempSubCategory,
-                                                            fetchAllTags:fetchAllTags,
-                                                            addFlag :addFlag,
-                                                            productImagesArr1 :tempProductImages1,
-                                                            productImagesArr2 :tempProductImages2,
-                                                            productImagesArr3 :tempProductImages3,
-                                                            productImagesArr4 :tempProductImages4,
-                                                            attrOptionValuesArr :tempAttrOptionValues,
-                                                            colorsArr:tempColors,
-                                                            fetchAllProductsHashtags:fetchAllProductsHashtags,
-                                                            brandLogoArr:tempBrandLogo
-                                                        });
-                                                    }
-                                                })
-                                            });	   
-                                        });	    
-                                    });	
-                                }); 
+                                                    })
+                                                });	   
+                                            });	    
+                                        });	
+                                    }); 
+                                });
                             });
                         });
                     });
-                });
-            });	
-        });
-     }else{
-        req.flash('errors', ['Unauthorised user role']);
-        return res.redirect('/dashboard');
+                });	
+            });
+         }else{
+            req.flash('errors', ['Unauthorised user role']);
+            return res.redirect('/dashboard');
+         }
      }
-    
-    
 };
 
 /* Create new Product */
@@ -377,7 +374,7 @@ exports.editProduct = (req, res) => {
 
 /* Save Product */
 exports.saveProduct = (req, res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c04fbd43592d87b0e6f600') == -1){
+    if(((req.user.role_id == 3 || req.user.role_id == 4) && req.user.userPermissions.indexOf('57c04fbd43592d87b0e6f600') == -1 && req.user.userPermissions.indexOf('57c04f9a43592d87b0e6f5ff')) || (req.user.role_id == 6 && req.user.userPermissions.indexOf('57eccdcdeb288fb7157b23c6') == -1 && req.user.userPermissions.indexOf('57eccb11eb288f37067b23c6') == -1 )){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
@@ -496,7 +493,7 @@ exports.saveProduct = (req, res) => {
 
 /* Update Product */
 exports.updateProduct = (req, res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c04fdb43592d87b0e6f602') == -1){
+    if(((req.user.role_id == 3 || req.user.role_id == 4) && req.user.userPermissions.indexOf('57c04fdb43592d87b0e6f602') == -1 && req.user.userPermissions.indexOf('57c04f9a43592d87b0e6f5ff')) || (req.user.role_id == 6 && req.user.userPermissions.indexOf('57eccde4eb288fb8157b23c9') == -1  && req.user.userPermissions.indexOf('57eccb11eb288f37067b23c6') == -1 )){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
