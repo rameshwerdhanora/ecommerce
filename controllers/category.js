@@ -5,7 +5,7 @@ const Constants 		= require('../constants/constants');
 /* Get the list of all Categories name with imformation */
 exports.listOfCategories = (req, res) => {
     
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c0519c43592d87b0e6f605') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c0519c43592d87b0e6f605') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
@@ -61,7 +61,7 @@ exports.listOfCategories = (req, res) => {
 
 /* Add Category page  */
 exports.addCategory = (req, res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c0519c43592d87b0e6f605') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c0519c43592d87b0e6f605') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
@@ -74,7 +74,7 @@ exports.addCategory = (req, res) => {
 
 /* Save Category Information */
 exports.saveCategory = (req,res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c0519c43592d87b0e6f605') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c0519c43592d87b0e6f605') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
@@ -99,7 +99,7 @@ exports.saveCategory = (req,res) => {
 
 /* Remove Category */
 exports.removeCategory = (req,res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c0519c43592d87b0e6f605') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c0519c43592d87b0e6f605') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
@@ -116,7 +116,7 @@ exports.removeCategory = (req,res) => {
  
 /* Edit Category */
 exports.editCategory = (req,res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c0519c43592d87b0e6f605') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c0519c43592d87b0e6f605') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
@@ -132,7 +132,7 @@ exports.editCategory = (req,res) => {
 
 /* Update edit details */
 exports.updateCategory = (req,res) => { 
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c0519c43592d87b0e6f605') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c0519c43592d87b0e6f605') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{

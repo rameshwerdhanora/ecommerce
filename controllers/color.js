@@ -18,7 +18,7 @@ var uploadColor = Multer({ storage : storage}).single('color_logo');
 
 /* Get the list of all color name with imformation */
 exports.listOfColor = (req, res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051a943592d87b0e6f606') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c051a943592d87b0e6f606') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
@@ -58,7 +58,7 @@ exports.listOfColor = (req, res) => {
 
 /* Save Color Information */
 exports.saveColor = (req,res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051a943592d87b0e6f606') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c051a943592d87b0e6f606') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
@@ -127,7 +127,7 @@ exports.removeColor = (req,res) => {
  
 /* Edit Color */
 exports.editColor = (req,res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051a943592d87b0e6f606') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c051a943592d87b0e6f606') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
@@ -144,7 +144,7 @@ exports.editColor = (req,res) => {
 
 /* Update edit details */
 exports.updateColor = (req,res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051a943592d87b0e6f606') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c051a943592d87b0e6f606') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{

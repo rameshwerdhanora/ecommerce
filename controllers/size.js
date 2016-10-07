@@ -20,7 +20,7 @@ function getAttributeOptions(attributIds,callback){
 
 /* Get the list of all color name with imformation */
 exports.listOfSize = (req, res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051d843592d87b0e6f608') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c051d843592d87b0e6f608') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
@@ -113,7 +113,7 @@ exports.listOfSize = (req, res) => {
 
 /* Add Size page  */
 exports.addSize = (req, res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051d843592d87b0e6f608') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c051d843592d87b0e6f608') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
@@ -130,7 +130,7 @@ exports.addSize = (req, res) => {
 
 /* Save Size Information */
 exports.saveSize = (req,res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051d843592d87b0e6f608') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c051d843592d87b0e6f608') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
@@ -152,7 +152,7 @@ exports.saveSize = (req,res) => {
 
 /* Remove Size */
 exports.removeSize = (req,res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051d843592d87b0e6f608') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c051d843592d87b0e6f608') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
@@ -172,7 +172,7 @@ exports.removeSize = (req,res) => {
  
 /* Edit Size */
 exports.editSize = (req,res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051d843592d87b0e6f608') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c051d843592d87b0e6f608') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
@@ -197,7 +197,7 @@ exports.editSize = (req,res) => {
 /* Update edit details */
 
 exports.updateSize = (req,res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051d843592d87b0e6f608') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c051d843592d87b0e6f608') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
@@ -223,7 +223,7 @@ exports.updateSize = (req,res) => {
 
 
 exports.listOfAllSize = (req, res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051d843592d87b0e6f608') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c051d843592d87b0e6f608') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{

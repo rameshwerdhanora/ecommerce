@@ -8,7 +8,7 @@ const flash = require('connect-flash');
 
 /* Get the list of all color name with imformation */
 exports.list = (req, res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051ec43592d87b0e6f609') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c051ec43592d87b0e6f609') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
@@ -16,7 +16,7 @@ exports.list = (req, res) => {
         page = (page == 0)?1:page;
         var skipRecord = (page-1)*Constants.RECORDS_PER_PAGE;
 
-        Attribute.count(function(err, totalRecord) { 
+        Attribute.count(function(err, totalRecord) {
             //if(totalRecord > 0){
                 var totalPage = Math.ceil(totalRecord/Constants.RECORDS_PER_PAGE);
                 Attribute.find()
@@ -40,7 +40,7 @@ exports.list = (req, res) => {
 
 /* Add Attribute page  */
 exports.create = (req, res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051ec43592d87b0e6f609') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c051ec43592d87b0e6f609') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
@@ -54,7 +54,7 @@ exports.create = (req, res) => {
 
 /* To get attribute options*/
 exports.getAttributeOptions = (req,res) =>{
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051ec43592d87b0e6f609') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c051ec43592d87b0e6f609') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
@@ -70,7 +70,7 @@ exports.getAttributeOptions = (req,res) =>{
 
 /* Save Attribute Information */
 exports.saveAttribute = (req,res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051ec43592d87b0e6f609') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c051ec43592d87b0e6f609') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
@@ -111,7 +111,7 @@ exports.saveAttribute = (req,res) => {
 
 /* Delete Attribute */
 exports.deleteAttribute = (req,res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051ec43592d87b0e6f609') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c051ec43592d87b0e6f609') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
@@ -132,7 +132,7 @@ exports.deleteAttribute = (req,res) => {
  
 /* Edit Attribute */
 exports.edit = (req,res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051ec43592d87b0e6f609') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c051ec43592d87b0e6f609') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
@@ -155,7 +155,7 @@ exports.edit = (req,res) => {
 /* Update edit details */
 
 exports.updateAttribute = (req,res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051ec43592d87b0e6f609') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c051ec43592d87b0e6f609') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
@@ -177,7 +177,7 @@ exports.updateAttribute = (req,res) => {
 
 /* To delete attribute option */
 exports.deleteAttributeOption = (req,res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051ec43592d87b0e6f609') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c051ec43592d87b0e6f609') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
@@ -193,7 +193,7 @@ exports.deleteAttributeOption = (req,res) => {
 
 /* To delete attribute option */
 exports.updateAttributeOption = (req,res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051ec43592d87b0e6f609') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c051ec43592d87b0e6f609') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
@@ -207,7 +207,7 @@ exports.updateAttributeOption = (req,res) => {
 
 /* To add new attribut option */
 exports.addAttributeOption = (req,res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051ec43592d87b0e6f609') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c051ec43592d87b0e6f609') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{

@@ -63,7 +63,7 @@
                 li
                   a(href='javascript:void(0);') Add User
         -}
-        -if(user.role_id == 1 || user.role_id == 2 || user.userPermissions.indexOf('57c04f9a43592d87b0e6f5ff') != -1){
+        -if(user.role_id == 1 || user.role_id == 2 || ((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c04f9a43592d87b0e6f5ff') != -1) || ((user.role_id == 6) && user.userPermissions.indexOf('57eccb11eb288f37067b23c6') != -1)){
             li(class=(left_activeClass == 3)? 'active':'')
               a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='javascript:void(0);')
                 img(src='/images/left-icon3.png', alt='icon')

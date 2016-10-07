@@ -18,7 +18,7 @@ var uploadBrand = Multer({ storage : storage}).any();
 
 /* Get the list of all brand name with imformation */
 exports.listOfBrand = (req, res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051c943592d87b0e6f607') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c051c943592d87b0e6f607') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
@@ -59,7 +59,7 @@ exports.listOfBrand = (req, res) => {
 
 /* Save Brand Information */
 exports.saveBrand = (req,res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051c943592d87b0e6f607') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c051c943592d87b0e6f607') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
@@ -139,7 +139,7 @@ exports.saveBrand = (req,res) => {
 /* Update edit details */
 
 exports.updateBrand = (req,res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051c943592d87b0e6f607') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c051c943592d87b0e6f607') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
@@ -178,7 +178,7 @@ exports.updateBrand = (req,res) => {
 
 /* Remove Brand */
 exports.removeBrand = (req,res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051c943592d87b0e6f607') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c051c943592d87b0e6f607') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
@@ -199,7 +199,7 @@ exports.removeBrand = (req,res) => {
  
 /* Edit Brand */
 exports.editBrand = (req,res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051c943592d87b0e6f607') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c051c943592d87b0e6f607') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
@@ -225,7 +225,7 @@ exports.editBrand = (req,res) => {
 */
 
 exports.listOfAllBrand = (req, res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051c943592d87b0e6f607') == -1){
+    if(req.user.role_id == 6 || ((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c051c943592d87b0e6f607') == -1)){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
