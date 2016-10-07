@@ -126,6 +126,7 @@ exports.detail = (req, res) => {
         orderDetailObj.order_number         = OrderIds.order_number;
         orderDetailObj.status               = OrderIds.status;
         orderDetailObj.shipping_address     = OrderIds.shipping_address;
+        orderDetailObj.payment_details      = OrderIds.payment_details;  
         orderDetailObj.billing_address      = OrderIds.billing_address;
         orderDetailObj.totalprice           = OrderIds.totalprice;
         orderDetailObj.shipping_charges     = OrderIds.shipping_charges;
