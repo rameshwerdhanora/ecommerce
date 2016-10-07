@@ -21,7 +21,7 @@ block content
                 each getAllBrand in getAllBrands
                   li
                     a(href='/brand/list/#{getAllBrand._id}',role='Edit brand')
-                      img(src='/#{getAllBrand.brand_logo}', alt='Logo')
+                      img(src='#{getAllBrand.brand_logo}', alt='#{getAllBrand.brand_name}')
                       | #{getAllBrand.brand_name}
 
           

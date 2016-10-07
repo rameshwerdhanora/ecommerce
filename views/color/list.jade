@@ -26,7 +26,7 @@ block content
                   li
                     a(href="/color/list/#{getAllColor._id}")
                       span
-                        img(src='/#{getAllColor.color_logo}', alt='Logo')
+                        img(src='#{getAllColor.color_logo}', alt='#{getAllColor.color_name}')
                       | #{getAllColor.color_name}
                       
             include ../partials/pagination
