@@ -57,8 +57,13 @@ block content
                         td(align='center')
                           input#checkbox4(type='checkbox', name='checkbox4' class='rowCheckbox')
                         -if(user.role_id == 1 || user.role_id == 2 || ((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c0522a43592d87b0e6f60b') != -1) || ((user.role_id == 6) && user.userPermissions.indexOf('57ecd3fdeb288f34067b23c7') != -1)){
-                            td 
-                              a.ord-title(href='/customer/view/#{getCustomer._id}') #{getCustomer.first_name} #{getCustomer.last_name}
+                            -if(user.role_id == 1 || user.role_id == 2){
+                                td 
+                                  a.ord-title(href='/customer/view/#{getCustomer._id}') #{getCustomer.first_name} #{getCustomer.last_name}
+                            -}else{
+                                td 
+                                  #{getCustomer.first_name} #{getCustomer.last_name}
+                            -}
                         -}
                         -if(user.role_id == 1 || user.role_id == 2 || ((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c0527c43592d87b0e6f612') != -1)){
                             td #{getCustomer.email_id}  

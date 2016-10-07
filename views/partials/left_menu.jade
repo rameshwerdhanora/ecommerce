@@ -48,7 +48,7 @@
         -}
         -if(user.role_id == 1 || user.role_id == 2 || ((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c04cb743592d87b0e6f5fa') != -1) || ((user.role_id == 6) && user.userPermissions.indexOf('57eccaabeb288f521a7b23c6') != -1)){
             li(class=(left_activeClass == 2)?'active':'')
-              a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button',data-toggle='dropdown', href='javascript:void(0);')
+              a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button',href='/order/list')
                 img(src='/images/left-icon2.png', alt='icon')
                 | Orders
               
@@ -106,6 +106,7 @@
                       a(href='/tag/add') Add Hash Tag
                 -}
         -}
+        
         li(class=(left_activeClass == 4)?'active':'')
           a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='javascript:void(0);')
             img(src='/images/left-icon4.png', alt='icon')
@@ -119,8 +120,7 @@
               span.sub-title CUSTOMERS
             li
               a(href='/customer/list') Customer list
-            //li
-              //a(href='/user/add') Add Customer
+        
         - if(user.role_id == 1 || user.role_id == 2)              
           li(class=(left_activeClass == 5)?'active':'')
             a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='javascript:void(0);')
