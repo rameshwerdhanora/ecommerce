@@ -6,7 +6,9 @@ block content
       img(src='/images/title-icon2.png', alt='icon')
       |  ORDERS 
       .right-sub
-        a.save-btn(href='#') PRINT INVOICE
+        -if(user.userPermissions.indexOf('57c04f7043592d87b0e6f5fd') != -1){
+            a.save-btn(href='#') PRINT INVOICE
+        -}
     .customer-box.clearfix
       .customer-cl.order_details
         .profile-top-row
@@ -242,4 +244,6 @@ block content
           li
             strong UPS ACCOUNT 1237912837019
         .btn-btm
-          button ADD TRACKING
+            -if(user.userPermissions.indexOf('57c04f5d43592d87b0e6f5fc') != -1){
+                button ADD TRACKING
+            -}

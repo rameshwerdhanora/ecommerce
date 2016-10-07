@@ -5,7 +5,9 @@ block content
       img(src='/images/title-icon2.png', alt='icon')
       |  ORDERS
       .edit-btn-cl
-        a.edit-btn(href='#') PRINT INVOICE
+        -if(user.userPermissions.indexOf('57c04f7043592d87b0e6f5fd') != -1){
+            a.edit-btn(href='#') PRINT INVOICE
+        -}
     .customer-box.cmn-in.clearfix
       .low-tbl-box.order-txt
         form(name='form2', method='post', action='')
