@@ -28,4 +28,6 @@ block content
                     .profile-frm-cl2
                       input(name='password', type='password', value='',placeholder='*************')
                   .btn-btm
-                    button#profile_up_Btn(type='submit') CHANGE PASSWORD
+                    -if((user.role_id == 3 || user.role_id == 4 || user.role_id == 6) && user.userPermissions.indexOf('57c052ce43592d87b0e6f616') != -1){
+                        button#profile_up_Btn(type='submit') CHANGE PASSWORD
+                    -}

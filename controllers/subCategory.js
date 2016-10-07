@@ -1,47 +1,58 @@
 /* Add Multer Library for upload image */
 const Category = require('../models/category');
 const SubCategory = require('../models/subCategory');
+const Constants 		= require('../constants/constants');
 
 
 
 /* Save Sub Category Information */
 exports.saveSubCategory = (req,res) => {
-    var subCategoryIns = new SubCategory();
-    subCategoryIns.name = req.body.name;
-    subCategoryIns.description = req.body.description;
-    subCategoryIns.is_active = req.body.is_active;
-    subCategoryIns.parent_id = req.body.parent_id;
-    subCategoryIns.created = Date.now();
-    subCategoryIns.save(function(err){
-        if (err){
-            //res.send({status:'error',error:err});
-            req.flash('errors',['Something went wronge!']);
-            res.redirect('/category/list');
-        }else{
-            //res.redirect('/listofsubcategories');
-            req.flash('success',['Subcategory added successfully']);
-            res.redirect('/category/list');
-        }
-    });
+    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c0519c43592d87b0e6f605') == -1){
+        req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
+        res.redirect('/user/shopprofile');
+    }else{
+        var subCategoryIns = new SubCategory();
+        subCategoryIns.name = req.body.name;
+        subCategoryIns.description = req.body.description;
+        subCategoryIns.is_active = req.body.is_active;
+        subCategoryIns.parent_id = req.body.parent_id;
+        subCategoryIns.created = Date.now();
+        subCategoryIns.save(function(err){
+            if (err){
+                //res.send({status:'error',error:err});
+                req.flash('errors',['Something went wronge!']);
+                res.redirect('/category/list');
+            }else{
+                //res.redirect('/listofsubcategories');
+                req.flash('success',['Subcategory added successfully']);
+                res.redirect('/category/list');
+            }
+        });
+    }
 };
 
 
 
 /* Update edit details */
 exports.updateSubCategory = (req,res) => {
-    updateData = {
-        'name' 	 : req.body.name,
-        'description' : req.body.description,
-        'is_active' : req.body.is_active,
-        'parent_id' : req.body.parent_id,
-        'update' : Date.now()
-    };
-    console.log(updateData);
-    console.log(req.body.subCatId);
-    SubCategory.findByIdAndUpdate(req.body.subCatId,updateData, function(error, updateRes){
-        req.flash('success',['Subcategory updated successfully']);
-        res.redirect('/category/list');
-    });
+    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c0519c43592d87b0e6f605') == -1){
+        req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
+        res.redirect('/user/shopprofile');
+    }else{
+        updateData = {
+            'name' 	 : req.body.name,
+            'description' : req.body.description,
+            'is_active' : req.body.is_active,
+            'parent_id' : req.body.parent_id,
+            'update' : Date.now()
+        };
+        console.log(updateData);
+        console.log(req.body.subCatId);
+        SubCategory.findByIdAndUpdate(req.body.subCatId,updateData, function(error, updateRes){
+            req.flash('success',['Subcategory updated successfully']);
+            res.redirect('/category/list');
+        });
+    }
 };
 
 

@@ -2,10 +2,10 @@
   .img-1-wrp
     -if(user.role_id == 3 || user.role_id == 4 || user.role_id == 6){
       .logo-left
-        a#modal-104831(href='#modal-container-104831', role='button', data-toggle='modal')
+        a#modal-104831(href='#modal-container-shopLogo', role='button', data-toggle='modal')
             img#modal-104831(src='#{user.shop_logo}', alt='#{user.shop_name}',width='71')
             
-        #modal-container-104831.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+        #modal-container-shopLogo.modal.fade.cmn-popup(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
             .modal-dialog.popup-wdt-1
               form(name='updateColor', method='post', action='/user/updateShopLogo', enctype='multipart/form-data')
                 .modal-content
@@ -83,25 +83,35 @@
                 -}
 
 
-                -if(user.role_id == 1  || user.role_id == 2){
-
-                li
-                  a(href='/category/list') Manage Categories
-                li
-                  a(href='/color/list') Manage Colors
-                li
-                  a(href='/size/list') Manage Sizes
-                li
-                  a(href='/brand/list') Manage Brands
-                li
-                  a(href='/attribute/list') Manage Attributes
-
-                li
-                  span.sub-title Hash Tag
-                li
-                  a(href='/tag/list') Hash Tag list
-                li
-                  a(href='/tag/add') Add Hash Tag    
+                
+                -if(user.role_id == 1 || user.role_id == 2 || user.userPermissions.indexOf('57c04fef43592d87b0e6f603') != -1){
+                    -if(user.role_id == 1 || user.role_id == 2 || user.userPermissions.indexOf('57c0519c43592d87b0e6f605') != -1){
+                        li
+                          a(href='/category/list') Manage Categories
+                    -}
+                    -if(user.role_id == 1 || user.role_id == 2 || user.userPermissions.indexOf('57c051a943592d87b0e6f606') != -1){
+                        li
+                          a(href='/color/list') Manage Colors
+                    -}
+                    -if(user.role_id == 1 || user.role_id == 2 || user.userPermissions.indexOf('57c051d843592d87b0e6f608') != -1){
+                        li
+                          a(href='/size/list') Manage Sizes
+                    -}
+                    -if(user.role_id == 1 || user.role_id == 2 || user.userPermissions.indexOf('57c051c943592d87b0e6f607') != -1){
+                        li
+                          a(href='/brand/list') Manage Brands
+                    -}
+                    -if(user.role_id == 1 || user.role_id == 2 || user.userPermissions.indexOf('57c051ec43592d87b0e6f609') != -1){
+                        li
+                          a(href='/attribute/list') Manage Attributes
+                    -}
+                    
+                    li
+                      span.sub-title Hash Tag
+                    li
+                      a(href='/tag/list') Hash Tag list
+                    li
+                      a(href='/tag/add') Add Hash Tag
                 -}
         -}
         li(class=(left_activeClass == 4)?'active':'')
@@ -168,15 +178,20 @@
                 a(href='/user/shop_linked_account') Linked Accounts
               li
                 a(href='/user/shop_notification') Notifications     
-              
-              - if(user.role_id == 3 || user.role_id == 4){
-                li
-                  span.sub-title USERS
-                li
-                  a(href='/user/shop_user_list') Manage Users
-                li
-                  a(href='/user/add') Add User     
-              - }
+              - if(user.userPermissions.indexOf('57c052f343592d87b0e6f618') != -1){
+                - if(user.userPermissions.indexOf('57f624afed308fb31f7b23c6') != -1){
+                      li
+                        span.sub-title USERS
+                      -if(user.userPermissions.indexOf('57f624cbed308f69097b23c6') != -1){
+                          li
+                            a(href='/user/shop_user_list') Manage Users
+                      -}
+                      -if(user.userPermissions.indexOf('57f624d3ed308fea1f7b23c6') != -1){
+                          li
+                            a(href='/user/add') Add User     
+                      -}
+                - }
+              -}
         -if(user.role_id == 1 || user.role_id == 2){
         li(class=(left_activeClass == 6)?'active':'')
           a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='javascript:void(0);')

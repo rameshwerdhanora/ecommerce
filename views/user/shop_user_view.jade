@@ -10,15 +10,22 @@ block content
         .customer-cl
           h2 USERS
           ul
-            li
-              -if(user.role_id == 1 || user.role_id == 2){
-              a(href='/user/list') Manage Users
-              -}else if(user.role_id == 3 || user.role_id == 4 || user.role_id == 6){
-              a(href='/user/shop_user_list') Manage Users
-              -}
-              
-            li
-              a(href='/user/add') Add User
+            -if(user.role_id == 1 || user.role_id == 2){
+                li
+                    a(href='/user/list') Manage Users
+            -}else if(user.role_id == 3 || user.role_id == 4 || user.role_id == 6){
+                  -if(user.userPermissions.indexOf('57f624cbed308f69097b23c6') != -1 && user.userPermissions.indexOf('57f624afed308fb31f7b23c6') != -1 && user.userPermissions.indexOf('57c052f343592d87b0e6f618') != -1){
+                    li
+                      a(href='/user/shop_user_list') Manage Users
+                  -}
+            -}
+            -if(user.role_id == 1 || user.role_id == 2){
+                li
+                  a(href='/user/add') Add User
+            -}else if(user.userPermissions.indexOf('57f624d3ed308fea1f7b23c6') != -1 && user.userPermissions.indexOf('57f624afed308fb31f7b23c6') != -1 && user.userPermissions.indexOf('57c052f343592d87b0e6f618') != -1){
+                li
+                  a(href='/user/add') Add User
+            -}
         .profile-cl
           .profile-top-row
             h2 VIEW USER

@@ -18,36 +18,36 @@ var uploadBrand = Multer({ storage : storage}).any();
 
 /* Get the list of all brand name with imformation */
 exports.listOfBrand = (req, res) => {
-    
-    var page = (req.query.page == undefined)?1:req.query.page;
-    page = (page == 0)?1:page;
-    var skipRecord = (page-1)*Constants.RECORDS_PER_PAGE;
-    
-    
-    Brand.count(function(err, totalRecord) { 
-        var totalPage = Math.ceil(totalRecord/Constants.RECORDS_PER_PAGE);
-        Brand.find()
-                .limit(Constants.RECORDS_PER_PAGE)
-                .skip(skipRecord)
-                .sort('-_id')
-                .exec(function(error,getAllBrands){
-            if(req.params.brandId){
-                Brand.findOne({_id:req.params.brandId},function(error,brandRes){
-                    if(error){
-                        req.flash('errors', 'Something went wrong!!');
-                    }else{
-                        res.render('brand/list', { title: 'Brand',getAllBrands:getAllBrands,activeClass:5,editRes:brandRes,currentPage:page, totalRecord:totalRecord, totalPage:totalPage,left_activeClass:3});
-                    }
-                });
-            }else{
-                res.render('brand/list', { title: 'Brand',getAllBrands:getAllBrands,activeClass:5,editRes:false,currentPage:page, totalRecord:totalRecord, totalPage:totalPage,left_activeClass:3});
-            }
+    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051c943592d87b0e6f607') == -1){
+        req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
+        res.redirect('/user/shopprofile');
+    }else{
+        var page = (req.query.page == undefined)?1:req.query.page;
+        page = (page == 0)?1:page;
+        var skipRecord = (page-1)*Constants.RECORDS_PER_PAGE;
+
+
+        Brand.count(function(err, totalRecord) { 
+            var totalPage = Math.ceil(totalRecord/Constants.RECORDS_PER_PAGE);
+            Brand.find()
+                    .limit(Constants.RECORDS_PER_PAGE)
+                    .skip(skipRecord)
+                    .sort('-_id')
+                    .exec(function(error,getAllBrands){
+                if(req.params.brandId){
+                    Brand.findOne({_id:req.params.brandId},function(error,brandRes){
+                        if(error){
+                            req.flash('errors', 'Something went wrong!!');
+                        }else{
+                            res.render('brand/list', { title: 'Brand',getAllBrands:getAllBrands,activeClass:5,editRes:brandRes,currentPage:page, totalRecord:totalRecord, totalPage:totalPage,left_activeClass:3});
+                        }
+                    });
+                }else{
+                    res.render('brand/list', { title: 'Brand',getAllBrands:getAllBrands,activeClass:5,editRes:false,currentPage:page, totalRecord:totalRecord, totalPage:totalPage,left_activeClass:3});
+                }
+            });
         });
-    });
-    
-    
-    
- 
+    }
 };
 
 /* Add Brand page  */
@@ -59,82 +59,90 @@ exports.listOfBrand = (req, res) => {
 
 /* Save Brand Information */
 exports.saveBrand = (req,res) => {
-    
-    /***To create directory if not exist***/
-    var fs = require('fs');
-    var dirBrandLogo = './public/uploads/brands_logo';
-    var dirProfileImg = './public/uploads/profile_images';
+    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051c943592d87b0e6f607') == -1){
+        req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
+        res.redirect('/user/shopprofile');
+    }else{
+        /***To create directory if not exist***/
+        var fs = require('fs');
+        var dirBrandLogo = './public/uploads/brands_logo';
+        var dirProfileImg = './public/uploads/profile_images';
 
-    if (!fs.existsSync(dirBrandLogo)){
-        fs.mkdirSync(dirBrandLogo);
-    }
+        if (!fs.existsSync(dirBrandLogo)){
+            fs.mkdirSync(dirBrandLogo);
+        }
 
-    if (!fs.existsSync(dirProfileImg)){
-        fs.mkdirSync(dirProfileImg);
-    }
-    
-    uploadBrand(req,res,function(err) {
-        req.assert('brand_name', 'Brand name is required').notEmpty();
-        req.assert('brand_desc', 'Brand description is required').notEmpty();
-        var errors = req.validationErrors();  
-        if( !errors){   //No errors were found.  Passed Validation!
-            Brand.count({brand_name:req.body.brand_name},function(error,brandCount){
-                
-            
-                if(brandCount == 0){
+        if (!fs.existsSync(dirProfileImg)){
+            fs.mkdirSync(dirProfileImg);
+        }
+
+        uploadBrand(req,res,function(err) {
+            req.assert('brand_name', 'Brand name is required').notEmpty();
+            req.assert('brand_desc', 'Brand description is required').notEmpty();
+            var errors = req.validationErrors();  
+            if( !errors){   //No errors were found.  Passed Validation!
+                Brand.count({brand_name:req.body.brand_name},function(error,brandCount){
 
 
-                    if(err) {
-                        req.flash('errors',['Some error is occured please try again']);
-                        res.redirect('/brand/list');
-                    }
-                    var brandIns 		= new Brand();
-                    if(req.files.length > 0){
-                        for(var i = 0;i < req.files.length;i++){
-                            switch(req.files[i].fieldname){
-                                case 'brand_logo':
-                                    brandIns.brand_logo = req.files[i].path.replace('public','');
-                                    break;
-                                case 'brand_cover':
-                                    brandIns.brand_cover = req.files[i].path.replace('public','');
-                                    break;
-                            }
-                        }
-                    }
-                    brandIns.brand_name  	= req.body.brand_name;
-                    brandIns.brand_desc 	= req.body.brand_desc;
-                    brandIns.user_id 		= req.user._id; 
-                    brandIns.save(function(err) 
-                    {
-                        if (err)
-                        {
-                        res.send({status:'error',error:err});
-                        }
-                        else 
-                        {
-                            req.flash('success',['Brand added successfully']);
+                    if(brandCount == 0){
+
+
+                        if(err) {
+                            req.flash('errors',['Some error is occured please try again']);
                             res.redirect('/brand/list');
                         }
-                    });
-                }else{
-                    req.flash('errors',['Brand already exist']);
-                    res.redirect('/brand/list');
+                        var brandIns 		= new Brand();
+                        if(req.files.length > 0){
+                            for(var i = 0;i < req.files.length;i++){
+                                switch(req.files[i].fieldname){
+                                    case 'brand_logo':
+                                        brandIns.brand_logo = req.files[i].path.replace('public','');
+                                        break;
+                                    case 'brand_cover':
+                                        brandIns.brand_cover = req.files[i].path.replace('public','');
+                                        break;
+                                }
+                            }
+                        }
+                        brandIns.brand_name  	= req.body.brand_name;
+                        brandIns.brand_desc 	= req.body.brand_desc;
+                        brandIns.user_id 		= req.user._id; 
+                        brandIns.save(function(err) 
+                        {
+                            if (err)
+                            {
+                            res.send({status:'error',error:err});
+                            }
+                            else 
+                            {
+                                req.flash('success',['Brand added successfully']);
+                                res.redirect('/brand/list');
+                            }
+                        });
+                    }else{
+                        req.flash('errors',['Brand already exist']);
+                        res.redirect('/brand/list');
+                    }
+                });
+            }else{
+                var er = new Array();
+                for(var i = 0;i<errors.length;i++){
+                    er.push(errors[i].msg);
                 }
-            });
-        }else{
-            var er = new Array();
-            for(var i = 0;i<errors.length;i++){
-                er.push(errors[i].msg);
+                req.flash('errors',er);
+                res.redirect('/brand/list');
             }
-            req.flash('errors',er);
-            res.redirect('/brand/list');
-        }
-    });
+        });
+    }
 };
 
 /* Update edit details */
 
 exports.updateBrand = (req,res) => {
+    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051c943592d87b0e6f607') == -1){
+        req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
+        res.redirect('/user/shopprofile');
+    }else{
 	uploadBrand(req,res,function(err) {
             if(err) {
                 req.flash('errors',['Some error is occured please try again']);
@@ -165,10 +173,15 @@ exports.updateBrand = (req,res) => {
                 res.redirect('/brand/list');
             });
 	});
+    }
 };
 
 /* Remove Brand */
 exports.removeBrand = (req,res) => {
+    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051c943592d87b0e6f607') == -1){
+        req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
+        res.redirect('/user/shopprofile');
+    }else{
 	Brand.remove({_id:req.params.brandId},function(error,removeBrand)
 	{
 		if(error)
@@ -181,10 +194,15 @@ exports.removeBrand = (req,res) => {
 		}
 		return res.redirect('/brand/list');
 	});
+    }
 };
  
 /* Edit Brand */
 exports.editBrand = (req,res) => {
+    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051c943592d87b0e6f607') == -1){
+        req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
+        res.redirect('/user/shopprofile');
+    }else{
 	Brand.findOne({_id:req.params.brandId},function(error,fetchBrand)
 	{
 		if(error)
@@ -196,6 +214,7 @@ exports.editBrand = (req,res) => {
 			res.render('brand/edit_brand', { title: 'Brand',fetchBrand:fetchBrand});
 		}
 	});
+    }
 };
 
 
@@ -206,6 +225,10 @@ exports.editBrand = (req,res) => {
 */
 
 exports.listOfAllBrand = (req, res) => {
+    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c051c943592d87b0e6f607') == -1){
+        req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
+        res.redirect('/user/shopprofile');
+    }else{
 	Brand.find({},function(error,getAllBrands){
 		if(getAllBrands)
 		{
@@ -216,7 +239,7 @@ exports.listOfAllBrand = (req, res) => {
 			res.send({status:'error',msg:'Unable to found any brands.'});
 		}
 	});	
- 
+    }
 };
 
 
