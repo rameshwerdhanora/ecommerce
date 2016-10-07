@@ -82,11 +82,7 @@ exports.saveBrand = (req,res) => {
             var errors = req.validationErrors();  
             if( !errors){   //No errors were found.  Passed Validation!
                 Brand.count({brand_name:req.body.brand_name},function(error,brandCount){
-
-
                     if(brandCount == 0){
-
-
                         if(err) {
                             req.flash('errors',['Some error is occured please try again']);
                             res.redirect('/brand/list');
@@ -186,17 +182,13 @@ exports.removeBrand = (req,res) => {
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
-	Brand.remove({_id:req.params.brandId},function(error,removeBrand)
-	{
-		if(error)
-		{
-			req.flash('message', 'Something Wrong!!');
-		}
-		else
-		{
-			req.flash('message', 'Remove Successfully.');
-		}
-		return res.redirect('/brand/list');
+	Brand.remove({_id:req.params.brandId},function(error,removeBrand){
+            if(error){
+                req.flash('message', 'Something Wrong!!');
+            }else{
+                req.flash('message', 'Remove Successfully.');
+            }
+            return res.redirect('/brand/list');
 	});
     }
 };
@@ -207,16 +199,12 @@ exports.editBrand = (req,res) => {
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
-	Brand.findOne({_id:req.params.brandId},function(error,fetchBrand)
-	{
-		if(error)
-		{
-			res.send({status:'error',msg:error});
-		}
-		else 
-		{
-			res.render('brand/edit_brand', { title: 'Brand',fetchBrand:fetchBrand});
-		}
+	Brand.findOne({_id:req.params.brandId},function(error,fetchBrand){
+            if(error){
+                res.send({status:'error',msg:error});
+            }else {
+                    res.render('brand/edit_brand', { title: 'Brand',fetchBrand:fetchBrand});
+            }
 	});
     }
 };
@@ -234,14 +222,11 @@ exports.listOfAllBrand = (req, res) => {
         res.redirect('/user/shopprofile');
     }else{
 	Brand.find({},function(error,getAllBrands){
-		if(getAllBrands)
-		{
-			res.send({status:'success',msg:'Successfully fetch all brands.',getAllBrands:getAllBrands});
-		}
-		else 
-		{
-			res.send({status:'error',msg:'Unable to found any brands.'});
-		}
+            if(getAllBrands){
+                    res.send({status:'success',msg:'Successfully fetch all brands.',getAllBrands:getAllBrands});
+            }else {
+                res.send({status:'error',msg:'Unable to found any brands.'});
+            }
 	});	
     }
 };

@@ -11,23 +11,42 @@ exports.saveSubCategory = (req,res) => {
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
-        var subCategoryIns = new SubCategory();
-        subCategoryIns.name = req.body.name;
-        subCategoryIns.description = req.body.description;
-        subCategoryIns.is_active = req.body.is_active;
-        subCategoryIns.parent_id = req.body.parent_id;
-        subCategoryIns.created = Date.now();
-        subCategoryIns.save(function(err){
-            if (err){
-                //res.send({status:'error',error:err});
-                req.flash('errors',['Something went wronge!']);
-                res.redirect('/category/list');
-            }else{
-                //res.redirect('/listofsubcategories');
-                req.flash('success',['Subcategory added successfully']);
-                res.redirect('/category/list');
+        req.assert('name', 'Sub Category is required').notEmpty();
+        req.assert('parent_id', 'Category is required').notEmpty();
+        var errors = req.validationErrors();  
+        if( !errors){   //No errors were found.  Passed Validation!
+            SubCategory.count({name:req.body.name,parent_id:req.body.parent_id},function(error,subCategoryCount){
+                if(subCategoryCount == 0){
+                    var subCategoryIns = new SubCategory();
+                    subCategoryIns.name = req.body.name;
+                    subCategoryIns.description = req.body.description;
+                    subCategoryIns.is_active = req.body.is_active;
+                    subCategoryIns.parent_id = req.body.parent_id;
+                    subCategoryIns.created = Date.now();
+                    subCategoryIns.save(function(err){
+                        if (err){
+                            //res.send({status:'error',error:err});
+                            req.flash('errors',['Something went wronge!']);
+                            res.redirect('/category/list');
+                        }else{
+                            //res.redirect('/listofsubcategories');
+                            req.flash('success',['Subcategory added successfully']);
+                            res.redirect('/category/list');
+                        }
+                    });
+                }else{
+                    req.flash('errors',['Sub Category already exist!']);
+                    res.redirect('/category/list');
+                }
+            });
+        }else{
+            var er = new Array();
+            for(var i = 0;i<errors.length;i++){
+                er.push(errors[i].msg);
             }
-        });
+            req.flash('errors',er);
+            res.redirect('/category/list');
+        }
     }
 };
 
@@ -39,19 +58,38 @@ exports.updateSubCategory = (req,res) => {
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
-        updateData = {
-            'name' 	 : req.body.name,
-            'description' : req.body.description,
-            'is_active' : req.body.is_active,
-            'parent_id' : req.body.parent_id,
-            'update' : Date.now()
-        };
-        console.log(updateData);
-        console.log(req.body.subCatId);
-        SubCategory.findByIdAndUpdate(req.body.subCatId,updateData, function(error, updateRes){
-            req.flash('success',['Subcategory updated successfully']);
+        req.assert('name', 'Sub Category is required').notEmpty();
+        req.assert('parent_id', 'Category is required').notEmpty();
+        var errors = req.validationErrors();  
+        if( !errors){   //No errors were found.  Passed Validation!
+            SubCategory.count({name:req.body.name,parent_id:req.body.parent_id,_id:{$ne:req.body.subCatId}},function(error,subCategoryCount){
+                if(subCategoryCount == 0){
+                    updateData = {
+                        'name' 	 : req.body.name,
+                        'description' : req.body.description,
+                        'is_active' : req.body.is_active,
+                        'parent_id' : req.body.parent_id,
+                        'update' : Date.now()
+                    };
+                    console.log(updateData);
+                    console.log(req.body.subCatId);
+                    SubCategory.findByIdAndUpdate(req.body.subCatId,updateData, function(error, updateRes){
+                        req.flash('success',['Subcategory updated successfully']);
+                        res.redirect('/category/list');
+                    });
+                }else{
+                    req.flash('errors',['Sub Category already exist!']);
+                    res.redirect('/category/list');
+                }
+            });
+        }else{
+            var er = new Array();
+            for(var i = 0;i<errors.length;i++){
+                er.push(errors[i].msg);
+            }
+            req.flash('errors',er);
             res.redirect('/category/list');
-        });
+        }
     }
 };
 

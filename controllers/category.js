@@ -78,22 +78,40 @@ exports.saveCategory = (req,res) => {
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
-        var categoryIns = new Category();
-        categoryIns.name = req.body.name;
-        categoryIns.description = req.body.description;
-        categoryIns.gender = req.body.gender;
-        categoryIns.is_active 	= req.body.is_active;
-        categoryIns.created 	= Date.now();
-        categoryIns.save(function(err){
-            if (err){
-                req.flash('errors',['Something went wronge!']);
-                res.redirect('/category/list');
-                //res.send({status:'error',error:err});
-            }else{
-                req.flash('success',['Category added successfully']);
-                res.redirect('/category/list');
+        req.assert('name', 'Category is required').notEmpty();
+        var errors = req.validationErrors();  
+        if( !errors){   //No errors were found.  Passed Validation!
+            Category.count({name:req.body.name,gender:req.body.gender},function(error,categoryCount){
+                if(categoryCount == 0){
+                    var categoryIns = new Category();
+                    categoryIns.name = req.body.name;
+                    categoryIns.description = req.body.description;
+                    categoryIns.gender = req.body.gender;
+                    categoryIns.is_active 	= req.body.is_active;
+                    categoryIns.created 	= Date.now();
+                    categoryIns.save(function(err){
+                        if (err){
+                            req.flash('errors',['Something went wronge!']);
+                            res.redirect('/category/list');
+                            //res.send({status:'error',error:err});
+                        }else{
+                            req.flash('success',['Category added successfully']);
+                            res.redirect('/category/list');
+                        }
+                    });
+                }else{
+                    req.flash('errors',['Category already exist!']);
+                    res.redirect('/category/list');
+                }
+            });
+        }else{
+            var er = new Array();
+            for(var i = 0;i<errors.length;i++){
+                er.push(errors[i].msg);
             }
-        });
+            req.flash('errors',er);
+            res.redirect('/category/list');
+        }
     }
 };
 
@@ -136,16 +154,34 @@ exports.updateCategory = (req,res) => {
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
-        updateData = {
-            'name' 	: req.body.name,
-            'description'	: req.body.description,
-            'is_active': req.body.is_active,
-            'gender': req.body.gender,
-            'update' : Date.now()
-        };
-        Category.findByIdAndUpdate(req.body.CatId,updateData, function(error, updateRes){
-            req.flash('success', 'Category updated Successfully.');
+        req.assert('name', 'Category is required').notEmpty();
+        var errors = req.validationErrors();  
+        if( !errors){   //No errors were found.  Passed Validation!
+            Category.count({name:req.body.name,gender:req.body.gender,_id:{$ne:req.body.CatId}},function(error,categoryCount){
+                if(categoryCount == 0){
+                    updateData = {
+                        'name' 	: req.body.name,
+                        'description'	: req.body.description,
+                        'is_active': req.body.is_active,
+                        'gender': req.body.gender,
+                        'update' : Date.now()
+                    };
+                    Category.findByIdAndUpdate(req.body.CatId,updateData, function(error, updateRes){
+                        req.flash('success', 'Category updated Successfully.');
+                        res.redirect('/category/list');
+                    });
+                }else{
+                    req.flash('errors',['Category already exist!']);
+                    res.redirect('/category/list');
+                }
+            });
+        }else{
+            var er = new Array();
+            for(var i = 0;i<errors.length;i++){
+                er.push(errors[i].msg);
+            }
+            req.flash('errors',er);
             res.redirect('/category/list');
-        });
+        }
     }
 };

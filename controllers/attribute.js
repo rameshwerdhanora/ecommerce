@@ -74,38 +74,51 @@ exports.saveAttribute = (req,res) => {
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
-	//console.log(req.body);
-        var attrIns 			= new Attribute();
-        attrIns.name 			= req.body.attr_name;
-        attrIns.type  			= req.body.type;
-        attrIns.is_required  	= req.body.is_required;
-        attrIns.is_post_feed	= req.body.is_post_feed,
-   	attrIns.product_manager = req.body.product_manager; 
-   	attrIns.display_type 	= req.body.display_type; 
-   	attrIns.is_published 	= req.body.is_published; 
-   	attrIns.save(function(err,rm){
-            if (err)
-            {
-                req.flash('errors', ['There is some error occured']);
-                res.redirect('/attribute/list');
-                //res.send({status:'error',error:err});
-            }
-            else 
-            {   
+        req.assert('attr_name', 'Attribute is required').notEmpty();
+        var errors = req.validationErrors();  
+        if( !errors){   //No errors were found.  Passed Validation!
+            Attribute.count({name:req.body.attr_name},function(error,attribCount){
+                if(attribCount == 0){
+                    var attrIns 		= new Attribute();
+                    attrIns.name 		= req.body.attr_name;
+                    attrIns.type  		= req.body.type;
+                    attrIns.is_required  	= req.body.is_required;
+                    attrIns.is_post_feed	= req.body.is_post_feed,
+                    attrIns.product_manager     = req.body.product_manager; 
+                    attrIns.display_type 	= req.body.display_type; 
+                    attrIns.is_published 	= req.body.is_published; 
+                    attrIns.save(function(err,rm){
+                        if (err){
+                            req.flash('errors', ['There is some error occured']);
+                            res.redirect('/attribute/list');
+                        }else{   
 
-                if(req.body.type == 'select' || req.body.type == 'multiselect'){
-                    var attribOptions = req.body.optionName;
-                    for(var i=0;i < attribOptions.length;i++){
-                        var attrbModel = new AttributeOption();
-                        attrbModel.value = attribOptions[i];
-                        attrbModel.attribute_id = rm._id;
-                        attrbModel.save(function(err){});
-                    }
+                            if(req.body.type == 'select' || req.body.type == 'multiselect'){
+                                var attribOptions = req.body.optionName;
+                                for(var i=0;i < attribOptions.length;i++){
+                                    var attrbModel = new AttributeOption();
+                                    attrbModel.value = attribOptions[i];
+                                    attrbModel.attribute_id = rm._id;
+                                    attrbModel.save(function(err){});
+                                }
+                            }
+                            req.flash('success', ['Attribute saved successfully']);
+                            res.redirect('/attribute/list');
+                        }
+                    });
+                 }else{
+                    req.flash('errors',['Attribute is already exist!']);
+                    res.redirect('/attribute/add');
                 }
-                req.flash('success', ['Attribute saved successfully']);
-                res.redirect('/attribute/list');
+            });
+        }else{
+            var er = new Array();
+            for(var i = 0; i < errors.length; i++){
+                er.push(errors[i].msg);
             }
-        });
+            req.flash('errors',er);
+            res.redirect('/attribute/add');
+        }
     }
 };
 
@@ -159,19 +172,37 @@ exports.updateAttribute = (req,res) => {
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
-	updateData = {
-		'name' :  req.body.attr_name,
-		'is_required' 	: req.body.is_required,
-		'is_post_feed'		: req.body.is_post_feed,
-		'product_manager'	: req.body.product_manager,
-		'display_type'		: req.body.display_type,
-	    'is_published'		: req.body.is_published 
-	};
-	Attribute.findByIdAndUpdate(req.body._id,updateData, function(error, updateRes)
-	{
-            req.flash('success', ['Attribute updated successfully']);
-            res.redirect('/attribute/list');
-	});
+        req.assert('attr_name', 'Attribute is required').notEmpty();
+        var errors = req.validationErrors();  
+        if( !errors){   //No errors were found.  Passed Validation!
+            Attribute.count({name:req.body.attr_name,_id:{$ne:req.body._id}},function(error,attribCount){
+                if(attribCount == 0){
+                    updateData = {
+                        'name' :  req.body.attr_name,
+                        'is_required' 	: req.body.is_required,
+                        'is_post_feed'	: req.body.is_post_feed,
+                        'product_manager'	: req.body.product_manager,
+                        'display_type'	: req.body.display_type,
+                        'is_published'	: req.body.is_published 
+                    };
+                    Attribute.findByIdAndUpdate(req.body._id,updateData, function(error, updateRes)
+                    {
+                        req.flash('success', ['Attribute updated successfully']);
+                        res.redirect('/attribute/list');
+                    });
+                }else{
+                    req.flash('errors',['Attribute is already exist!']);
+                    res.redirect('/attribute/edit/'+req.body._id);
+                }
+            });
+        }else{
+            var er = new Array();
+            for(var i = 0; i < errors.length; i++){
+                er.push(errors[i].msg);
+            }
+            req.flash('errors',er);
+            res.redirect('/attribute/edit/'+req.body._id);
+        }
     }
 };
 

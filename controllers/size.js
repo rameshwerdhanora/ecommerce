@@ -81,7 +81,6 @@ exports.listOfSize = (req, res) => {
                 )
             }, 
             function(err){
-
                 //console.log(finalRs[0]);
                 /*
                 for(var i =0;i<finalRs.length;i++){
@@ -96,9 +95,6 @@ exports.listOfSize = (req, res) => {
                     }
                 }
                 */
-
-
-
                 res.render('size/list', {
                     title: 'Size',
                     fetchAllAttribute:finalRs,
@@ -118,12 +114,12 @@ exports.addSize = (req, res) => {
         res.redirect('/user/shopprofile');
     }else{
 	Attribute.find({},function(error,fetchAllAttribute){
-		res.render('size/add_size', {
-		    title: 'Size',
-		    fetchAllAttribute:fetchAllAttribute,
-                    left_activeClass:3,
-                    activeClass:4,
-		});	
+            res.render('size/add_size', {
+                title: 'Size',
+                fetchAllAttribute:fetchAllAttribute,
+                left_activeClass:3,
+                activeClass:4,
+            });	
 	})	
     }
 };
@@ -134,17 +130,38 @@ exports.saveSize = (req,res) => {
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
-        var sizeIns = new Size();
-        sizeIns.size_name = req.body.size_name;
-        sizeIns.gender = req.body.gender,
-        sizeIns.listofattrmap = req.body.listofattrmap,
-        sizeIns.is_published = req.body.is_published,
-            sizeIns.user_id = req.user._id; 
-            sizeIns.save(function(err) {
-            if (err){
-                res.send({status:'error',error:err});
+        Size.count({size_name:req.body.size_name},function(error,sizeCount){
+            if(sizeCount == 0){
+                req.assert('size_name', 'Size is required').notEmpty();
+                req.assert('gender', 'Gender is required').notEmpty();
+                req.assert('listofattrmap', 'Attribute is required').notEmpty();
+                req.assert('is_published', 'Publish is required').notEmpty();
+                var errors = req.validationErrors();  
+                if( !errors){   //No errors were found.  Passed Validation!
+                    var sizeIns = new Size();
+                    sizeIns.size_name = req.body.size_name;
+                    sizeIns.gender = req.body.gender,
+                    sizeIns.listofattrmap = req.body.listofattrmap,
+                    sizeIns.is_published = req.body.is_published,
+                    sizeIns.user_id = req.user._id; 
+                    sizeIns.save(function(err) {
+                        if (err){
+                            res.send({status:'error',error:err});
+                        }else{
+                            res.redirect('/size/list');
+                        }
+                    });
+                }else{
+                    var er = new Array();
+                    for(var i = 0;i<errors.length;i++){
+                        er.push(errors[i].msg);
+                    }
+                    req.flash('errors',er);
+                    res.redirect('/size/add');
+                }
             }else{
-                    res.redirect('/size/list');
+                req.flash('errors',['Size is already exist!']);
+                res.redirect('/size/add');
             }
         });
     }
@@ -156,16 +173,12 @@ exports.removeSize = (req,res) => {
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
-	Size.remove({_id:req.params.sizeId},function(error,removeSize)
-	{
-		if(error)
-		{
-			res.send({status:'error',msg:error});
-		}
-		else
-		{
-			res.send({status:'success',msg:'Remove Successfully.'});
-		}
+	Size.remove({_id:req.params.sizeId},function(error,removeSize){
+            if(error){
+                res.send({status:'error',msg:error});
+            }else{
+                res.send({status:'success',msg:'Remove Successfully.'});
+            }
 	});
     }
 };
@@ -201,17 +214,24 @@ exports.updateSize = (req,res) => {
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
-	updateData = {
-		'size_name' 		: req.body.size_name,
-		'gender'			: req.body.gender,
-		'is_published'		: req.body.is_published,
-		'listofattrmap'		: req.body.listofattrmap,
-	    'user_id'			: req.body.user_id 
-	};
-	Size.findByIdAndUpdate(req.body._id,updateData, function(error, updateRes)
-	{
-		res.redirect('/size/list');
-	});
+        Size.count({$and:[{size_name:req.body.size_name,gender:{$ne:req.body.gender}}],_id:{$ne:req.body._id}},function(error,sizeCount){
+            if(sizeCount == 0){
+                updateData = {
+                    'size_name' : req.body.size_name,
+                    'gender'	: req.body.gender,
+                    'is_published' : req.body.is_published,
+                    'listofattrmap' : req.body.listofattrmap,
+                    'user_id' : req.body.user_id 
+                };
+                Size.findByIdAndUpdate(req.body._id,updateData, function(error, updateRes){
+                    req.flash('success',['Size updated successfully!']);
+                    res.redirect('/size/list');
+                });
+            }else{
+                req.flash('errors',['Size is already exist!']);
+                res.redirect('/size/edit/'+req.body._id);
+            }
+        });
     }
 };
 
