@@ -17,34 +17,35 @@ block content
                 tr
                     th(align='center')
                       input#checkbox2(type='checkbox', name='checkbox2' class='tableCheckbox')
-                    -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0522a43592d87b0e6f60b') != -1){
+                    
+                    -if(user.role_id == 1 || user.role_id == 2 || ((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c0522a43592d87b0e6f60b') != -1) || ((user.role_id == 6) && user.userPermissions.indexOf('57ecd3fdeb288f34067b23c7') != -1)){
                       th CUSTOMER NAME
                     -}
-                    -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0527c43592d87b0e6f612') != -1){
+                    -if(user.role_id == 1 || user.role_id == 2 || ((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c0527c43592d87b0e6f612') != -1)){
                         th E-Mail 
                     -}
-                    -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0523743592d87b0e6f60c') != -1){
+                    -if(user.role_id == 1 || user.role_id == 2 || ((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c0523743592d87b0e6f60c') != -1) || ((user.role_id == 6) && user.userPermissions.indexOf('57ecd452eb288f541a7b23c6') != -1)){
                         th ADDRESS 
                     -}
-                    -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0524043592d87b0e6f60d') != -1){
+                    -if(user.role_id == 1 || user.role_id == 2 || ((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c0524043592d87b0e6f60d') != -1) || ((user.role_id == 6) && user.userPermissions.indexOf('57ecd459eb288f531a7b23c7') != -1)){
                         th CITY
                     -}
-                    -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0524743592d87b0e6f60e') != -1){
+                    -if(user.role_id == 1 || user.role_id == 2 || ((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c0524743592d87b0e6f60e') != -1) || ((user.role_id == 6) && user.userPermissions.indexOf('57ecd464eb288fb7157b23c7') != -1)){
                         th STATE
                     -}
-                    -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0525743592d87b0e6f60f') != -1){
+                    -if(user.role_id == 1 || user.role_id == 2 || ((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c0525743592d87b0e6f60f') != -1) || ((user.role_id == 6) && user.userPermissions.indexOf('57ecd46beb288f36067b23c7') != -1)){
                         th ZIP CODE 
                     -}
-                    -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0526443592d87b0e6f610') != -1){
+                    -if(user.role_id == 1 || user.role_id == 2 || ((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c0526443592d87b0e6f610') != -1) || ((user.role_id == 6) && user.userPermissions.indexOf('57ecd476eb288f33067b23c6') != -1)){
                         th COUNTRY
                     -}
-                    -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0527043592d87b0e6f611') != -1){
+                    -if(user.role_id == 1 || user.role_id == 2 || ((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c0527043592d87b0e6f611') != -1)){
                         th PHONE
                     -}
-                    -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0528a43592d87b0e6f613') != -1){
+                    -if(user.role_id == 1 || user.role_id == 2 || ((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c0528a43592d87b0e6f613') != -1)){
                         th GENDER
                     -}
-                    -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0529843592d87b0e6f614') != -1){
+                    -if(user.role_id == 1 || user.role_id == 2 || ((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c0529843592d87b0e6f614') != -1)){
                         th B-day
                     -}
                     th
@@ -55,35 +56,35 @@ block content
                     tr
                         td(align='center')
                           input#checkbox4(type='checkbox', name='checkbox4' class='rowCheckbox')
-                        -if(user.role_id == 1 || user.role_id == 2 || user.userPermissions.indexOf('57c0522a43592d87b0e6f60b') != -1){
+                        -if(user.role_id == 1 || user.role_id == 2 || ((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c0522a43592d87b0e6f60b') != -1) || ((user.role_id == 6) && user.userPermissions.indexOf('57ecd3fdeb288f34067b23c7') != -1)){
                             td 
                               a.ord-title(href='/customer/view/#{getCustomer._id}') #{getCustomer.first_name} #{getCustomer.last_name}
                         -}
-                        -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0527c43592d87b0e6f612') != -1){
+                        -if(user.role_id == 1 || user.role_id == 2 || ((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c0527c43592d87b0e6f612') != -1)){
                             td #{getCustomer.email_id}  
                         -}
-                        -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0523743592d87b0e6f60c') != -1){
+                        -if(user.role_id == 1 || user.role_id == 2 || ((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c0523743592d87b0e6f60c') != -1) || ((user.role_id == 6) && user.userPermissions.indexOf('57ecd452eb288f541a7b23c6') != -1)){
                             td #{addressLine1[getCustomer._id]}
                         -}
-                        -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0524043592d87b0e6f60d') != -1){
+                        -if(user.role_id == 1 || user.role_id == 2 || ((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c0524043592d87b0e6f60d') != -1) || ((user.role_id == 6) && user.userPermissions.indexOf('57ecd459eb288f531a7b23c7') != -1)){
                             td #{city[getCustomer._id]}
                         -}
-                        -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0524743592d87b0e6f60e') != -1){
+                        -if(user.role_id == 1 || user.role_id == 2 || ((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c0524743592d87b0e6f60e') != -1) || ((user.role_id == 6) && user.userPermissions.indexOf('57ecd464eb288fb7157b23c7') != -1)){
                             td #{state[getCustomer._id]} 
                         -}
-                        -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0525743592d87b0e6f60f') != -1){
+                        -if(user.role_id == 1 || user.role_id == 2 || ((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c0525743592d87b0e6f60f') != -1) || ((user.role_id == 6) && user.userPermissions.indexOf('57ecd46beb288f36067b23c7') != -1)){
                             td #{postalCode[getCustomer._id]} 
                         -}
-                        -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0526443592d87b0e6f610') != -1){
-                            td #{city[getCustomer._id]}
+                        -if(user.role_id == 1 || user.role_id == 2 || ((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c0526443592d87b0e6f610') != -1) || ((user.role_id == 6) && user.userPermissions.indexOf('57ecd476eb288f33067b23c6') != -1)){
+                            td #{country[getCustomer._id]}
                         -}
-                        -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0527043592d87b0e6f611') != -1){
+                        -if(user.role_id == 1 || user.role_id == 2 || ((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c0527043592d87b0e6f611') != -1)){
                             td.clr-s1 #{contactNo[getCustomer._id]}
                         -}
-                        -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0528a43592d87b0e6f613') != -1){
+                        -if(user.role_id == 1 || user.role_id == 2 || ((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c0528a43592d87b0e6f613') != -1)){
                             td #{getCustomer.gender}
                         -}
-                        -if(user.role_id == 1 || user.role_id == 2 ||  user.userPermissions.indexOf('57c0529843592d87b0e6f614') != -1){
+                        -if(user.role_id == 1 || user.role_id == 2 || ((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c0529843592d87b0e6f614') != -1)){
                             td #{getCustomer.dob}
                         -}
                         td               

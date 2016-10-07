@@ -40,28 +40,18 @@
   .nav-left
     .nav-in
       ul
-        -if(user.role_id == 1 || user.role_id == 2 || user.userPermissions.indexOf('57c04c7043592d87b0e6f5f9') != -1){
+        -if(user.role_id == 1 || user.role_id == 2 || ((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c04c7043592d87b0e6f5f9') != -1) || ((user.role_id == 6) && user.userPermissions.indexOf('57eccaabeb288f521a7b23c6') != -1)){
             li(class=(left_activeClass == 1)?'active':'')
               a(href='/dashboard')
                 img(src='/images/left-icon1.png', alt='icon')
                 |  Dashboard 
         -}
-        -if(user.role_id == 1 || user.role_id == 2 || user.userPermissions.indexOf('57c04cb743592d87b0e6f5fa') != -1){
+        -if(user.role_id == 1 || user.role_id == 2 || ((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c04cb743592d87b0e6f5fa') != -1) || ((user.role_id == 6) && user.userPermissions.indexOf('57eccaabeb288f521a7b23c6') != -1)){
             li(class=(left_activeClass == 2)?'active':'')
-              a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', href='/order/list')
+              a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button',data-toggle='dropdown', href='javascript:void(0);')
                 img(src='/images/left-icon2.png', alt='icon')
-                | Orders                    
-              ul.easy-sidebar.dropdown-menu
-                li
-                  span.nav-close
-                    a(href='javascript:void(0);')
-                      img(src='/images/close-white.png', alt='close')
-                li
-                  span.sub-title USERS
-                li
-                  a(href='javascript:void(0);') Mange Users
-                li
-                  a(href='javascript:void(0);') Add User
+                | Orders
+              
         -}
         -if(user.role_id == 1 || user.role_id == 2 || ((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c04f9a43592d87b0e6f5ff') != -1) || ((user.role_id == 6) && user.userPermissions.indexOf('57eccb11eb288f37067b23c6') != -1)){
             li(class=(left_activeClass == 3)? 'active':'')
@@ -78,8 +68,10 @@
                 li
                   a(href='/product/list') Product list
                 -if(user.role_id != 1 && user.role_id !=2){
-                    li
-                      a(href='/product/list/add') Add Product
+                    -if(((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c04fbd43592d87b0e6f600') != -1) || ((user.role_id == 6) && user.userPermissions.indexOf('57eccdcdeb288fb7157b23c6') != -1)){
+                        li
+                          a(href='/product/list/add') Add Product
+                    -}
                 -}
 
 
