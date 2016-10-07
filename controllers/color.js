@@ -69,7 +69,6 @@ exports.saveColor = (req,res) => {
         if (!fs.existsSync(dirColorImg)){
             fs.mkdirSync(dirColorImg);
         }
-
         uploadColor(req,res,function(err) {
             Color.count({color_name:req.body.color_name},function(error,colorCount){
                 if(colorCount == 0){
@@ -79,23 +78,20 @@ exports.saveColor = (req,res) => {
                     req.assert('color_name', 'Color name is required').notEmpty();
                     var errors = req.validationErrors();  
                     if( !errors){   //No errors were found.  Passed Validation!
-
-                                var fileName = req.file.path.replace('public','');
-                                var colorIns  = new Color();
-                                colorIns.color_logo = fileName;
-                                colorIns.color_name  = req.body.color_name;
-                                colorIns.user_id = req.user._id; 
-                                colorIns.save(function(err){
-                                    if (err){
-                                        req.flash('errors',['Some thing goes wronge']);
-                                        res.redirect('/color/list');
-                                    }else{
-                                        req.flash('success',['Color has been added successfully']);
-                                        res.redirect('/color/list');
-                                    }
-                                });
-
-
+                        var fileName = req.file.path.replace('public','');
+                        var colorIns  = new Color();
+                        colorIns.color_logo = fileName;
+                        colorIns.color_name  = req.body.color_name;
+                        colorIns.user_id = req.user._id; 
+                        colorIns.save(function(err){
+                            if (err){
+                                req.flash('errors',['Some thing goes wronge']);
+                                res.redirect('/color/list');
+                            }else{
+                                req.flash('success',['Color has been added successfully']);
+                                res.redirect('/color/list');
+                            }
+                        });
                     }else{
                         var er = new Array();
                         for(var i = 0;i<errors.length;i++){
@@ -162,16 +158,23 @@ exports.updateColor = (req,res) => {
                 req.flash('errors', 'Something Wrong!!');
                 return res.end("Error uploading file.");
             }
-            updateData = {
-                'color_name'	: req.body.color_name,
-                'user_id'		: req.body.user_id 
-            };
-            if(req.file){
-                updateData.color_logo = req.file.path.replace('public','');
-            }
-            Color.findByIdAndUpdate(req.body.colorId,updateData, function(error, updateRes){
-                req.flash('success',['Color updated successfully']);
-                res.redirect('/color/list');
+            Color.count({color_name:req.body.color_name,_id:{$ne:req.body.colorId}},function(error,colorCount){
+                if(colorCount == 0){
+                    updateData = {
+                        'color_name'	: req.body.color_name,
+                        'user_id'		: req.body.user_id 
+                    };
+                    if(req.file){
+                        updateData.color_logo = req.file.path.replace('public','');
+                    }
+                    Color.findByIdAndUpdate(req.body.colorId,updateData, function(error, updateRes){
+                        req.flash('success',['Color updated successfully']);
+                        res.redirect('/color/list');
+                    });
+                }else{
+                    req.flash('errors',['Color is already exist!']);
+                    res.redirect('/color/list/'+req.body.colorId);
+                }
             });
         });
     }
