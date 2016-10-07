@@ -28,7 +28,11 @@ block content
                     td(align='center')
                       input.rowCheckbox#checkbox4(type='checkbox', name='checkbox4')
                     td 
-                      a(href='/order/detail/#{orderdatas._id}' class='ord-title') #{orderdatas.order_number}
+                      -if(((user.role_id == 3 || user.role_id == 4 ) && user.userPermissions.indexOf('57c04f8243592d87b0e6f5fe') != -1) || (user.role_id == 6 && user.userPermissions.indexOf('57eccd3ceb288f521a7b23c7') != -1)) {
+                        a(href='/order/detail/#{orderdatas._id}' class='ord-title') #{orderdatas.order_number} 
+                      -}else{
+                        |#{orderdatas.order_number} 
+                      -}
                     td #{orderdatas.orderdate}
                     td  #{orderdatas.first_name} #{orderdatas.last_name}  
                     td Paid

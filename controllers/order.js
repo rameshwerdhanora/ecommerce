@@ -13,7 +13,7 @@ const Constants       = require('../constants/constants');
 
 exports.list = (req, res) => {
 
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c04c7043592d87b0e6f5f9') == -1){
+    if(((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c04cb743592d87b0e6f5fa') == -1) || (req.user.role_id == 6 && req.user.userPermissions.indexOf('57eccaabeb288f521a7b23c6') == -1)) {
       req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
       res.redirect('/user/shopprofile');
     }else{
@@ -92,137 +92,139 @@ exports.list = (req, res) => {
 
 exports.detail = (req, res) => {
 
-  if (!req.user) {
-    return res.redirect('/login');
-  }	
+  if(((req.user.role_id == 3 || req.user.role_id == 4 ) && req.user.userPermissions.indexOf('57c04f8243592d87b0e6f5fe') == -1) || (req.user.role_id == 6 && req.user.userPermissions.indexOf('57eccd3ceb288f521a7b23c7') == -1)) {
+      req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
+      res.redirect('/user/shopprofile');
+    }else{
   
-  Order.find({_id:req.params.orderId},function(error,getAllOrders)
-  {
-    if(getAllOrders)
+    Order.find({_id:req.params.orderId},function(error,getAllOrders)
     {
-      var finalOrderDetailData  = new Array();
-      var brandIdsArr           = new Array();
-      var shipFromAddress       = new Array();
-
-      async.eachSeries(getAllOrders, function(OrderIds, callback)
+      if(getAllOrders)
       {
-        var orderDetailObj = {};
-        var dateTime = new Date(parseInt(OrderIds.order_date));
-        
-        //var split = dateTime.split(' ');
- 
-        var year  = dateTime.getFullYear();
-        var month = dateTime.getMonth()+1;
-        var date  = dateTime.getDate();
+        var finalOrderDetailData  = new Array();
+        var brandIdsArr           = new Array();
+        var shipFromAddress       = new Array();
 
-        var hour  = dateTime.getHours() == 0 ? 12 : (dateTime.getHours() > 12 ? dateTime.getHours() - 12 : dateTime.getHours());
-        var min   = dateTime.getMinutes() < 10 ? '0' + dateTime.getMinutes() : dateTime.getMinutes();
-        var ampm  = dateTime.getHours() < 12 ? 'AM' : 'PM';
-        var time  = hour + ':' + min + ' ' + ampm;
+        async.eachSeries(getAllOrders, function(OrderIds, callback)
+        {
+          var orderDetailObj = {};
+          var dateTime = new Date(parseInt(OrderIds.order_date));
+          
+          //var split = dateTime.split(' ');
+   
+          var year  = dateTime.getFullYear();
+          var month = dateTime.getMonth()+1;
+          var date  = dateTime.getDate();
 
-        finalDate = month+'/'+date+'/'+year ;
+          var hour  = dateTime.getHours() == 0 ? 12 : (dateTime.getHours() > 12 ? dateTime.getHours() - 12 : dateTime.getHours());
+          var min   = dateTime.getMinutes() < 10 ? '0' + dateTime.getMinutes() : dateTime.getMinutes();
+          var ampm  = dateTime.getHours() < 12 ? 'AM' : 'PM';
+          var time  = hour + ':' + min + ' ' + ampm;
 
-        orderDetailObj._id                  = OrderIds._id;
-        orderDetailObj.order_number         = OrderIds.order_number;
-        orderDetailObj.status               = OrderIds.status;
-        orderDetailObj.shipping_address     = OrderIds.shipping_address;
-        orderDetailObj.payment_details      = OrderIds.payment_details;  
-        orderDetailObj.billing_address      = OrderIds.billing_address;
-        orderDetailObj.totalprice           = OrderIds.totalprice;
-        orderDetailObj.shipping_charges     = OrderIds.shipping_charges;
-        orderDetailObj.tax                  = OrderIds.tax;
-        orderDetailObj.subtotal             = OrderIds.subtotal;
-        orderDetailObj.itemquantity         = OrderIds.itemquantity;
-        orderDetailObj.orderdate            = finalDate;
-        orderDetailObj.ordertime            = time;
+          finalDate = month+'/'+date+'/'+year ;
 
-        
-        async.parallel
-        (
-          [
-              function(callback)
-              {
-                User.findOne({_id:OrderIds.user_id},function(error,fetUserDetails)
+          orderDetailObj._id                  = OrderIds._id;
+          orderDetailObj.order_number         = OrderIds.order_number;
+          orderDetailObj.status               = OrderIds.status;
+          orderDetailObj.shipping_address     = OrderIds.shipping_address;
+          orderDetailObj.payment_details      = OrderIds.payment_details;  
+          orderDetailObj.billing_address      = OrderIds.billing_address;
+          orderDetailObj.totalprice           = OrderIds.totalprice;
+          orderDetailObj.shipping_charges     = OrderIds.shipping_charges;
+          orderDetailObj.tax                  = OrderIds.tax;
+          orderDetailObj.subtotal             = OrderIds.subtotal;
+          orderDetailObj.itemquantity         = OrderIds.itemquantity;
+          orderDetailObj.orderdate            = finalDate;
+          orderDetailObj.ordertime            = time;
+
+          
+          async.parallel
+          (
+            [
+                function(callback)
                 {
-                  if(fetUserDetails)
+                  User.findOne({_id:OrderIds.user_id},function(error,fetUserDetails)
                   {
-                    orderDetailObj.user_id    = OrderIds.user_id;
-                    orderDetailObj.user_name  = fetUserDetails.user_name;
-                    orderDetailObj.email_id   = fetUserDetails.email_id;
-                    orderDetailObj.first_name = fetUserDetails.first_name;
-                    orderDetailObj.last_name  = fetUserDetails.last_name;
-                    orderDetailObj.gender     = fetUserDetails.gender;
-                  }
-                  callback(error);
-                });
-              },
-              function(callback)
-              {
-                OrderDetails.find({order_id:OrderIds._id},function(error,fetchingAllOrderDetails)
-                {
-                    if(fetchingAllOrderDetails)
+                    if(fetUserDetails)
                     {
-                      orderDetailObj.details   = fetchingAllOrderDetails;
-                      callback(error);
+                      orderDetailObj.user_id    = OrderIds.user_id;
+                      orderDetailObj.user_name  = fetUserDetails.user_name;
+                      orderDetailObj.email_id   = fetUserDetails.email_id;
+                      orderDetailObj.first_name = fetUserDetails.first_name;
+                      orderDetailObj.last_name  = fetUserDetails.last_name;
+                      orderDetailObj.gender     = fetUserDetails.gender;
                     }
-                })
-              },
-              function(callback)
-              {
-                OrderDetails.find({order_id:OrderIds._id},function(error,fetchingAllOrderDetails)
-                {   
-                    
-                    async.eachSeries(fetchingAllOrderDetails, function(fetchBrandId, callback)
-                    {
-                      brandIdsArr.push(fetchBrandId.brand_id);
-                      callback(error);
-                    },
-                    function(err)
-                    {
-                        uniqueArrayForBrandId = brandIdsArr.filter(function(elem, pos) {
-                          return brandIdsArr.indexOf(elem) == pos;
-                        });
-                        
-                        orderDetailObj.brand_id = uniqueArrayForBrandId;
-                        //-- Get Ship from address
+                    callback(error);
+                  });
+                },
+                function(callback)
+                {
+                  OrderDetails.find({order_id:OrderIds._id},function(error,fetchingAllOrderDetails)
+                  {
+                      if(fetchingAllOrderDetails)
+                      {
+                        orderDetailObj.details   = fetchingAllOrderDetails;
+                        callback(error);
+                      }
+                  })
+                },
+                function(callback)
+                {
+                  OrderDetails.find({order_id:OrderIds._id},function(error,fetchingAllOrderDetails)
+                  {   
+                      
+                      async.eachSeries(fetchingAllOrderDetails, function(fetchBrandId, callback)
+                      {
+                        brandIdsArr.push(fetchBrandId.brand_id);
+                        callback(error);
+                      },
+                      function(err)
+                      {
+                          uniqueArrayForBrandId = brandIdsArr.filter(function(elem, pos) {
+                            return brandIdsArr.indexOf(elem) == pos;
+                          });
+                          
+                          orderDetailObj.brand_id = uniqueArrayForBrandId;
+                          //-- Get Ship from address
 
-                        ShopShipping.find({user_id:{$in:uniqueArrayForBrandId}},function(error,fetchingShoperDetails){
+                          ShopShipping.find({user_id:{$in:uniqueArrayForBrandId}},function(error,fetchingShoperDetails){
 
-                            if(fetchingShoperDetails)
-                            {
-                              orderDetailObj.shopperDetails = fetchingShoperDetails;
-                              callback(err);
-                            }
-                        });
-                        
-                        // uniqueArrayForBrandId.forEach(function(item, index) {
-                        //     orderDetailObj.shopperDetails = orderDetailObj.brand_id[index];
-                        // });  
+                              if(fetchingShoperDetails)
+                              {
+                                orderDetailObj.shopperDetails = fetchingShoperDetails;
+                                callback(err);
+                              }
+                          });
+                          
+                          // uniqueArrayForBrandId.forEach(function(item, index) {
+                          //     orderDetailObj.shopperDetails = orderDetailObj.brand_id[index];
+                          // });  
 
-                    });
-                })
-              }
-          ],
-          function(err)
-          {
-            //console.log(finalOrderDetailData);
-            finalOrderDetailData.push(orderDetailObj);
-            callback(err);
-          }
-        );
-      },
-      function(err)
+                      });
+                  })
+                }
+            ],
+            function(err)
+            {
+              //console.log(finalOrderDetailData);
+              finalOrderDetailData.push(orderDetailObj);
+              callback(err);
+            }
+          );
+        },
+        function(err)
+        {
+          console.log(finalOrderDetailData[0].shopperDetails);
+          res.render('order/detail', { title: 'Order',left_activeClass:2,orderdata:finalOrderDetailData[0]});
+        });
+      } 
+      else 
       {
-        console.log(finalOrderDetailData[0].shopperDetails);
-        res.render('order/detail', { title: 'Order',left_activeClass:2,orderdata:finalOrderDetailData[0]});
-      });
-    } 
-    else 
-    {
-      req.flash('success',['Order is not created.']);
-      res.render('order/list',{title: 'Order List',left_activeClass:2,orderdata:''});
-    } 
-  });
+        req.flash('success',['Order is not created.']);
+        res.render('order/list',{title: 'Order List',left_activeClass:2,orderdata:''});
+      } 
+    });
+}
 };
 
  

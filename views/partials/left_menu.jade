@@ -171,14 +171,14 @@
               li
                 a(href='/user/shop_notification') Notifications     
               - if(user.userPermissions.indexOf('57c052f343592d87b0e6f618') != -1){
-                - if(user.userPermissions.indexOf('57f624afed308fb31f7b23c6') != -1){
+                - if(1 || user.userPermissions.indexOf('57f624afed308fb31f7b23c6') != -1){
                       li
                         span.sub-title USERS
                       -if(user.userPermissions.indexOf('57f624cbed308f69097b23c6') != -1){
                           li
                             a(href='/user/shop_user_list') Manage Users
                       -}
-                      -if(user.userPermissions.indexOf('57f624d3ed308fea1f7b23c6') != -1){
+                      -if(1 || user.userPermissions.indexOf('57f624d3ed308fea1f7b23c6') != -1){
                           li
                             a(href='/user/add') Add User     
                       -}
