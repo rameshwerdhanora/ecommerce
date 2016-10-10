@@ -15,7 +15,7 @@ block content
                     a(href='/user/list') Manage Users
             -}else if(user.role_id == 3 || user.role_id == 4 || user.role_id == 6){
                   -if(user.userPermissions.indexOf('57f624cbed308f69097b23c6') != -1 && user.userPermissions.indexOf('57f624afed308fb31f7b23c6') != -1 && user.userPermissions.indexOf('57c052f343592d87b0e6f618') != -1){
-                    li(class=(activeClass == 2?'active':''))
+                    li(class=(activeClass == 1?'active':''))
                       a(href='/user/shop_user_list') Manage Users
                   -}
             -}

@@ -6,10 +6,12 @@ block content
       img(src='/images/title-icon4.png', alt='icon')
       |  CUSTOMERS
       .edit-btn-cl.select-item
+        -if(user.role_id == 1 || user.role_id == 2){
         form(name='form3', method='post', action='')
           select(name='deleteCustomer')
             option(value='') SELECT ACTION
             option(value='delete') DELETE
+        -}
     .customer-box.cmn-in.clearfix
         .low-tbl-box.order-txt.large-table
           form(name='form2', method='post', action='')

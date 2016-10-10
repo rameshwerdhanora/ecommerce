@@ -1221,7 +1221,7 @@ exports.shop_account = (req, res) => {
 };
 /* User Account */
 exports.shop_account_update = (req, res) => {
-    if((req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6) && req.user.userPermissions.indexOf('57c052ce43592d87b0e6f616') == -1){
+    if(((req.user.role_id == 3 || req.user.role_id == 4) && req.user.userPermissions.indexOf('57c052ce43592d87b0e6f616') == -1) || req.user.role_id == 6){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
@@ -1309,20 +1309,26 @@ exports.shop_notification_update = (req, res) => {
 exports.shop_payment_method = (req, res) => {
     res.render('user/shop_payment_method', { title: 'Shop User notification',activeClass:3,availablePaymentMethod:'',left_activeClass:5 });
 }
+
 exports.shop_user_list = (req, res) => {
-    var page = (req.query.page == undefined)?1:req.query.page;
-    page = (page == 0)?1:page;
-    var skipRecord = (page-1)*Constants.RECORDS_PER_PAGE;
-    User.count({shop_id:req.user.shop_id,role_id:6,is_deleted:false},function(err, totalRecord) {
-        var totalPage = Math.ceil(totalRecord/Constants.RECORDS_PER_PAGE);
-        User.find({shop_id:req.user.shop_id,role_id:6,is_deleted:false})
-            .limit(Constants.RECORDS_PER_PAGE)
-            .skip(skipRecord)
-            .sort('-_id')
-            .exec(function(error,userRes){
-                res.render('user/shop_user_list', { title: 'Shop User list',activeClass:1,result:userRes, left_activeClass:5,currentPage:page,  totalPage:totalPage});
+    if(((req.user.role_id == 3 || req.user.role_id == 4) && req.user.userPermissions.indexOf('57f624cbed308f69097b23c6') == -1) || req.user.role_id == 6){
+        req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
+        res.redirect('/user/shopprofile');        
+    }else{
+        var page = (req.query.page == undefined)?1:req.query.page;
+        page = (page == 0)?1:page;
+        var skipRecord = (page-1)*Constants.RECORDS_PER_PAGE;
+        User.count({shop_id:req.user.shop_id,role_id:6,is_deleted:false},function(err, totalRecord) {
+            var totalPage = Math.ceil(totalRecord/Constants.RECORDS_PER_PAGE);
+            User.find({shop_id:req.user.shop_id,role_id:6,is_deleted:false})
+                .limit(Constants.RECORDS_PER_PAGE)
+                .skip(skipRecord)
+                .sort('-_id')
+                .exec(function(error,userRes){
+                    res.render('user/shop_user_list', { title: 'Shop User list',activeClass:1,result:userRes, left_activeClass:5,currentPage:page,  totalPage:totalPage});
+            });
         });
-    });
+    }
 }
 
 
@@ -1751,7 +1757,6 @@ exports.deletecustomers = (req, res) => {
                         }
                     }
                     if(deleteAr.length > 0){
-                        
                         User.update({_id:{$in:deleteAr}},updateData, { multi: true },function(error,updateRes){
                             if(error == null){
                                 if(matchFlag){
