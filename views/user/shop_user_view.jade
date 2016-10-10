@@ -11,19 +11,19 @@ block content
           h2 USERS
           ul
             -if(user.role_id == 1 || user.role_id == 2){
-                li
+                li(class=(activeClass == 1?'active':''))
                     a(href='/user/list') Manage Users
             -}else if(user.role_id == 3 || user.role_id == 4 || user.role_id == 6){
                   -if(user.userPermissions.indexOf('57f624cbed308f69097b23c6') != -1 && user.userPermissions.indexOf('57f624afed308fb31f7b23c6') != -1 && user.userPermissions.indexOf('57c052f343592d87b0e6f618') != -1){
-                    li
+                    li(class=(activeClass == 2?'active':''))
                       a(href='/user/shop_user_list') Manage Users
                   -}
             -}
             -if(user.role_id == 1 || user.role_id == 2){
-                li
+                li(class=(activeClass == 2?'active':''))
                   a(href='/user/add') Add User
             -}else if(user.userPermissions.indexOf('57f624d3ed308fea1f7b23c6') != -1 && user.userPermissions.indexOf('57f624afed308fb31f7b23c6') != -1 && user.userPermissions.indexOf('57c052f343592d87b0e6f618') != -1){
-                li
+                li(class=(activeClass == 2?'active':''))
                   a(href='/user/add') Add User
             -}
         .profile-cl

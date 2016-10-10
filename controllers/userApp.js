@@ -40,7 +40,7 @@ exports.customerList = (req, res) => {
         page = (page == 0)?1:page;
         var skipRecord = (page-1)*Constants.RECORDS_PER_PAGE;
         Address.find({is_default:1, add_type:Constants.SHIPPING},function(error,fetchAddress){  
-            User.find({role_id:5},function(error,fetchAllCustomers){  
+            User.find({role_id:5,is_deleted:false},function(error,fetchAllCustomers){  
                 OrderDetails.find({shop_id:req.user._id},function(error,fetchOrderDetails){   
                     var tempShopUsers = {};
                     var tempShopUsersArr = [];
@@ -54,11 +54,11 @@ exports.customerList = (req, res) => {
                         }
                     }
                     
-                    User.find({role_id:5,_id:{$in:tempShopUsersArr}},function(error,countAllCustomers){  
+                    User.find({role_id:5,is_deleted:false,_id:{$in:tempShopUsersArr}},function(error,countAllCustomers){  
                          var totalRecord = countAllCustomers.length;
                          var totalPage = Math.ceil(totalRecord/Constants.RECORDS_PER_PAGE);
 
-                        User.find({role_id:5,_id:{$in:tempShopUsersArr}})
+                        User.find({role_id:5,is_deleted:false,_id:{$in:tempShopUsersArr}})
                             .limit(Constants.RECORDS_PER_PAGE)
                             .skip(skipRecord)
                             .sort('-_id')
@@ -97,10 +97,10 @@ exports.customerList = (req, res) => {
         page = (page == 0)?1:page;
         var skipRecord = (page-1)*Constants.RECORDS_PER_PAGE;
         var getCustomers = [];
-        User.count(function(error, totalRecord) {
+        User.count({role_id:5,is_deleted:false},function(error, totalRecord) {
             var totalPage = Math.ceil(totalRecord/Constants.RECORDS_PER_PAGE);
 
-            User.find({role_id:5})
+            User.find({role_id:5,is_deleted:false})
                     .limit(Constants.RECORDS_PER_PAGE)
                     .skip(skipRecord)
                     .sort('-_id')
@@ -205,18 +205,27 @@ exports.customerUpdate = (req, res) => {
  * Delete Customer Information
 */
 exports.customerDelete = (req,res) => {
-	User.remove({_id:req.params.customerId},function(error,customerDelete)
-	{
-		if(error)
-		{
-			res.send({status:'errors',msg:error});
-		}
-		else
-		{
-			res.flash('success',['Remove Successfully.']);
-			res.redirect('/customer/list');
-		}
-	});
+    updateData = {
+        is_deleted:true
+    }
+    User.update({_id:req.params.customerId},updateData,function(error,customerDelete){
+        if(error){
+            req.flash('errors',['Something went wronge!']);
+            res.redirect('/customer/list');
+        }else{
+            req.flash('success',['Customer has been removed Successfully.']);
+            res.redirect('/customer/list');
+        }
+    });
+    /*
+    User.remove({_id:req.params.customerId},function(error,customerDelete){
+            if(error){
+                res.send({status:'errors',msg:error});
+            }else{
+                req.flash('success',['Remove Successfully.']);
+                res.redirect('/customer/list');
+            }
+    });*/
 };
 
 /**
@@ -313,7 +322,7 @@ exports.customerAddressSave = (req, res) => {
  * User List - here we need to get both users and customers in seprate columns
  */
 exports.userList = (req, res) => {
-    if(req.user.role_id != 1 || req.user.role_id != 2){
+    if(req.user.role_id != 1 && req.user.role_id != 2){
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
@@ -647,7 +656,7 @@ exports.userDelete = (req,res) => {
 		}
 		else
 		{
-			res.flash('success',['Remove Successfully.']);
+			req.flash('success',['Remove Successfully.']);
 
 			res.redirect('/customer/list');
 
@@ -1390,7 +1399,7 @@ exports.shop_user_view = (req, res) => {
                             finalUserPremission.push(userPerRes[i].permission_id);
                         }
                     }
-                    res.render('user/shop_user_view', { title: 'Shop User View',activeClass:'',result:userRes,left_activeClass:5,getPermissions:finalPermission,userPermission:finalUserPremission});
+                    res.render('user/shop_user_view', { title: 'Shop User View',activeClass:1,result:userRes,left_activeClass:5,getPermissions:finalPermission,userPermission:finalUserPremission});
                 });
             }
         });
