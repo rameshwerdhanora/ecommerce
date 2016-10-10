@@ -25,6 +25,64 @@ function getSizeOptions(gender,frmID){
     }
 }
 $(document).ready(function() {
+    $("select[name='tagOption']").change(function(n){
+        if($(this).val() == 'delete'){
+            var deleteArr = [];
+            $('.rowCheckbox:checked').each(function(){
+                deleteArr.push($(this).val());
+            });
+            if(deleteArr.length > 0){
+                var tFalse = confirm("Are you sure ?");
+                if(tFalse){
+                    $.ajax({
+                        type: "POST",
+                        url: "/tag/deleteTag",
+                        data: { deleteArr:deleteArr},
+                        dataType: 'json',
+                        success: function(res){
+                            if(res.status == 'error'){
+                                alert(res.data);
+                            }else{
+                                window.location.reload(true);
+                            }
+                        }
+                    });
+                }
+            }else{
+                alert("Please select atleast one item");
+            }
+        }
+    });
+    $("select[name='deleteCustomer']").change(function(n){
+        if($(this).val() == 'delete'){
+            var deleteArr = [];
+            $('.rowCheckbox:checked').each(function(){
+                deleteArr.push($(this).val());
+            });
+            if(deleteArr.length > 0){
+                var tFalse = confirm("Are you sure ?");
+                if(tFalse){
+                    $.ajax({
+                        type: "POST",
+                        url: "/customer/deletecustomers",
+                        data: { deleteArr:deleteArr},
+                        dataType: 'json',
+                        success: function(res){
+                            if(res.status == 'error'){
+                                alert(res.data);
+                            }else{
+                                window.location.reload(true);
+                            }
+                        }
+                    });
+                }
+            }else{
+                alert("Please select atleast one customer to delete");
+            }
+        }
+    });
+    
+    
     $(".addProduct").on('change','select[name="attribute[]"]',function(n){
         
         var selectElement = $(this);
@@ -319,23 +377,24 @@ function getOptions(attrbid){
 
 
 
-function deleteAttribute(id)
-{
+function deleteAttribute(id){
+    var tFalse = confirm("Are you sure ?");
+    if(tFalse){    
 	$.ajax({
-		type: "GET",
-		url: "/attribute/delete/"+id,
-		async: false,
-		success: function(result)
-		{
-			if(result.status == 'success')
-			{
-				$(".attrTr_"+id).remove();
-			}  
-		},
-		cache: false,
-		contentType: false,
-		processData: false
+            type: "GET",
+            url: "/attribute/delete/"+id,
+            success: function(result){
+                    if(result.status == 'success'){
+                        $(".attrTr_"+id).remove();
+
+                    }
+                    window.location.reload(true);
+            },
+            cache: false,
+            contentType: false,
+            processData: false
 	});
+    }
 }
 
 function make_sure_for_brand(id)
@@ -589,6 +648,7 @@ function loadAttrValues(attrId,id)
 		processData: false
 	});
 }
+
 
 
 // Delete shop product by admin

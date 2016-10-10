@@ -1,5 +1,69 @@
 const Tag = require('../models/tag');
+const ProductHashtag = require('../models/productHashtag');
 const Constants 		= require('../constants/constants');
+
+
+
+/* Delete tag*/
+exports.deleteTag = (req, res) => {
+    if(req.user.role_id != 1 && req.user.role_id != 2){
+        req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
+        res.redirect('/user/shopprofile');
+    }else{
+        ProductHashtag.find({hashtag_id:{$in:req.body.deleteArr}},function(error,tagResRes){
+           if(error == null){
+               console.log(tagResRes);
+               if(tagResRes && tagResRes.length > 0 ){
+                    var tempProducttag = [];
+                    for(var i = 0; i < tagResRes.length; i++){
+                        tempProducttag.push(String(tagResRes[i].hashtag_id));
+                    }
+                    var deleteAr = [];
+                    var matchFlag = false;
+                    for(var i = 0; i < req.body.deleteArr.length; i++){
+                        if(tempProducttag.indexOf(String(req.body.deleteArr[i])) == -1){
+                             deleteAr.push(req.body.deleteArr[i]);
+                        }else{
+                            matchFlag = true;
+                        }
+                    }
+                    console.log(matchFlag);
+                    if(deleteAr.length > 0){
+                        Tag.remove({_id:{$in:deleteAr}},function(error,removeRes){
+                            if(error == null){
+                                if(matchFlag){
+                                    req.flash('success',['Only those hashtag which are not associated with any product are removed successfully!']);
+                                }else{
+                                    req.flash('success',['Hashtag has been removed successfully']);
+                                }
+                                res.send({status:'success',data:'Deleted'});
+                            }
+                        });
+                    }else{
+                        var msg = 'Hashtag are associated with product! So it can not be removed.';
+                        req.flash('errors',[msg]);
+                        res.send({status:'error',data:msg});
+                    }
+                }else{
+                    console.log(req.body.deleteArr);
+                    Tag.remove({_id:{$in:req.body.deleteArr}},function(error,removeRes){
+                        if(error == null){
+                            req.flash('success',['Hashtag has been removed successfully']);
+                            res.send({status:'success',data:'Deleted'});
+                        }else{
+                            req.flash('errors',['Something went wronge!']);
+                            res.send({status:'error',data:error});
+                        }
+                    });
+                }
+            }else{
+                 req.flash('errors',['Something went wronge!']);
+                 res.send({status:'error',data:error});
+            }
+        });
+   }
+};
+
 
 /**
  * GET /
@@ -32,6 +96,7 @@ exports.list = (req, res) => {
         });
     }
 };
+
 
 
 /**
@@ -290,3 +355,4 @@ exports.test2 = (req, res) => {
     });
       
 };
+

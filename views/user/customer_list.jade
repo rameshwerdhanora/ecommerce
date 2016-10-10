@@ -7,8 +7,9 @@ block content
       |  CUSTOMERS
       .edit-btn-cl.select-item
         form(name='form3', method='post', action='')
-          select#select(name='select')
-            option ACTIONS
+          select(name='deleteCustomer')
+            option(value='') SELECT ACTION
+            option(value='delete') DELETE
     .customer-box.cmn-in.clearfix
         .low-tbl-box.order-txt.large-table
           form(name='form2', method='post', action='')
@@ -16,7 +17,7 @@ block content
               tbody
                 tr
                     th(align='center')
-                      input#checkbox2(type='checkbox', name='checkbox2' class='tableCheckbox')
+                      input(type='checkbox', name='checkbox2' class='tableCheckbox')
                     
                     -if(user.role_id == 1 || user.role_id == 2 || ((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c0522a43592d87b0e6f60b') != -1) || ((user.role_id == 6) && user.userPermissions.indexOf('57ecd3fdeb288f34067b23c7') != -1)){
                       th CUSTOMER NAME
@@ -48,14 +49,14 @@ block content
                     -if(user.role_id == 1 || user.role_id == 2 || ((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c0529843592d87b0e6f614') != -1)){
                         th B-day
                     -}
-                    th
+                    //th
                       a(href='#')
                         img(src='/images/delete-icon.png', alt='Delete')
                 if getCustomers.length > 0
                   each getCustomer in getCustomers       
                     tr
                         td(align='center')
-                          input#checkbox4(type='checkbox', name='checkbox4' class='rowCheckbox')
+                          input#checkbox4(type='checkbox', name='checkbox4' class='rowCheckbox',value='#{getCustomer._id}')
                         -if(user.role_id == 1 || user.role_id == 2 || ((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c0522a43592d87b0e6f60b') != -1) || ((user.role_id == 6) && user.userPermissions.indexOf('57ecd3fdeb288f34067b23c7') != -1)){
                             -if(user.role_id == 1 || user.role_id == 2){
                                 td 
@@ -92,7 +93,7 @@ block content
                         -if(user.role_id == 1 || user.role_id == 2 || ((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c0529843592d87b0e6f614') != -1)){
                             td #{getCustomer.dob}
                         -}
-                        td               
+                        //td               
                 else
                   tr
                     td(colspan=12)

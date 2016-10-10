@@ -8,7 +8,7 @@ block content
       |  PRODUCTS
     .top-btns.clearfix
       .btn-s-right
-        -if(((user.role_id == 3 || user.role_ud == 4) && user.userPermissions.indexOf('57c04fbd43592d87b0e6f600') != -1) || (user.role_id == 6 && user.userPermissions.indexOf('57eccdcdeb288fb7157b23c6') != -1 )){
+        -if(((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c04fbd43592d87b0e6f600') != -1) || (user.role_id == 6 && user.userPermissions.indexOf('57eccdcdeb288fb7157b23c6') != -1 )){
             a#addPrductBtn.default-btn(href='#modal-container', title='Add Product', role='button', data-toggle='modal') +POST TO FEED
         -}
         //a.default-btn(href='/product/add', title='Add Size', role='button', data-toggle='modal') ADD PRODUCT  
@@ -52,7 +52,7 @@ block content
                         span #{brandAr[fetchAllProducts[i].brand_id]}
                         p.price $#{fetchAllProducts[i].price}
                         .right-sub
-                          -if(((user.role_id == 3 || user.role_ud == 4) && user.userPermissions.indexOf('57c04fce43592d87b0e6f601') != -1) || (user.role_id == 6 && user.userPermissions.indexOf('57eccddbeb288fb8157b23c8') != -1 )){
+                          -if(((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c04fce43592d87b0e6f601') != -1) || (user.role_id == 6 && user.userPermissions.indexOf('57eccddbeb288fb8157b23c8') != -1 )){
                             a#modal-702680.btn.save-btn(href='#modal-container-702680#{i}', role='button', data-toggle='modal') ITEM PREVIEW
                           -}
                     -}else{
@@ -87,7 +87,7 @@ block content
                         span #{brandAr[fetchAllProducts[i].brand_id]}
                         p.price $#{fetchAllProducts[i].price}
                         .right-sub
-                          -if(((user.role_id == 3 || user.role_ud == 4) && user.userPermissions.indexOf('57c04fce43592d87b0e6f601') != -1) || (user.role_id == 6 && user.userPermissions.indexOf('57eccddbeb288fb8157b23c8') != -1 )){
+                          -if(((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c04fce43592d87b0e6f601') != -1) || (user.role_id == 6 && user.userPermissions.indexOf('57eccddbeb288fb8157b23c8') != -1 )){
                             a#modal-702680.btn.save-btn(href='#modal-container-702680#{i}', role='button', data-toggle='modal') ITEM PREVIEW
                           -}
                      -} 
@@ -170,9 +170,10 @@ block content
                               -}
                           -}
                        .discount
-                         -if(((user.role_id == 3 || user.role_ud == 4) && user.userPermissions.indexOf('57c04fdb43592d87b0e6f602') != -1) || (user.role_id == 6 && user.userPermissions.indexOf('57eccde4eb288fb8157b23c9') != -1 )){
-                            a(href='/product/list/#{fetchAllProduct._id}') EDIT ITEM
+                         -if(((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c04fdb43592d87b0e6f602') != -1) || (user.role_id == 6 && user.userPermissions.indexOf('57eccde4eb288fb8157b23c9') != -1 )){
+                         a(href='/product/list/#{fetchAllProduct._id}') EDIT ITEM
                          -}
+                         
                          a.btn(href='#modal-container-#{fetchAllProduct._id}', role='button', data-toggle='modal',id='modal-#{fetchAllProduct._id}') Apply Discount code
 
                        .modal.fade(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true',id='modal-container-#{fetchAllProduct._id}')

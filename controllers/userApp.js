@@ -1726,3 +1726,63 @@ exports.shop_delete_employee = (req, res) => {
     });
 };
 
+
+/* Delete customer*/
+exports.deletecustomers = (req, res) => {
+    if(req.user.role_id != 1 && req.user.role_id != 2){
+        req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
+        res.redirect('/user/shopprofile');
+    }else{
+        updateData = {is_deleted:true};
+        Order.find({user_id:{$in:req.body.deleteArr}},function(error,userOrderRes){
+           if(error == null){
+               if(userOrderRes && userOrderRes.length > 0 ){
+                    var tempUsers = [];
+                    for(var i = 0; i < userOrderRes.length; i++){
+                        tempUsers.push(String(userOrderRes[i].user_id));
+                    }
+                    var deleteAr = [];
+                    var matchFlag = false;
+                    for(var i = 0; i < req.body.deleteArr.length; i++){
+                        if(tempUsers.indexOf(String(req.body.deleteArr[i])) == -1){
+                             deleteAr.push(req.body.deleteArr[i]);
+                        }else{
+                            matchFlag = true;
+                        }
+                    }
+                    if(deleteAr.length > 0){
+                        
+                        User.update({_id:{$in:deleteAr}},updateData, { multi: true },function(error,updateRes){
+                            if(error == null){
+                                if(matchFlag){
+                                    req.flash('success',['Removed only those customer who has not placed any order yet!']);
+                                }else{
+                                    req.flash('success',['Customer has been removed successfully']);
+                                }
+                                res.send({status:'success',data:'Deleted'});
+                            }
+                        });
+                    }else{
+                        var msg = 'Customer having order! So it can not be removed.';
+                        req.flash('errors',[msg]);
+                        res.send({status:'error',data:msg});
+                    }
+                }else{
+                    User.update({_id:{$in:req.body.deleteArr}},updateData, { multi: true },function(error,removeRes){
+                        if(error == null){
+                            req.flash('success',['Customer has been removed successfully']);
+                            res.send({status:'success',data:'Deleted'});
+                        }else{
+                            req.flash('errors',['Something went wronge!']);
+                            res.send({status:'error',data:error});
+                        }
+                    });
+                }
+            }else{
+                 req.flash('errors',['Something went wronge!']);
+                 res.send({status:'error',data:error});
+            }
+        });
+   }
+};
+

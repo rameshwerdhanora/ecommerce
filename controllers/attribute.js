@@ -2,9 +2,15 @@
 
 const Attribute		= require('../models/attribute');
 const AttributeOption   = require('../models/attributeOption');
+const Size   = require('../models/size');
 const passport = require('passport');
 const Constants 		= require('../constants/constants');
 const flash = require('connect-flash');
+
+
+
+
+
 
 /* Get the list of all color name with imformation */
 exports.list = (req, res) => {
@@ -128,18 +134,56 @@ exports.deleteAttribute = (req,res) => {
         req.flash('errors',[Constants.SHOP_PERMISSION_ERROR_MSG]);
         res.redirect('/user/shopprofile');
     }else{
-	Attribute.remove({_id:req.params.attributeId},function(error,deleteAttribute)
-	{
-		if(error)
-		{
-                    //req.flash('errors', ['There is no such attribute found']);
-                    res.send({status:'error',msg:error});
-		}
-		else
-		{
-			res.send({status:'success',msg:'Attribute deleted Successfully.'});
-		}
-	});
+        Size.find({listofattrmap:{$in:[req.params.attributeId]}},function(error,attrRes){
+           if(error == null){
+               if(attrRes && attrRes.length > 0 ){
+                    var tempAttr = [];
+                    for(var i = 0; i < attrRes.length; i++){
+                        if(attrRes[i].listofattrmap && attrRes[i].listofattrmap.length){
+                            for(var j = 0; j < attrRes.length; j++){
+                                tempAttr.push(String(attrRes[i].listofattrmap[j]));
+                            }
+                        }
+                    }
+                    var deleteAr = [];
+                    var matchFlag = false;
+                    if(tempAttr.indexOf(String(req.params.attributeId)) == -1){
+                         deleteAr.push(req.params.attributeId);
+                    }else{
+                        matchFlag = true;
+                    }
+                    if(deleteAr.length > 0){
+                        Attribute.remove({_id:{$in:deleteAr}},function(error,removeRes){
+                            if(error == null){
+                                if(matchFlag){
+                                    req.flash('success',['Removed only those attribut which are not associated with any of the sizes!']);
+                                }else{
+                                    req.flash('success',['Attribut has been removed successfully']);
+                                }
+                                res.send({status:'success',data:'Deleted'});
+                            }
+                        });
+                    }else{
+                        var msg = 'Attribute associated with Sizes! So it can not be removed.';
+                        req.flash('errors',[msg]);
+                        res.send({status:'error',data:msg});
+                    }
+                }else{
+                    Attribute.remove({_id:{$in:req.body.deleteArr}},function(error,removeRes){
+                        if(error == null){
+                            req.flash('success',['Attribute has been removed successfully']);
+                            res.send({status:'success',data:'Deleted'});
+                        }else{
+                            req.flash('errors',['Something went wronge!']);
+                            res.send({status:'error',data:error});
+                        }
+                    });
+                }
+            }else{
+                 req.flash('errors',['Something went wronge!']);
+                 res.send({status:'error',data:error});
+            }
+        });
     }
 };
  

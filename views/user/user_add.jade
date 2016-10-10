@@ -28,10 +28,11 @@ block content
                     function validatePassword(){
                         var pass=document.getElementById("password").value;
                         var cpass=document.getElementById("cpassword").value;
-                        if(pass != cpass)
-                        document.getElementById("cpassword").setCustomValidity("Password and confirm password does't match");
-                        else
-                        document.getElementById("cpassword").setCustomValidity('');
+                        if(pass != cpass){
+                            document.getElementById("cpassword").setCustomValidity("Password and confirm password does't match");
+                        }else{
+                            document.getElementById("cpassword").setCustomValidity('');
+                        }
                     }
                     document.getElementById("password").onchange = validatePassword;
                     document.getElementById("cpassword").onchange = validatePassword;

@@ -6,9 +6,9 @@ block content
             img(src='/images/title-icon.png', alt='icon')
             |  User
             .edit-btn-cl.select-item
-                //form(action='', method='post', name='form3')
-                    select#select(name='select')
-                        option ACTIONS
+                select(name='tagOption')
+                    option(value='') Select Action
+                    option(value='delete') DELETE
         .customer-box.clearfix
             include left_menu
             .profile-cl
@@ -20,7 +20,7 @@ block content
                         tbody
                           tr
                             th(align='center')
-                              //input#checkbox2(type='checkbox', name='checkbox2')
+                              input.tableCheckbox(type='checkbox', name='checkbox2')
                             th
                               | Name
                             th Created
@@ -32,7 +32,8 @@ block content
                             if resultRes.length > 0
                                 each record in resultRes 
                                     tr(class='attrTr_#{record._id}')
-                                      td(align='center') #{count}
+                                      td(align='center')
+                                        input.rowCheckbox(type='checkbox', name='checkbox-row', value="#{record._id}")
                                       td.ord-title #{record.name}
                                       td #{dateFormat(parseInt(record.createdAt),'dd-mm-yyyy')}
                                       td #{dateFormat(parseInt(record.updatedAt), "dd-mm-yyyy")}

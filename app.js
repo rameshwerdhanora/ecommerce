@@ -370,6 +370,7 @@ app.get('/tag/add', passportConfig.isAuthenticated, tagController.add);
 
 app.post('/tag/save', passportConfig.isAuthenticated, tagController.save);
 app.post('/tag/update', passportConfig.isAuthenticated, tagController.update);
+app.post('/tag/deleteTag', passportConfig.isAuthenticated, tagController.deleteTag);
 app.get('/tag/edit/:tagId', passportConfig.isAuthenticated, tagController.edit);
 
 
@@ -396,6 +397,7 @@ app.get('/customer/order/:customerId', passportConfig.isAuthenticated,  userAppC
 app.get('/customer/payments/:customerId', passportConfig.isAuthenticated,  userAppControlleraAdmin.payments);
 app.get('/customer/address/:customerId', passportConfig.isAuthenticated,  userAppControlleraAdmin.customerAddressList);
 app.post('/customer/address/save/:customerId', passportConfig.isAuthenticated,  userAppControlleraAdmin.customerAddressSave);
+app.post('/customer/deletecustomers', passportConfig.isAuthenticated,  userAppControlleraAdmin.deletecustomers);
 app.post('/search', passportConfig.isAuthenticated,  searchController.searchResult)
 
 
