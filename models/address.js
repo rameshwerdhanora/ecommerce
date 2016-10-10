@@ -12,7 +12,7 @@ const customerAddressSchema = new mongoose.Schema({
 	postal_code : {type:String,default:''},
 	city : {type:String,default:''},
 	country : {type:String,default:''},
-	billmode:{type:Boolean,default:''},
+	billmode:{type:String,default:''},
 	add_type : {type:String,default:''},
     is_default: {type:String,default:''},
     state: {type:String,default:''}
