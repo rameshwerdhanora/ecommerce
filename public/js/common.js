@@ -37,8 +37,7 @@ function deleteUser(id)
 }
 
 // Delete shop product
-function deleteShopProducts()
-{
+function deleteShopProducts(){
     var deleteProductArr = [];
     $('.checkbox-row:checked').each(function(){ //iterate all listed checkbox items
         deleteProductArr.push($(this).val());
@@ -57,7 +56,7 @@ function deleteShopProducts()
             });
         }
     }else{
-        confirm("Please select atleast one item");
+        alert("Please select atleast one item");
     }
    
 }
@@ -87,7 +86,32 @@ function deleteUsersAndShop()
             });
         }
     }else{
-        confirm("Please select atleast one item");
+        alert("Please select atleast one item");
+    }
+   
+}
+
+
+function deleteShopEmployee(){
+    var deleteArr = [];
+    $('.rowCheckbox:checked').each(function(){ //iterate all listed checkbox items
+        deleteArr.push($(this).val());
+    });
+    if(deleteArr.length>0){
+        var tFalse = confirm("Are you sure to delete the user?");
+        if(tFalse){
+            $.ajax({
+                type: "POST",
+                url: "/user/shop_delete_employee",
+                data: { deleteUserArr:deleteArr },
+                dataType: 'json',
+                success: function(res){
+                    window.location.reload(true);
+                }
+            });
+        }
+    }else{
+        alert("Please select atleast one employee");
     }
    
 }

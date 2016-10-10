@@ -98,12 +98,14 @@
                           a(href='/attribute/list') Manage Attributes
                     -}
                     
-                    li
-                      span.sub-title Hash Tag
-                    li
-                      a(href='/tag/list') Hash Tag list
-                    li
-                      a(href='/tag/add') Add Hash Tag
+                    -if(user.role_id == 1 || user.role_id == 2){                    
+                        li
+                          span.sub-title Hash Tag
+                        li
+                          a(href='/tag/list') Hash Tag list
+                        li
+                          a(href='/tag/add') Add Hash Tag
+                    -}
                 -}
         -}
         

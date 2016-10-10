@@ -382,7 +382,7 @@ exports.userAdd = (req, res) => {
         }else{
             var permissionType = 'SHOPUSER';
         }
-        Permission.find({type:permissionType},function(error,getPermissions){
+        Permission.find({type:permissionType,is_active:true},function(error,getPermissions){
             if(getPermissions){
                 var flag=true;
                 var finalPermission = new Array();
@@ -473,7 +473,7 @@ exports.userSave = (req, res) => {
                     }else{
                         var permissionType = 'SHOPUSER';
                     }
-                    Permission.find({type:permissionType},function(error,getPermissions){
+                    Permission.find({type:permissionType,is_active:true},function(error,getPermissions){
                         if(getPermissions){
                             return res.render('user/user_add',{title: 'New User', data: req.body,getPermissions:getPermissions,left_activeClass:5});
                         }else{
@@ -496,7 +496,7 @@ exports.userSave = (req, res) => {
                         }
                     }
 
-                    userIns.shop_name   	= req.body.shop_name.trim();
+                    userIns.shop_name   	= req.body.shop_name;
                     userIns.user_name   	= req.body.user_name.trim();
                     userIns.password    	= req.body.password.trim();
                     userIns.email_id       	= req.body.email_id.trim();
@@ -1313,9 +1313,9 @@ exports.shop_user_list = (req, res) => {
     var page = (req.query.page == undefined)?1:req.query.page;
     page = (page == 0)?1:page;
     var skipRecord = (page-1)*Constants.RECORDS_PER_PAGE;
-    User.count({shop_id:req.user.shop_id},function(err, totalRecord) {
+    User.count({shop_id:req.user.shop_id,role_id:6,is_deleted:false},function(err, totalRecord) {
         var totalPage = Math.ceil(totalRecord/Constants.RECORDS_PER_PAGE);
-        User.find({shop_id:req.user.shop_id})
+        User.find({shop_id:req.user.shop_id,role_id:6,is_deleted:false})
             .limit(Constants.RECORDS_PER_PAGE)
             .skip(skipRecord)
             .sort('-_id')
@@ -1333,7 +1333,7 @@ exports.shop_user_view = (req, res) => {
         }else{
             var permissionType = 'SHOPUSER';
         }
-	Permission.find({type:permissionType})
+	Permission.find({type:permissionType,is_active:true})
             .sort('parent_id')
             .exec(function(error,getPermissions){
             if(getPermissions){
@@ -1703,7 +1703,7 @@ exports.updateShopProfile = (req, res) => {
 exports.removeUsersAndShop = (req, res) => {
     updateData = {is_deleted:true};
     
-    User.update({$or: [ { _id: {$in:req.body.deleteUserArr} }, { shop_id:{$in: req.body.deleteUserArr}}]},updateData, function(error, removeUserId){
+    User.update({$or: [ { _id: {$in:req.body.deleteUserArr} }, { shop_id:{$in: req.body.deleteUserArr}}]},updateData,{ multi: true }, function(error, removeUserId){
         if(error == null){
             req.flash('success',['User removed successfully!']);
             res.send({status:'success',data:['Remove Successfully.']});
@@ -1713,3 +1713,16 @@ exports.removeUsersAndShop = (req, res) => {
         }
     });
 };
+exports.shop_delete_employee = (req, res) => {
+    updateData = {is_deleted:true};
+    User.update({_id: {$in:req.body.deleteUserArr},role_id:6,shop_id:req.user.shop_id },updateData,{ multi: true }, function(error, removeUserId){
+        if(error == null){
+            req.flash('success',['User removed successfully!']);
+            res.send({status:'success',data:['Remove Successfully.']});
+        }else{
+            req.flash('errors',['Something went wronge!']);
+            res.send({status:'error',data:error});
+        }
+    });
+};
+

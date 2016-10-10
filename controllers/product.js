@@ -217,7 +217,7 @@ exports.listOfProducts = (req, res) => {
                                                                         }
                                                                     }//Find selected size for the product
                                                                     Size.find({"$or":[{"gender": productRes.gender},{"gender": "unisex"}]},function(error,allSizeRes){
-                                                                        console.log(allSizeRes);
+                                                                        //console.log(allSizeRes);
                                                                         Size.find({listofattrmap:{$in:finalAttribResult}},function(error,sizeRes){
                                                                             var finalSize = new Array();
                                                                             if(sizeRes != null){
@@ -829,23 +829,46 @@ exports.updateDiscount = (req,res) => {
 
 /* Remove Product */
 exports.removeShopProduct = (req, res) => {
-    Product.remove({_id:{$in:req.body.deleteProductArr}}, function(error, removeProductId){
-        ProductsHashtag.remove({product_id:{$in:req.body.deleteProductArr}}, function(err, removeHashtag){
-            ProductImage.remove({product_id:{$in:req.body.deleteProductArr}}, function(err, removeProductImage){
-                Cart.remove({product_id:{$in:req.body.deleteProductArr}}, function(err, removeCartProduct){
-                    Like.remove({product_id:{$in:req.body.deleteProductArr}}, function(err, removeLikeProduct){
-                        Wishlist.remove({product_id:{$in:req.body.deleteProductArr}}, function(err, removeWishlistProduct){
-                            if(err == null){
-                                req.flash('success',['Product has been deleted successfully']);
-                                res.send({status:'success',data:['Remove Successfully.']});
-                            }else{
-                                req.flash('errors',['Something went wronge!']);
-                                res.send({status:'error',data:err});
-                            }
+    //console.log(req.body.deleteProductArr);
+    if(req.user.role_id == 1 || req.user.role_id == 2){
+        Product.remove({_id:{$in:req.body.deleteProductArr}}, function(error, removeProductId){
+            ProductsHashtag.remove({product_id:{$in:req.body.deleteProductArr}}, function(err, removeHashtag){
+                ProductImage.remove({product_id:{$in:req.body.deleteProductArr}}, function(err, removeProductImage){
+                    Cart.remove({product_id:{$in:req.body.deleteProductArr}}, function(err, removeCartProduct){
+                        Like.remove({product_id:{$in:req.body.deleteProductArr}}, function(err, removeLikeProduct){
+                            Wishlist.remove({product_id:{$in:req.body.deleteProductArr}}, function(err, removeWishlistProduct){
+                                if(err == null){
+                                    req.flash('success',['Product has been deleted successfully']);
+                                    res.send({status:'success',data:['Remove Successfully.']});
+                                }else{
+                                    req.flash('errors',['Something went wronge!']);
+                                    res.send({status:'error',data:err});
+                                }
+                            });    
                         });    
                     });    
                 });    
-            });    
-       }); 
-    });
+           }); 
+        });
+    }else{
+        Product.remove({_id:{$in:req.body.deleteProductArr},shop_id:req.user.shop_id}, function(error, removeProductId){
+            ProductsHashtag.remove({product_id:{$in:req.body.deleteProductArr}}, function(err, removeHashtag){
+                ProductImage.remove({product_id:{$in:req.body.deleteProductArr}}, function(err, removeProductImage){
+                    Cart.remove({product_id:{$in:req.body.deleteProductArr}}, function(err, removeCartProduct){
+                        Like.remove({product_id:{$in:req.body.deleteProductArr}}, function(err, removeLikeProduct){
+                            Wishlist.remove({product_id:{$in:req.body.deleteProductArr}}, function(err, removeWishlistProduct){
+                                if(err == null){
+                                    req.flash('success',['Product has been deleted successfully']);
+                                    res.send({status:'success',data:['Remove Successfully.']});
+                                }else{
+                                    req.flash('errors',['Something went wronge!']);
+                                    res.send({status:'error',data:err});
+                                }
+                            });    
+                        });    
+                    });    
+                });    
+           }); 
+        });
+    }
 };

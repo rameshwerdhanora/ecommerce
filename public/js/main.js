@@ -589,3 +589,29 @@ function loadAttrValues(attrId,id)
 		processData: false
 	});
 }
+
+
+// Delete shop product by admin
+function deleteProductsFrmAdmin(){
+    var deleteProductArr = [];
+    $('.rowCheckbox:checked').each(function(){ //iterate all listed checkbox items
+        deleteProductArr.push($(this).val());
+    });
+    if(deleteProductArr.length>0){
+        var tFalse = confirm("Are you sure ?");
+        if(tFalse){
+            $.ajax({
+                type: "POST",
+                url: "/product/delete-shop-product",
+                data: { deleteProductArr:deleteProductArr },
+                dataType: 'json',
+                success: function(res){
+                    window.location.reload(true);
+                }
+            });
+        }
+    }else{
+        alert("Please select atleast one item");
+    }
+   
+}

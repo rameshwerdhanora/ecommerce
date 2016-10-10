@@ -23,13 +23,16 @@ block content
         .profile-cl
           .profile-top-row
             h2 Users
+              .btn-s-right
+                a(href='javascript:void(0);', onclick='deleteShopEmployee()')
+                    img(src='/images/delete-icon.png')
           .low-tbl-box.order-txt
             form(name='form2', method='post', action='')
               table.user-tbl(width='100%', cellspacing='0', cellpadding='0', border='0')
                 tbody
                     tr
                       th(align='center')
-                        input#checkbox2(type='checkbox', name='checkbox2')
+                        input.tableCheckbox(type='checkbox', name='checkbox2')
                       th First Name
                       th LAst Name 
                       th E-Mail Address
@@ -39,7 +42,7 @@ block content
                     each record in result
                         tr
                           td(align='center')
-                            input#checkbox4(type='checkbox', name='checkbox4')
+                            input.rowCheckbox(type='checkbox', name='employee',value='#{record._id}')
                           td #{record.first_name}
                           td #{record.last_name}
                           td #{record.email_id}

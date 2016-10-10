@@ -6,10 +6,10 @@ block content
     .large-title-row
       img(src='/images/title-icon.png', alt='icon')
       |  PRODUCTS
-    //.top-btns.clearfix
+    .top-btns.clearfix
       .btn-s-right
-        a#addPrductBtn.default-btn(href='#modal-container', title='Add Product', role='button', data-toggle='modal') ADD PRODUCT  
-        //a.default-btn(href='/product/add', title='Add Size', role='button', data-toggle='modal') ADD PRODUCT  
+        a(href='javascript:void(0);', onclick='deleteProductsFrmAdmin()')
+            img(src='/images/delete-icon.png')
     .customer-box.clearfix
       include ../partials/product_left_menu
       .profile-cl
@@ -76,7 +76,7 @@ block content
                       - i++;
                       tr(class='productTr_#{fetchAllProduct._id}')
                        td  
-                        input.rowCheckbox(type='checkbox', name='checkbox2')
+                        input.rowCheckbox(type='checkbox', name='checkbox-row', value="#{fetchAllProduct._id}")
                        td --
                        td #{brandAr[fetchAllProduct.brand_id]}
                        td

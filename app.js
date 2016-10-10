@@ -450,6 +450,7 @@ app.get('/user/shopuser_notification/:userId', passportConfig.isAuthenticated, u
 app.post('/user/shopuser_notification_update', passportConfig.isAuthenticated, userAppControlleraAdmin.shopuser_notification_update);
 app.get('/user/shopuser_account/:userId', passportConfig.isAuthenticated, userAppControlleraAdmin.shopuser_account);
 app.post('/user/shopuser_account_update', passportConfig.isAuthenticated, userAppControlleraAdmin.shopuser_account_update);
+app.post('/user/shop_delete_employee', passportConfig.isAuthenticated, userAppControlleraAdmin.shop_delete_employee);
 
 
 app.get('/user/list', passportConfig.isAuthenticated, userAppControlleraAdmin.userList);

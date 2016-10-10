@@ -23,6 +23,19 @@ block content
           .profile-top-row
             h2 ADD USERS
           .profile-form-box
+            script(type='text/javascript').
+                $(document).ready(function(n){
+                    function validatePassword(){
+                        var pass=document.getElementById("password").value;
+                        var cpass=document.getElementById("cpassword").value;
+                        if(pass != cpass)
+                        document.getElementById("cpassword").setCustomValidity("Password and confirm password does't match");
+                        else
+                        document.getElementById("cpassword").setCustomValidity('');
+                    }
+                    document.getElementById("password").onchange = validatePassword;
+                    document.getElementById("cpassword").onchange = validatePassword;
+                });
             .add-user-cl1.col-sm-6
               h4 NEW USER
               -if(user.role_id == 1 || user.role_id == 2){
@@ -54,11 +67,11 @@ block content
               .profile-frm-row
                 .profile-frm-cl1 Password
                 .profile-frm-cl2
-                  input(type='password', value='#{data ? data.password :""}', name='password', required='required')
+                  input#password(type='password', value='#{data ? data.password :""}', name='password', required='required')
               .profile-frm-row
                 .profile-frm-cl1 Confirm Password 
                 .profile-frm-cl2
-                  input(type='password', value='#{data ? data.password :""}', name='confirm_password', required='required')
+                  input#cpassword(type='password', value='#{data ? data.password :""}', name='confirm_password', required='required')
                   
               .profile-frm-row
                 .profile-frm-cl1 Address
