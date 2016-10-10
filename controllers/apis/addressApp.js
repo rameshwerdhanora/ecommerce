@@ -50,6 +50,7 @@ exports.addAddress = (req,res) => {
 
 function saveBillingAddress(req,res,addressObject)
 {
+    var type                      = (req.body.add_type == 'Billing') ? 'Shipping' : 'Billing';
     var addressInsFB              = new CustomerAddress();
     addressInsFB.user_id          = req.body.user_id;
     addressInsFB.firstname        = req.body.firstname;
@@ -62,7 +63,7 @@ function saveBillingAddress(req,res,addressObject)
     addressInsFB.postal_code      = req.body.postal_code;
     addressInsFB.country          = req.body.country;
     addressInsFB.billmode         = req.body.billmode;
-    addressInsFB.add_type         = 'Billing';
+    addressInsFB.add_type         = type;
  
     addressInsFB.save(function(error,addressBillObject)
     {
