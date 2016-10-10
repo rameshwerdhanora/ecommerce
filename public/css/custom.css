@@ -256,3 +256,18 @@ select.multiselect-item {
   border-bottom: 1px solid #ccc;
   padding-bottom: 5px;
 }
+
+.profile-frm-cl2 input[type="email"] {
+    border: 1px solid #333333;
+    color: #000;
+    font-size: 15px;
+    font-weight: 600;
+    height: 34px;
+    line-height: 34px;
+    padding: 0 10px;
+    width: 100%;
+}
+.add-user-cl1 .profile-frm-cl2 input[type="email"] {
+    height: 26px;
+    padding: 5px;
+}

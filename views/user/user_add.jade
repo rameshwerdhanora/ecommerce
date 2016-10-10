@@ -46,7 +46,7 @@ block content
               .profile-frm-row
                 .profile-frm-cl1 E-mail Address 
                 .profile-frm-cl2
-                  input(type='text', value='#{data ? data.email_id :""}', name='email_id', required='required')
+                  input(type='email', value='#{data ? data.email_id :""}', name='email_id', required='required')
               .profile-frm-row
                 .profile-frm-cl1 Contact Number 
                 .profile-frm-cl2
@@ -93,9 +93,6 @@ block content
                 .profile-frm-cl1 Cover Photo
                 .profile-frm-cl2
                   input(type='file', name='cover_image', required='required')
-                  
-                  
-              
               .profile-frm-row.botique-spc
                 .profile-frm-cl1 Boutique 
                 .profile-frm-cl2
@@ -118,13 +115,13 @@ block content
                         li
                             input(type='checkbox', name='permissions[]', value='#{getPermission.id}')
                             | #{getPermission.name}
-                            -if(getPermission.options.length > 0){
+                            -if(getPermission.options && getPermission.options.length > 0){
                                 ul.perms-sub-list
                                     each level1 in getPermission.options
                                         li
                                             input(type='checkbox', name='permissions[]', value='#{level1.id}')
                                             | #{level1.name}
-                                            -if(level1.options.length > 0){
+                                            -if(level1.options && level1.options.length > 0){
                                                 ul.perms-sub-list
                                                     each level2 in level1.options
                                                         li

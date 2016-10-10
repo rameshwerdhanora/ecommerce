@@ -460,9 +460,10 @@ exports.userSave = (req, res) => {
              if(err) {
                 return res.end("Error uploading file.");
              }
-            User.findOne({$or: [ { email_id: req.body.email_id }, { user_name: req.body.user_name}] }, function(err, existingEmail){
+             
+            User.findOne({$or: [ { email_id: req.body.email_id.trim() }, { user_name: req.body.user_name.trim()}] }, function(err, existingEmail){
                 if(existingEmail){
-                    if(existingEmail.email_id == req.body.email_id){
+                    if(existingEmail.email_id == req.body.email_id.trim()){
                         req.flash('errors', ['Email address already exists.']);
                     }else{
                         req.flash('errors', ['Username already exists.']);
@@ -495,13 +496,13 @@ exports.userSave = (req, res) => {
                         }
                     }
 
-                    userIns.shop_name   	= req.body.shop_name;
-                    userIns.user_name   	= req.body.user_name;
-                    userIns.password    	= req.body.password;
-                    userIns.email_id       	= req.body.email_id;
-                    userIns.first_name  	= req.body.first_name;
-                    userIns.last_name   	= req.body.last_name;
-                    userIns.contact_no  	= req.body.contact_no;
+                    userIns.shop_name   	= req.body.shop_name.trim();
+                    userIns.user_name   	= req.body.user_name.trim();
+                    userIns.password    	= req.body.password.trim();
+                    userIns.email_id       	= req.body.email_id.trim();
+                    userIns.first_name  	= req.body.first_name.trim();
+                    userIns.last_name   	= req.body.last_name.trim();
+                    userIns.contact_no  	= req.body.contact_no.trim();
                     userIns.dob   		= '';
                     userIns.gender   		= '';
                     userIns.bio   		= '';
@@ -513,12 +514,12 @@ exports.userSave = (req, res) => {
                     userIns.created        	= Date.now();
                     userIns.updated        	= Date.now();
 
-                    userIns.address        	= req.body.address;
-                    userIns.city        	= req.body.city;
-                    userIns.state        	= req.body.state;
-                    userIns.country        	= req.body.country;
-                    userIns.zip                 = req.body.zip;
-                    userIns.bio                 = req.body.bio;
+                    userIns.address        	= req.body.address.trim();
+                    userIns.city        	= req.body.city.trim();
+                    userIns.state        	= req.body.state.trim();
+                    userIns.country        	= req.body.country.trim();
+                    userIns.zip                 = req.body.zip.trim();
+                    userIns.bio                 = req.body.bio.trim();
 
                     userIns.shop_id = '';
                     userIns.role_id = '';
@@ -1451,14 +1452,14 @@ exports.shopuser_profile = (req, res) => {
 
 exports.shopuser_profile_update = (req, res) => {
     updateData = {
-        'first_name' 	: req.body.first_name,
-        'last_name'	: req.body.last_name,
-        'address'	: req.body.address,
-        'city'		: req.body.city,
-        'state'		: req.body.state,
-        'zip'           : req.body.zip,
-        'country'	: req.body.country,
-        'bio'           : req.body.bio
+        'first_name' 	: req.body.first_name.trim(),
+        'last_name'	: req.body.last_name.trim(),
+        'address'	: req.body.address.trim(),
+        'city'		: req.body.city.trim(),
+        'state'		: req.body.state.trim(),
+        'zip'           : req.body.zip.trim(),
+        'country'	: req.body.country.trim(),
+        'bio'           : req.body.bio.trim()
     };
     User.findByIdAndUpdate(req.body.userId,updateData, function(error, updateRes){
         if(error == null){

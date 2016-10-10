@@ -836,8 +836,10 @@ exports.removeShopProduct = (req, res) => {
                     Like.remove({product_id:{$in:req.body.deleteProductArr}}, function(err, removeLikeProduct){
                         Wishlist.remove({product_id:{$in:req.body.deleteProductArr}}, function(err, removeWishlistProduct){
                             if(err == null){
+                                req.flash('success',['Product has been deleted successfully']);
                                 res.send({status:'success',data:['Remove Successfully.']});
                             }else{
+                                req.flash('errors',['Something went wronge!']);
                                 res.send({status:'error',data:err});
                             }
                         });    
