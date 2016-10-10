@@ -339,19 +339,19 @@ exports.userList = (req, res) => {
        var skipRecordSecond = (pagesecond-1)*Constants.RECORDS_PER_PAGE;
        
        
-        User.find({role_id:6},function(error,countAllCustomers){  
+        User.find({role_id:6,is_deleted:false},function(error,countAllCustomers){  
             var totalRecord = countAllCustomers.length;
             var totalPage = Math.ceil(totalRecord/Constants.RECORDS_PER_PAGE);
-                User.find({role_id:6})
+                User.find({role_id:6,is_deleted:false})
                     .limit(Constants.RECORDS_PER_PAGE)
                     .skip(skipRecord)
                     .sort('-_id')
                     .exec(function(error,getCustomers){   
 
-                    User.find({role_id:{$in : [3,4]}},function(error,countAllUsers){
+                    User.find({role_id:{$in : [3,4]},is_deleted:false},function(error,countAllUsers){
                         var totalRecordSecond = countAllUsers.length;
                         var totalPageSecond = Math.ceil(totalRecordSecond/Constants.RECORDS_PER_PAGE);
-                        User.find({role_id:{$in : [3,4]}})
+                        User.find({role_id:{$in : [3,4]},is_deleted:false})
                             .limit(Constants.RECORDS_PER_PAGE)
                             .skip(skipRecordSecond)
                             .sort('-_id')
@@ -1701,12 +1701,15 @@ exports.updateShopProfile = (req, res) => {
 
 /* Remove Product */
 exports.removeUsersAndShop = (req, res) => {
+    updateData = {is_deleted:true};
     
-    /*User.remove({$or: [ { _id: req.body.deleteUserArr }, { shop_id: req.body.deleteUserArr}]}, function(error, removeUserId){
+    User.update({$or: [ { _id: {$in:req.body.deleteUserArr} }, { shop_id:{$in: req.body.deleteUserArr}}]},updateData, function(error, removeUserId){
         if(error == null){
+            req.flash('success',['User removed successfully!']);
             res.send({status:'success',data:['Remove Successfully.']});
         }else{
+            req.flash('errors',['Something went wronge!']);
             res.send({status:'error',data:error});
         }
-    });*/
+    });
 };
