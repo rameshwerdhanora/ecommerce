@@ -381,7 +381,7 @@ exports.postUpdateProfile = function(req,res)
 						    'enable_filter'	: req.body.enable_filter,
 						    'updated'	: Date.now()
 						};
-						UserDetails.findByIdAndUpdate(req.body.userid,updateUserDetailsData, function(error, updateExistingVals)
+						UserDetails.findByIdAndUpdate(fetchUserDetails._id,updateUserDetailsData, function(error, updateExistingVals)
   						{
   							return res.json({"status":'success',"msg":'Your details is successfully Updated.'});
   						});
