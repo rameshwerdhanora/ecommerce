@@ -53,7 +53,7 @@ exports.likeProductByUser = (req, res) => {
   			}
   			else 
   			{
-  				return res.json({"status":'success',"msg":'This Product successfully in like your list.'});
+  				return res.json({"status":'success',"msg":'This Product successfully added in your like list.'});
   			}
   		});
   		 
@@ -91,7 +91,7 @@ exports.wishListProductByUser = (req, res) => {
   			}
   			else 
   			{
-  				return res.json({"status":'success',"msg":'This Product successfully added your wishlist.'});
+  				return res.json({"status":'success',"msg":'This Product successfully added in your wishlist.'});
   			}
   		});
   		 
