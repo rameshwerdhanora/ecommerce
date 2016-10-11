@@ -11,14 +11,15 @@ const bcrypt 			= require('bcrypt-nodejs');
 const NodeMailer 		= require('nodemailer');
 const Passport 			= require('passport');
 const Multer 			= require('multer');
-const User 			= require('../../models/userApp');
-const ForgetPassword		= require('../../models/forgetPassword');
+const User 				= require('../../models/userApp');
+const ForgetPassword	= require('../../models/forgetPassword');
 const Constants 		= require('../../constants/constants');
 const UserDetails 		= require('../../models/usersDetails');
-const Brand             	= require('../../models/brand');
-const Attribute         	= require('../../models/attribute');
-const AttributeOptions  	= require('../../models/attributeOption');
-const Cart             	 	= require('../../models/cart');
+const Brand             = require('../../models/brand');
+const Attribute         = require('../../models/attribute');
+const AttributeOptions  = require('../../models/attributeOption');
+const Cart             	= require('../../models/cart');
+const Privacy           = require('../../models/privacy');
 
 
 
@@ -167,17 +168,28 @@ exports.postLoginManually = function(req,res)
 									{
 										if(fetchUserCartProducts.length > 0)
 										{
-											return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:fetchUserDetails.configDetail,counter:fetchUserCartProducts.length});
+											Privacy.findOne({user_id:checkForLogin._id},function(error,fetchPrivacy)
+											{
+												if(fetchPrivacy)
+												{
+													return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:fetchUserDetails,counter:fetchUserCartProducts.length,privacy:fetchPrivacy});
+												}
+												else 
+												{
+													return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:fetchUserDetails,counter:fetchUserCartProducts.length,privacy:''});
+												}
+											});
+											//return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:fetchUserDetails,counter:fetchUserCartProducts.length});
 										}
 										else
 										{
-											return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:'',counter:0});
+											return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:'',counter:0,privacy:''});
 										}
 									});
 								}
 								else 
 								{
-									return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:'',counter:0});
+									return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:'',counter:0,privacy:''});
 								}
 							});
 					  	}
@@ -503,17 +515,28 @@ exports.postSignupFacebook = function(req,res)
 							{
 								if(fetchUserCartProducts.length > 0)
 								{
-									return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:fetchUserDetails.configDetail,counter:fetchUserCartProducts.length});
+									Privacy.findOne({user_id:checkForLogin._id},function(error,fetchPrivacy)
+									{
+										if(fetchPrivacy)
+										{
+											return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:fetchUserDetails,counter:fetchUserCartProducts.length,privacy:fetchPrivacy});
+										}
+										else 
+										{
+											return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:fetchUserDetails,counter:fetchUserCartProducts.length,privacy:''});
+										}
+									});
+								//return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:fetchUserDetails.configDetail,counter:fetchUserCartProducts.length});
 								}
 								else
 								{
-									return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:'',counter:0});
+									return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:'',counter:0,privacy:''});
 								}
 							});
 						}
 						else 
 						{
-							return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:'',counter:0});
+							return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:'',counter:0,privacy:''});
 						}
 					});
 				}
@@ -559,17 +582,28 @@ exports.postSignupGooglePlus = function(req,res)
 							{
 								if(fetchUserCartProducts.length > 0)
 								{
-									return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:fetchUserDetails.configDetail,counter:fetchUserCartProducts.length});
+									Privacy.findOne({user_id:checkForLogin._id},function(error,fetchPrivacy)
+									{
+										if(fetchPrivacy)
+										{
+											return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:fetchUserDetails,counter:fetchUserCartProducts.length,privacy:fetchPrivacy});
+										}
+										else 
+										{
+											return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:fetchUserDetails,counter:fetchUserCartProducts.length,privacy:''});
+										}
+									});
+								//return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:fetchUserDetails.configDetail,counter:fetchUserCartProducts.length});
 								}
 								else
 								{
-									return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:'',counter:0});
+									return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:'',counter:0,privacy:''});
 								}
 							});
 						}
 						else 
 						{
-							return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:'',counter:0});
+							return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:'',counter:0,privacy:''});
 						}
 					});
 				}
