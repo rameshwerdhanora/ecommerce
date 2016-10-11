@@ -483,7 +483,7 @@ function signUpFromSocial(req,res,constants)
 				}
 				else 
 				{
-					return res.json({"status":'success',"msg":'Login Successfully.',newId:userIns._id,alluserData:userIns,configData:userDetailsIns.configDetail});
+					return res.json({"status":'success',"msg":'Login Successfully.',newId:userIns._id,alluserData:userIns,configData:userDetailsIns.configDetail,counter:0,privacy:''});
 					// SendMailToUser(req.body);
 				}
 			});
