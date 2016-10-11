@@ -1469,9 +1469,9 @@ exports.shopuser_profile_update = (req, res) => {
     };
     User.findByIdAndUpdate(req.body.userId,updateData, function(error, updateRes){
         if(error == null){
-            req.flash('errors',['Something went wronge!']);
-        }else{
             req.flash('success',['User profile saved successfully!']);
+        }else{
+            req.flash('errors',['Something went wronge!']);
         }
         res.redirect('/user/shopuser_profile/'+req.body.userId);
     });

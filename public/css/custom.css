@@ -271,3 +271,23 @@ select.multiselect-item {
     height: 26px;
     padding: 5px;
 }
+.full-row {
+    clear: both;
+}
+.errors {
+  color: red;
+  font-size: 14px;
+  padding-bottom: 15px;
+}
+.alert {
+
+  padding: 8px 15px;
+}
+
+.simply-scroll-list li img {
+   
+    margin: auto;
+}
+.vert .simply-scroll-list .view_product ul {
+    margin-left: 10px;
+}

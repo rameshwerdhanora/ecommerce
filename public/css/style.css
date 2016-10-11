@@ -713,7 +713,7 @@ header {
 	float: left;
 	font-size: 15px;
 	font-weight: 600;
-	padding-right: 12px;
+	padding-right: 9px;
 	padding-top: 8px;
 	text-align: right;
 	width: 105px;
@@ -927,7 +927,7 @@ div .first-txt .profile-frm-cl1 {
 	position: absolute;
 	top: -2px;
 	width: 390px;
-	z-index: 1;
+	z-index: 5;
 }
 .easy-sidebar li {
 	background: none;
@@ -1875,7 +1875,8 @@ label.css-label {
 	border: 1px solid #aaaaaa;
 }
 .view_product ul li img {
-	width: 100%;
+    width: 100%;
+    padding-bottom: 10px;
 }
 .product_info_details {
 	padding: 0 10px;
@@ -2502,7 +2503,7 @@ label.css-label {
 }
 .popup-wdt-2 .popup_product .profile-frm-cl1 {
 	width: 40%;
-	font-size: 13px;
+	font-size: 12px;
 }
 .popup-wdt-2 .popup_product .profile-frm-cl2 {
 	width: 60%;

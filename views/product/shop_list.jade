@@ -343,15 +343,16 @@ block content
                       input.product_desc(type='text', name='weight', value='', required='required')
                       
                   .profile-frm-row.product_select
-                    .profile-frm-cl1 DIMENSION(HxWxL) Inch
+                    .profile-frm-cl1 DIMENSION (HxWxL) Inch
                     .profile-frm-cl2
-                      input.product_desc(type='text', name='dimension', value='', required='required')
+                      input.product_desc(type='text', name='dimension', value='')
                       
                   .clr-row.slctClr#lastColorSelect
                     .color-left
                         .profile-frm-cl1 COLOR
                         .profile-frm-cl2
                           select.color(name='color[]',id='color' required='required')
+                            option(value='') Select color
                             each fetchAllColor in fetchAllColors
                               option(value='#{fetchAllColor._id}') #{fetchAllColor.color_name}
                   
@@ -527,15 +528,16 @@ block content
                           input.product_desc(type='text', name='weight', value='#{productRes.weight}', required='required')
 
                     .profile-frm-row.product_select
-                        .profile-frm-cl1 DIMENSION(HxWxL) Inch
+                        .profile-frm-cl1 DIMENSION (HxWxL) Inch
                         .profile-frm-cl2
-                          input.product_desc(type='text', name='dimension', value='#{productRes.dimension}', required='required')
+                          input.product_desc(type='text', name='dimension', value='#{productRes.dimension}')
 
                     .clr-row.slctClr#lastColorSelect
                       .color-left
                           .profile-frm-cl1 COLOR
                           .profile-frm-cl2
                             select.color#color(name='color[]', required='required')
+                                option(value='') Select color
                                 each fetchAllColor in fetchAllColors
                                     each clr in productRes.color
                                       -var tmpClrSelection = '';

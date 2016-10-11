@@ -682,6 +682,26 @@ header {
 .profile-top-row {
 	padding: 0 10px;
 }
+
+.color-right {
+    float: none;
+    padding-left: 30px;
+    text-align: center;
+    width: 100%;
+    clear: both;
+}
+
+.color-left {
+    float: none;
+    width: 100%;
+}
+.popup-wdt-2 select.chosen-select {
+    height: 80px;
+}
+.add_product .modal-body ul.up-list li{
+    width: 23%;
+}
+
 }
 
 
