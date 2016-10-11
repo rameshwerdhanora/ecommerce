@@ -7,7 +7,7 @@ const cartSchema = new mongoose.Schema({
 	quantity:{type:String,default:''},
 	size:{type:Array,default:[]},//Comma separated
 	color_id:{type:String,default:''},
-	appliedcoupon:{type:String,default:''},
+	appliedcoupon:{type:String,default:'no'},
 	created:{type:Date,default:Date},
 	updated:{type:Date,default:Date}
 });
