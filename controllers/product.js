@@ -436,6 +436,8 @@ exports.saveProduct = (req, res) => {
                 productIns.dis_type = req.body.add_dis_type;
                 productIns.dis_amount = req.body.add_dis_amount;
                 productIns.shop_id = req.user.shop_id;
+                productIns.dimension = req.body.dimension;
+                productIns.weight = req.body.weight;
 
 
 
@@ -529,7 +531,9 @@ exports.updateProduct = (req, res) => {
                     'gender'            : req.body.gender,
                     'dis_name'          : req.body.edit_dis_name,
                     'dis_type'          : req.body.edit_dis_type,
-                    'dis_amount'        : req.body.edit_dis_amount
+                    'dis_amount'        : req.body.edit_dis_amount,
+                    'dimension'         : req.body.dimension,
+                    'weight'            : req.body.weight,
                 };
 
                 Product.findByIdAndUpdate(req.body.productId,updateProductData, function(error, updateProductRes){

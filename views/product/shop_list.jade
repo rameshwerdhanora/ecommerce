@@ -337,6 +337,16 @@ block content
                     .profile-frm-cl2
                       input.product_desc(type='text', name='price', value='', required='required')
                       
+                  .profile-frm-row.product_select
+                    .profile-frm-cl1 WEIGHT(LBS)
+                    .profile-frm-cl2
+                      input.product_desc(type='text', name='weight', value='', required='required')
+                      
+                  .profile-frm-row.product_select
+                    .profile-frm-cl1 DIMENSION(HxWxL) Inch
+                    .profile-frm-cl2
+                      input.product_desc(type='text', name='dimension', value='', required='required')
+                      
                   .clr-row.slctClr#lastColorSelect
                     .color-left
                         .profile-frm-cl1 COLOR
@@ -510,7 +520,16 @@ block content
                       .profile-frm-cl1 PRICE
                       .profile-frm-cl2
                         input.product_desc(type='text', name='price', value='#{productRes.price}', required='required')
+                        
+                    .profile-frm-row.product_select
+                        .profile-frm-cl1 WEIGHT(LBS)
+                        .profile-frm-cl2
+                          input.product_desc(type='text', name='weight', value='#{productRes.weight}', required='required')
 
+                    .profile-frm-row.product_select
+                        .profile-frm-cl1 DIMENSION(HxWxL) Inch
+                        .profile-frm-cl2
+                          input.product_desc(type='text', name='dimension', value='#{productRes.dimension}', required='required')
 
                     .clr-row.slctClr#lastColorSelect
                       .color-left
