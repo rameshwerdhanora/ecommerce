@@ -182,6 +182,7 @@ exports.addTocart = (req,res) => {
         cartModel.product_id =  req.body.product_id;
         cartModel.brand_id = req.body.brand_id; // We will pass brand_id too
         cartModel.quantity= req.body.quantity;
+	cartModel.appliedcoupon = req.body.appliedcoupon;
         // var quamaSepSize = '';
         // var size = req.body.size;
         // for(var i = 0; i<size.length;i++){
