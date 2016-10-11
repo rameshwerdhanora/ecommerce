@@ -899,6 +899,11 @@ exports.BrandDetailView = (req, res) => {
   { 
     if(fetchAllBrands)
     {
+      var updateData = {
+        brand_view : parseInt(fetchAllBrands.brand_view) + parseInt(1)
+      }
+      Brand.findByIdAndUpdate({_id:req.params.brandId},updateData,function(error,updateRes){}); 	
+	    
       var filterObj                 = {};
       var image                     = [];
       filterObj._id                 = fetchAllBrands._id;
