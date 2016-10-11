@@ -248,7 +248,7 @@ exports.postForgetPassword = function(req,res)
 			{
 				forgetPasswordIns	 			= new ForgetPassword();
 				forgetPasswordIns.email 		= req.body.email;
-				forgetPasswordIns.send_token 	= new Buffer.from(req.body).toString('base64');
+				//forgetPasswordIns.send_token 	= new Buffer.from(req.body).toString('base64');
 				forgetPasswordIns.send_time		= Date.now();
 				// SendMailToUser(req.body);
 				// For Decode 
