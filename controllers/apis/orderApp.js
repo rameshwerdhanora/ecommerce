@@ -284,8 +284,8 @@ exports.detailsOfSelectedOrder = (req,res) => {
         	orderData.status			= fetchOrdersDetails.status;
         	orderData.billing_address	= fetchOrdersDetails.billing_address;
         	orderData.payment_details	= fetchOrdersDetails.payment_details;
-        	orderData.order_date		= dateFormat(parseInt(OrderRes.order_date),'mm/dd/yyyy');;
-        	orderData.expected_date		= dateFormat(parseInt(OrderRes.order_date),'mm/dd/yyyy');;
+        	orderData.order_date		= dateFormat(parseInt(fetchOrdersDetails.order_date),'mm/dd/yyyy');;
+        	orderData.expected_date		= dateFormat(parseInt(fetchOrdersDetails.order_date),'mm/dd/yyyy');;
 
         	OrderDetails.find({order_id:fetchOrdersDetails._id},function(error,fetchOrdersProductDetails)
         	{
