@@ -5,7 +5,7 @@ const brandSchema = new mongoose.Schema({
 	brand_cover : {type:String,default:''},
 	brand_logo : {type:String,default:''},
 	brand_desc : {type:String,default:''},
-	brand_view  :{type:String,default:'1'}
+	brand_view  :{type:String,default:'1'},
 	user_id : {type:String,default:''}
 });
 
