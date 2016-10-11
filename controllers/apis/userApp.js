@@ -248,7 +248,7 @@ exports.postForgetPassword = function(req,res)
 			{
 				forgetPasswordIns	 			= new ForgetPassword();
 				forgetPasswordIns.email 		= req.body.email;
-				//forgetPasswordIns.send_token 	= new Buffer.from(req.body).toString('base64');
+				//forgetPasswordIns.send_token 	= new Buffer.from(req.body).toString('base64'); 
 				forgetPasswordIns.send_time		= Date.now();
 				// SendMailToUser(req.body);
 				// For Decode 
@@ -483,7 +483,7 @@ function signUpFromSocial(req,res,constants)
 				}
 				else 
 				{
-					return res.json({"status":'success',"msg":'Login Successfully.',newId:userIns._id,alluserData:userIns,configData:userDetailsIns.configDetail,counter:0,privacy:''});
+					return res.json({"status":'success',"msg":'Login Successfully.',newId:userIns._id,alluserData:userIns,configData:userDetailsIns,counter:0,privacy:''});
 					// SendMailToUser(req.body);
 				}
 			});
@@ -511,32 +511,32 @@ exports.postSignupFacebook = function(req,res)
 					{
 						if(fetchUserDetails)
 						{
-							Cart.find({user_id:checkForLogin._id},function(error,fetchUserCartProducts)
+							Cart.find({user_id:tokenExist._id},function(error,fetchUserCartProducts)
 							{
 								if(fetchUserCartProducts.length > 0)
 								{
-									Privacy.findOne({user_id:checkForLogin._id},function(error,fetchPrivacy)
+									Privacy.findOne({user_id:tokenExist._id},function(error,fetchPrivacy)
 									{
 										if(fetchPrivacy)
 										{
-											return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:fetchUserDetails,counter:fetchUserCartProducts.length,privacy:fetchPrivacy});
+											return res.json({"status":'success',"msg":'Successfully login.',user_id:tokenExist._id,alluserData:tokenExist,configData:fetchUserDetails,counter:fetchUserCartProducts.length,privacy:fetchPrivacy});
 										}
 										else 
 										{
-											return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:fetchUserDetails,counter:fetchUserCartProducts.length,privacy:''});
+											return res.json({"status":'success',"msg":'Successfully login.',user_id:tokenExist._id,alluserData:tokenExist,configData:fetchUserDetails,counter:fetchUserCartProducts.length,privacy:''});
 										}
 									});
 								//return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:fetchUserDetails.configDetail,counter:fetchUserCartProducts.length});
 								}
 								else
 								{
-									return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:'',counter:0,privacy:''});
+									return res.json({"status":'success',"msg":'Successfully login.',user_id:tokenExist._id,alluserData:tokenExist,configData:'',counter:0,privacy:''});
 								}
 							});
 						}
 						else 
 						{
-							return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:'',counter:0,privacy:''});
+							return res.json({"status":'success',"msg":'Successfully login.',user_id:tokenExist._id,alluserData:tokenExist,configData:'',counter:0,privacy:''});
 						}
 					});
 				}
@@ -578,32 +578,32 @@ exports.postSignupGooglePlus = function(req,res)
 					{
 						if(fetchUserDetails)
 						{
-							Cart.find({user_id:checkForLogin._id},function(error,fetchUserCartProducts)
+							Cart.find({user_id:tokenExist._id},function(error,fetchUserCartProducts)
 							{
 								if(fetchUserCartProducts.length > 0)
 								{
-									Privacy.findOne({user_id:checkForLogin._id},function(error,fetchPrivacy)
+									Privacy.findOne({user_id:tokenExist._id},function(error,fetchPrivacy)
 									{
 										if(fetchPrivacy)
 										{
-											return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:fetchUserDetails,counter:fetchUserCartProducts.length,privacy:fetchPrivacy});
+											return res.json({"status":'success',"msg":'Successfully login.',user_id:tokenExist._id,alluserData:tokenExist,configData:fetchUserDetails,counter:fetchUserCartProducts.length,privacy:fetchPrivacy});
 										}
 										else 
 										{
-											return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:fetchUserDetails,counter:fetchUserCartProducts.length,privacy:''});
+											return res.json({"status":'success',"msg":'Successfully login.',user_id:tokenExist._id,alluserData:tokenExist,configData:fetchUserDetails,counter:fetchUserCartProducts.length,privacy:''});
 										}
 									});
 								//return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:fetchUserDetails.configDetail,counter:fetchUserCartProducts.length});
 								}
 								else
 								{
-									return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:'',counter:0,privacy:''});
+									return res.json({"status":'success',"msg":'Successfully login.',user_id:tokenExist._id,alluserData:tokenExist,configData:'',counter:0,privacy:''});
 								}
 							});
 						}
 						else 
 						{
-							return res.json({"status":'success',"msg":'Successfully login.',user_id:checkForLogin._id,alluserData:checkForLogin,configData:'',counter:0,privacy:''});
+							return res.json({"status":'success',"msg":'Successfully login.',user_id:tokenExist._id,alluserData:tokenExist,configData:'',counter:0,privacy:''});
 						}
 					});
 				}
