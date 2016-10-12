@@ -30,14 +30,18 @@ exports.postLogin = (req, res, next) => {
   const errors = req.validationErrors();
 
   if (errors) {
-    req.flash('errors', errors);
+    var er = new Array();
+    for(var i = 0;i<errors.length;i++){
+         er.push(errors[i].msg);
+    }
+    req.flash('errors', er);
     return res.redirect('/login');
   }
 
   passport.authenticate('local', (err, user, info) => {
     if (err) { return next(err); }
     if (!user) {
-      req.flash('errors', info);
+      req.flash('errors', [info.msg]);
       return res.redirect('/login');
     }
     req.logIn(user, (err) => {
