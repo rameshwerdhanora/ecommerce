@@ -232,9 +232,10 @@ exports.test = (req, res) => {
     ab.order_id = '57e90f27b250698e3140729c';
     ab.order_detail_id = '57e90f28b250698e314072a2';
     ab.rating = '2';
+    ab.createAt = new Date();
     ab.comment = 'Yes this product is very nice i am very happy for it';
-    ab.save(function(error,res){
-       res.send({message:'googd',id:ab._id}); 
+    ab.save(function(error,ress){
+        res.send({ status:'success',data:ab._id  });
     });
 };
 exports.test1 = (req, res) => {
