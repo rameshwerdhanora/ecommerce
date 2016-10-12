@@ -226,35 +226,16 @@ exports.update = (req,res) => {
 }
 
 exports.test = (req, res) => {
-    var paypal = require('paypal-rest-sdk');
-    paypal.configure({
-        'mode': 'sandbox', //sandbox or live
-        'client_id': 'AUQMq6AmlUtFQcoefUeYXWoDzRlUJ76XCEGJAX-0kF9yd9vtXZ__cltHnTnAN9I79C4eM9do-xTmxCZO',
-        'client_secret': 'EF_YGSwJZGkIeBM3HytaN5tWc7qeyjwh7poaRN9Y-pwCnYJrTkYqf8eujuJPQ_7RI7rgqH-KR8xUpi0j'
+    const ProductReview = require('../models/productReview');
+    var ab = new ProductReview();
+    ab.user_id = '57e38e9729a99a654bde9398';
+    ab.order_id = '57e90f27b250698e3140729c';
+    ab.order_detail_id = '57e90f28b250698e314072a2';
+    ab.rating = '2';
+    ab.comment = 'Yes this product is very nice i am very happy for it';
+    ab.save(function(error,res){
+       res.send({message:'googd',id:ab._id}); 
     });
-    
-    var card_data = {
-        "type": "visa",
-        //"number": "4111111111111111",
-        "number": "4311198990428292",
-        
-        "expire_month": "03",
-        "expire_year": "2021",
-        "cvv2": "123",
-        "first_name": "Joe",
-        "last_name": "Shopper"
-      };
-
-      paypal.creditCard.create(card_data, function(error, credit_card){
-        if (error) {
-          console.log(error);
-          throw error;
-        } else {
-          console.log("Create Credit-Card Response");
-          console.log(credit_card);
-          res.send(JSON.stringify(credit_card));
-        }
-      });
 };
 exports.test1 = (req, res) => {
     var paypal = require('paypal-rest-sdk');
