@@ -1007,8 +1007,32 @@ exports.productPreview = (req, res) => {
         User.findOne({_id:custId},function(error,getCustomerDetails){
             if(error == null){
                 if(getCustomerDetails){
-                    ProductReview.find({user_id:custId},function(error,rewRes){
-                        res.render('user/productPreview', { title: 'Product review',getCustomerDetails:getCustomerDetails,activeClass:5,left_activeClass:4 });
+                    ProductReview.find({user_id:custId},function(error,reviewRes){
+                        var finalRs = [];
+                        var reviewProductIds = [];
+                        if(reviewRes && reviewRes.length){
+                            for(var i=0;i < reviewRes.length;i++){
+                                var tmpVr = {};
+                                tmpVr.id = reviewRes[i]._id;
+                                tmpVr.comment = reviewRes[i].comment;
+                                tmpVr.rating = reviewRes[i].rating;
+                                tmpVr.order_detail_id = reviewRes[i].order_detail_id;
+                                finalRs.push(tmpVr);
+                                reviewProductIds.push(String(reviewRes[i].order_detail_id));
+                            }
+                        }
+                        OrderDetails.find({_id:{$in:reviewProductIds}},function(error,orderDetailRes){
+                            if(orderDetailRes && orderDetailRes.length > 0){
+                                for(var i=0;i < orderDetailRes.length;i++){
+                                    if(reviewProductIds.indexOf(String(orderDetailRes[i]._id)) != -1){
+                                        var ind = reviewProductIds.indexOf(String(orderDetailRes[i]._id));
+                                        finalRs[ind].productDetail  = orderDetailRes[i];
+                                    }
+                                }
+                            }
+                            console.log(finalRs);
+                            res.render('user/productPreview', { title: 'Product review',getCustomerDetails:getCustomerDetails,activeClass:5,left_activeClass:4,result:finalRs });
+                        });
                     });
                     
                 }
