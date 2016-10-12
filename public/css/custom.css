@@ -292,6 +292,6 @@ select.multiselect-item {
     margin-left: 10px;
 }
  
- input {
+ input, textarea, select {
     border-radius: 0;
 }

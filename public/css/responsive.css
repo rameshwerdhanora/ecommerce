@@ -7,10 +7,11 @@
 }
 }
  @media screen and (max-width:1250px) {
-     .add-user-cl1 .profile-frm-cl2 input[type="text"]{
+     .add-user-cl1 .profile-frm-cl2 input[type="text"], .add-user-cl1 .profile-frm-cl2 input[type="password"], .add-user-cl1 .profile-frm-cl2 input[type="email"]{
    height:30px;
    line-height:24px;
   }
+
 .top-btns {
 	padding-left: 31%;
 	width: 100%;
