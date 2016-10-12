@@ -205,7 +205,12 @@ exports.listofAllFeaturedProd = (req, res) => {
   Product.find({is_featured:'1'},function(error,fetchallFeatProds)
   {
     var temp = []; 
-     
+    var userArr = [];
+    
+    UsersDetails.find({user_id:req.params.userId},function(err,userRes){
+       userArr.push(userRes[0]);        
+     })
+
     async.eachSeries(fetchallFeatProds, function(ProductId, callback)
     {
         var pArr              = {};
@@ -214,7 +219,6 @@ exports.listofAllFeaturedProd = (req, res) => {
         pArr.sku              = ProductId.sku;
         pArr.description      = ProductId.description;
         pArr.price            = ProductId.price;
-
 
         /* Use asyn Parallel method for waiting those functions value */
         async.parallel
@@ -249,7 +253,7 @@ exports.listofAllFeaturedProd = (req, res) => {
                    pArr.wishlist = wishlist;
                    callback(err); //Forgot to add
                 });
-              },
+              } 
           ], 
           function(err)
           {
@@ -261,7 +265,7 @@ exports.listofAllFeaturedProd = (req, res) => {
       function(err)
       {
         // console.log(temp); //This should give you desired result
-        return res.json({"status":'success',"msg":'Fetch all products.',productslist:temp});
+        return res.json({"status":'success',"msg":'Fetch all products.',productslist:temp,userDetails:userArr});
       });
   });  
 }; 

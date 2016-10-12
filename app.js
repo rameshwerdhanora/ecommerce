@@ -293,8 +293,6 @@ app.post('/api/search/advancedsearch',searchAppController.advanceSearch);
 //app.post('/api/search/searchbrand',searchAppController.searchBrand);
 
 
-
-
 /* Color CRUD Section */ // Need isAuthenticated code for check user is loggedin.
 app.get('/color/list/:colorId?', passportConfig.isAuthenticated,  colorController.listOfColor);
 //app.get('/color/add',  colorController.addColor);
