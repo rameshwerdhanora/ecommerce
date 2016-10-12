@@ -14,6 +14,7 @@ const OrderDetails  = require('../../models/orderDetails');
 const Product  		= require('../../models/product');
 const Tag 			= require('../../models/tag');
 const productHashTag	= require('../../models/productHashtag');
+const ProductImage      = require('../../models/productsImages');
 
 /**
  * POST /api/search/advancedsearch
@@ -42,7 +43,9 @@ exports.advanceSearch =  function(req,res)
 	}
 }
 
-
+/**
+ *  Process for search people.
+ */
 
 function searchUsers(req,res)
 {
@@ -86,6 +89,11 @@ function searchUsers(req,res)
   	}
 
 }
+
+
+/**
+ *  Process for search brands.
+ */
 
 function searchBrands(req,res)
 {
@@ -150,6 +158,10 @@ function searchBrands(req,res)
 
 }
 
+/**
+ *  Process for search hashtags.
+ */
+
 function searchHashtags(req,res)
 {	
 	if(req.body.device_token !== '')
@@ -161,6 +173,7 @@ function searchHashtags(req,res)
   			{
   				var hashTagDatafinalObj = {};	
   				var hashTagDataArr = [];
+  				var hashTagTSDataArr = [];
   				async.eachSeries(fetchHashtags, function(HashTagData, callback)
   				{
   					async.parallel
@@ -171,6 +184,7 @@ function searchHashtags(req,res)
 		  						productHashTag.count({hashtag_id:HashTagData._id},function(error,hasttagCount)
 			  					{
 			  						var hashtagTredObj 		= {};
+			  						hashtagTredObj._id 		= HashTagData._id;
 			  						hashtagTredObj.name 	= HashTagData.name;
 			  						hashtagTredObj.count 	= hasttagCount;
 			  						hashTagDataArr.push(hashtagTredObj);
@@ -181,21 +195,35 @@ function searchHashtags(req,res)
 		  					{
 		  						productHashTag.find({hashtag_id:HashTagData._id},function(error,hasttagTopSealer)
 			  					{
+			  						var newArr = [];
+			  						var hashtagTredObj 		= {};
 			  						async.eachSeries(hasttagTopSealer, function(hasttagTopSealerData, callback)
-  									{
-  										OrderDetails.count({_id:hasttagTopSealerData.product_id},function(error,productCount)
+  									{	
+  										OrderDetails.count({product_id:hasttagTopSealerData.product_id},function(error,productCount)
   										{
-  											console.log(productCount);
-  										})
+  											if(productCount > 0)
+  											{												
+  												hashtagTredObj.name 	= HashTagData.name;
+  											}
+  											callback(error);
+  										});
+  										
+  									},
+  									function(error)
+  									{
+  										if(hashtagTredObj.name != undefined)
+  										{
+  											hashTagTSDataArr.push(hashtagTredObj);
+  										}
+  										callback(error);
   									});
-			  						console.log(hasttagTopSealer);
-			  						callback(error);
-			  					}).count();
+			  					});
 		  					}
   						],
 	  					function(error)
 	  					{
 	  						hashTagDatafinalObj.trending = hashTagDataArr;
+	  						hashTagDatafinalObj.topseller = hashTagTSDataArr;
 	  						callback();
 	  					}
   					);
@@ -204,18 +232,12 @@ function searchHashtags(req,res)
   				{
   					return res.json({"status":'success',"msg":'found hashtag.',hashtag:hashTagDatafinalObj});
   				})
-
-  				//hashTagDatafinalObj.trending = fetchHashtags;
-
-
   			}
   			else 
   			{
   				return res.json({"status":'error',"msg":'Unable to found any hashtag according to your search.'});
   			}
   		});
-
-  		//return res.json({"status":'success',"msg":'Working in progress.'});
   	}
 	else 
   	{
@@ -223,11 +245,60 @@ function searchHashtags(req,res)
   	}
 }
 
+/**
+ *  Process for search goods.
+ */
+
 function searchGoods(req,res)
 {
 	if(req.body.device_token !== '')
   	{
-  		return res.json({"status":'success',"msg":'Working in progress.'});
+  		var productSearch = req.body.search;
+  		Product.find({name : { $regex : productSearch }},function(error,fetchSearchProducts)
+  		{
+  			 
+  			var finalProductObj = {};
+			var finalProductArr = [];
+			var productDataArr = [];  
+
+  			async.eachSeries(fetchSearchProducts, function(ProductData, callback)
+  			{
+  				var productDataObj 		= {};  
+  				productDataObj._id 		= ProductData._id;
+  				productDataObj.name 	= ProductData.name;
+  				productDataObj.sku 		= ProductData.sku;
+  				productDataObj.price 	= ProductData.price;
+  				productDataObj.description = ProductData.description;
+  				async.parallel
+  				(
+  					[
+  						function(callback)
+  						{
+  							ProductImage.findOne({product_id:ProductData._id},function(error,productImage)
+  							{
+  								if(productImage)
+  								{
+  									productDataObj.image = productImage.thumb_image_1;
+  								}
+  								//console.log(productCount);
+  							})
+  							callback()
+  						}
+  					],
+  					function(error)
+  					{
+  						productDataArr.push(productDataObj);
+  						console.log(productDataArr);
+  						callback(error);
+  					}
+  				)
+
+  			},
+  			function(error){
+
+  			});
+  		}).limit(6).sort("-productview");
+  		//return res.json({"status":'success',"msg":'Working in progress.'});
   	}
 	else 
   	{
