@@ -1,7 +1,7 @@
 /*
 	@author : Cis Team
-	@date : 10-Aug-2016
-	@File : Create User from Application
+	@date : 12-Oct-2016
+	@File : Advanced Search Application
 
 */
 
@@ -140,7 +140,7 @@ function searchBrands(req,res)
 				},
 				function(error)
 				{	
-					brandDatafinalObj.top_seller = brandDataArr;
+					brandDatafinalObj.topseller = brandDataArr;
 					return res.json({"status":'success',"msg":'found brand list.',userdata:brandDatafinalObj});
 				});
   			}
@@ -237,7 +237,7 @@ function searchHashtags(req,res)
   			{
   				return res.json({"status":'error',"msg":'Unable to found any hashtag according to your search.'});
   			}
-  		});
+  		}).limit('6');
   	}
 	else 
   	{
@@ -260,15 +260,19 @@ function searchGoods(req,res)
   			var finalProductObj = {};
 			var finalProductArr = [];
 			var productDataArr = [];  
+			var productDataTSArr = [];  
 
   			async.eachSeries(fetchSearchProducts, function(ProductData, callback)
   			{
-  				var productDataObj 		= {};  
+  				var productDataObj 		= {}; 
+  				var productDataTSObj 		= {};   
+
   				productDataObj._id 		= ProductData._id;
   				productDataObj.name 	= ProductData.name;
   				productDataObj.sku 		= ProductData.sku;
   				productDataObj.price 	= ProductData.price;
   				productDataObj.description = ProductData.description;
+  				productDataObj.productview = ProductData.productview;
   				async.parallel
   				(
   					[
@@ -279,26 +283,55 @@ function searchGoods(req,res)
   								if(productImage)
   								{
   									productDataObj.image = productImage.thumb_image_1;
+  									callback()
   								}
-  								//console.log(productCount);
   							})
-  							callback()
+  						},
+  						function(callback)
+  						{
+  							OrderDetails.count({product_id:ProductData._id},function(error,productCount)
+  							{
+  								if(productCount > 0)
+  								{
+  									productDataTSObj._id 		= ProductData._id;
+					  				productDataTSObj.name 		= ProductData.name;
+					  				productDataTSObj.sku 		= ProductData.sku;
+					  				productDataTSObj.price 		= ProductData.price;
+					  				productDataTSObj.description = ProductData.description;
+					  				productDataTSObj.productcount = productCount;
+					  				ProductImage.findOne({product_id:ProductData._id},function(error,productImage)
+		  							{
+		  								if(productImage)
+		  								{
+		  									productDataTSObj.image = productImage.thumb_image_1;
+		  									//callback()
+		  								}
+		  							})
+  									//productDataObj.image = productImage.thumb_image_1;
+  								}
+  								callback()
+  							});
   						}
   					],
   					function(error)
   					{
   						productDataArr.push(productDataObj);
-  						console.log(productDataArr);
+  						if(productDataTSObj.name != undefined)
+  						{
+  							productDataTSArr.push(productDataTSObj);
+  						}
+  						finalProductObj.trending = productDataArr; 
+  						finalProductObj.topseller = productDataTSArr; 
   						callback(error);
   					}
   				)
 
   			},
   			function(error){
-
+  				return res.json({"status":'success',"msg":'Working in progress.',productData:finalProductObj});
   			});
-  		}).limit(6).sort("-productview");
-  		//return res.json({"status":'success',"msg":'Working in progress.'});
+  		}).limit('6').sort("-productview");
+  		
   	}
 	else 
   	{
