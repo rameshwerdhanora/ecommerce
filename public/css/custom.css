@@ -47,8 +47,8 @@
     width: 100%;
 }
 
-.midlle-bar{
-min-height:900px;
+.midlle-bar {
+    min-height: 1050px;
 }
 
 .product_table .product_table_img ul.small_thumb img{
@@ -292,3 +292,6 @@ select.multiselect-item {
     margin-left: 10px;
 }
  
+ input {
+    border-radius: 0;
+}

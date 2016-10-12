@@ -834,6 +834,7 @@ div .first-txt .profile-frm-cl1 {
 	right: 0;
 	top: 50%;
 	transform: translateY(-50%);
+        -webkit-transform: translateY(-50%);
 	width: 94%;
 }
 .login-title-row {
