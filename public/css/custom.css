@@ -292,8 +292,3 @@ select.multiselect-item {
     margin-left: 10px;
 }
  
-.loign-body {
-    min-height: 100%;
-    background: url(../images/login-bg.jpg) no-repeat center fixed;
-    background-size: cover;
-}

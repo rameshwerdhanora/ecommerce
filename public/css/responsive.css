@@ -32,7 +32,9 @@
 	right: 5px;
 }
 .loign-body {
-	background-size: auto;
+	/*background-size: auto;*/
+         background: url(../images/login-bg.jpg) no-repeat center fixed;
+    background-size: cover;
 }
 .left-sidebar {
 	width: 25%;
