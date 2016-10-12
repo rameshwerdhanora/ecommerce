@@ -10,6 +10,7 @@ const EmailTemplate = require('../models/emailTemplate');
 const CommonHelper = require('../helpers/commonHelper');
 const Order           = require('../models/orders');
 const OrderDetails    = require('../models/orderDetails');
+const ProductReview    = require('../models/productreview');
 const Constants 		= require('../constants/constants');
 const Multer 	= require('multer');
 
@@ -999,6 +1000,7 @@ exports.accounts = (req, res) => {
 exports.productPreview = (req, res) => {
     User.findOne({_id:req.params.customerId},function(error,getCustomerDetails){
         if(getCustomerDetails){
+            
             res.render('user/productPreview', { title: 'Product review',getCustomerDetails:getCustomerDetails,activeClass:5,left_activeClass:4 });
         }
     });
