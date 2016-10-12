@@ -525,6 +525,13 @@ exports.productDetailView = (req, res) => {
     var productArray = {};
     if(fetchAProductDetails)
     {
+     
+      var updateData = {
+        productview : parseInt(fetchAProductDetails.productview) + parseInt(1)
+      }
+      Product.findByIdAndUpdate({_id:req.params.productId},updateData,function(error,updateRes){});  
+
+	    
       productArray._id           = fetchAProductDetails._id;
       productArray.name          = fetchAProductDetails.name;
       productArray.sku           = fetchAProductDetails.sku;
