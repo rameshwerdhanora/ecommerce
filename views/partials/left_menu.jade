@@ -174,19 +174,14 @@
                 li
                   a(href='/user/shop_notification') Notifications  
               -}
-              
               -if(((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57c052f343592d87b0e6f618') != -1)){
-                    // || ((user.role_id == 6) && user.userPermissions.indexOf('57eccb35eb288f36067b23c6') != -1
                 -if(((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57f624afed308fb31f7b23c6') != -1)){
-                        // || ((user.role_id == 6) && user.userPermissions.indexOf('57ecd49deb288f521a7b23c8') != -1)
                       li
                         span.sub-title USERS
                       -if(((user.role_id == 3 || user.role_id == 4) && user.userPermissions.indexOf('57f624cbed308f69097b23c6') != -1)){
-                            // || ((user.role_id == 6) && user.userPermissions.indexOf('57ecd4a5eb288f37067b23c8') != -1)
                           li
                             a(href='/user/shop_user_list') Manage Users
                       -}
-                      
                       -if(user.userPermissions.indexOf('57f624d3ed308fea1f7b23c6') != -1){
                           li
                             a(href='/user/add') Add User     
