@@ -70,6 +70,7 @@ exports.saveUserFinalOrder = (req,res) => {
 		                            			if(fetchProductDataForCart)
 		                            			{
 		                            				finalCartObj.product 		= fetchProductDataForCart;
+		                            				finalCartObj.product_id 	= CartRes.product_id;
 		                            				finalCartObj.real_price 	= parseInt(fetchProductDataForCart.price);
 		                            				finalCartObj.price_quan		= parseInt(fetchProductDataForCart.price) * CartRes.quantity;
 		                            				finalCartObj.quantity		= CartRes.quantity;
@@ -167,6 +168,7 @@ exports.saveUserFinalOrder = (req,res) => {
 		                            	orderDetailsIns.brand_id 	= finalCartObj.brand_id;
 										orderDetailsIns.user_id 	= req.body.user_id;
 		                            	orderDetailsIns.shop_id 	= finalCartObj.shop_id;
+		                            	orderDetailsIns.product_id 	= finalCartObj.product_id;
 		                            	orderDetailsIns.index 		= 'product';
 		                            	orderDetailsIns.data 		= finalCartObj;
 		                            	orderDetailsIns.save(function(error,saveOrderDetails){})

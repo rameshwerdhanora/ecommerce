@@ -161,7 +161,6 @@ function searchHashtags(req,res)
   			{
   				var hashTagDatafinalObj = {};	
   				var hashTagDataArr = [];
-  				console.log(fetchHashtags);
   				async.eachSeries(fetchHashtags, function(HashTagData, callback)
   				{
   					async.parallel
@@ -180,7 +179,18 @@ function searchHashtags(req,res)
 		  					},
 		  					function(callback)
 		  					{
-		  						
+		  						productHashTag.find({hashtag_id:HashTagData._id},function(error,hasttagTopSealer)
+			  					{
+			  						async.eachSeries(hasttagTopSealer, function(hasttagTopSealerData, callback)
+  									{
+  										OrderDetails.count({_id:hasttagTopSealerData.product_id},function(error,productCount)
+  										{
+  											console.log(productCount);
+  										})
+  									});
+			  						console.log(hasttagTopSealer);
+			  						callback(error);
+			  					}).count();
 		  					}
   						],
 	  					function(error)

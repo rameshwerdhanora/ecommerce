@@ -6,6 +6,7 @@ const orderDetailsSchema = new mongoose.Schema({
 	brand_id:{type:String,default:''},
 	user_id:{type:String,default:''},
 	shop_id:{type:String,default:''},
+	product_id:{type:String,default:''},
 	data : {type:Array,default:[]} 
 });
 
