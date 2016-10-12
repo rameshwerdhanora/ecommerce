@@ -1,0 +1,76 @@
+header
+  #content.container
+    .logo
+      a(href='/')
+        img(src='/images/logo.png', alt='icon')
+    .top-left
+      .top-l-1
+        a(href='#')
+          img(src='/images/nav-icon.png', alt='icon')
+      .top-search
+        form(name='searchform', method='post', action='/search')
+          button(type='submit')
+            img(src='/images/search-icon.png', alt='icon')
+          input#textfield(type='text', name='search', placeholder='SEARCH')
+    .top-right
+      ul
+        li.dropdown
+        
+          a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
+            img(src='/images/user-icon.png', alt='icon')
+          ul.dropdown-menu.my-account-box
+            li.profile-img
+              //a(href='#')
+                span.my-name  
+                span.my-photo
+                  img(src='/images/noPhoto2.png', alt='img')
+            
+            li
+                a(href='/user/shopprofile')
+                    i.fa.fa-edit
+                    |  My Profile
+            
+                    
+            
+            li
+              a(href='/logout')
+                i.fa.fa-arrow-left
+                |  Sign Out
+        li.dropdown
+          a.fr-main-link.dropdown-toggle(aria-expanded='false', aria-haspopup='true', role='button', data-toggle='dropdown', href='#')
+            img(src='/images/notifaction-icon.png', alt='icon')
+          span.noti-itme 5
+          .dropdown-menu.my-account-box.notifation
+            h2.noti-tital Notifications
+            ul.user-list
+              li
+                .u-list-l
+                  a(href='#')
+                    img(src='/images/img-1.png', alt='img')
+                .u-list-m
+                  span.time-us-l  11:17am 
+                  h4 Ash Arn
+                  p Saw the writing under one...
+              
+              li
+                .u-list-l
+                  a(href='#')
+                    img(src='/images/img-1.png', alt='img')
+                .u-list-m
+                  span.time-us-l  11:17am 
+                  h4 Geno Roefaro
+                  p Saw the writing under one...
+              .user-list
+              li
+                .u-list-l
+                  a(href='#')
+                    img(src='/images/img-1.png', alt='img')
+                .u-list-m
+                  span.time-us-l  11:17am 
+                  h4 Geno Roefaro
+                  p Saw the writing under one...
+              li.all-view
+                span
+                  a(href='#') View All > 
+              // header end
+
