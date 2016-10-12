@@ -351,13 +351,17 @@ exports.getForgot = (req, res) => {
  * Create a random token, then the send user an email with a reset link.
  */
 exports.postForgot = (req, res, next) => {
-  req.assert('email', 'Please enter a valid email address.').isEmail();
-  req.sanitize('email').normalizeEmail({ remove_dots: false });
-
-  const errors = req.validationErrors();
+    //req.assert('email', 'Please enter a email address.').notEmpty();
+    req.assert('email', 'Please enter a valid email address.').isEmail();
+    req.sanitize('email').normalizeEmail({ remove_dots: false });
+    const errors = req.validationErrors();
 
   if (errors) {
-    req.flash('errors', errors);
+    var er = new Array();
+    for(var i = 0; i < errors.length;i++){
+        er.push(errors[i].msg);
+    }
+    req.flash('errors', er);
     return res.redirect('/forgot');
   }
 
@@ -371,7 +375,7 @@ exports.postForgot = (req, res, next) => {
     function (token, done) {
       User.findOne({ email: req.body.email }, (err, user) => {
         if (!user) {
-          req.flash('errors', { msg: 'Account with that email address does not exist.' });
+          req.flash('errors', ['Account with that email address does not exist.']);
           return res.redirect('/forgot');
         }
         user.passwordResetToken = token;

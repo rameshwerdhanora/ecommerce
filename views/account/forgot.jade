@@ -2,13 +2,14 @@ extends ../layout_forget
 
 block content
     .col-sm-9.midlle-bar
+        include ../partials/flash
         .large-title-row
             img(src='/images/title-icon.png', alt='icon')
-            |  PRODUCTS
+            |  Forgot Password
         .top-btns.clearfix
         .customer-box.clearfix
             form(method='POST')
-                legend Forgot Password
+                
                 input(type='hidden', name='_csrf', value=_csrf)
                 .form-group
                   p Enter your email address below and we will send you password reset instructions.
