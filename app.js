@@ -98,7 +98,7 @@ mongoose.connection.on('error', () => {
 /**
  * Express configuration.
  */
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 8081);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(compression());
@@ -202,7 +202,6 @@ app.post('/api/customer/create/facebook', userAppController.postSignupFacebook);
 app.post('/api/customer/create/googleplus', userAppController.postSignupGooglePlus); // Completed
 
 app.post('/api/customer/leavefeedback', commonAppController.postLeaveFeedback); // Completed
-app.get('/api/menuclick/:userId', commonAppController.menuClick); // Completed
 
 app.get('/api/product/like/:userId/:productId',productAppController.likeProductByUser);
 app.get('/api/product/wishlist/:userId/:productId',productAppController.wishListProductByUser);
@@ -292,6 +291,9 @@ app.post('/api/updateUserAddress',addressAppController.updateAddress);
 
 app.post('/api/search/advancedsearch',searchAppController.advanceSearch);
 //app.post('/api/search/searchbrand',searchAppController.searchBrand);
+
+
+
 
 /* Color CRUD Section */ // Need isAuthenticated code for check user is loggedin.
 app.get('/color/list/:colorId?', passportConfig.isAuthenticated,  colorController.listOfColor);
