@@ -23,13 +23,7 @@ html
     body.loign-body
       .login-box
         .login-title-row
-            -if(messages.errors){
-             .alert.alert-danger.fade.in
-               button.close(type='button', data-dismiss='alert')
-                 i.fa.fa-times-circle-o
-               for error in messages.errors
-                 div= error
-            -}     
+            include ../partials/flash  
            .login-logo
              a(href='#')
                img(src='images/logo-2.png', alt='logo')
@@ -39,9 +33,9 @@ html
           .login-in
             h2.form-signin-heading Welcome
             .lgn-row
-              input#inputEmail.form-control(type='email', name='email', placeholder='Email', autofocus)
+              input#inputEmail.form-control(type='email', name='email', placeholder='Email', autofocus,required)
             .lgn-row
-              input#inputPassword.form-control(type='password', name='password', placeholder='Password')
+              input#inputPassword.form-control(type='password', name='password', placeholder='Password',required)
             .forgot-link
               a(href='/forgot') Forgot Password?
             .login-btn-r
