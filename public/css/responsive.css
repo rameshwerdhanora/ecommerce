@@ -321,6 +321,9 @@ div .vert .simply-scroll-list li {
 	font-size: 15px;
 	line-height: 55px;
 }
+.easy-sidebar li a{
+    line-height: 32px;
+}
 .img-1-wrp > img {
 	max-width: inherit;
 }
