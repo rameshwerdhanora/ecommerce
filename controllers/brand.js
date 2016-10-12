@@ -103,7 +103,7 @@ exports.saveBrand = (req,res) => {
                         brandIns.brand_name  	= req.body.brand_name;
                         brandIns.brand_desc 	= req.body.brand_desc;
                         brandIns.user_id 	= req.user._id; 
-			brandIns.brand_view     = parseInt(0); 
+			            brandIns.brand_view     = parseInt(0); 
                         brandIns.save(function(err) 
                         {
                             if (err)

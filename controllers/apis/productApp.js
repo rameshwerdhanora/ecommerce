@@ -524,14 +524,11 @@ exports.productDetailView = (req, res) => {
   {
     var productArray = {};
     if(fetchAProductDetails)
-    {
-     
+    { 
       var updateData = {
         productview : parseInt(fetchAProductDetails.productview) + parseInt(1)
       }
       Product.findByIdAndUpdate({_id:req.params.productId},updateData,function(error,updateRes){});  
-
-	    
       productArray._id           = fetchAProductDetails._id;
       productArray.name          = fetchAProductDetails.name;
       productArray.sku           = fetchAProductDetails.sku;
@@ -895,7 +892,7 @@ exports.fetchSortValues = (req, res) => {
 };
 
 /**
- * GET /api/brand/details/:brandId
+ * GET /api/brand/details/:brandId/:userId
  * Process for Fetch Brand Product
  */
 
@@ -910,7 +907,6 @@ exports.BrandDetailView = (req, res) => {
         brand_view : parseInt(fetchAllBrands.brand_view) + parseInt(1)
       }
       Brand.findByIdAndUpdate({_id:req.params.brandId},updateData,function(error,updateRes){}); 	
-	    
       var filterObj                 = {};
       var image                     = [];
       filterObj._id                 = fetchAllBrands._id;

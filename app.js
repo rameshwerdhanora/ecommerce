@@ -58,6 +58,7 @@ const shippingAppController     = require('./controllers/apis/shippingApp');
 const cartAppController         = require('./controllers/apis/cartApp');
 const privacyAppController      = require('./controllers/apis/privacyApp');
 const orderAppController        = require('./controllers/apis/orderApp');
+const searchAppController       = require('./controllers/apis/searchApp');
 
 const brandController          = require('./controllers/brand');
 const colorController          = require('./controllers/color');
@@ -97,7 +98,7 @@ mongoose.connection.on('error', () => {
 /**
  * Express configuration.
  */
-app.set('port', process.env.PORT || 8081);
+app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(compression());
@@ -285,6 +286,13 @@ app.post('/api/getUserAddress',addressAppController.getUserAddress);
 app.post('/api/addUserAddress',addressAppController.addAddress);
 app.post('/api/deleteUserAddress',addressAppController.deleteAddress);
 app.post('/api/updateUserAddress',addressAppController.updateAddress);
+
+/* Advanced Search APis*/
+
+app.post('/api/search/advancedsearch',searchAppController.advanceSearch);
+//app.post('/api/search/searchbrand',searchAppController.searchBrand);
+
+
 
 
 /* Color CRUD Section */ // Need isAuthenticated code for check user is loggedin.

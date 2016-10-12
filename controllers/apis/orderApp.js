@@ -310,7 +310,7 @@ exports.detailsOfSelectedOrder = (req,res) => {
     					callback();
 	        		},
 	        		function(err)
-	        		{
+	        		{ 
 	        			orderData.alldetailsoforder = ProductDetailsArr;
 	        			return res.json({"status":'success',"msg":'Found your list of orders.',listOfOrders:orderData}) 
 	        		});
