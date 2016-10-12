@@ -8,7 +8,9 @@
 /* Load required library */
 const Common	     = require('../../models/commonApp');
 const NodeMailer 	  = require('nodemailer');
-
+const Cart          = require('../../models/cart');
+const Order         = require('../../models/orders');
+const async         = require('async');
 
 /**
  * POST /api/customer/postLeaveFeedback
@@ -43,5 +45,45 @@ exports.postLeaveFeedback = function(req,res)
       return res.json({"status":'error',"msg":'Device Token is not available.'});
    }
 
+}
+
+/**
+ * GET /api/menuclick/:userId
+ * Process for taken counters
+ */
+
+exports.menuClick = function(req,res)
+{
+   var counters = {};
+   async.parallel
+   (
+      [
+      function(callback)
+      {
+         Cart.count({user_id:req.params.userId},function(error,cartCount)
+         {
+            counters.cartCounter = cartCount;
+            callback(error);
+         });
+      },
+      function(callback)
+      {
+         Order.count({user_id:req.params.userId,status:{ $ne: 'DELIVERED' }},function(error,cartCount)
+         {
+            counters.orderCounter = cartCount;
+            callback(error);
+         });
+      },
+      function(callback)
+      {
+         counters.activityCounter = 0;
+         callback();
+      }
+      ],
+      function(error)
+      {
+         return res.json({"status":'success',"msg":'Found your counters.',counters:counters});
+      }
+   );
 }
 

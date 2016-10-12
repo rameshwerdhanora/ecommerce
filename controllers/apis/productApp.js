@@ -18,7 +18,7 @@ const Attribute         = require('../../models/attribute');
 const AttributeOptions  = require('../../models/attributeOption');
 const UsersDetails      = require('../../models/usersDetails');
 const FilterSort        = require('../../models/filterSort');
-
+const Cart              = require('../../models/cart');
 
 
 exports.getProducts = (req, res) => {
@@ -167,8 +167,6 @@ exports.listOfAllLike = (req, res) => {
       {
         lkProdId.push(fetchAllLikeByUser[lk].product_id);
       }
-
-
        
      fetchingAllWLAndLikeProducts(lkProdId,function(err, fetchLikeProducts)
      {
@@ -206,10 +204,24 @@ exports.listofAllFeaturedProd = (req, res) => {
   {
     var temp = []; 
     var userArr = [];
+    var cartCounterArr = [];
     
     UsersDetails.find({user_id:req.params.userId},function(err,userRes){
        userArr.push(userRes[0]);        
+    })
+
+    Cart.count({user_id:req.params.userId},function(err,cartCount)
+    {
+      if(cartCount > 0)
+      {
+        cartCounterArr.push(cartCount);       
+      }
+      else 
+      {
+        cartCounterArr.push(0);       
+      }
      })
+ 
 
     async.eachSeries(fetchallFeatProds, function(ProductId, callback)
     {
@@ -265,7 +277,7 @@ exports.listofAllFeaturedProd = (req, res) => {
       function(err)
       {
         // console.log(temp); //This should give you desired result
-        return res.json({"status":'success',"msg":'Fetch all products.',productslist:temp,userDetails:userArr});
+        return res.json({"status":'success',"msg":'Fetch all products.',productslist:temp,userDetails:userArr,cartCounter:cartCounterArr});
       });
   });  
 }; 
@@ -607,7 +619,15 @@ exports.productDetailView = (req, res) => {
               productArray.relatedProducts  = fetchRelatedProducts;
               callback(err); //Forgot to add
              });
+          },
+          function(callback) 
+          {
+            UsersDetails.find({user_id:req.params.userId},function(err,userRes){
+              productArray.userDetails = userRes[0];    
+              callback(err);    
+            })
           }
+
       ], 
       function(err, results) 
       {

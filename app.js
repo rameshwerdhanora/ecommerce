@@ -202,6 +202,7 @@ app.post('/api/customer/create/facebook', userAppController.postSignupFacebook);
 app.post('/api/customer/create/googleplus', userAppController.postSignupGooglePlus); // Completed
 
 app.post('/api/customer/leavefeedback', commonAppController.postLeaveFeedback); // Completed
+app.get('/api/menuclick/:userId', commonAppController.menuClick); // Completed
 
 app.get('/api/product/like/:userId/:productId',productAppController.likeProductByUser);
 app.get('/api/product/wishlist/:userId/:productId',productAppController.wishListProductByUser);
