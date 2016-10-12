@@ -1007,8 +1007,10 @@ exports.productPreview = (req, res) => {
         User.findOne({_id:custId},function(error,getCustomerDetails){
             if(error == null){
                 if(getCustomerDetails){
-                    ProductReview.find({user_id:custId})
-                    res.render('user/productPreview', { title: 'Product review',getCustomerDetails:getCustomerDetails,activeClass:5,left_activeClass:4 });
+                    ProductReview.find({user_id:custId},function(error,rewRes){
+                        res.render('user/productPreview', { title: 'Product review',getCustomerDetails:getCustomerDetails,activeClass:5,left_activeClass:4 });
+                    });
+                    
                 }
             }else{
                 req.flash('errors',['Something went wronge!']);
