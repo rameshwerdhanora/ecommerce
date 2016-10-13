@@ -458,127 +458,149 @@ exports.userSave = (req, res) => {
         res.redirect('/user/shopprofile');
     }else{
         uploadShopImages(req,res,function(err) {
-             if(err) {
-                return res.end("Error uploading file.");
-             }
-             
-            User.findOne({$or: [ { email_id: req.body.email_id.trim() }, { user_name: req.body.user_name.trim()}] }, function(err, existingEmail){
-                if(existingEmail){
-                    if(existingEmail.email_id == req.body.email_id.trim()){
-                        req.flash('errors', ['Email address already exists.']);
-                    }else{
-                        req.flash('errors', ['Username already exists.']);
-                    }
-                    if(req.user.role_id == Constants.MASTERROLE || req.user.role_id == Constants.ADMINROLE){
-                        var permissionType = 'SHOPADMIN';
-                    }else{
-                        var permissionType = 'SHOPUSER';
-                    }
-                    Permission.find({type:permissionType,is_active:true},function(error,getPermissions){
-                        if(getPermissions){
-                            return res.render('user/user_add',{title: 'New User', data: req.body,getPermissions:getPermissions,left_activeClass:5});
+            if(err) {
+               return res.end("Error uploading file.");
+            }
+            req.assert('user_name', 'User name is required').notEmpty();
+            var errors = req.validationErrors();  
+            if( !errors){   //No errors were found.  Passed Validation!
+                User.findOne({$or: [ { email_id: req.body.email_id.trim() }, { user_name: req.body.user_name.trim()}] }, function(err, existingEmail){
+                    if(existingEmail){
+                        if(existingEmail.email_id == req.body.email_id.trim()){
+                            req.flash('errors', ['Email address already exists.']);
                         }else{
-                            var tmp = new Array();
-                            return res.render('user/user_add',{title: 'New User', data: req.body,getPermissions:tmp,left_activeClass:5});
+                            req.flash('errors', ['Username already exists.']);
                         }
-                    });
-                }else{
-                    var userIns        		= new User();
-                    if(req.files.length > 0){
-                        for(var i = 0;i < req.files.length;i++){
-                            switch(req.files[i].fieldname){
-                                case 'cover_image':
-                                    userIns.cover_image = req.files[i].path.replace('public','');
-                                    break;
-                                case 'profile_image':
-                                    userIns.profile_image = req.files[i].path.replace('public','');
-                                    break;
-                            }
+                        if(req.user.role_id == Constants.MASTERROLE || req.user.role_id == Constants.ADMINROLE){
+                            var permissionType = 'SHOPADMIN';
+                        }else{
+                            var permissionType = 'SHOPUSER';
                         }
-                    }
-
-                    userIns.shop_name   	= req.body.shop_name;
-                    userIns.user_name   	= req.body.user_name.trim();
-                    userIns.password    	= req.body.password.trim();
-                    userIns.email_id       	= req.body.email_id.trim();
-                    userIns.first_name  	= req.body.first_name.trim();
-                    userIns.last_name   	= req.body.last_name.trim();
-                    userIns.contact_no  	= req.body.contact_no.trim();
-                    userIns.dob   		= '';
-                    userIns.gender   		= '';
-                    userIns.bio   		= '';
-                    userIns.social_type   	= '';
-                    userIns.social_id   	= '';
-                    userIns.access_token   	= '';
-                    userIns.is_active   	= true;
-                    userIns.is_deleted   	= false;
-                    userIns.created        	= Date.now();
-                    userIns.updated        	= Date.now();
-
-                    userIns.address        	= req.body.address.trim();
-                    userIns.city        	= req.body.city.trim();
-                    userIns.state        	= req.body.state.trim();
-                    userIns.country        	= req.body.country.trim();
-                    userIns.zip                 = req.body.zip.trim();
-                    userIns.bio                 = req.body.bio.trim();
-
-                    userIns.shop_id = '';
-                    userIns.role_id = '';
-
-
-                    userIns.save(function(error){
-                        if(error === null){
-                            if(req.user.role_id == Constants.MASTERROLE || req.user.role_id == Constants.ADMINROLE){
-                                userIns.shop_id = userIns._id;
-                                userIns.role_id = req.body.role_id;
+                        Permission.find({type:permissionType,is_active:true},function(error,getPermissions){
+                            if(getPermissions){
+                                return res.render('user/user_add',{title: 'New User', data: req.body,getPermissions:getPermissions,left_activeClass:5});
                             }else{
-                                userIns.shop_id = req.user.shop_id;
-                                userIns.role_id = Constants.SHOP_EMPLOYEE;
+                                var tmp = new Array();
+                                return res.render('user/user_add',{title: 'New User', data: req.body,getPermissions:tmp,left_activeClass:5});
                             }
-
-                            userIns.save(function(error){});
-                            //-- save user permissions 
-                            if(req.body.permissions){
-                                for(var i=0; i<req.body.permissions.length; i++){
-                                    var userPermission = new UserPermission();
-                                    userPermission.user_id = userIns._id;
-                                    userPermission.permission_id = req.body.permissions[i];
-                                    userPermission.created = Date.now();
-                                    userPermission.save();
+                        });
+                    }else{
+                        var userIns        		= new User();
+                        if(req.files.length > 0){
+                            for(var i = 0;i < req.files.length;i++){
+                                switch(req.files[i].fieldname){
+                                    case 'cover_image':
+                                        userIns.cover_image = req.files[i].path.replace('public','');
+                                        break;
+                                    case 'profile_image':
+                                        userIns.profile_image = req.files[i].path.replace('public','');
+                                        break;
                                 }
                             }
-                            // Get the get template content for 'registration' and call the helper to send the email         
-                            EmailTemplate.findOne({template_type:'registration'},function(error,getTemplateDetail){
-                                if(getTemplateDetail != null){
-                                    var registerTemplateContent = getTemplateDetail.content;
-                                    //dynamicTemplateContent= registerTemplateContent.replace(/{first_name}/gi, userIns.first_name).replace(/{last_name}/gi, userIns.last_name);
-                                    dynamicTemplateContent = registerTemplateContent.replace(/{customer_name}/gi, userIns.first_name);
-                                    if(dynamicTemplateContent){
-                                        CommonHelper.emailTemplate(getTemplateDetail.subject, dynamicTemplateContent, userIns._id);      
+                        }
+
+                        userIns.shop_name   	= req.body.shop_name;
+                        userIns.user_name   	= req.body.user_name.trim();
+                        userIns.password    	= req.body.password.trim();
+                        userIns.email_id       	= req.body.email_id.trim();
+                        userIns.first_name  	= req.body.first_name.trim();
+                        userIns.last_name   	= req.body.last_name.trim();
+                        userIns.contact_no  	= req.body.contact_no.trim();
+                        userIns.dob   		= '';
+                        userIns.gender   		= '';
+                        userIns.bio   		= '';
+                        userIns.social_type   	= '';
+                        userIns.social_id   	= '';
+                        userIns.access_token   	= '';
+                        userIns.is_active   	= true;
+                        userIns.is_deleted   	= false;
+                        userIns.created        	= Date.now();
+                        userIns.updated        	= Date.now();
+
+                        userIns.address        	= req.body.address.trim();
+                        userIns.city        	= req.body.city.trim();
+                        userIns.state        	= req.body.state.trim();
+                        userIns.country        	= req.body.country.trim();
+                        userIns.zip                 = req.body.zip.trim();
+                        userIns.bio                 = req.body.bio.trim();
+
+                        userIns.shop_id = '';
+                        userIns.role_id = '';
+
+
+                        userIns.save(function(error){
+                            if(error === null){
+                                if(req.user.role_id == Constants.MASTERROLE || req.user.role_id == Constants.ADMINROLE){
+                                    userIns.shop_id = userIns._id;
+                                    userIns.role_id = req.body.role_id;
+                                }else{
+                                    userIns.shop_id = req.user.shop_id;
+                                    userIns.role_id = Constants.SHOP_EMPLOYEE;
+                                }
+
+                                userIns.save(function(error){});
+                                //-- save user permissions 
+                                if(req.body.permissions){
+                                    for(var i=0; i<req.body.permissions.length; i++){
+                                        var userPermission = new UserPermission();
+                                        userPermission.user_id = userIns._id;
+                                        userPermission.permission_id = req.body.permissions[i];
+                                        userPermission.created = Date.now();
+                                        userPermission.save();
                                     }
                                 }
-                            });
-                            // Send SMS Using Twilio API to perticular user mobile number
-                            if((userIns.contact_no!='') && isNaN(userIns.contact_no)){
-                                //CommonHelper.sendSms(req, res, smsContent, userId);
+                                // Get the get template content for 'registration' and call the helper to send the email         
+                                EmailTemplate.findOne({template_type:'registration'},function(error,getTemplateDetail){
+                                    if(getTemplateDetail != null){
+                                        var registerTemplateContent = getTemplateDetail.content;
+                                        //dynamicTemplateContent= registerTemplateContent.replace(/{first_name}/gi, userIns.first_name).replace(/{last_name}/gi, userIns.last_name);
+                                        dynamicTemplateContent = registerTemplateContent.replace(/{customer_name}/gi, userIns.first_name);
+                                        if(dynamicTemplateContent){
+                                            CommonHelper.emailTemplate(getTemplateDetail.subject, dynamicTemplateContent, userIns._id);      
+                                        }
+                                    }
+                                });
+                                // Send SMS Using Twilio API to perticular user mobile number
+                                if((userIns.contact_no!='') && isNaN(userIns.contact_no)){
+                                    //CommonHelper.sendSms(req, res, smsContent, userId);
+                                }
+                                req.flash('success', ['User information saved successfully.']);
+                                if(req.user.role_id == Constants.MASTERROLE || req.user.role_id == Constants.ADMINROLE){
+                                    return res.redirect('/user/list');
+                                }else if(req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6){
+                                    return res.redirect('/user/shop_user_list');
+                                }
+                            }else{
+                                req.flash('error', 'Something wrong!!');
+                                if(req.user.role_id == Constants.MASTERROLE || req.user.role_id == Constants.ADMINROLE){
+                                    return res.redirect('/user/list');
+                                }else if(req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6){
+                                    return res.redirect('/user/shop_user_list');
+                                }
                             }
-                            req.flash('success', ['User information saved successfully.']);
-                            if(req.user.role_id == Constants.MASTERROLE || req.user.role_id == Constants.ADMINROLE){
-                                return res.redirect('/user/list');
-                            }else if(req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6){
-                                return res.redirect('/user/shop_user_list');
-                            }
-                        }else{
-                            req.flash('error', 'Something wrong!!');
-                            if(req.user.role_id == Constants.MASTERROLE || req.user.role_id == Constants.ADMINROLE){
-                                return res.redirect('/user/list');
-                            }else if(req.user.role_id == 3 || req.user.role_id == 4 || req.user.role_id == 6){
-                                return res.redirect('/user/shop_user_list');
-                            }
-                        }
-                    }); 
+                        }); 
+                    }
+                });
+            }else{
+                if(req.user.role_id == Constants.MASTERROLE || req.user.role_id == Constants.ADMINROLE){
+                    var permissionType = 'SHOPADMIN';
+                }else{
+                    var permissionType = 'SHOPUSER';
                 }
-            });
+                var er = new Array();
+                for(var i = 0;i<errors.length;i++){
+                    er.push(errors[i].msg);
+                }
+                req.flash('errors',er);
+                Permission.find({type:permissionType,is_active:true},function(error,getPermissions){
+                    if(getPermissions){
+                        return res.render('user/user_add',{title: 'New User', data: req.body,getPermissions:getPermissions,left_activeClass:5});
+                    }else{
+                        var tmp = new Array();
+                        return res.render('user/user_add',{title: 'New User', data: req.body,getPermissions:tmp,left_activeClass:5});
+                    }
+                });
+            }
         });
     }
 };
